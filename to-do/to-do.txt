@@ -1,0 +1,34 @@
+Due: August 12
+==============
+1. Read more on Antlr book
+	Exercises: 
+		a. Implement operations on the small expression language
+			I. Pretty Print (infix and postfix)
+			II. Type Check
+		c. Applying the Composite and Visitor Patterns
+		
+2. Try Proposition theorems in Z3
+	See the Gries-Theorems.pdf under resources
+	
+	If time permitted, also see how you can encode the predicate theorems in Z3.
+	
+	Resource: https://rise4fun.com/z3/tutorial
+	
+3. Develop a simple Java program which:
+	a. Takes as input a text file in SMT-Lib format (functional style)
+	b. Output to the console:
+		I. Outputs from Z3 verbatim (e.g., unsat vs. sat with witnesses)
+	c. Explore if there are different output options of Z3 (e.g., format, witnesses)
+		note. Your compiler later will transform these outputs to more user-friendly format 
+	
+4. Find papers on "automated predicate solver" in the context of "computing education"
+		a. Research Question: How can the automated logic verifier you build facilitate the learning of students (e.g., 1090, 3311)?
+		b. Potential keywords:
+			I. Computing/Engineering Education
+			II. Teaching of formal/proposition/predicate/set-theoretic Logic
+			III. Tool support for teaching of logic
+			IV. Challenges of teaching formal logic
+			You'd find more keywords as you do searches. 
+		c. Look specifically in: ACM, IEEE, and Springer
+			e.g., ACM SIGCSE
+		?. Put papers under 'papers'
