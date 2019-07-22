@@ -32,3 +32,5 @@ Due: August 12
 		c. Look specifically in: ACM, IEEE, and Springer
 			e.g., ACM SIGCSE
 		?. Put papers under 'papers'
+		
+5. Write up (in bullet points, and possibly a diagram) about why p is negated in order to use the SMT solver to prove that p is a tautology.
