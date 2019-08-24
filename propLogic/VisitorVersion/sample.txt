@@ -1,2 +1,0 @@
-p, q
-p and q
