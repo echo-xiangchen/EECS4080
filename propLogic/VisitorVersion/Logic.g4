@@ -6,13 +6,13 @@ stat : varDecl formula;
 varDecl : VAR (',' VAR)* NEWLINE;
 
 formula 
-	  : NOT formula					# Not
+	  : NOT formula				# Not
 	  | formula AND formula			# And
 	  | formula OR formula			# Or
 	  | formula IMPLIES formula		# Implies
 	  | formula EQUALS formula		# Equals
-	  | VAR 						# Var
-	  | '(' formula ')'				# Paren
+	  | VAR 				# Var
+	  | '(' formula ')'			# Paren
 	  ;
 
 
