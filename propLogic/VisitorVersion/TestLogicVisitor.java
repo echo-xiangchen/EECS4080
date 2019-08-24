@@ -76,8 +76,9 @@ public class TestLogicVisitor {
 
 	// test the result
 	public static void main (String[] args) {
-		try {
-		// test to see if there is a input file
+	
+	try {
+	// test to see if there is a input file
         String inputFile = null;
         if ( args.length>0 ) inputFile = args[0];
         InputStream is = System.in;
@@ -117,7 +118,7 @@ public class TestLogicVisitor {
         
         // show the result: sat, unsat, unknow
         if (result == Status.SATISFIABLE){  
-        	System.out.println("Th formula is not tautology.");
+        	System.out.println("The formula is not tautology.");
            }  
         else if(result == Status.UNSATISFIABLE)  
             System.out.println("The formula is tautology");  
