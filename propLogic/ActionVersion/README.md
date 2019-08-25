@@ -8,6 +8,7 @@ How to run the program:
   
   2. Set up the alias:
     `alias antlr4='java -jar /your/Antlr/library/path'`
+    
     `alias grun='java org.antlr.v4.gui.TestRig'`
     
        My antlr4 looks like this:
