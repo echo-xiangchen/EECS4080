@@ -11,7 +11,7 @@ How to run the program:
     `alias grun='java org.antlr.v4.gui.TestRig'`
     
        My antlr4 looks like this:
-         alias antlr4='java -jar /usr/local/lib/antlr-4.7.2-complete.jar'
+         `alias antlr4='java -jar /usr/local/lib/antlr-4.7.2-complete.jar'`
     
   3. compile the grammar file:
     `antlr4 ActionLogic.g4`
