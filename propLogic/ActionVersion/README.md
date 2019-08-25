@@ -4,7 +4,7 @@
 
 
 How to run the program:
-  1. Add the Antlr and z3 library path to the environment variable CLASS_PATH.
+  1. Add the Antlr and z3 library path to the environment variable CLASS_PATH as well as the java library path.
   
   2. Set up the alias:
     `alias antlr4='java -jar /your/Antlr/library/path'`
