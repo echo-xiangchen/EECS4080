@@ -55,3 +55,22 @@ Due: August 26
 	e.g. if it will only work on functions but not boolean formulas
 	
 4. Check to see of there is another way to define the precedence in Antlr.
+
+Due: September 6
+=============
+Jackie: 
+
+0. In the README file of propLogic, write down how your program can be used.
+1. multiple var declarations, interleaved with multiple formulas
+When there are type errors, list them all at once. Rather than stopping at the first encountered error.
+2. support comments (using --)
+3. support also integer variables (integer literal tokens), and also arithmetic operations (+, -, *, /)
+4. for integer or boolean variable, you can either leave it unspecified, or bound to a constant or expression.
+5. Factor out decision-making code (by Z3) into a helper method in @members
+6. Support your compiler to output the immediate Z3 encoding as a properly-formatted text file.
+7. Fix: When you turn the AST to Z3 encoding, the user should not have to add parentheses if they don't change the meaning of the formula. E.g., user may write p or q => r = p => (q => r) 
+8. Keep the visitor<BoolExpr> example in 'struggle' (also include the Z3 classes hierarchy diagram you drew). Try to writeup a small paragraph explaining where exactly this fails to work (show a screenshot of the debugger emphasizing how difficult it is to debug). We will use this later to justify why need to go for our own hierarchy of Z3 type classes.  
+9. Start drawing the diagram showing all the Java classes involved (Antlr + your own). 
+10. Start a new tex document describing the new design. 
+
+11. Convert this to-do.txt to README.md
