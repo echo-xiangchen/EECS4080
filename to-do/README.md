@@ -20,4 +20,17 @@
 4. Find papers on "automated predicate solver" in the context of "computing education"    
     - Research Question: How can the automated logic verifier you build facilitate the learning of students (e.g., 1090, 3311)?    
     - Potential keywords:    
-        - Computing/Engineering Education
+        - Computing/Engineering Education    
+        - Teaching of formal/proposition/predicate/set-theoretic Logic    
+        - Tool support for teaching of logic    
+        - Challenges of teaching formal logic    
+    - Look specifically in: ACM, IEEE, and Springer. e.g., ACM SIGCSE    
+    - Put papers under 'papers'    
+
+5. Write up (in bullet points, and possibly a diagram) about why p is negated in order to use the SMT solver 
+to prove that p is a tautology.    
+
+
+## Due: August 26
+---
+    
