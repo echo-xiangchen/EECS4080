@@ -33,4 +33,17 @@ to prove that p is a tautology.
 
 ## Due: August 26
 ---
-    
+1. Continue to find the papers on "automated predicate solver" in the context of "computing education"    
+2. Finish different version of propositional logic program:    
+    - Visitor version    
+    - Embedded action version    
+3. Check to see the result of "get-model" method of Z3.    
+    - e.g. if it will only work on functions but not boolean formulas
+4. Check to see of there is another way to define the precedence in Antlr.    
+
+
+## Due: September 6
+---
+0. In the README file of propLogic, write down how your program can be used.    
+1. multiple var declarations, interleaved with multiple formulas    
+    When there are type errors, list them all at once. Rather than stopping at the first encountered error.
