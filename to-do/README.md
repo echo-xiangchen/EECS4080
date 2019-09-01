@@ -1,4 +1,4 @@
-# Due: August 12
+## Due: August 12
 ---
 1. Read more on Antlr book    
     Exercises:     
@@ -15,4 +15,9 @@
     - Takes as input a text file in SMT-Lib format (functional style)    
     - Output to the console: Outputs from Z3 verbatim (e.g., unsat vs. sat with witnesses)    
     - Explore if there are different output options of Z3 (e.g., format, witnesses)    
-        note. Your compiler later will transform these outputs to more user-friendly format 
+        note. Your compiler later will transform these outputs to more user-friendly format      
+
+4. Find papers on "automated predicate solver" in the context of "computing education"    
+    - Research Question: How can the automated logic verifier you build facilitate the learning of students (e.g., 1090, 3311)?    
+    - Potential keywords:    
+        - Computing/Engineering Education
