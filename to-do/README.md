@@ -44,16 +44,30 @@ to prove that p is a tautology.
 
 ## Due: September 6
 ---
-0. In the README file of propLogic, write down how your program can be used.    
-1. multiple var declarations, interleaved with multiple formulas    
-    When there are type errors, list them all at once. Rather than stopping at the first encountered error.
-2. support comments (using --)    
-3. support also integer variables (integer literal tokens), and also arithmetic operations (+, -, *, /)    
-4. for integer or boolean variable, you can either leave it unspecified, or bound to a constant or expression.      
-5. Factor out decision-making code (by Z3) into a helper method in @members    
-6. Support your compiler to output the immediate Z3 encoding as a properly-formatted text file.     
-7. Fix: When you turn the AST to Z3 encoding, the user should not have to add parentheses if they don't change the meaning of the formula. E.g., user may write p or q => r = p => (q => r)        
-8. Keep the visitor<BoolExpr> example in 'struggle' (also include the Z3 classes hierarchy diagram you drew). Try to writeup a small paragraph explaining where exactly this fails to work (show a screenshot of the debugger emphasizing how difficult it is to debug). We will use this later to justify why need to go for our own hierarchy of Z3 type classes.        
-9. Start drawing the diagram showing all the Java classes involved (Antlr + your own).       
-10. Start a new tex document describing the new design. 
-11. Convert this to-do.txt to README.md
+
+1. [DONE] multiple var declarations, interleaved with multiple formulas
+2. [DONE] When there are type errors, list them all at once. Rather than stopping at the first encountered error.
+3. [DONE] support comments (using --)    
+4. [DONE] Start drawing the diagram showing all the Java classes involved (Antlr + your own).       
+5. [DONE] Start a new tex document describing the new design. 
+6. [DONE] Convert this to-do.txt to README.md
+
+## Due: September 13
+
+0. Find some papers!
+
+1. Support two options for verifier: -p outFile for pretty printing and -v for verification. Pretty printing should happen for both -p and -v (i.e., even in the case of -v, you can simply pass the pretty-printed string to Z3). 
+2. Set up regression tests for both versions the pretty printer of verifier: sample.txt specifis the predicates/propositions, sample.actual.txt specifies the pretty printing output, sample.expected.txt specifies the expected output. In case there's no error, both actual and expected resutls should be loadable to: https://rise4fun.com/z3/tutorial
+
+For Jackie to test: When you turn the AST to Z3 encoding, the user should not have to add parentheses if they don't change the meaning of the formula. E.g., user may write p or q => r = p => (q => r)   
+
+For each sample.txt write a header comment summarizing what the test is supposed to do.
+
+3. In the README file of propLogic, write down how your program can be used.    
+
+4. support also integer variables (integer literal tokens), and also arithmetic operations (+, -, *, /) 
+
+5. for integer or boolean variable, you can either leave it unspecified, or bound to a constant or expression.        
+
+
+6. Document the resolution: Keep the visitor<BoolExpr> example in 'struggle' (also include the Z3 classes hierarchy diagram you drew). Try to writeup a small paragraph explaining where exactly this fails to work (show a screenshot of the debugger emphasizing how difficult it is to debug). We will use this later to justify why need to go for our own hierarchy of Z3 type classes.
