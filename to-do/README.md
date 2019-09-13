@@ -81,3 +81,4 @@ For each sample.txt write a header comment summarizing what the test is supposed
 4. Put the flow diagram of two versions intp your report.
 5. Move the type check for V2 to a visitor.
 6. V2 is a much better design: the AST of logic should be completely independent of the AST of syntax (whcih corresponds to how the grammar is defined). For example: having interleaved declarations of named predicates and checks VERSUS having centralized sections of variable, predicates, and checks, should not affect the definition of AST logic.
+7. Question to answer: how do you tell wheter an ID toeken is used for named predicate, or varaible, or formula to check?
