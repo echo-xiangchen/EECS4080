@@ -71,3 +71,13 @@ For each sample.txt write a header comment summarizing what the test is supposed
 
 
 6. Document the resolution: Keep the visitor<BoolExpr> example in 'struggle' (also include the Z3 classes hierarchy diagram you drew). Try to writeup a small paragraph explaining where exactly this fails to work (show a screenshot of the debugger emphasizing how difficult it is to debug). We will use this later to justify why need to go for our own hierarchy of Z3 type classes.
+
+## Due: September 19
+
+0. Get rid of NEWLINE
+1. What are the kind of type-checking errors by Z3 (ContextMismatch, NullPointer, anything else)? What are the kind of type-checking errors that we wish to find (e.g., non-existing formula labels) but not supported by Z3?
+2. For V2, type checking should be done on the composite AST (of logic) rather than on the syntax AST (built from Antlr).
+3. Three visitors on the composite: TypeChecker, Z3Generator (for strings passed to Z3), and PrettyPrinter (for generating files for fomula, such that users can copy and past and load to Z3 website).
+4. Put the flow diagram of two versions intp your report.
+5. Move the type check for V2 to a visitor.
+6. V2 is a much better design: the AST of logic should be completely independent of the AST of syntax (whcih corresponds to how the grammar is defined). For example: having interleaved declarations of named predicates and checks VERSUS having centralized sections of variable, predicates, and checks, should not affect the definition of AST logic.
