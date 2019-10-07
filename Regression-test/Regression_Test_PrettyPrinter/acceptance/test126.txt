@@ -1,0 +1,19 @@
+-- test propositional logic and greater or equal than  
+-- with uninitialized boolean and int variable declaration (with error)
+int i
+int j
+int m
+boolean p
+boolean m
+boolean q
+verify p <=> q and i >= j + 1
+boolean i
+boolean r 
+boolean s
+verify not r and (s or q) <=> p => m >= i - j
+boolean s1
+int s
+boolean r0
+boolean k
+int p
+verify not r0 <=> (s1 => (not k and r)) or i >= j - m + j * 2

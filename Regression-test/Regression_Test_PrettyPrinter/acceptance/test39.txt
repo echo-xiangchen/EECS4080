@@ -1,0 +1,9 @@
+-- test disjunction with initialized boolean variable declaration with constant value (no error)
+boolean p = true
+boolean q = false
+verify p or q
+verify not p or q or not q
+boolean s = false
+verify not s or p or q
+boolean r = true
+verify s or r or p or q

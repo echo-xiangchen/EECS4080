@@ -1,0 +1,10 @@
+(declare-const i Int)
+(declare-const j Int)
+(declare-const m Int)
+(declare-const p Bool)
+(declare-const q Bool)
+(declare-const k Bool)
+(assert (not (= (=> (and (not p) q) (> i (* j m))) (or k (and (= m (- i j)) (not (>= (/ j m) 120)))))))
+(check-sat)
+;Remove the comment if the result of z3 online tool returns "sat"
+;(get-model)

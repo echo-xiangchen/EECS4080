@@ -1,0 +1,5 @@
+Error: Type declaration of variable k is ambigous. Please make sure each variable is declared exactly once.
+Error: Type of variable k in this expression is ambigous. Please make sure each variable is declared exactly once.
+Error: Type declaration of variable s is ambigous. Please make sure each variable is declared exactly once.
+Error: Type of variable k in this expression is ambigous. Please make sure each variable is declared exactly once.
+Error: Type of variable s in this expression is ambigous. Please make sure each variable is declared exactly once.

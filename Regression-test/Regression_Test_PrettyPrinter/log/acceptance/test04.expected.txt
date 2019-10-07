@@ -1,0 +1,3 @@
+Error: Type declaration of variable i is ambigous. Please make sure each variable is declared exactly once.
+Error: Type declaration of variable j0 is ambigous. Please make sure each variable is declared exactly once.
+Error: Type declaration of variable m is ambigous. Please make sure each variable is declared exactly once.

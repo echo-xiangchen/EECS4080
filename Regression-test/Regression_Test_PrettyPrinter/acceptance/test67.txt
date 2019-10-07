@@ -1,0 +1,9 @@
+-- test equal with uninitialized int variable declaration (no error)
+int i
+int j
+int k
+int m
+verify i = j
+verify k = m
+int n
+verify m = n

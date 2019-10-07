@@ -1,0 +1,6 @@
+(declare-const i Int)
+(declare-const j Int)
+(assert (not (= (* i j) (+ j 5))))
+(check-sat)
+;Remove the comment if the result of z3 online tool returns "sat"
+;(get-model)
