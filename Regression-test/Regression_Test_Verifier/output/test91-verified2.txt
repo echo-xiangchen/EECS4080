@@ -1,0 +1,5 @@
+This formula is not tautology.
+(define-fun m () Int
+  0)
+(define-fun k () Int
+  1)

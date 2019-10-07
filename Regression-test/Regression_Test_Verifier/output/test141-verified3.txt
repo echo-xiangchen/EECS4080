@@ -1,0 +1,21 @@
+This formula is not tautology.
+(define-fun p () Bool
+  true)
+(define-fun r () Bool
+  true)
+(define-fun s1 () Bool
+  true)
+(define-fun k () Bool
+  false)
+(define-fun r0 () Bool
+  false)
+(define-fun s () Bool
+  false)
+(define-fun q () Bool
+  false)
+(define-fun m () Int
+  11)
+(define-fun j () Int
+  10)
+(define-fun i () Int
+  21)

@@ -1,0 +1,3 @@
+Error: Variable q has not been declared.
+Error: Variable q has not been declared.
+Error: Variable s has not been declared.

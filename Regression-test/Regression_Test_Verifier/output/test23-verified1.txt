@@ -1,0 +1,9 @@
+This formula is not tautology.
+(define-fun p () Bool
+  true)
+(define-fun m () Int
+  17)
+(define-fun j () Int
+  8)
+(define-fun i () Int
+  4)

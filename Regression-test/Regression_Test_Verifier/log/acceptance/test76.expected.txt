@@ -1,0 +1,5 @@
+Error: Type declaration of variable j is ambigous. Please make sure each variable is declared exactly once.
+Error: Type of variable j in this expression is ambigous. Please make sure each variable is declared exactly once.
+Error: Type declaration of variable m is ambigous. Please make sure each variable is declared exactly once.
+Error: Type of variable j in this expression is ambigous. Please make sure each variable is declared exactly once.
+Error: Type of variable m in this expression is ambigous. Please make sure each variable is declared exactly once.

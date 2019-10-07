@@ -1,0 +1,9 @@
+Error: Variable q has not been declared.
+Error: Variable i has not been declared.
+Error: Type declaration of variable m is ambigous. Please make sure each variable is declared exactly once.
+Error: Variable i has not been declared.
+Error: Variable j has not been declared.
+Error: Type of variable m in this expression is ambigous. Please make sure each variable is declared exactly once.
+Error: Variable i has not been declared.
+Error: Variable j has not been declared.
+Error: Type declaration of variable y is ambigous. Please make sure each variable is declared exactly once.

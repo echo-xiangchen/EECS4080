@@ -1,0 +1,9 @@
+This formula is not tautology.
+(define-fun n () Int
+  45)
+(define-fun m () Int
+  100)
+(define-fun j () Int
+  46)
+(define-fun i () Int
+  3)
