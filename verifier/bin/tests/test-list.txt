@@ -1,2 +1,0 @@
-01 - 16: Variable declaration
-17 - 26: Negation

@@ -12,7 +12,7 @@ import com.microsoft.z3.*;
 import antlr.*;
 import version.z3.*;
 
-public class TestVersionZ3 {
+public class TestZ3Ver {
 
 	public static void main(String[] args) {
 		try {

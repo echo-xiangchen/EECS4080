@@ -14,34 +14,30 @@ import types.*;
 import values.*;
 import version.logic.composite.*;
 
-public class HelperPrinter implements Visitor{
+public class InfixPrinter implements Visitor{
 	
-	public String output;
+	public String infixOutput;
 	
-	// list storing variables and their types and values
-	// only for printing
-	public static List<String[]> varList = new ArrayList<String[]>();   
-	
-	public HelperPrinter() {
-		output = "";
+	public InfixPrinter() {
+		infixOutput = "";
 	}
 	
 	public void visitBinaryExpr (BinaryExpr b, String op) {
-		HelperPrinter leftPrinter = new HelperPrinter();
-		HelperPrinter rightPrinter = new HelperPrinter();
+		InfixPrinter leftPrinter = new InfixPrinter();
+		InfixPrinter rightPrinter = new InfixPrinter();
 		
 		b.left().accept(leftPrinter);
 		b.right().accept(rightPrinter);
-		output = output.concat("(" + op + " " + leftPrinter.output + " " + rightPrinter.output + ")");
+		infixOutput = infixOutput.concat("(" + leftPrinter.infixOutput + " " + op + " " + rightPrinter.infixOutput + ")");
 	}
 	
 	public void visitUnaryExpr(UnaryExpr u, String op) {
 		
-		HelperPrinter p = new HelperPrinter();
+		InfixPrinter p = new InfixPrinter();
 		
 		u.child.accept(p);
 		
-		output = output.concat("(" + op + " " + p.output + ")");
+		infixOutput = infixOutput.concat("(" + op + " " + p.infixOutput + ")");
 	}
 	
 	
@@ -124,20 +120,18 @@ public class HelperPrinter implements Visitor{
 		// e.g. boolean p
 		if(v.mode == 0) {
 			String[] str = {v.name, "Bool", null};
-			varList.add(str);
 		}
 		// mode 1: verification
 		else if (v.mode == 1) {
-			output = output.concat(v.name);
+			infixOutput = infixOutput.concat(v.name);
 		}
 		// mode 2: initialized declaration
 		// e.g. boolean p = not q
 		else if (v.mode == 2) {
-			HelperPrinter h = new HelperPrinter();
+			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 			
-			String[] str = {v.name, "Bool", h.output};
-			varList.add(str);
+			String[] str = {v.name, "Bool", h.infixOutput};
 		}
 	}
 	
@@ -149,38 +143,36 @@ public class HelperPrinter implements Visitor{
 		if(v.mode == 0) {
 			
 			String[] str = {v.name, "Int", null};
-			varList.add(str);
 		}
 		// mode 1: verification
 		else if (v.mode == 1) {
-			output = output.concat(v.name);
+			infixOutput = infixOutput.concat(v.name);
 		}
 		// mode 2: initialized declaration
 		// e.g. int i = 2
 		else if (v.mode == 2) {
-			HelperPrinter h = new HelperPrinter();
+			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 			
-			String[] str = {v.name, "Int", h.output};
-			varList.add(str);
+			String[] str = {v.name, "Int", h.infixOutput};
 		}
 	}
 
 
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
-		output = output.concat(c.name);
+		infixOutput = infixOutput.concat(c.name);
 	}
 
 	@Override
 	public void visitBoolFalse(BoolFalse c) {
-		output = output.concat(c.name);
+		infixOutput = infixOutput.concat(c.name);
 		
 	}
 
 	@Override
 	public void visitNumConst(NumConst c) {
-		output = output.concat(c.name);
+		infixOutput = infixOutput.concat(c.name);
 		
 	}
 }

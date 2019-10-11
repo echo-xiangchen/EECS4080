@@ -1,0 +1,25 @@
+Formula: ((not r0) = (((s1 => ((not k) or r)) and (i = (j - m))) or (k and (not (m >= n)))))
+Where: 
+    p: Bool
+    r: Bool
+    s1: Bool
+    k: Bool
+    r0: Bool
+    s: Bool
+    n: Int
+    q: Bool
+    m: Int
+    j: Int
+    i: Int
+Is not tautology. Here is a counter example: 
+    p: true
+    r: true
+    s1: true
+    k: false
+    r0: false
+    s: false
+    n: 106
+    q: false
+    m: 11
+    j: 10
+    i: 21

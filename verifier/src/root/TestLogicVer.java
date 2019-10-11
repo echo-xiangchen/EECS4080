@@ -10,6 +10,7 @@ import java.util.*;
 import com.microsoft.z3.*;
 
 import antlr.*;
+import values.VarValue;
 import version.logic.*;
 import version.logic.composite.*;
 import version.logic.visitor.*;
@@ -21,9 +22,6 @@ public class TestLogicVer {
 			// set up strings for different mode
 			String printerStr = "-p";
 			String verifierStr = "-v";
-			
-			// create file writer
-			FileWriter writer;
 			
 			// if there is no argument
 			if (args.length < 1) {
@@ -106,12 +104,15 @@ public class TestLogicVer {
 									file.createNewFile();
 								}
 								
+								// write to file
 								FileOutputStream outStream = new FileOutputStream(file);
 								outStream.write(splitedOutput[i - 1].getBytes());
 								outStream.close();
+								
+								// print the result to the console
+								System.out.println("Output of formula: " 
+										+ printer.formulaList.get(i - 1) + "\nhas been stored in " + path1 + "\n");
 							}
-							System.out.println("There's no error. "
-									+ "Generated files based on your input has been stored in the \"output\" directory.");
 						}
 						// if there is no input file
 						else {
@@ -130,9 +131,11 @@ public class TestLogicVer {
 								FileOutputStream outStream = new FileOutputStream(file);
 								outStream.write(splitedOutput[i - 1].getBytes());
 								outStream.close();
+								
+								// print the result to the console
+								System.out.println("Output of formula: " 
+										+ printer.formulaList.get(i - 1) + "\nhas been stored in " + path2 + "\n");
 							}
-							System.out.println("There's no error. "
-									+ "Generated files based on your input has been stored in the \"output\" directory.");
 						}
 			        }
 			        // if errormsg is not empty
@@ -207,7 +210,7 @@ public class TestLogicVer {
 							
 							// create the string used to write to files
 							String writeToFile = "";
-							
+			            	
 							// write the output to the file
 							for (int i = 1; i <= splitedOutput.length; i++) {
 								// set up the path
@@ -237,27 +240,49 @@ public class TestLogicVer {
 								Status result = s.check();
 								
 								if (result == Status.SATISFIABLE){  
-					        		writeToFile = "This formula is not tautology.\n";
+					        		writeToFile = "Formula: " + printer.formulaList.get(i - 1) + "\nWhere: \n";
 					        		
 					        		// get the model
 					            	Model m = s.getModel();
 					            	
-					            	writeToFile = writeToFile.concat(m.toString());
+					            	// create the list to store only the necessary output string
+					            	List<String[]> varOutput = new ArrayList<String[]>();
 					            	
-					            }  
+					            	// split the z3 outputed model string
+					            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+					            	 
+					            	for (int j = 1; j < splitModel.length; j++) {
+				
+										String[] varValue = splitModel[j].split(" ");
+										// grab the necessary output
+										String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+										varOutput.add(str);
+									}
+					            	
+					            	for (int j = 0; j < varOutput.size(); j++) {
+					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+					            				+ ": " + varOutput.get(j)[1] + "\n");
+									}
+					            	writeToFile = writeToFile.concat("Is not tautology. Here is a counter example: \n");
+					            	for (int j = 0; j < varOutput.size(); j++) {
+					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+					            				+ ": " + varOutput.get(j)[2] + "\n");
+									}
+					            } 
 					            else if(result == Status.UNSATISFIABLE) { 
-					            	writeToFile = "This formula is tautology.\n";
+					            	writeToFile = "Formula: " + printer.formulaList.get(i - 1)
+					            				+ " is tautology.\n";
 					            }
 					            else  {
-					            	writeToFile = "Unknow formula.\n";
+					            	writeToFile = "Unknow formula: " + printer.formulaList.get(i - 1) + "\n";
 					            }
 								
 								FileOutputStream outStream = new FileOutputStream(file);
 								outStream.write(writeToFile.getBytes());
 								outStream.close();
+								
+								System.out.println(writeToFile);
 							}
-							System.out.println("There's no error. "
-									+ "Generated files based on your input has been stored in the \"output\" directory.");
 						}
 						// if there is no input file
 						else {
@@ -292,26 +317,49 @@ public class TestLogicVer {
 								Status result = s.check();
 								
 								if (result == Status.SATISFIABLE){  
-					        		writeToFile = "This formula is not tautology.\n";
+									writeToFile = "Formula: " + printer.formulaList.get(i - 1) + "\nWhere: \n";
 					        		
 					        		// get the model
 					            	Model m = s.getModel();
 					            	
-					            	writeToFile = writeToFile.concat(m.toString());
+					            	// create the list to store only the necessary output string
+					            	List<String[]> varOutput = new ArrayList<String[]>();
+					            	
+					            	// split the z3 outputed model string
+					            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+					            	 
+					            	for (int j = 1; j < splitModel.length; j++) {
+				
+										String[] varValue = splitModel[j].split(" ");
+										// grab the necessary output
+										String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+										varOutput.add(str);
+									}
+					            	
+					            	for (int j = 0; j < varOutput.size(); j++) {
+					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+					            				+ ": " + varOutput.get(j)[1] + "\n");
+									}
+					            	writeToFile = writeToFile.concat("Is not tautology. Here is a counter example: \n");
+					            	for (int j = 0; j < varOutput.size(); j++) {
+					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+					            				+ ": " + varOutput.get(j)[2] + "\n");
+									}
 					            }  
 					            else if(result == Status.UNSATISFIABLE) {
-					            	writeToFile = "This formula is tautology.\n";
+					            	writeToFile = "Formula: " + printer.formulaList.get(i - 1)
+		            				+ " is tautology.\n";
 					            }
 					            else { 
-					            	writeToFile = "Unknow formula.\n";
+					            	writeToFile = "Unknow formula: " + printer.formulaList.get(i - 1) + "\n";
 					            }
 								
 								FileOutputStream outStream = new FileOutputStream(file);
 								outStream.write(writeToFile.getBytes());
 								outStream.close();
+								
+								System.out.println(writeToFile);
 							}
-							System.out.println("There's no error. "
-									+ "Generated files based on your input has been stored in the \"output\" directory.");
 						}
 			        }
 			        else {

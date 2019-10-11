@@ -20,15 +20,21 @@ import version.logic.composite.*;
 public class PrettyPrinter implements Visitor {
 	
 	public String z3output;
+	public static List<String> formulaList = new ArrayList<String>();
 	
 	public PrettyPrinter() {
 		z3output = "";
 	}
 	
+	// version that include all the variable declared
 	public void printExpr (Logic e) {
-		// use the HelperPrinter to return the output
-		HelperPrinter p = new HelperPrinter();
+		// use the PrefixPrinter to return the output
+		PrefixPrinter p = new PrefixPrinter();
 		e.accept(p);
+		
+		// use the InfixPrinter to return the output
+		InfixPrinter p2 = new InfixPrinter();
+		e.accept(p2);
 				
 		// check if any variable has been added to the list
 		if (p.varList != null) {
@@ -49,11 +55,14 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("(assert (not " + p.output + "))\n"
+		z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
 				+ "(check-sat)\n"
 				+ ";Remove the comment if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
 				+ "split\n");
+		
+		// add the infix version to formulaList
+		formulaList.add(p2.infixOutput);
 
 		// try to print the list
 //		for (String[] strArr : p.varList) {
@@ -138,8 +147,8 @@ public class PrettyPrinter implements Visitor {
 		// mode 0: uninitialized declaration
 		// e.g. boolean p
 		if(v.mode == 0) {
-			// use the HelperPrinter to return the output
-			HelperPrinter p = new HelperPrinter();
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
 			v.accept(p);
 		}
 		// mode 1: verification
@@ -149,16 +158,16 @@ public class PrettyPrinter implements Visitor {
 		// mode 2: initialized declaration
 		// e.g. boolean p = not q
 		else if (v.mode == 2) {
-			// use the HelperPrinter to return the output
-			HelperPrinter p = new HelperPrinter();
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
 			v.accept(p);
 		}
 	}
 	
 	@Override
 	public void visitIntVar(IntVar v) {
-		// use the HelperPrinter to return the output
-		HelperPrinter p = new HelperPrinter();
+		// use the PrefixPrinter to return the output
+		PrefixPrinter p = new PrefixPrinter();
 		v.accept(p);
 	}
 
@@ -174,8 +183,8 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitNumConst(NumConst c) {
-		// use the HelperPrinter to return the output
-		HelperPrinter p = new HelperPrinter();
+		// use the PrefixPrinter to return the output
+		PrefixPrinter p = new PrefixPrinter();
 		c.accept(p);
 	}
 }
