@@ -1,0 +1,10 @@
+-- test negation with initialized boolean variable declaration with relational value (no error)
+int i = 1 + 3
+int j = i * 2
+int m = 3 * 4 + 5
+boolean p = i > 0
+verify not p
+boolean r = j >= m
+boolean s = j < 20
+verify not r
+verify not s

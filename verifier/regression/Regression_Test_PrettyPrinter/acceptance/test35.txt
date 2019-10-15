@@ -1,0 +1,14 @@
+-- test conjunction with initialized boolean variable declaration with relational value + propositional value (no error)
+int i = 1 + 3
+int j = i * 2
+int m = 3 * 4 + 5
+boolean p = not i > 0
+boolean q = i > j and m = i * j
+verify p and q
+boolean r = j >= m and p
+boolean s = j < 20 or m = 17
+verify not r and s and q
+boolean s1 = j = i => s
+boolean r0 = i = j <=> s1
+boolean k = m < i and not r
+verify not r0 and s1 and not k and r

@@ -1,1 +1,0 @@
-Formula: ((((i >= (m - j)) and (not p)) => ((q and s1) or k)) = ((n > ((m * i) - 2)) or (not (m = (j - (i * 9)))))) is tautology.

@@ -1,1 +1,0 @@
-Formula: (p => (((q and ((i >= j) = (not (m = 0)))) or (n <= (i + j))) or ((not q) and (not (j > (n - m)))))) is tautology.

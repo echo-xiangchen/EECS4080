@@ -1,0 +1,20 @@
+-- test propositional logic and equal  
+-- with initialized boolean and int variable declaration with expression value(no error)
+int i = 5 * 6 - 9
+int j = 1 + 9
+int m = 35 - 12 * 2
+boolean p = true
+boolean m = i = j
+boolean q = not p
+int n = i + m * j - 25
+verify p => q and (i >= j <=> not m = 0) or n <= i + j or (not q and not j > n - m)
+boolean r = not p => q and p
+int p = m + j
+boolean s = r and p <=> q and p
+verify not r and (s or q) <=> (p or m = i * n) and not i >= m => n > m * i + j
+boolean s1 = i >= j - 3
+boolean r0 = m = i * (j + 5)
+boolean k = i = m - 7
+verify not r0 <=> (s1 => (not k or r)) and i = j - m or k and not m >= n
+boolean p0 = i + j * m < n and not q or n >= i + j => m = 11
+verify  i >= m - j and not p => q and s1 or k <=> n > m * i - 2 or not m = j - i * 9

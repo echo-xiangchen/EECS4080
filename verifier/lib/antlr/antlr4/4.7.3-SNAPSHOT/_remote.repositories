@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Aug 31 18:03:22 EDT 2019
+antlr4-4.7.3-SNAPSHOT.jar>=
+antlr4-4.7.3-SNAPSHOT-complete.jar>=
+antlr4-4.7.3-SNAPSHOT.pom>=
+antlr4-4.7.3-SNAPSHOT-sources.jar>=

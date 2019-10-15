@@ -1,0 +1,10 @@
+-- test disjunction 
+-- with uninitialized boolean variable declaration (with error)
+boolean p
+verify not p or q or s
+boolean q
+verify not p or q
+boolean k
+boolean s
+boolean s
+verify p or not q or k or not s

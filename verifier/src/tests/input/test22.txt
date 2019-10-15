@@ -1,0 +1,11 @@
+-- test negation with initialized boolean variable declaration with propositional value (with error)
+boolean p = true
+verify not q
+boolean q = not p
+boolean r = p and q
+boolean t1 = p or r
+verify not r
+verify not t1
+boolean t2 = t1 => q
+boolean t3 = p <=> t2
+verify t3

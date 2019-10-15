@@ -1,0 +1,13 @@
+-- test of propositional logic 
+-- with initialized boolean variable declaration with constant value (with error)
+boolean p = true
+boolean q = false
+boolean k = true
+verify not p => (q and p)
+boolean k = false
+verify k <=> (not q and p => not p and q)
+boolean s = false
+verify not (s <=> p or q)
+boolean r = true
+boolean s = true
+verify (r => q) or (not p <=> (k and s))

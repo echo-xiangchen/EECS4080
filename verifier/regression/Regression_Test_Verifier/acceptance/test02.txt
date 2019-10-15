@@ -1,0 +1,11 @@
+-- test uninitialized boolean variable declaration (with error)
+boolean p
+boolean p
+boolean s
+boolean r
+boolean t
+boolean r
+boolean y
+boolean p0
+boolean q1
+boolean p0

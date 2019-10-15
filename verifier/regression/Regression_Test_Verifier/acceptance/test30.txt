@@ -1,0 +1,11 @@
+-- test conjunction 
+-- with initialized boolean variable declaration with constant value (with error)
+boolean p = true
+boolean q = false
+boolean q = true
+boolean r = false
+verify p and q
+verify not p and p and not q and q
+boolean s = false
+verify s and p and q
+verify s and r and not p

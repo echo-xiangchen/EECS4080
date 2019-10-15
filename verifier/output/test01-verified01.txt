@@ -1,0 +1,5 @@
+Formula: (p and q)
+Where: 
+    q: Bool = false
+Is not a tautology. Here is a counter example: 
+    q: false

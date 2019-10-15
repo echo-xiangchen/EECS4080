@@ -1,0 +1,11 @@
+-- test less or equal 
+-- with initialized int variable declaration with expression value (with error)
+int i = 2 * 3 + 24
+int j = i / 5 -7
+verify i <= j
+int j = 3 * i - 5
+int m = i * j / 2
+verify m <= i + 2
+verify m <= i + j
+int k = (m + 30) * 2
+verify k <= i * j

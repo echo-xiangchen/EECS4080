@@ -2,19 +2,13 @@ package root;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-
 import java.io.*;
-
 import java.util.*;
-
 import com.microsoft.z3.*;
-
 import antlr.*;
-import values.VarValue;
-import version.logic.*;
-import version.logic.composite.*;
-import version.logic.visitor.*;
-import version.z3.Z3generator;
+import logic.*;
+import logic.composite.*;
+import logic.visitor.*;
 
 public class TestLogicVer {
 	public static void main(String[] args) {
@@ -42,7 +36,8 @@ public class TestLogicVer {
 			            is = new FileInputStream(inputFile);
 			        }
 			        
-			        ANTLRInputStream input = new ANTLRInputStream(is);
+			        @SuppressWarnings("deprecation")
+					ANTLRInputStream input = new ANTLRInputStream(is);
 			        LogicLexer lexer = new LogicLexer(input);
 			        CommonTokenStream tokens = new CommonTokenStream(lexer);
 			        LogicParser parser = new LogicParser(tokens);
@@ -51,13 +46,13 @@ public class TestLogicVer {
 			        
 			        //System.out.println(tree.getText());
 			        
-			        LVisitor LVisitor = new LVisitor();
+			        AntlrToLogic AntlrToLogic = new AntlrToLogic();
 			        
 			        // list that stores the subtree separately
 			        List<Logic> logic = new ArrayList<Logic>();
 			        
 			        for (int i = 0; i < tree.getChildCount(); i++) {
-			        	logic.add(LVisitor.visit(tree.getChild(i)));
+			        	logic.add(AntlrToLogic.visit(tree.getChild(i)));
 					}
 			       
 			        // create new TypeChecker
@@ -93,7 +88,7 @@ public class TestLogicVer {
 							
 							// write the output to the file
 							for (int i = 1; i <= splitedOutput.length; i++) {
-								String path1 = "./output/" + testNum + "-formula" + i + ".txt";
+								String path1 = "./output/" + testNum + "-formula0" + i + ".txt";
 								
 								
 								File file = new File(path1);
@@ -109,16 +104,29 @@ public class TestLogicVer {
 								outStream.write(splitedOutput[i - 1].getBytes());
 								outStream.close();
 								
-								// print the result to the console
-								System.out.println("Output of formula: " 
-										+ printer.formulaList.get(i - 1) + "\nhas been stored in " + path1 + "\n");
+								
+								// print the warning message
+								if (PrettyPrinter.warningMsg.get(i - 1) != "") {
+									System.out.println("Formula: " 
+											+ PrettyPrinter.infixFormula.get(i - 1)
+											+ "\nWarning:" + "\n  Unused variable: " 
+											+ PrettyPrinter.warningMsg.get(i - 1)
+											+ "\nOutput of this formula has been stored in " + path1 + "\n");
+								}
+								else {
+									// print the result to the console
+									System.out.println("Formula: " 
+											+ PrettyPrinter.infixFormula.get(i - 1) 
+											+ "\nOutput of this formula has been stored in " + path1 + "\n");
+								}
+								
 							}
 						}
 						// if there is no input file
 						else {
 							// write the output to the file
 							for (int i = 1; i <= splitedOutput.length; i++) {
-								String path2 = "./output/" + "formula" + i + ".txt";
+								String path2 = "./output/" + "formula0" + i + ".txt";
 								
 								File file = new File(path2);
 								
@@ -132,9 +140,20 @@ public class TestLogicVer {
 								outStream.write(splitedOutput[i - 1].getBytes());
 								outStream.close();
 								
-								// print the result to the console
-								System.out.println("Output of formula: " 
-										+ printer.formulaList.get(i - 1) + "\nhas been stored in " + path2 + "\n");
+								// print the warning message
+								if (PrettyPrinter.warningMsg.get(i - 1) != "") {
+									System.out.println("Formula: " 
+											+ PrettyPrinter.infixFormula.get(i - 1)
+											+ "\nWarning:" + "\n  Unused variable: " 
+											+ PrettyPrinter.warningMsg.get(i - 1)
+											+ "\nOutput of this formula has been stored in " + path2 + "\n");
+								}
+								else {
+									// print the result to the console
+									System.out.println("Formula: " 
+											+ PrettyPrinter.infixFormula.get(i - 1) 
+											+ "\nOutput of this formula has been stored in " + path2 + "\n");
+								}
 							}
 						}
 			        }
@@ -158,7 +177,8 @@ public class TestLogicVer {
 			            is = new FileInputStream(inputFile);
 			        }
 			        
-			        ANTLRInputStream input = new ANTLRInputStream(is);
+			        @SuppressWarnings("deprecation")
+					ANTLRInputStream input = new ANTLRInputStream(is);
 			        LogicLexer lexer = new LogicLexer(input);
 			        CommonTokenStream tokens = new CommonTokenStream(lexer);
 			        LogicParser parser = new LogicParser(tokens);
@@ -167,14 +187,14 @@ public class TestLogicVer {
 			        
 			        //System.out.println(tree.getText());
 			        
-			        LVisitor LVisitor = new LVisitor(); 
+			        AntlrToLogic AntlrToLogic = new AntlrToLogic(); 
 			        
 			        
 			        // list that stores the subtree separately
 			        List<Logic> logic = new ArrayList<Logic>();
 			        
 			        for (int i = 0; i < tree.getChildCount(); i++) {
-			        	logic.add(LVisitor.visit(tree.getChild(i)));
+			        	logic.add(AntlrToLogic.visit(tree.getChild(i)));
 					}
 			       
 			        // create new TypeChecker
@@ -214,7 +234,7 @@ public class TestLogicVer {
 							// write the output to the file
 							for (int i = 1; i <= splitedOutput.length; i++) {
 								// set up the path
-								String path1 = "./output/" + testNum + "-verified" + i + ".txt";
+								String path1 = "./output/" + testNum + "-verified0" + i + ".txt";
 								
 								File file = new File(path1);
 								
@@ -226,6 +246,7 @@ public class TestLogicVer {
 								}
 								
 								// create z3 context
+								@SuppressWarnings("resource")
 								Context ctx = new Context();
 								
 								// convert the string and sent it to z3 context
@@ -240,7 +261,7 @@ public class TestLogicVer {
 								Status result = s.check();
 								
 								if (result == Status.SATISFIABLE){  
-					        		writeToFile = "Formula: " + printer.formulaList.get(i - 1) + "\nWhere: \n";
+					        		writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
 					        		
 					        		// get the model
 					            	Model m = s.getModel();
@@ -260,21 +281,30 @@ public class TestLogicVer {
 									}
 					            	
 					            	for (int j = 0; j < varOutput.size(); j++) {
-					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-					            				+ ": " + varOutput.get(j)[1] + "\n");
+					            		// also include the initialized variable value
+					            		if (PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b == null) {
+					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+						            				+ ": " + varOutput.get(j)[1] + "\n");
+										}
+					            		else {
+					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+						            				+ ": " + varOutput.get(j)[1] 
+						            				+ " = " + PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b 
+						            				+ "\n");
+										}
 									}
-					            	writeToFile = writeToFile.concat("Is not tautology. Here is a counter example: \n");
+					            	writeToFile = writeToFile.concat("Is not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {
 					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
 					            				+ ": " + varOutput.get(j)[2] + "\n");
 									}
 					            } 
 					            else if(result == Status.UNSATISFIABLE) { 
-					            	writeToFile = "Formula: " + printer.formulaList.get(i - 1)
-					            				+ " is tautology.\n";
+					            	writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1)
+					            				+ " is a tautology.\n";
 					            }
 					            else  {
-					            	writeToFile = "Unknow formula: " + printer.formulaList.get(i - 1) + "\n";
+					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
 					            }
 								
 								FileOutputStream outStream = new FileOutputStream(file);
@@ -291,7 +321,7 @@ public class TestLogicVer {
 							
 							// write the output to the file
 							for (int i = 1; i <= splitedOutput.length; i++) {
-								String path2 = "./output/" + "verified" + i + ".txt";
+								String path2 = "./output/" + "verified0" + i + ".txt";
 								
 								File file = new File(path2);
 								
@@ -303,6 +333,7 @@ public class TestLogicVer {
 								}
 								
 								// create z3 context
+								@SuppressWarnings("resource")
 								Context ctx = new Context();
 								
 								// convert the string and sent it to z3 context
@@ -317,7 +348,7 @@ public class TestLogicVer {
 								Status result = s.check();
 								
 								if (result == Status.SATISFIABLE){  
-									writeToFile = "Formula: " + printer.formulaList.get(i - 1) + "\nWhere: \n";
+									writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
 					        		
 					        		// get the model
 					            	Model m = s.getModel();
@@ -337,21 +368,31 @@ public class TestLogicVer {
 									}
 					            	
 					            	for (int j = 0; j < varOutput.size(); j++) {
-					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-					            				+ ": " + varOutput.get(j)[1] + "\n");
+					            		// also include the initialized variable value
+					            		if (PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b == null) {
+					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+						            				+ ": " + varOutput.get(j)[1] + "\n");
+										}
+					            		else {
+					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+						            				+ ": " + varOutput.get(j)[1] 
+						            				+ " = " + PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b 
+						            				+ "\n");
+										}
+					            		
 									}
-					            	writeToFile = writeToFile.concat("Is not tautology. Here is a counter example: \n");
+					            	writeToFile = writeToFile.concat("Is not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {
 					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
 					            				+ ": " + varOutput.get(j)[2] + "\n");
 									}
 					            }  
 					            else if(result == Status.UNSATISFIABLE) {
-					            	writeToFile = "Formula: " + printer.formulaList.get(i - 1)
-		            				+ " is tautology.\n";
+					            	writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1)
+		            				+ " is a tautology.\n";
 					            }
 					            else { 
-					            	writeToFile = "Unknow formula: " + printer.formulaList.get(i - 1) + "\n";
+					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
 					            }
 								
 								FileOutputStream outStream = new FileOutputStream(file);
