@@ -1,0 +1,5 @@
+-- Gries Theorems
+-- Implication
+-- (3.72) Right zero of '=>':
+boolean p
+verify p => true <=> true

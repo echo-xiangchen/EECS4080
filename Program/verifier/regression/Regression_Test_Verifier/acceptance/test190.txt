@@ -1,0 +1,6 @@
+-- Gries Theorems
+-- Conjunction
+-- (3.53) Exclusive or: 
+boolean p
+boolean q
+verify not (p <=> q) <=> (not p and q) or (p and not q)

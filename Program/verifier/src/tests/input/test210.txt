@@ -1,0 +1,5 @@
+-- Gries Theorems
+-- Implication
+-- (3.75) 
+boolean p
+verify false => p <=> true

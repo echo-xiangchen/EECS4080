@@ -1,0 +1,7 @@
+-- Gries Theorems
+-- Implication
+-- (3.78) 
+boolean p
+boolean q
+boolean r
+verify (p => r) and (q => r) <=> (p or q => r)

@@ -1,0 +1,4 @@
+-- Gries Theorems
+-- Negation, Inequivalence, and false
+-- (3.13) Negation of false
+verify not false <=> true

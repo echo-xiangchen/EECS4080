@@ -1,0 +1,9 @@
+-- Gries Theorems
+-- Implication
+-- (3.82) Transitivity:
+boolean p
+boolean q
+boolean r
+verify (p => q) and (q => r) => (p => r)
+verify (p <=> q) and (q => r) => (p => r)
+verify (p => q) and (q <=> r) => (p => r)

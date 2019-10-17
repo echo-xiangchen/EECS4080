@@ -1,0 +1,6 @@
+-- Gries Theorems
+-- Lerbniz as an axiom
+-- (4.1) 
+boolean p
+boolean q
+verify p => (q => p)

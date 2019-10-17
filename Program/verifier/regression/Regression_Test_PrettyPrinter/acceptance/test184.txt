@@ -1,0 +1,7 @@
+-- Gries Theorems
+-- Conjunction
+-- (3.47) De Morgan: 
+boolean p
+boolean q
+verify not (p and q) <=> not p or not q
+verify not (p or q) <=> not p and not q

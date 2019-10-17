@@ -1,0 +1,9 @@
+-- test implication with uninitialized boolean variable declaration (with error)
+boolean p
+boolean q
+boolean k
+boolean q
+verify not p => q => s
+verify q => (s => not p) => not q
+boolean s
+verify p => (not s or q)

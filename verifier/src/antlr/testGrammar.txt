@@ -1,6 +1,0 @@
-int r
-int p = 1 * 3 - 4
-verify 3 + 4 > 5 => 5 < 4
-boolean p = true
-boolean q = not true and p
-boolean p = 3

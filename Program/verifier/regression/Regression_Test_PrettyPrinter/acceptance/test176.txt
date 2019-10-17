@@ -1,0 +1,5 @@
+-- Gries Theorems
+-- Conjunction
+-- (3.39) Identity of 'and': 
+boolean p
+verify p and true <=> p

@@ -1,0 +1,7 @@
+-- Gries Theorems
+-- Lerbniz as an axiom
+-- (4.3) Monotonicity of 'and':
+boolean p
+boolean q
+boolean r
+verify (p => q) => (p and r => q and r)

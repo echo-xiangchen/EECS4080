@@ -1,0 +1,6 @@
+-- Gries Theorems
+-- Conjunction
+-- (3.48) 
+boolean p
+boolean q
+verify p and q <=> p and not q <=> not p

@@ -1,0 +1,10 @@
+-- test relational logic with uninitialized int variable declaration (no error)
+int i
+int j
+verify i * j = j + 5
+verify i >= j + 48
+int m
+verify m * j <= m + 45
+int k
+verify k + i < m * 9
+verify m > j + i

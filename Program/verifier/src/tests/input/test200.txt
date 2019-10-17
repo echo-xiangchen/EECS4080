@@ -1,0 +1,7 @@
+-- Gries Theorems
+-- Implication
+-- (3.65) Shunting:
+boolean p
+boolean q
+boolean r
+verify p and q => r <=> p => (q => r)

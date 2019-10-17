@@ -1,0 +1,7 @@
+-- Gries Theorems
+-- Conjunction
+-- (3.45) Distributivity of 'or' over 'and': 
+boolean p
+boolean q
+boolean r
+verify p or (q and r) <=> (p or q) and (p or r)

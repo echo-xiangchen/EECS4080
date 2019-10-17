@@ -1,0 +1,4 @@
+-- Gries Theorems
+-- Negation, Inequivalence, and false
+-- (3.8) Axiom, Definition of false:
+verify false <=> not true

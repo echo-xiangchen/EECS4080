@@ -1,7 +1,0 @@
--- test propositional logic and equal  
--- with initialized boolean and int variable declaration with expression value(no error)
-boolean p
-boolean q = false
-verify p and q
-boolean r
-verify not p

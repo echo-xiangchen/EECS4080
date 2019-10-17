@@ -1,0 +1,6 @@
+-- Gries Theorems
+-- Disjunction
+-- (3.32) 
+boolean p
+boolean q
+verify p or q <=> p or not q <=> p

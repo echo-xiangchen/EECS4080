@@ -1,0 +1,6 @@
+-- Gries Theorems
+-- Implication
+-- (3.61) Contrapositive: 
+boolean p
+boolean q
+verify p => q <=> not q => not p
