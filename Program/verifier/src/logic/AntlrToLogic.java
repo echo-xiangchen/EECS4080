@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+import java.util.List;
 import antlr.*;
 import antlr.LogicParser.*;
 import logic.composite.*;
@@ -7,18 +9,16 @@ import modes.*;
 
 public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	
-	// uninitialized boolean variable declaration
+	// uninitialized boolean or int variable declaration
 	@Override
-	public Logic visitSingleBool(SingleBoolContext ctx) {
-		return new BoolVar(ctx.ID().getText(), new UninitializedDecl());
+	public Logic visitSingleVar(SingleVarContext ctx) {
+		if (ctx.type.getType() == LogicParser.BOOL) {
+			return new BoolVar(ctx.ID().getText(), new UninitializedDecl());
+		}
+		else {
+			return new IntVar(ctx.ID().getText(), new UninitializedDecl());
+		}
 	}
-	
-	// uninitialized int variable declaration
-	@Override
-	public Logic visitSingleInt(SingleIntContext ctx) {
-		return new IntVar(ctx.ID().getText(), new UninitializedDecl());
-	}
-
 	
 	
 	// initialized boolean variable declaration
@@ -38,6 +38,7 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	public Logic visitEvalBoolExpr(EvalBoolExprContext ctx) {
 		return visit(ctx.boolExpr());
 	}
+	
 	
 	
 	
@@ -71,6 +72,63 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 		return new NumConst(ctx.NUM().getText());
 	}
 	
+	
+	
+	// forall
+	@Override
+	public Logic visitForall(ForallContext ctx) {
+		// create a list of Var
+		// recursively call visit(ctx.varDecl()) 
+		// which will return a Logic object (it's guaranteed to be BoolVar or IntVar)
+		List<Var> list = new ArrayList<Var>();
+		for (int i = 0; i < ctx.varDecl().size(); i++) {
+			list.add((Var) visit(ctx.varDecl(i)));
+		}
+		// create a new Forall object, and copy all the declared variables into quantifyList
+		return new Forall(list, visit(ctx.boolExpr()));
+		
+	}
+	
+	// there exists
+	@Override
+	public Logic visitExists(ExistsContext ctx) {
+		// create a list of Var
+		// recursively call visit(ctx.varDecl()) 
+		// which will return a Logic object (it's guaranteed to be BoolVar or IntVar)
+		List<Var> list = new ArrayList<Var>();
+		for (int i = 0; i < ctx.varDecl().size(); i++) {
+			list.add((Var) visit(ctx.varDecl(i)));
+		}
+		// create a new exists object, and copy all the declared variables into quantifyList
+		return new Exists(list, visit(ctx.boolExpr()));
+	}
+	
+	
+	// quantification boolean variable declaration
+	@Override
+	public Logic visitQuantifyBool(QuantifyBoolContext ctx) {
+		// store each ID's string into list
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < ctx.ID().size(); i++) {
+			list.add(ctx.ID(i).getText());
+		}
+		// create a new BoolVar object, accepting the list
+		// and transform the list of String into a list of BoolVar
+		return new BoolVar(list, new QuantifyBool());
+	}
+	
+	// quantification int variable declaration
+	@Override
+	public Logic visitQuantifyInt(QuantifyIntContext ctx) {
+		// store each ID's string into list
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < ctx.ID().size(); i++) {
+			list.add(ctx.ID(i).getText());
+		}
+		// create a new IntVar object, accepting the list
+		// and transform the list of String into a list of IntVar
+		return new IntVar(list, new QuantifyInt());
+	}
 	
 	
 	

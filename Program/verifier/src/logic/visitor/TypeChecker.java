@@ -10,6 +10,7 @@ public class TypeChecker implements Visitor{
 	// hashmap for type checking
 	public static Map<String, Pair<VarType, Logic>> varMap = new HashMap<String, Pair<VarType, Logic>>();
 	
+	
 	// error message
 	public List<String> errormsg;
 	
@@ -40,6 +41,31 @@ public class TypeChecker implements Visitor{
 		
 		errormsg.addAll(checker.errormsg);
 	}
+	
+	public void QuantifyChecker (Quantification q) {
+		// recursively accept all the variables in the list first
+		for (int i = 0; i < q.quantifyList.size(); i++) {
+			TypeChecker c1 = new TypeChecker();
+			q.quantifyList.get(i).accept(c1);
+			errormsg.addAll(c1.errormsg);
+		}
+		// then accept the boolexpr next
+		TypeChecker c2 = new TypeChecker();
+		q.expr.accept(c2);
+		errormsg.addAll(c2.errormsg);
+	}
+	
+	// for all
+	@Override
+	public void visitForall(Forall q) {
+		QuantifyChecker(q);
+	}
+
+	// there exists
+	@Override
+	public void visitExists(Exists q) {
+		QuantifyChecker(q);
+	}	
 
 	// not
 	@Override
@@ -128,9 +154,12 @@ public class TypeChecker implements Visitor{
 	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// variable 0: uninitialized declaration
+		// mode 0: uninitialized declaration
 		// e.g. boolean q
-		if (v.variable instanceof modes.UninitializedDecl) {
+		
+		// and mode 3: quantification declaration
+		// e.g. forall boolean p; @ not p
+		if ((v.mode instanceof modes.UninitializedDecl) || (v.mode instanceof modes.QuantifyBool)) {
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
 				varMap.put(v.name, new Pair<VarType, Logic>(new BoolType(), null));
@@ -143,11 +172,11 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// variable 1: verification
+		// mode 1: verification
 		// e.g. p => q
-		else if (v.variable instanceof modes.Verification) {
+		else if (v.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(v.name)) {
-				errormsg.add("Error: Variable " + v.name + " has not been declared.");
+				errormsg.add("Error: variable " + v.name + " has not been declared.");
 			}
 			// if it has unknown type
 			else if (varMap.containsKey(v.name) && (varMap.get(v.name).a instanceof types.UnknowType)) {
@@ -156,13 +185,13 @@ public class TypeChecker implements Visitor{
 			}
 			// if it's not boolean type
 			else if (varMap.containsKey(v.name) && !(varMap.get(v.name).a instanceof types.BoolType)) {
-				errormsg.add("Error: Variable " + v.name + " is not declared as boolean type.");
+				errormsg.add("Error: variable " + v.name + " is not declared as boolean type.");
 			}
 		}
-		// variable 2: initialized declaration
+		// mode 2: initialized declaration
 		// e.g. boolean p = not q
-		else if (v.variable instanceof modes.InitializedDecl) {
-			// type check this boolean variable's value first
+		else if (v.mode instanceof modes.InitializedDecl) {
+			// type check this boolean mode's value first
 			TypeChecker checker = new TypeChecker();
 			v.value.accept(checker);
 			
@@ -185,9 +214,12 @@ public class TypeChecker implements Visitor{
 	// int variable
 	@Override
 	public void visitIntVar(IntVar v) {
-		// variable 0: uninitialized declaration
+		// mode 0: uninitialized declaration
 		// e.g. int i
-		if (v.variable instanceof modes.UninitializedDecl) {
+		
+		// and mode 3: quantification declaration
+		// e.g. forall int i; @ i > 0
+		if ((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
 				varMap.put(v.name, new Pair<VarType, Logic>(new IntType(), null));
@@ -200,10 +232,10 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// variable 1: verification
-		else if (v.variable instanceof modes.Verification) {
+		// mode 1: verification
+		else if (v.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(v.name)) {
-				errormsg.add("Error: Variable " + v.name + " has not been declared.");
+				errormsg.add("Error: variable " + v.name + " has not been declared.");
 			}
 			// if it has unknown type
 			else if (varMap.containsKey(v.name) && (varMap.get(v.name).a instanceof types.UnknowType)) {
@@ -212,12 +244,12 @@ public class TypeChecker implements Visitor{
 			}
 			// if it's not declared as int type
 			else if (varMap.containsKey(v.name) && !(varMap.get(v.name).a instanceof types.IntType)) {
-				errormsg.add("Error: Variable " + v.name + " is not declared as integer type.");
+				errormsg.add("Error: variable " + v.name + " is not declared as integer type.");
 			}
 		}
-		// variable 2: initialized declaration
+		// mode 2: initialized declaration
 		// int j = 1 + 2
-		else if (v.variable instanceof modes.InitializedDecl) {
+		else if (v.mode instanceof modes.InitializedDecl) {
 			// type check this arithmetic variable's value first
 			TypeChecker checker = new TypeChecker();
 			v.value.accept(checker);
@@ -254,5 +286,6 @@ public class TypeChecker implements Visitor{
 	@Override
 	public void visitNumConst(NumConst l) {
 		// automatically type correct
-	}	
+	}
+
 }

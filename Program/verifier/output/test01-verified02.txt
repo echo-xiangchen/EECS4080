@@ -1,5 +1,1 @@
-Formula: (not p)
-Where: 
-    p: Bool
-Is not a tautology. Here is a counter example: 
-    p: true
+Formula: Forall r,s;((r => s) = ((r and s) = r)) is a tautology.

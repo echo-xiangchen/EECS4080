@@ -9,11 +9,15 @@ import logic.composite.*;
 public class PrettyPrinter implements Visitor {
 	
 	public String z3output;
+	public String quantifyIndicator;
 	public static List<String> infixFormula = new ArrayList<String>();
 	public static List<String> warningMsg = new ArrayList<String>();
 	
+	public static List<ArrayList<String>> usedVarList = new ArrayList<ArrayList<String>>();
+	
 	public PrettyPrinter() {
 		z3output = "";
+		quantifyIndicator = "";
 	}
 	
 	// version that include all the variable declared
@@ -25,11 +29,16 @@ public class PrettyPrinter implements Visitor {
 		// use the InfixPrinter to return the output
 		InfixPrinter p2 = new InfixPrinter();
 		e.accept(p2);
-				
-		// compare two variable hashmaps, and output the unused variable(s)
-		Map<String, Pair<String, String>> differenceMap = new HashMap<String, Pair<String,String>>();
-		// add all the elements of completeVarList to differenceMap
-		differenceMap.putAll(PrefixPrinter.completeVarMap);
+		
+		// clone the inclusiveVarMap to usedVarList
+		// for "-v" version, printing the used variable for each formula
+		ArrayList<String> varNames = new ArrayList<String>();
+		
+		for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
+			varNames.add(entry.getKey());
+			
+		}
+		usedVarList.add(varNames);
 		
 		
 		// check if any variable has been added to the list
@@ -40,14 +49,15 @@ public class PrettyPrinter implements Visitor {
 					z3output = z3output.concat("(declare-const " + entry.getKey() 
 							+  " " + entry.getValue().a +")\n");
 				}
+				else if (entry.getValue().b.equals("Quantification")) {
+					
+				}
 				else {
 					z3output = z3output.concat("(declare-const " + entry.getKey() +  " " 
 							+ entry.getValue().a + ")\n"
 							+ "(assert (= " + entry.getKey() 
 							+ " " + entry.getValue().b + "))\n");
 				}
-				// delete the same element of completeVarList and inclusiveVarList
-				differenceMap.remove(entry.getKey());
 			}
 		}
 		// add the remaining string
@@ -60,23 +70,154 @@ public class PrettyPrinter implements Visitor {
 		// add the infix version to formulaList
 		infixFormula.add(p2.infixOutput);
 		
-		// iterate through differenceMap, and get the variable name, store it in warning message
+		// iterate through differenceMap, and get the mode name, store it in warning message
 		String varString = "";
-		for (Entry<String, Pair<String, String>> entry : differenceMap.entrySet()) {
-			varString = varString.concat("<" + entry.getKey() + "> ");
+		if (!VarPrinter.unusedVarMap.isEmpty()) {
+			for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
+				varString = varString.concat("<" + entry.getKey() + "> ");
+			}
 		}
 		// add to warning message
 		warningMsg.add(varString);
 		
-//		System.out.println("varlist: " + PrefixPrinter.completeVarList);
-//		System.out.println("varlist2 before: " +PrefixPrinter.inclusiveVarList);
+		
+		// clear the map
 		PrefixPrinter.inclusiveVarMap.clear();
-//		System.out.println("varlist2 after: " +PrefixPrinter.inclusiveVarList);
+	}
+	
+	
+	// version for quantification
+	public void printQuantification (Quantification q) {
+		// use the PrefixPrinter to return the output
+		PrefixPrinter p = new PrefixPrinter();
+		q.accept(p);
+				
+		// use the InfixPrinter to return the output
+		InfixPrinter p2 = new InfixPrinter();
+		q.accept(p2);
+		
+		// clone the inclusiveVarMap to usedVarList
+		// for "-v" version, printing the used variable for each formula
+		ArrayList<String> varNames = new ArrayList<String>();
+		
+		for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
+			varNames.add(entry.getKey());
+			
+		}
+		usedVarList.add(varNames);
+		
+		// check if any variable has been added to the list
+		if (PrefixPrinter.inclusiveVarMap != null) {
+					
+			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
+				if (entry.getValue().b == null) {
+					z3output = z3output.concat("(declare-const " + entry.getKey() 
+							+  " " + entry.getValue().a +")\n");
+				}
+				else if (entry.getValue().b.equals("Quantification")) {
+							
+				}
+				else {
+					z3output = z3output.concat("(declare-const " + entry.getKey() +  " " 
+							+ entry.getValue().a + ")\n"
+							+ "(assert (= " + entry.getKey() 
+							+ " " + entry.getValue().b + "))\n");
+				}
+			}
+		}
+		
+		// add the remaining string
+		z3output = z3output.concat("(assert (" + " " + p.prefixOutput + "))\n"
+				+ "(check-sat)\n"
+				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
+				+ ";(get-model)\n"
+				+ "split\n");
+		
+		// add the infix version to formulaList
+		infixFormula.add(p2.infixOutput);
+				
+		// iterate through differenceMap, and get the mode name, store it in warning message
+		String varString = "";
+		if (!VarPrinter.unusedVarMap.isEmpty()) {
+			for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
+				varString = varString.concat("<" + entry.getKey() + "> ");
+			}
+		}
+		// add to warning message
+		warningMsg.add(varString);
+		
+		// clear the map
+		PrefixPrinter.inclusiveVarMap.clear();
+	}
+	
+	
+	
+	@Override
+	public void visitForall(Forall q) {
+		// use the PrefixPrinter to return the output
+				PrefixPrinter p = new PrefixPrinter();
+				q.accept(p);
+				
+				// use the InfixPrinter to return the output
+				InfixPrinter p2 = new InfixPrinter();
+				q.accept(p2);
+				
+				// clone the inclusiveVarMap to usedVarList
+				// for "-v" version, printing the used variable for each formula
+				ArrayList<String> varNames = new ArrayList<String>();
+				
+				for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
+					varNames.add(entry.getKey());
+					
+				}
+				usedVarList.add(varNames);
+				
+				
+				// check if any variable has been added to the list
+				if (PrefixPrinter.inclusiveVarMap != null) {
+					
+					for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
+						if (entry.getValue().b == null || entry.getValue().b.equals("Quantification")) {
+							z3output = z3output.concat("(declare-const " + entry.getKey() 
+									+  " " + entry.getValue().a +")\n");
+						}
+						else {
+							z3output = z3output.concat("(declare-const " + entry.getKey() +  " " 
+									+ entry.getValue().a + ")\n"
+									+ "(assert (= " + entry.getKey() 
+									+ " " + entry.getValue().b + "))\n");
+						}
+					}
+				}
+				// add the remaining string
+				z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
+						+ "(check-sat)\n"
+						+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
+						+ ";(get-model)\n"
+						+ "split\n");
+				
+				// add the infix version to formulaList
+				infixFormula.add(p2.infixOutput);
+				
+				// iterate through differenceMap, and get the mode name, store it in warning message
+				String varString = "";
+				if (!VarPrinter.unusedVarMap.isEmpty()) {
+					for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
+						varString = varString.concat("<" + entry.getKey() + "> ");
+					}
+				}
+				// add to warning message
+				warningMsg.add(varString);
+				
+				
+				// clear the map
+				PrefixPrinter.inclusiveVarMap.clear();
+	}
 
-		// try to print the list
-//		for (String[] strArr : p.varList) {
-//			System.out.println(Arrays.toString(strArr));
-//		}	
+	@Override
+	public void visitExists(Exists q) {
+		quantifyIndicator = "forall";
+		printQuantification(q);
 	}
 	
 	
@@ -153,20 +294,20 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// variable 0: uninitialized declaration
+		// mode 0: uninitialized declaration
 		// e.g. boolean p
-		if(v.variable instanceof modes.UninitializedDecl) {
+		if(v.mode instanceof modes.UninitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
 			v.accept(p);
 		}
-		// variable 1: verification
-		else if (v.variable instanceof modes.Verification) {
+		// mode 1: verification
+		else if (v.mode instanceof modes.Verification) {
 			printExpr(v);
 		}
-		// variable 2: initialized declaration
+		// mode 2: initialized declaration
 		// e.g. boolean p = not q
-		else if (v.variable instanceof modes.InitializedDecl) {
+		else if (v.mode instanceof modes.InitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
 			v.accept(p);
@@ -196,4 +337,5 @@ public class PrettyPrinter implements Visitor {
 		PrefixPrinter p = new PrefixPrinter();
 		c.accept(p);
 	}
+
 }

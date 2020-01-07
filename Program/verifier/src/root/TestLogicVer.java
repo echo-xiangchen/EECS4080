@@ -1,9 +1,12 @@
 package root;
 
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.tree.*;
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
+
 import com.microsoft.z3.*;
 import antlr.*;
 import logic.*;
@@ -13,7 +16,7 @@ import logic.visitor.*;
 public class TestLogicVer {
 	public static void main(String[] args) {
 		try {
-			// set up strings for different variable
+			// set up strings for different mode
 			String printerStr = "-p";
 			String verifierStr = "-v";
 			
@@ -66,13 +69,18 @@ public class TestLogicVer {
 			        // check if error msg is empty
 			        // only when it's empty, call the pretty printer
 			        if (checker.errormsg.isEmpty()) {
-			        	PrettyPrinter printer = new PrettyPrinter();
+			        	VarPrinter varPrinter = new VarPrinter();
+ 			        	PrettyPrinter printer = new PrettyPrinter();
+ 			        	
+ 			        	// check to see if there is any unused mode
+ 			        	for (int i = 0; i < logic.size(); i++) {
+							logic.get(i).accept(varPrinter);
+						}
 						
+ 			        	// call the pretty printer
 						for (int i = 0; i < logic.size(); i++) {
 							logic.get(i).accept(printer);
 						}
-						//System.out.println(printer.z3output);
-						
 						
 						// split the output
 						String[] splitedPrinterOutput = printer.z3output.split("split\n");
@@ -104,23 +112,22 @@ public class TestLogicVer {
 								outStream.write(splitedPrinterOutput[i - 1].getBytes());
 								outStream.close();
 								
-								
-								// print the warning message
-								if (PrettyPrinter.warningMsg.get(i - 1) != "") {
-									System.out.println("Formula: " 
-											+ PrettyPrinter.infixFormula.get(i - 1)
-											+ "\nWarning:" + "\n  Unused variable: " 
-											+ PrettyPrinter.warningMsg.get(i - 1)
-											+ "\nOutput of this formula has been stored in " + path1 + "\n");
-								}
-								else {
-									// print the result to the console
-									System.out.println("Formula: " 
-											+ PrettyPrinter.infixFormula.get(i - 1) 
-											+ "\nOutput of this formula has been stored in " + path1 + "\n");
-								}
+								// print the result to the console
+								System.out.println("Formula: " 
+										+ PrettyPrinter.infixFormula.get(i - 1) 
+										+ "\nOutput of this formula has been stored in " + path1 + "\n");
 								
 							}
+							// iterate through differenceMap, and get the mode name, store it in warning message
+							String varString = "";
+							if (!VarPrinter.unusedVarMap.isEmpty()) {
+								for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
+									varString = varString.concat("<" + entry.getKey() + "> ");
+								}
+								
+							System.out.println("Warning: The following variable(s) are declared but never used: \n  " + varString);
+							}
+							
 						}
 						// if there is no input file
 						else {
@@ -140,21 +147,22 @@ public class TestLogicVer {
 								outStream.write(splitedPrinterOutput[i - 1].getBytes());
 								outStream.close();
 								
-								// print the warning message
-								if (PrettyPrinter.warningMsg.get(i - 1) != "") {
-									System.out.println("Formula: " 
-											+ PrettyPrinter.infixFormula.get(i - 1)
-											+ "\nWarning:" + "\n  Unused variable: " 
-											+ PrettyPrinter.warningMsg.get(i - 1)
-											+ "\nOutput of this formula has been stored in " + path2 + "\n");
-								}
-								else {
-									// print the result to the console
-									System.out.println("Formula: " 
-											+ PrettyPrinter.infixFormula.get(i - 1) 
-											+ "\nOutput of this formula has been stored in " + path2 + "\n");
-								}
+								
+								// print the result to the console
+								System.out.println("Formula: " 
+										+ PrettyPrinter.infixFormula.get(i - 1) 
+										+ "\nOutput of this formula has been stored in " + path2 + "\n");
+								
 							}
+							// iterate through differenceMap, and get the mode name, store it in warning message
+							String varString = "";
+							if (!VarPrinter.unusedVarMap.isEmpty()) {
+								for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
+									varString = varString.concat("<" + entry.getKey() + "> ");
+								}
+							System.out.println("Warning: The following variable(s) are declared but never used: \n  " + varString);
+							}
+							
 						}
 			        }
 			        // if errormsg is not empty
@@ -184,8 +192,7 @@ public class TestLogicVer {
 			        LogicParser parser = new LogicParser(tokens);
 			        parser.setBuildParseTree(true);      // tell ANTLR to build a parse tree
 			        ParseTree tree = parser.stat(); // parse
-			        
-			        //System.out.println(tree.getText());
+			       
 			        
 			        AntlrToLogic AntlrToLogic = new AntlrToLogic(); 
 			        
@@ -208,16 +215,22 @@ public class TestLogicVer {
 			        // check if error msg is empty
 			        // only when it's empty, call the pretty printer
 			        if (checker.errormsg.isEmpty()) {
-			        	PrettyPrinter printer = new PrettyPrinter();
+			        	VarPrinter varPrinter = new VarPrinter();
+ 			        	PrettyPrinter printer = new PrettyPrinter();
+ 			        	
+ 			        	// check to see if there is any unused mode
+ 			        	for (int i = 0; i < logic.size(); i++) {
+							logic.get(i).accept(varPrinter);
+						}
 						
+ 			        	// call the pretty printer
 						for (int i = 0; i < logic.size(); i++) {
 							logic.get(i).accept(printer);
 						}
-						//System.out.println(printer.z3output);
-						
 						
 						// split the output
 						String[] splitedOutput = printer.z3output.split("split\n");
+						//System.out.println(splitedOutput[1]);
 						
 						// if there is an input file
 						if (inputFile != null) {
@@ -227,6 +240,7 @@ public class TestLogicVer {
 							// get the file name without the extension type
 							// e.g. for test01.txt, only store test01
 							String testNum = splitedpath[splitedpath.length - 1].split("\\.")[0];
+							
 							
 							// create the string used to write to files
 							String writeToFile = "";
@@ -253,6 +267,8 @@ public class TestLogicVer {
 								BoolExpr[] inputExpr = ctx.parseSMTLIB2String(splitedOutput[i - 1].replaceAll("\n", ""), 
 										null, null, null, null);
 								
+								
+								
 								// create solver and add the input expression
 								Solver s = ctx.mkSolver();
 								s.add(inputExpr);
@@ -260,11 +276,14 @@ public class TestLogicVer {
 								// check if the formula is a tautology
 								Status result = s.check();
 								
+								
 								if (result == Status.SATISFIABLE){  
 					        		writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
 					        		
 					        		// get the model
 					            	Model m = s.getModel();
+					            	
+					            	//System.out.println(m.toString());
 					            	
 					            	// create the list to store only the necessary output string
 					            	List<String[]> varOutput = new ArrayList<String[]>();
@@ -272,6 +291,8 @@ public class TestLogicVer {
 					            	// split the z3 outputed model string
 					            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
 					            	 
+					            	
+					            	
 					            	for (int j = 1; j < splitModel.length; j++) {
 				
 										String[] varValue = splitModel[j].split(" ");
@@ -280,19 +301,22 @@ public class TestLogicVer {
 										varOutput.add(str);
 									}
 					            	
-					            	for (int j = 0; j < varOutput.size(); j++) {
-					            		// also include the initialized variable value
-					            		if (PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b == null) {
-					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-						            				+ ": " + varOutput.get(j)[1] + "\n");
+					            	// also include the initialized variable value
+					            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
+										if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
+											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+													+ ": " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
+													+ "\n");     
 										}
-					            		else {
-					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-						            				+ ": " + varOutput.get(j)[1] 
-						            				+ " = " + PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b 
-						            				+ "\n");
+										else {
+											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
+													+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
+													+ "\n");
 										}
 									}
+					            	
+//					            	
 					            	writeToFile = writeToFile.concat("Is not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {
 					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
@@ -367,19 +391,18 @@ public class TestLogicVer {
 										varOutput.add(str);
 									}
 					            	
-					            	for (int j = 0; j < varOutput.size(); j++) {
-					            		// also include the initialized variable value
-					            		if (PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b == null) {
-					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-						            				+ ": " + varOutput.get(j)[1] + "\n");
+					            	// also include the initialized variable value
+					            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
+										if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
+											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+													+ ": " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a);     
 										}
-					            		else {
-					            			writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-						            				+ ": " + varOutput.get(j)[1] 
-						            				+ " = " + PrefixPrinter.completeVarMap.get(varOutput.get(j)[0]).b 
-						            				+ "\n");
+										else {
+											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
+													+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
+													+ "\n");
 										}
-					            		
 									}
 					            	writeToFile = writeToFile.concat("Is not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {

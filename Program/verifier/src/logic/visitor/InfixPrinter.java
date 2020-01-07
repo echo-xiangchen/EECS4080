@@ -1,13 +1,19 @@
 package logic.visitor;
 
+import java.util.*;
+
+import org.antlr.v4.runtime.misc.Pair;
+
 import logic.composite.*;
 
 public class InfixPrinter implements Visitor{
 	
 	public String infixOutput;
+	public List<String> quantifyVar;
 	
 	public InfixPrinter() {
 		infixOutput = "";
+		quantifyVar = new ArrayList<String>();
 	}
 	
 	public void visitBinaryExpr (BinaryExpr b, String op) {
@@ -28,6 +34,36 @@ public class InfixPrinter implements Visitor{
 		infixOutput = infixOutput.concat("(" + op + " " + p.infixOutput + ")");
 	}
 	
+	
+	public void visitQuantifier (Quantification q) {
+		InfixPrinter p1 = new InfixPrinter();
+		for (int i = 0; i < q.quantifyList.size(); i++) {
+			q.quantifyList.get(i).accept(p1);
+		}
+		quantifyVar.addAll(p1.quantifyVar);
+		
+		InfixPrinter p2 = new InfixPrinter();
+		q.expr.accept(p2);
+		
+		for (int i = 0; i < quantifyVar.size(); i++) {
+			infixOutput = infixOutput.concat(quantifyVar.get(i) + ",");
+		}
+		infixOutput = infixOutput.substring(0, infixOutput.length() - 1);
+		infixOutput = infixOutput.concat(";" + p2.infixOutput);
+	}
+	
+	
+	@Override
+	public void visitForall(Forall q) {
+		visitQuantifier(q);
+		infixOutput = "Forall " + infixOutput;
+	}
+
+	@Override
+	public void visitExists(Exists q) {
+		visitQuantifier(q);
+		infixOutput = "There exists " + infixOutput;
+	}
 	
 	
 	@Override
@@ -101,43 +137,53 @@ public class InfixPrinter implements Visitor{
 		visitBinaryExpr(e, "/");
 	}
 
-	// boolean variable declaration
+	// boolean mode declaration
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// variable 0: uninitialized declaration
+		// mode 0: uninitialized declaration
 		// e.g. boolean p
-		if(v.variable instanceof modes.UninitializedDecl) {
+		if(v.mode instanceof modes.UninitializedDecl) {
 			
 		}
-		// variable 1: verification
-		else if (v.variable instanceof modes.Verification) {
+		// mode 1: verification
+		else if (v.mode instanceof modes.Verification) {
 			infixOutput = infixOutput.concat(v.name);
 		}
-		// variable 2: initialized declaration
+		// mode 2: initialized declaration
 		// e.g. boolean p = not q
-		else if (v.variable instanceof modes.InitializedDecl) {
+		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
+		}
+		// mode 3: quantification declaration
+		// e.g. forall boolean p; @ not p
+		else if (v.mode instanceof modes.QuantifyBool) {
+			quantifyVar.add(v.name);
 		}
 	}
 	
-	// int variable declaration
+	// int mode declaration
 	@Override
 	public void visitIntVar(IntVar v) {
-		// variable 0: uninitialized declaration
+		// mode 0: uninitialized declaration
 		// e.g. int j
-		if(v.variable instanceof modes.UninitializedDecl) {
+		if(v.mode instanceof modes.UninitializedDecl) {
 			
 		}
-		// variable 1: verification
-		else if (v.variable instanceof modes.Verification) {
+		// mode 1: verification
+		else if (v.mode instanceof modes.Verification) {
 			infixOutput = infixOutput.concat(v.name);
 		}
-		// variable 2: initialized declaration
+		// mode 2: initialized declaration
 		// e.g. int i = 2
-		else if (v.variable instanceof modes.InitializedDecl) {
+		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
+		}
+		// mode 3: quantification declaration
+		// e.g. forall boolean p; @ not p
+		else if (v.mode instanceof modes.QuantifyInt) {
+			quantifyVar.add(v.name);
 		}
 	}
 
@@ -158,4 +204,5 @@ public class InfixPrinter implements Visitor{
 		infixOutput = infixOutput.concat(c.name);
 		
 	}
+
 }

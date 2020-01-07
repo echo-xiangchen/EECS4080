@@ -1,0 +1,7 @@
+-- Gries Theorems
+-- Conjunction
+-- (3.43) Absorption: 
+boolean p
+boolean q
+verify p and (p or q) <=> p
+verify p or (p and q) <=> p

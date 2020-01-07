@@ -1,0 +1,4 @@
+-- Gries Theorems
+-- Equivalence and true
+-- (3.4) true
+verify true

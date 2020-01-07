@@ -49,4 +49,10 @@ public interface Visitor {
 	void visitNumConst(NumConst c);
 
 	
+	
+	void visitForall(Forall q);
+
+	void visitExists(Exists q);
+
+	
 }

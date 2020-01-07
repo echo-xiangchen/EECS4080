@@ -1,7 +1,10 @@
--- test propositional logic and equal  
--- with initialized boolean and int variable declaration with expression value(no error)
-boolean p
-boolean q = true
-verify p and q
-boolean r
-verify not p
+-- test equal with initialized int variable declaration with constant value (with error)
+int i = 3
+int j = 0
+int m = 100
+verify i = j
+int m = 2
+int n = 45
+verify n = 0
+int n = 6
+verify m = n

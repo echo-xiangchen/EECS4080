@@ -1,0 +1,1 @@
+Formula: Forall m,n;((m => n) = ((m or n) = n)) is a tautology.

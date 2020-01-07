@@ -4,8 +4,8 @@ import logic.visitor.*;
 
 public class NumConst extends IntConst {
 
-	// variable 0: declaration
-	// variable 1: verification
+	// mode 0: declaration
+	// mode 1: verification
 	public NumConst(String name) {
 		super(name);
 	}
