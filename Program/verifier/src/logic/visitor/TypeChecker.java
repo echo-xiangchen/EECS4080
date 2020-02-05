@@ -20,26 +20,173 @@ public class TypeChecker implements Visitor{
 		errormsg = new ArrayList<String>();
 	}
 	
-	// helper method for checking binary expression
-	public void BinaryChecker(BinaryExpr b) {
-		TypeChecker checker1 = new TypeChecker();
-		TypeChecker checker2 = new TypeChecker();
+	
+	// type checker for binary logical expr
+	// e.g. and, or, =>, <=>
+	public void logicalBinaryChecker(BinaryExpr e) {
+		TypeChecker leftChecker = new TypeChecker();
+		TypeChecker rightChecker = new TypeChecker();
 		
-		b.left().accept(checker1);
-		b.right().accept(checker2);
+		e.left().accept(leftChecker);
+		e.right().accept(rightChecker);
 		
-		errormsg.addAll(checker1.errormsg);
-		errormsg.addAll(checker2.errormsg);
+		InfixPrinter leftPrinter = new InfixPrinter();
+		InfixPrinter rightPrinter = new InfixPrinter();
+		
+		e.left().accept(leftPrinter);
+		e.right().accept(rightPrinter);
+		
+		
+		errormsg.addAll(leftChecker.errormsg);
+		errormsg.addAll(rightChecker.errormsg);
+		
+		// if left child is not boolean type
+		if (!(varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType)) {
+			errormsg.add(leftPrinter.infixOutput + " is not boolean type.");
+		}
+		
+		// if right child is not boolean type
+		else if (!(varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType)) {
+			
+			errormsg.add(rightPrinter.infixOutput + " is not boolean type.");
+		}
+		
+		// if left and right child are both boolean type (no type error)
+		// add this expr to the varmap
+		else {
+			InfixPrinter infixPrinter = new InfixPrinter();
+			e.accept(infixPrinter);
+			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+		}
 	}
+	
+	// type checker for binary relational expr
+	// e.g. =, >, <, >=, <=
+	public void relationalBinaryChecker(BinaryExpr e) {
+		TypeChecker leftChecker = new TypeChecker();
+		TypeChecker rightChecker = new TypeChecker();
+		
+		e.left().accept(leftChecker);
+		e.right().accept(rightChecker);
+		
+		InfixPrinter leftPrinter = new InfixPrinter();
+		InfixPrinter rightPrinter = new InfixPrinter();
+		
+		e.left().accept(leftPrinter);
+		e.right().accept(rightPrinter);
+		
+		
+		errormsg.addAll(leftChecker.errormsg);
+		errormsg.addAll(rightChecker.errormsg);
+		
+		// if left child is not int type of real type
+		if (varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType) {
+			errormsg.add(leftPrinter.infixOutput + " is boolean type.");
+		}
+		
+		// if right child is not int type of real type
+		else if (varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType) {
+			errormsg.add(rightPrinter.infixOutput + " is boolean type.");
+		}
+		
+		// if left and right child are both arithmetic type (no type error)
+		// add this expr to the varmap
+		else {
+			InfixPrinter infixPrinter = new InfixPrinter();
+			e.accept(infixPrinter);
+			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+		}
+	}
+	
+	// type checker for binary arithmetic expr
+	// e.g. +, -, *, /
+	public void arithmeticBinaryChecker(BinaryExpr e) {
+		TypeChecker leftChecker = new TypeChecker();
+		TypeChecker rightChecker = new TypeChecker();
+		
+		e.left().accept(leftChecker);
+		e.right().accept(rightChecker);
+		
+		InfixPrinter leftPrinter = new InfixPrinter();
+		InfixPrinter rightPrinter = new InfixPrinter();
+		
+		e.left().accept(leftPrinter);
+		e.right().accept(rightPrinter);
+		
+		
+		errormsg.addAll(leftChecker.errormsg);
+		errormsg.addAll(rightChecker.errormsg);
+		
+		// if left child is not int type or real type
+		if (varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType) {
+					
+			InfixPrinter infixPrinter = new InfixPrinter();
+			e.left().accept(infixPrinter);
+			errormsg.add(infixPrinter.infixOutput + " is boolean type.");
+		}
+				
+		// if right child is not int type or real type
+		else if (varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType) {
+					
+			InfixPrinter infixPrinter = new InfixPrinter();
+			e.right().accept(infixPrinter);
+			errormsg.add(infixPrinter.infixOutput + " is not of any arithmetic type.");
+		}
+		
+		// if any one of left or right child is real type
+		// the whole expr will be real type
+		else if (varMap.get(leftPrinter.infixOutput).a instanceof types.RealType
+					||
+					varMap.get(rightPrinter.infixOutput).a instanceof types.RealType) {
+			
+			InfixPrinter infixPrinter = new InfixPrinter();
+			e.accept(infixPrinter);
+			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new RealType(), null));
+		}
+		
+		// if both left and right child are int type, the whole expr will be int type
+		else {
+			InfixPrinter infixPrinter = new InfixPrinter();
+			e.accept(infixPrinter);
+			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new IntType(), null));
+		}
+	}
+	
+	
+	// helper method for checking binary expression
+//	public void BinaryChecker(BinaryExpr b) {
+//		TypeChecker checker1 = new TypeChecker();
+//		TypeChecker checker2 = new TypeChecker();
+//		
+//		b.left().accept(checker1);
+//		b.right().accept(checker2);
+//		
+//		errormsg.addAll(checker1.errormsg);
+//		errormsg.addAll(checker2.errormsg);
+//	}
 	
 	// helper method for checking unary expression
 	public void UnaryChecker(UnaryExpr u) {
 		
 		TypeChecker checker = new TypeChecker();
-		
 		u.child.accept(checker);
 		
 		errormsg.addAll(checker.errormsg);
+		
+		// if its child is not boolean type
+		if (!(varMap.get(u.child.name).a instanceof types.BoolType)) {
+			InfixPrinter infixPrinter = new InfixPrinter();
+			u.accept(infixPrinter);
+			errormsg.add(infixPrinter.infixOutput + " is not boolean type.");
+		}
+		
+		// if its child is boolean type (no type error)
+		else {
+			InfixPrinter infixPrinter = new InfixPrinter();
+			u.accept(infixPrinter);
+			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+		}
+		
 	}
 	
 	public void QuantifyChecker (Quantification q) {
@@ -76,89 +223,89 @@ public class TypeChecker implements Visitor{
 	// and
 	@Override
 	public void visitAnd(Conjunction e) {
-		BinaryChecker(e);
+		logicalBinaryChecker(e);
 	}
 	
 	// or
 	@Override
 	public void visitOr(Disjunction e) {
-		BinaryChecker(e);
+		logicalBinaryChecker(e);
 	}
 
 	// impies
 	@Override
 	public void visitImplies(Implication e) {
-		BinaryChecker(e);
+		logicalBinaryChecker(e);
 	}
 	
 	// if and only if
 	@Override
 	public void visitIff(Iff e) {
-		BinaryChecker(e);
+		logicalBinaryChecker(e);
 	}
 	
 	// arithmetic equal (=)
 	@Override
 	public void visitEqual(Equal e) {
-		BinaryChecker(e);
+		relationalBinaryChecker(e);
 	}
 
 	// arithmetic greater than (>)
 	@Override
 	public void visitGreaterThan(GreaterThan e) {
-		BinaryChecker(e);
+		relationalBinaryChecker(e);
 	}
 
 	// arithmetic less than (<)
 	@Override
 	public void visitLessThan(LessThan e) {
-		BinaryChecker(e);
+		relationalBinaryChecker(e);
 	}
 
 	// arithmetic greater than or equal (>=)
 	@Override
 	public void visitGreaterOrEqual(GreaterOrEqual e) {
-		BinaryChecker(e);
+		relationalBinaryChecker(e);
 	}
 
 	// arithmetic less or equal (<=)
 	@Override
 	public void visitLessOrEqual(LessOrEqual e) {
-		BinaryChecker(e);
+		relationalBinaryChecker(e);
 	}
 
 	// arithmetic add (+)
 	@Override
 	public void visitAddition(Addition e) {
-		BinaryChecker(e);
+		arithmeticBinaryChecker(e);
 	}
 
 	// arithmetic subtract (-)
 	@Override
 	public void visitSubtraction(Subtraction e) {
-		BinaryChecker(e);
+		arithmeticBinaryChecker(e);
 	}
 
 	// arithmetic multiply (*)
 	@Override
 	public void visitMultiplication(Multiplication e) {
-		BinaryChecker(e);
+		arithmeticBinaryChecker(e);
 	}
 
 	// arithmetic divide (/)
 	@Override
 	public void visitDivision(Division e) {
-		BinaryChecker(e);
+		arithmeticBinaryChecker(e);
 	}
 
 	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
 		// mode 0: uninitialized declaration
-		// e.g. boolean q
+		// e.g. q : BOOL
 		
 		// and mode 3: quantification declaration
-		// e.g. forall boolean p; @ not p
+		// e.g. forall p : BOOL; | not p
 		if ((v.mode instanceof modes.UninitializedDecl) || (v.mode instanceof modes.QuantifyBool)) {
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
@@ -173,7 +320,7 @@ public class TypeChecker implements Visitor{
 			}
 		}
 		// mode 1: verification
-		// e.g. p => q
+		// e.g. verify p => q
 		else if (v.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(v.name)) {
 				errormsg.add("Error: variable " + v.name + " has not been declared.");
@@ -189,11 +336,20 @@ public class TypeChecker implements Visitor{
 			}
 		}
 		// mode 2: initialized declaration
-		// e.g. boolean p = not q
+		// e.g. p : BOOL = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			// type check this boolean mode's value first
 			TypeChecker checker = new TypeChecker();
 			v.value.accept(checker);
+			
+			InfixPrinter infixPrinter = new InfixPrinter();
+			v.value.accept(infixPrinter);
+			
+			// check if the type of assigned value is type correct
+			// e.g. error: p : BOOL = 2 * 3
+			if (!(varMap.containsKey(infixPrinter.infixOutput)) || !(varMap.get(infixPrinter.infixOutput).a instanceof types.BoolType)) {
+				errormsg.add(infixPrinter.infixOutput + "is not boolean type, cannot perform this assignment.");
+			}
 			
 			// if there is no error, add it to the map
 			if (checker.errormsg.isEmpty()) {
@@ -215,10 +371,10 @@ public class TypeChecker implements Visitor{
 	@Override
 	public void visitIntVar(IntVar v) {
 		// mode 0: uninitialized declaration
-		// e.g. int i
+		// e.g. i : INTEGER
 		
 		// and mode 3: quantification declaration
-		// e.g. forall int i; @ i > 0
+		// e.g. forall i : INTEGER; | i > 0
 		if ((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
@@ -233,6 +389,7 @@ public class TypeChecker implements Visitor{
 			}
 		}
 		// mode 1: verification
+		// verify i > 0
 		else if (v.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(v.name)) {
 				errormsg.add("Error: variable " + v.name + " has not been declared.");
@@ -248,11 +405,20 @@ public class TypeChecker implements Visitor{
 			}
 		}
 		// mode 2: initialized declaration
-		// int j = 1 + 2
+		// j : INTEGER = i + 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			// type check this arithmetic variable's value first
 			TypeChecker checker = new TypeChecker();
 			v.value.accept(checker);
+			
+			InfixPrinter infixPrinter = new InfixPrinter();
+			v.value.accept(infixPrinter);
+			
+			// check if the type of assigned value is type correct
+			// e.g. error: p : INTEGER = 2.1
+			if (!(varMap.containsKey(infixPrinter.infixOutput)) || varMap.get(infixPrinter.infixOutput).a instanceof types.RealType) {
+				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot perform this assignment.");
+			}
 			
 			// if there is no error, check the map first
 			if (checker.errormsg.isEmpty()) {
@@ -270,22 +436,115 @@ public class TypeChecker implements Visitor{
 		}
 	}
 	
+	@Override
+	public void visitRealVar(RealVar v) {
+		// mode 0: uninitialized declaration
+		// e.g. i : REAL
+				
+		// and mode 3: quantification declaration
+		// e.g. forall i : REAL; | i > 0
+		if ((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {
+			// if this variable is declared for the first time, simply add it to the map
+			if (!varMap.containsKey(v.name)) {
+				varMap.put(v.name, new Pair<VarType, Logic>(new RealType(), null));
+			}
+			// if this variable is not declared for the first time, change its type to unknown type
+			// and add the error message
+			else {
+				varMap.replace(v.name, new Pair<VarType, Logic>(new UnknowType(), null));
+				errormsg.add("Error: Type declaration of variable " + v.name + " is ambigous. "
+						+ "Please make sure each variable is declared exactly once.");
+			}
+		}
+		// mode 1: verification
+		// verify j >= 2.2
+		else if (v.mode instanceof modes.Verification) {
+			if (!varMap.containsKey(v.name)) {
+				errormsg.add("Error: variable " + v.name + " has not been declared.");
+			}
+			// if it has unknown type
+			else if (varMap.containsKey(v.name) && (varMap.get(v.name).a instanceof types.UnknowType)) {
+				errormsg.add("Error: Type of variable " + v.name + " in this expression is ambigous. " 
+						+ "Please make sure each variable is declared exactly once.");
+			}
+			// if it's not declared as real type
+			else if (varMap.containsKey(v.name) && !(varMap.get(v.name).a instanceof types.RealType)) {
+				errormsg.add("Error: variable " + v.name + " is not declared as real type.");
+			}
+		}
+		// mode 2: initialized declaration
+		// j : REAL = i * 4
+		else if (v.mode instanceof modes.InitializedDecl) {
+			// type check this arithmetic variable's value first
+			TypeChecker checker = new TypeChecker();
+			v.value.accept(checker);
+					
+			// if there is no error, check the map first
+			if (checker.errormsg.isEmpty()) {
+				if (!varMap.containsKey(v.name)) {
+					varMap.put(v.name, new Pair<VarType, Logic>(new RealType(), v.value));
+				}
+				else {
+					varMap.replace(v.name, new Pair<VarType, Logic>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + v.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
+			}else {
+				errormsg.addAll(checker.errormsg);
+			}
+		}
+	}
+	
 	// boolean true
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
-		// automatically type correct
+		if (!varMap.containsKey(c.name)) {
+			varMap.put(c.name, new Pair<VarType, Logic>(new BoolType(), null));
+		}
 	}
 
 	// boolean false
 	@Override
 	public void visitBoolFalse(BoolFalse c) {
-		// automatically type correct
+		if (!varMap.containsKey(c.name)) {
+			varMap.put(c.name, new Pair<VarType, Logic>(new BoolType(), null));
+		}
 	}
 
-	// number constant
+	// int number constant
 	@Override
-	public void visitNumConst(NumConst l) {
-		// automatically type correct
+	public void visitIntConst(IntConst c) {
+		if (!varMap.containsKey(c.name)) {
+			varMap.put(c.name, new Pair<VarType, Logic>(new IntType(), null));
+		}
 	}
 
+	// real number constant
+	@Override
+	public void visitRealConst(RealConst c) {
+		if (!varMap.containsKey(c.name)) {
+			varMap.put(c.name, new Pair<VarType, Logic>(new RealType(), null));
+		}
+	}
+
+
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -12,7 +12,7 @@ public class BoolVar extends Var {
 	// mode 2: initialized declaration
 	// mode 3: quantification declaration
 	
-	// mode 0 and 1 and 3
+	// mode 0 and 1
 	public BoolVar(String name, mode mode) {
 		super(name, mode);
 	}
@@ -20,7 +20,6 @@ public class BoolVar extends Var {
 	// mode 2
 	public BoolVar(String name, Logic value, mode mode) {
 		super(name, value, mode);
-		
 	}
 	
 	// mode 3 

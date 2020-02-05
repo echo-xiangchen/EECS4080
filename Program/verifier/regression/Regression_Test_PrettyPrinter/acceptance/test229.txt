@@ -1,0 +1,9 @@
+-- test greater than with uninitialized int variable declaration (no error)
+i : REAL
+j : INT
+k : REAL
+m : INT
+verify i > j
+verify k > m
+n : INT
+verify m > n

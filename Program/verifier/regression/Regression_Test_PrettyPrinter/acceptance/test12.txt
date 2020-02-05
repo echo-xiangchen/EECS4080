@@ -1,11 +1,11 @@
 -- test initialized int variable declaration with arithmetic value (with error)
-int i = q + 3
-int j = i * 2
-int m = 3 * 4 + 5
-int m = m - 2
-int k = i + j / m
-int k1 = i * 4 / j
-int x = 6 * 3 - 2
-int y = x * x + 5
-int y = x + y - 4 * 3
+i = q + 3 : INT
+j = i * 2 : INT
+m = 3 * 4 + 5 : INT
+m = m - 2 : INT
+k = i + j / m : INT
+k1 = i * 4 / j : INT
+x = 6 * 3 - 2 : INT
+y = x * x + 5 : INT
+y = x + y - 4 * 3 : INT
 verify false

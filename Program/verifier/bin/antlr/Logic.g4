@@ -4,32 +4,32 @@ grammar Logic;
 stat : line+ ;
 
 line 
-	: type=(BOOL|INT) ID 									# SingleVar
-	| INT ID '[' PNUM ']'									# Arrays
-	| BOOL ID '=' boolExpr 									# BoolValueDecl
-	| INT ID '=' arithmetic 								# IntValueDecl
+	: ID ':' type=(BOOL|INT|REAL) 							# SingleVar
+	| ID ':' BOOL '=' boolExpr 								# BoolValueDecl
+	| ID ':' type=(INT|REAL) '=' arithmetic					# NumValueDecl
+	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'				# ArrayDecl
 	| VERIFY boolExpr										# EvalBoolExpr
-	| VERIFY '{' boolExpr '}' boolExpr '{' boolExpr '}'		# HoareLogic
 	;
 
 boolExpr 
-	: NOT boolExpr						# Not
-	| boolExpr AND boolExpr				# And
-	| boolExpr OR boolExpr				# Or
-	| boolExpr IMPLIES boolExpr			# Implies
-	| boolExpr IFF boolExpr				# Iff
-	| FORALL (varDecl)+ '@' boolExpr 	# Forall
-	| EXISTS (varDecl)+ '@' boolExpr 	# Exists
-	| ID 								# BoolVar
-	| TRUE 								# BoolTrue
-	| FALSE 							# BoolFalse
-	| '(' boolExpr ')'					# Paren
-	| relation							# Relate 
+	: NOT boolExpr									# Not
+	| boolExpr AND boolExpr							# And
+	| boolExpr OR boolExpr							# Or
+	| boolExpr IMPLIES boolExpr						# Implies
+	| boolExpr IFF boolExpr							# Iff
+	| FORALL (varDecl)+ '|' boolExpr 				# Forall
+	| EXISTS (varDecl)+ '|' boolExpr 				# Exists
+	| ID 											# BoolVar
+	| ID '[' POSITIVENUM ']'						# FixIndexBoolArray
+	| ID '[' arithmetic ']'							# ExprIndexBoolArray
+	| TRUE 											# BoolTrue
+	| FALSE 										# BoolFalse
+	| '(' boolExpr ')'								# Paren
+	| relation										# Relate 
 	;
 
 varDecl
-	: BOOL ID (',' ID)* ';'		# QuantifyBool
-	| INT ID (',' ID)* ';'		# QuantifyInt			
+	: ID (',' ID)* ':' type=(BOOL|INT|REAL) ';'		# QuantifyVar
 	;
 
 relation
@@ -41,16 +41,22 @@ relation
 	;
 
 arithmetic
-	: arithmetic op=(MUL|DIV) arithmetic	# MulDiv
-	| arithmetic op=(ADD|SUB) arithmetic	# AddSub
-	| ID 									# IntVar
-	| NUM									# Num
-	| '(' arithmetic ')' 					# ArithParen
+	: arithmetic op=(MUL|DIV) arithmetic				# MulDiv
+	| arithmetic op=(ADD|SUB) arithmetic				# AddSub
+	| ID 												# ArithmeticVar
+	| ID '[' POSITIVENUM ']'							# FixIndexArithmeticArray
+	| ID '[' arithmetic ']'								# ExprIndexArithmeticArray
+	| POSITIVENUM										# PositiveNum
+	| INTNUM											# IntNum
+	| REALNUM											# RealNum
+	| '(' arithmetic ')' 								# ArithParen
 	;
 
 
-BOOL : 'boolean';
-INT : 'int';
+BOOL : 'BOOLEAN';
+INT : 'INTEGER';
+REAL : 'REAL';
+ARRAY : 'ARRAY';
 VERIFY : 'verify';
 
 FORALL : 'forall';
@@ -80,5 +86,6 @@ COMMENT : '--' ~[\r\n]* -> skip;
 WS  :   [ \t\n]+ -> skip ;
 
 ID : [a-z][a-zA-Z0-9]*;
-NUM : '0'|'-'?[1-9][0-9]*;
-PNUM : [1-9][0-9]*;
+POSITIVENUM : [1-9][0-9]*;
+INTNUM : '0'|'-'?[1-9][0-9]*;
+REALNUM : '-'?[0-9]* '.' [0-9]+;

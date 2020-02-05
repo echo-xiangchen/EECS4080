@@ -1,11 +1,11 @@
 -- test initialized boolean variable declaration with constant value (no error)
-boolean p = true
-boolean q = false
-boolean s = false
-boolean r = true
-boolean t = false
-boolean x = false
-boolean y = true
-boolean p0 = true
-boolean q1 = true
+p = true : BOOL
+q = false : BOOL
+s = false : BOOL
+r = true : BOOL
+t = false : BOOL
+x = false : BOOL
+y = true : BOOL
+p0 = true : BOOL
+q1 = true : BOOL
 verify not p

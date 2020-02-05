@@ -1,2 +1,0 @@
-verify forall boolean x, not x
-verify exists int i, i > 3

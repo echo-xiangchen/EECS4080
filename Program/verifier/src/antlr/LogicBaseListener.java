@@ -41,18 +41,6 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrays(LogicParser.ArraysContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArrays(LogicParser.ArraysContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBoolValueDecl(LogicParser.BoolValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -65,13 +53,25 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntValueDecl(LogicParser.IntValueDeclContext ctx) { }
+	@Override public void enterNumValueDecl(LogicParser.NumValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntValueDecl(LogicParser.IntValueDeclContext ctx) { }
+	@Override public void exitNumValueDecl(LogicParser.NumValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrayDecl(LogicParser.ArrayDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrayDecl(LogicParser.ArrayDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -89,13 +89,49 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHoareLogic(LogicParser.HoareLogicContext ctx) { }
+	@Override public void enterOr(LogicParser.OrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHoareLogic(LogicParser.HoareLogicContext ctx) { }
+	@Override public void exitOr(LogicParser.OrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIff(LogicParser.IffContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIff(LogicParser.IffContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprIndexBoolArray(LogicParser.ExprIndexBoolArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprIndexBoolArray(LogicParser.ExprIndexBoolArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolVar(LogicParser.BoolVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolVar(LogicParser.BoolVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -113,18 +149,6 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOr(LogicParser.OrContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOr(LogicParser.OrContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterImplies(LogicParser.ImpliesContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -132,6 +156,18 @@ public class LogicBaseListener implements LogicListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitImplies(LogicParser.ImpliesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -185,18 +221,6 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIff(LogicParser.IffContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIff(LogicParser.IffContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterForall(LogicParser.ForallContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -221,18 +245,6 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolVar(LogicParser.BoolVarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoolVar(LogicParser.BoolVarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterParen(LogicParser.ParenContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -245,25 +257,13 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQuantifyBool(LogicParser.QuantifyBoolContext ctx) { }
+	@Override public void enterQuantifyVar(LogicParser.QuantifyVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQuantifyBool(LogicParser.QuantifyBoolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterQuantifyInt(LogicParser.QuantifyIntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitQuantifyInt(LogicParser.QuantifyIntContext ctx) { }
+	@Override public void exitQuantifyVar(LogicParser.QuantifyVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -329,6 +329,30 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArithmeticVar(LogicParser.ArithmeticVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithmeticVar(LogicParser.ArithmeticVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntNum(LogicParser.IntNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntNum(LogicParser.IntNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArithParen(LogicParser.ArithParenContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -365,25 +389,49 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNum(LogicParser.NumContext ctx) { }
+	@Override public void enterExprIndexArithmeticArray(LogicParser.ExprIndexArithmeticArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNum(LogicParser.NumContext ctx) { }
+	@Override public void exitExprIndexArithmeticArray(LogicParser.ExprIndexArithmeticArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntVar(LogicParser.IntVarContext ctx) { }
+	@Override public void enterRealNum(LogicParser.RealNumContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntVar(LogicParser.IntVarContext ctx) { }
+	@Override public void exitRealNum(LogicParser.RealNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPositiveNum(LogicParser.PositiveNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPositiveNum(LogicParser.PositiveNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

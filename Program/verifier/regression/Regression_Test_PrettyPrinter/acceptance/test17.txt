@@ -1,7 +1,7 @@
 -- test negation with uninitialized boolean variable declaration (no error)
-boolean p
-boolean q
-boolean s
+p : BOOL
+q : BOOL
+s : BOOL
 verify not p
 verify not q
 verify not s

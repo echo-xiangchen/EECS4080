@@ -212,21 +212,62 @@ public class TestLogicVer {
 			        	logic.get(i).accept(checker);
 					}
 			        
+			        
+			        
+			        
+			        
+			        
+			        
+			        
+			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        
+			        
+			        
+			        
+			        
+			        
+			        
+			        
+			        
+			        
 			        // check if error msg is empty
 			        // only when it's empty, call the pretty printer
 			        if (checker.errormsg.isEmpty()) {
 			        	VarPrinter varPrinter = new VarPrinter();
- 			        	PrettyPrinter printer = new PrettyPrinter();
  			        	
- 			        	// check to see if there is any unused mode
+ 			        	// check to see if there is any unused variable
  			        	for (int i = 0; i < logic.size(); i++) {
 							logic.get(i).accept(varPrinter);
 						}
+ 			        	
+ 			        	
+ 			        	
+ 			        	
+ 			        	
+ 			        	//System.out.println("varPrinter.allVarMap: " + varPrinter.allVarMap + "\n");
+ 			        	
+ 			        	
+ 			        	
+ 			        	
+ 			        	
+ 			        	
+ 			        	
 						
  			        	// call the pretty printer
+ 			        	PrettyPrinter printer = new PrettyPrinter();
+ 			        	
 						for (int i = 0; i < logic.size(); i++) {
 							logic.get(i).accept(printer);
 						}
+						
+						
+						
+						
+						//System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap + "\n");
+						
+						
+						
+						
 						
 						// split the output
 						String[] splitedOutput = printer.z3output.split("split\n");
@@ -296,7 +337,21 @@ public class TestLogicVer {
 					            	for (int j = 1; j < splitModel.length; j++) {
 				
 										String[] varValue = splitModel[j].split(" ");
+										
+//										for (int k = 0; k < varValue.length; k++) {
+//											System.out.println(k + " " + varValue[k]);
+//										}
+										
 										// grab the necessary output
+										if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+											varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") + varValue[6].replaceAll("\\)", "");
+										}
+										else if (varValue[4].charAt(0) == '(') {
+											varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+										}
+										
+										
+										
 										String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
 										varOutput.add(str);
 									}
@@ -316,8 +371,8 @@ public class TestLogicVer {
 										}
 									}
 					            	
-//					            	
-					            	writeToFile = writeToFile.concat("Is not a tautology. Here is a counter example: \n");
+				            	
+					            	writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {
 					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
 					            				+ ": " + varOutput.get(j)[2] + "\n");
@@ -384,8 +439,20 @@ public class TestLogicVer {
 					            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
 					            	 
 					            	for (int j = 1; j < splitModel.length; j++) {
+					            		
+					            		
 				
 										String[] varValue = splitModel[j].split(" ");
+										
+										
+										// grab the necessary output
+										if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+											varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") + varValue[6].replaceAll("\\)", "");
+										}
+										else if (varValue[4].charAt(0) == '(') {
+											varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+										}
+										
 										// grab the necessary output
 										String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
 										varOutput.add(str);
@@ -404,7 +471,7 @@ public class TestLogicVer {
 													+ "\n");
 										}
 									}
-					            	writeToFile = writeToFile.concat("Is not a tautology. Here is a counter example: \n");
+					            	writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {
 					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
 					            				+ ": " + varOutput.get(j)[2] + "\n");

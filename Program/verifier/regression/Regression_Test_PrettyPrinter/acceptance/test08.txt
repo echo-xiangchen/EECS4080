@@ -1,14 +1,10 @@
 -- test initialized int variable declaration with constant value (with error)
-int i = 1
-int j = 0
-int j = 100
-int k = 12
-int m = 11
-int m = 5
-int m1 = 78
-int k1 = 1020
-int n = 10
-int i = 2
-int x = 1010
-int x = 34
+i = 1 : INT
+j = 0 : INT
+j = 100 : INT
+k = 12 : INT
+m = 11 : INT
+m = 5 : INT
+x = 1010 : INT
+x = 34 : INT
 verify true

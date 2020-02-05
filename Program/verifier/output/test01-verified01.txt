@@ -1,1 +1,10 @@
-Formula: Forall p,q;((p => q) = ((not p) or q)) is a tautology.
+Formula: ((p and q) = r)
+Where: 
+    p: Bool
+    q: Bool
+    r : Bool = (p or q)
+
+Is not a tautology. Here is a counter example: 
+    r: true
+    p: false
+    q: true

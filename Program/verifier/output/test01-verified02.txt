@@ -1,1 +1,1 @@
-Formula: Forall r,s;((r => s) = ((r and s) = r)) is a tautology.
+Formula: ((p or (q and r)) => (p or q)) is a tautology.

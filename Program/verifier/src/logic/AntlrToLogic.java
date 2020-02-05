@@ -1,7 +1,10 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import antlr.*;
 import antlr.LogicParser.*;
 import logic.composite.*;
@@ -9,14 +12,26 @@ import modes.*;
 
 public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	
+	public static Map<String, String> IntOrReal = new HashMap<String, String>();
+	
+	/* *****************************************************************************************
+	 * Methods for line rule
+	 * *****************************************************************************************
+	 */
+	
 	// uninitialized boolean or int variable declaration
 	@Override
 	public Logic visitSingleVar(SingleVarContext ctx) {
 		if (ctx.type.getType() == LogicParser.BOOL) {
 			return new BoolVar(ctx.ID().getText(), new UninitializedDecl());
 		}
-		else {
+		else if (ctx.type.getType() == LogicParser.INT) {
+			IntOrReal.put(ctx.ID().getText(), "Int");
 			return new IntVar(ctx.ID().getText(), new UninitializedDecl());
+		} 
+		else {
+			IntOrReal.put(ctx.ID().getText(), "Real");
+			return new RealVar(ctx.ID().getText(), new UninitializedDecl());
 		}
 	}
 	
@@ -27,11 +42,35 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 		return new BoolVar(ctx.ID().getText(), visit(ctx.boolExpr()), new InitializedDecl());
 	}
 	
-	// initialized int variable declaration
+	
+	// initialized arithmetic variable declaration
 	@Override
-	public Logic visitIntValueDecl(IntValueDeclContext ctx) {
-		return new IntVar(ctx.ID().getText(), visit(ctx.arithmetic()), new InitializedDecl());
+	public Logic visitNumValueDecl(NumValueDeclContext ctx) {
+		if (ctx.type.getType() == LogicParser.INT) {
+			IntOrReal.put(ctx.ID().getText(), "Int");
+			return new IntVar(ctx.ID().getText(), visit(ctx.arithmetic()), new InitializedDecl());
+		}
+		else {
+			IntOrReal.put(ctx.ID().getText(), "Real");
+			return new RealVar(ctx.ID().getText(), visit(ctx.arithmetic()), new InitializedDecl());
+		}
 	}
+	
+	
+	// uninitialized array variable declaration
+	@Override
+	public Logic visitArrayDecl(ArrayDeclContext ctx) {
+		if (ctx.type.getType() == LogicParser.BOOL) {
+			return new BoolArrayVar(ctx.ID().getText(), new UninitializedDecl());
+		}
+		else if (ctx.type.getType() == LogicParser.INT) {
+			return new IntArrayVar(ctx.ID().getText(), new UninitializedDecl());
+		}
+		else {
+			return new RealArrayVar(ctx.ID().getText(), new UninitializedDecl());
+		}
+	}
+	
 	
 	// verify the formula
 	@Override
@@ -39,37 +78,39 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 		return visit(ctx.boolExpr());
 	}
 	
+	/* *****************************************************************************************
+	 * Methods for boolExpr rule
+	 * *****************************************************************************************
+	 */
 	
-	
-	
-	// boolean variable verification
+	// Negation
 	@Override
-	public Logic visitBoolVar(BoolVarContext ctx) {
-		return new BoolVar(ctx.ID().getText(), new Verification());
+	public Logic visitNot(NotContext ctx) {
+		return new Negation(visit(ctx.boolExpr()));
 	}
 	
-	// int variable verification
+	// Conjunction
 	@Override
-	public Logic visitIntVar(IntVarContext ctx) {
-		return new IntVar(ctx.ID().getText(), new Verification());
+	public Logic visitAnd(AndContext ctx) {
+		return new Conjunction(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
 	}
 	
-	// boolean true declaration
+	// Disjunction
 	@Override
-	public Logic visitBoolTrue(BoolTrueContext ctx) {
-		return new BoolTrue(ctx.TRUE().getText());
+	public Logic visitOr(OrContext ctx) {
+		return new Disjunction(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
 	}
 	
-	// boolean false declaration
+	// Implication
 	@Override
-	public Logic visitBoolFalse(BoolFalseContext ctx) {
-		return new BoolFalse(ctx.FALSE().getText());
+	public Logic visitImplies(ImpliesContext ctx) {
+		return new Implication(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
 	}
 	
-	// number declaration
+	// Iff
 	@Override
-	public Logic visitNum(NumContext ctx) {
-		return new NumConst(ctx.NUM().getText());
+	public Logic visitIff(IffContext ctx) {
+		return new Iff(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
 	}
 	
 	
@@ -102,65 +143,27 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 		// create a new exists object, and copy all the declared variables into quantifyList
 		return new Exists(list, visit(ctx.boolExpr()));
 	}
+		
 	
-	
-	// quantification boolean variable declaration
+	// boolean variable verification
 	@Override
-	public Logic visitQuantifyBool(QuantifyBoolContext ctx) {
-		// store each ID's string into list
-		List<String> list = new ArrayList<String>();
-		for (int i = 0; i < ctx.ID().size(); i++) {
-			list.add(ctx.ID(i).getText());
-		}
-		// create a new BoolVar object, accepting the list
-		// and transform the list of String into a list of BoolVar
-		return new BoolVar(list, new QuantifyBool());
-	}
-	
-	// quantification int variable declaration
-	@Override
-	public Logic visitQuantifyInt(QuantifyIntContext ctx) {
-		// store each ID's string into list
-		List<String> list = new ArrayList<String>();
-		for (int i = 0; i < ctx.ID().size(); i++) {
-			list.add(ctx.ID(i).getText());
-		}
-		// create a new IntVar object, accepting the list
-		// and transform the list of String into a list of IntVar
-		return new IntVar(list, new QuantifyInt());
+	public Logic visitBoolVar(BoolVarContext ctx) {
+		return new BoolVar(ctx.ID().getText(), new Verification());
 	}
 	
 	
-	
-	// Negation
+	// boolean true declaration
 	@Override
-	public Logic visitNot(NotContext ctx) {
-		return new Negation(visit(ctx.boolExpr()));
+	public Logic visitBoolTrue(BoolTrueContext ctx) {
+		return new BoolTrue(ctx.TRUE().getText());
 	}
 	
-	// Conjunction
+	// boolean false declaration
 	@Override
-	public Logic visitAnd(AndContext ctx) {
-		return new Conjunction(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
+	public Logic visitBoolFalse(BoolFalseContext ctx) {
+		return new BoolFalse(ctx.FALSE().getText());
 	}
 	
-	// Disjunction
-	@Override
-	public Logic visitOr(OrContext ctx) {
-		return new Disjunction(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
-	}
-	
-	// Implication
-	@Override
-	public Logic visitImplies(ImpliesContext ctx) {
-		return new Implication(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
-	}
-	
-	// Iff
-	@Override
-	public Logic visitIff(IffContext ctx) {
-		return new Iff(visit(ctx.boolExpr(0)), visit(ctx.boolExpr(1)));
-	}
 	
 	// parentheses
 	@Override
@@ -168,12 +171,61 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 		return visit(ctx.boolExpr());
 	}
 	
+	// Relate
 	@Override
 	public Logic visitRelate(RelateContext ctx) {
 		return visit(ctx.relation());
 	}
 	
 	
+	/* *****************************************************************************************
+	 * Methods for varDecl rule
+	 * *****************************************************************************************
+	 */
+	
+	// quantification variable declaration
+	@Override
+	public Logic visitQuantifyVar(QuantifyVarContext ctx) {
+		
+		if (ctx.type.getType() == LogicParser.BOOL) {
+			// store each ID's string into list
+			List<String> list = new ArrayList<String>();
+			for (int i = 0; i < ctx.ID().size(); i++) {
+				list.add(ctx.ID(i).getText());
+			}
+			// create a new BoolVar object, accepting the list
+			// and transform the list of String into a list of BoolVar
+			return new BoolVar(list, new QuantifyBool());
+		}
+		else if (ctx.type.getType() == LogicParser.INT) {
+			// store each ID's string into list
+			List<String> list = new ArrayList<String>();
+			for (int i = 0; i < ctx.ID().size(); i++) {
+				list.add(ctx.ID(i).getText());
+				IntOrReal.put(ctx.ID(i).getText(), "Int");
+			}
+			// create a new IntVar object, accepting the list
+			// and transform the list of String into a list of IntVar
+			return new IntVar(list, new QuantifyInt());
+		}
+		else {
+			// store each ID's string into list
+			List<String> list = new ArrayList<String>();
+			for (int i = 0; i < ctx.ID().size(); i++) {
+				list.add(ctx.ID(i).getText());
+				IntOrReal.put(ctx.ID(i).getText(), "Real");
+			}
+			// create a new RealVar object, accepting the list
+			// and transform the list of String into a list of IntVar
+			return new RealVar(list, new QuantifyInt());
+		}
+	}
+	
+	
+	/* *****************************************************************************************
+	 * Methods for relation rule
+	 * *****************************************************************************************
+	 */
 	
 	// arithmetic equal
 	@Override
@@ -205,6 +257,12 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 		return new LessOrEqual(visit(ctx.arithmetic(0)), visit(ctx.arithmetic(1)));
 	}
 	
+	
+	/* *****************************************************************************************
+	 * Methods for arithmetic rule
+	 * *****************************************************************************************
+	 */
+	
 	// multiply or division
 	@Override
 	public Logic visitMulDiv(MulDivContext ctx) {
@@ -226,6 +284,39 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 			return new Subtraction(visit(ctx.arithmetic(0)), visit(ctx.arithmetic(1))); 
 		}
 	}
+	
+	// arithmetic variable verification
+	@Override
+	public Logic visitArithmeticVar(ArithmeticVarContext ctx) {
+		if (IntOrReal.get(ctx.ID().getText()).equals("Int")) {
+			return new IntVar(ctx.ID().getText(), new Verification());
+		}
+		else {
+			return new RealVar(ctx.ID().getText(), new Verification());
+		}
+	}
+
+	
+	// positive int number
+	@Override
+	public Logic visitPositiveNum(PositiveNumContext ctx) {
+		return new IntConst(ctx.POSITIVENUM().getText());
+	}
+	
+	
+	// int number
+	@Override
+	public Logic visitIntNum(IntNumContext ctx) {
+		return new IntConst(ctx.INTNUM().getText());
+	}
+	
+	
+	// real number
+	@Override
+	public Logic visitRealNum(RealNumContext ctx) {
+		return new RealConst(ctx.REALNUM().getText());
+	}
+	
 	
 	// arithmetic parentheses
 	@Override

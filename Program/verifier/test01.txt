@@ -1,10 +1,12 @@
--- test equal with initialized int variable declaration with constant value (with error)
-int i = 3
-int j = 0
-int m = 100
-verify i = j
-int m = 2
-int n = 45
-verify n = 0
-int n = 6
-verify m = n
+-- test initialized boolean variable declaration with constant value (no error)
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN = p or q
+s : BOOLEAN
+k : BOOLEAN
+verify p and q <=> r
+verify p or (q and r) => p or q
+i : INTEGER
+j : REAL
+verify i >= j and j >= i <=> i = j
+verify i >= j and j >= i <=> i = j + 1

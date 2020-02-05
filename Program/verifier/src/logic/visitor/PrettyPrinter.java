@@ -127,7 +127,7 @@ public class PrettyPrinter implements Visitor {
 		}
 		
 		// add the remaining string
-		z3output = z3output.concat("(assert (" + " " + p.prefixOutput + "))\n"
+		z3output = z3output.concat("(assert (" + " " + quantifyIndicator + p.prefixOutput + "))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -291,7 +291,7 @@ public class PrettyPrinter implements Visitor {
 		printExpr(e);
 	}
 
-
+	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
 		// mode 0: uninitialized declaration
@@ -314,8 +314,17 @@ public class PrettyPrinter implements Visitor {
 		}
 	}
 	
+	// int variable
 	@Override
 	public void visitIntVar(IntVar v) {
+		// use the PrefixPrinter to return the output
+		PrefixPrinter p = new PrefixPrinter();
+		v.accept(p);
+	}
+	
+	// real variable
+	@Override
+	public void visitRealVar(RealVar v) {
 		// use the PrefixPrinter to return the output
 		PrefixPrinter p = new PrefixPrinter();
 		v.accept(p);
@@ -332,10 +341,34 @@ public class PrettyPrinter implements Visitor {
 	}
 
 	@Override
-	public void visitNumConst(NumConst c) {
+	public void visitIntConst(IntConst c) {
 		// use the PrefixPrinter to return the output
 		PrefixPrinter p = new PrefixPrinter();
 		c.accept(p);
 	}
 
+	@Override
+	public void visitRealConst(RealConst c) {
+		// use the PrefixPrinter to return the output
+		PrefixPrinter p = new PrefixPrinter();
+		c.accept(p);
+	}
+
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -30,3 +30,7 @@ Gries-Theorems
 192 - 217: Implication
 218 - 220: Lerbniz as an axiom
 221 - 224: Proof techniques
+224 - 228: Quantification
+
+
+228 - 230: Real number

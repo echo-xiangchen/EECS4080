@@ -7,8 +7,6 @@ import modes.*;
 
 public abstract class Var extends Logic {
 	
-	public String name;
-	
 	public Logic value;
 	
 	public mode mode;

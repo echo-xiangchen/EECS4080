@@ -127,16 +127,17 @@ public class VarPrinter implements Visitor {
 	@Override
 	public void visitBoolVar(BoolVar v) {
 		// mode 0: uninitialized declaration
-		// e.g. boolean p
+		// e.g. p : BOOLEAN
 		
 		// and mode 3: quantification declaration
-		// e.g. forall boolean p; @ not p
+		// e.g. forall p : BOOLEAN; | not p
 		if((v.mode instanceof modes.UninitializedDecl) || (v.mode instanceof modes.QuantifyBool)) {
 			// add the mode to both allVarMap and unusedVarMap
 			allVarMap.put(v.name, new Pair<String, String>("Bool", null));
 			unusedVarMap.put(v.name, new Pair<String, String>("Bool", null));
 		}
 		// mode 1: verification
+		// e.g. verify p => q
 		else if (v.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
 			if (unusedVarMap.containsKey(v.name)) {
@@ -144,7 +145,7 @@ public class VarPrinter implements Visitor {
 			}
 		}
 		// mode 2: initialized declaration
-		// e.g. boolean p = not q
+		// e.g. p : BOOLEAN = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
@@ -155,19 +156,20 @@ public class VarPrinter implements Visitor {
 	}
 
 	
-
+	// int number
 	@Override
 	public void visitIntVar(IntVar v) {
 		// mode 0: uninitialized declaration
-		// e.g. int j
-		
+		// e.g. j : INTEGER
+	
 		// and mode 3: quantification declaration
-		// e.g. forall int i; @ i > 0
+		// e.g. forall j: INTEGER; | i > 0
 		if((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {	
 			allVarMap.put(v.name, new Pair<String, String>("Int", null));
-			unusedVarMap.put(v.name, new Pair<String, String>("Bool", null));
+			unusedVarMap.put(v.name, new Pair<String, String>("Int", null));
 		}
 		// mode 1: verification
+		// e.g. verify p > 0
 		else if (v.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
 			if (unusedVarMap.containsKey(v.name)) {
@@ -175,14 +177,46 @@ public class VarPrinter implements Visitor {
 			}
 		}
 		// mode 2: initialized declaration
-		// e.g. int i = 2
+		// e.g. i: INTEGER = 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 					
 			allVarMap.put(v.name, new Pair<String, String>("Int", h.infixOutput));
-			unusedVarMap.put(v.name, new Pair<String, String>("Bool", h.infixOutput));
+			unusedVarMap.put(v.name, new Pair<String, String>("Int", h.infixOutput));
 		}
+	}
+	
+	// Real number
+	@Override
+	public void visitRealVar(RealVar v) {
+		// mode 0: uninitialized declaration
+		// e.g. i : REAL
+				
+		// and mode 3: quantification declaration
+		// e.g. forall i : REAL; @ i > 0
+		if((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyReal)) {	
+			allVarMap.put(v.name, new Pair<String, String>("Real", null));
+			unusedVarMap.put(v.name, new Pair<String, String>("Real", null));
+		}
+		// mode 1: verification
+		// e.g. verify j >= 0
+		else if (v.mode instanceof modes.Verification) {
+			// delete the mode if it has been used
+			if (unusedVarMap.containsKey(v.name)) {
+				unusedVarMap.remove(v.name);
+			}
+		}
+		// mode 2: initialized declaration
+		// e.g. i : REAL = 2.1
+		else if (v.mode instanceof modes.InitializedDecl) {
+			InfixPrinter h = new InfixPrinter();
+			v.value.accept(h);
+							
+			allVarMap.put(v.name, new Pair<String, String>("Real", h.infixOutput));
+			unusedVarMap.put(v.name, new Pair<String, String>("Real", h.infixOutput));
+		}
+		
 	}
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
@@ -195,7 +229,41 @@ public class VarPrinter implements Visitor {
 	}
 	
 	@Override
-	public void visitNumConst(NumConst c) {
+	public void visitIntConst(IntConst c) {
 
+	}
+
+	@Override
+	public void visitRealConst(RealConst c) {
+		
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// TODO Auto-generated method stub
+		
 	}
 }

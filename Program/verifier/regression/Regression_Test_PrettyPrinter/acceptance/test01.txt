@@ -1,11 +1,11 @@
 -- test uninitialized boolean variable declaration (no error)
-boolean p
-boolean q
-boolean s
-boolean r
-boolean t
-boolean x
-boolean y
-boolean p0
-boolean q1
+p : BOOL
+q : BOOL
+s : BOOL
+r : BOOL
+t : BOOL
+x : BOOL
+y : BOOL
+p0 : BOOL
+q1 : BOOL
 verify not p

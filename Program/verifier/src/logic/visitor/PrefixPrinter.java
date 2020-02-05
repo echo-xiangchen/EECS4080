@@ -155,11 +155,12 @@ public class PrefixPrinter implements Visitor{
 	@Override
 	public void visitBoolVar(BoolVar v) {
 		// mode 0: uninitialized declaration
-		// e.g. boolean p
+		// e.g. p : BOOLEAN
 		if(v.mode instanceof modes.UninitializedDecl) {
 			completeVarMap.put(v.name, new Pair<String, String>("Bool", null));
 		}
 		// mode 1: verification
+		// e.g. verify p => q
 		else if (v.mode instanceof modes.Verification) {
 			prefixOutput = prefixOutput.concat(v.name);
 			
@@ -169,7 +170,7 @@ public class PrefixPrinter implements Visitor{
 			
 		}
 		// mode 2: initialized declaration
-		// e.g. boolean p = not q
+		// e.g. p : BOOLEAN = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			PrefixPrinter h = new PrefixPrinter();
 			v.value.accept(h);
@@ -177,7 +178,7 @@ public class PrefixPrinter implements Visitor{
 			completeVarMap.put(v.name, new Pair<String, String>("Bool", h.prefixOutput));
 		}
 		// mode 3: quantification declaration
-		// e.g. forall boolean p; @ not p
+		// e.g. forall p : BOOLEAN; @ not p
 		else if (v.mode instanceof modes.QuantifyBool) {
 			completeVarMap.put(v.name, new Pair<String, String>("Bool", "Quantification"));
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Bool)");
@@ -188,12 +189,13 @@ public class PrefixPrinter implements Visitor{
 	@Override
 	public void visitIntVar(IntVar v) {
 		// mode 0: uninitialized declaration
-		// e.g. int j
+		// e.g. j : INTEGER
 		if(v.mode instanceof modes.UninitializedDecl) {
 			
 			completeVarMap.put(v.name, new Pair<String, String>("Int", null));
 		}
 		// mode 1: verification
+		// e.g. verify i > 0
 		else if (v.mode instanceof modes.Verification) {
 			prefixOutput = prefixOutput.concat(v.name);
 			
@@ -202,7 +204,7 @@ public class PrefixPrinter implements Visitor{
 			}
 		}
 		// mode 2: initialized declaration
-		// e.g. int i = 2
+		// e.g. i : INT = 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			PrefixPrinter h = new PrefixPrinter();
 			v.value.accept(h);
@@ -210,10 +212,44 @@ public class PrefixPrinter implements Visitor{
 			completeVarMap.put(v.name, new Pair<String, String>("Int", h.prefixOutput));
 		}
 		// mode 3: quantification declaration
-		// e.g. forall boolean p; @ not p
+		// e.g. forall i : INT; @ i > 0
 		else if (v.mode instanceof modes.QuantifyInt) {
 			completeVarMap.put(v.name, new Pair<String, String>("Int", "Quantification"));
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Int)");
+		}
+	}
+	
+	// real variable declaration
+	@Override
+	public void visitRealVar(RealVar v) {
+		// mode 0: uninitialized declaration
+		// e.g. j : REAL
+		if(v.mode instanceof modes.UninitializedDecl) {
+			
+			completeVarMap.put(v.name, new Pair<String, String>("Real", null));
+		}
+		// mode 1: verification
+		// e.g. verify i > 0
+		else if (v.mode instanceof modes.Verification) {
+			prefixOutput = prefixOutput.concat(v.name);
+			
+			if (!inclusiveVarMap.containsKey(v.name)) {
+				inclusiveVarMap.put(v.name, new Pair<String, String>(completeVarMap.get(v.name).a, completeVarMap.get(v.name).b));
+			}
+		}
+		// mode 2: initialized declaration
+		// e.g. i : REAL = 2
+		else if (v.mode instanceof modes.InitializedDecl) {
+			PrefixPrinter h = new PrefixPrinter();
+			v.value.accept(h);
+			
+			completeVarMap.put(v.name, new Pair<String, String>("Real", h.prefixOutput));
+		}
+		// mode 3: quantification declaration
+		// e.g. forall i : REAL; @ i > 0
+		else if (v.mode instanceof modes.QuantifyInt) {
+			completeVarMap.put(v.name, new Pair<String, String>("Real", "Quantification"));
+			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Real)");
 		}
 	}
 
@@ -229,9 +265,30 @@ public class PrefixPrinter implements Visitor{
 	}
 
 	@Override
-	public void visitNumConst(NumConst c) {
+	public void visitIntConst(IntConst c) {
 		prefixOutput = prefixOutput.concat(c.name);
 	}
 
-	
+	@Override
+	public void visitRealConst(RealConst c) {
+		prefixOutput = prefixOutput.concat(c.name);
+	}
+
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
 }

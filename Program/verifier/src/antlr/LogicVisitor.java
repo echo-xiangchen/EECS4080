@@ -24,13 +24,6 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSingleVar(LogicParser.SingleVarContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Arrays}
-	 * labeled alternative in {@link LogicParser#line}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArrays(LogicParser.ArraysContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code BoolValueDecl}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
@@ -38,12 +31,19 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolValueDecl(LogicParser.BoolValueDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code IntValueDecl}
+	 * Visit a parse tree produced by the {@code NumValueDecl}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntValueDecl(LogicParser.IntValueDeclContext ctx);
+	T visitNumValueDecl(LogicParser.NumValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArrayDecl}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayDecl(LogicParser.ArrayDeclContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code EvalBoolExpr}
 	 * labeled alternative in {@link LogicParser#line}.
@@ -52,12 +52,33 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEvalBoolExpr(LogicParser.EvalBoolExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code HoareLogic}
-	 * labeled alternative in {@link LogicParser#line}.
+	 * Visit a parse tree produced by the {@code Or}
+	 * labeled alternative in {@link LogicParser#boolExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHoareLogic(LogicParser.HoareLogicContext ctx);
+	T visitOr(LogicParser.OrContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Iff}
+	 * labeled alternative in {@link LogicParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIff(LogicParser.IffContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ExprIndexBoolArray}
+	 * labeled alternative in {@link LogicParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprIndexBoolArray(LogicParser.ExprIndexBoolArrayContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BoolVar}
+	 * labeled alternative in {@link LogicParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolVar(LogicParser.BoolVarContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Not}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
@@ -66,19 +87,19 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNot(LogicParser.NotContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Or}
-	 * labeled alternative in {@link LogicParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOr(LogicParser.OrContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Implies}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitImplies(LogicParser.ImpliesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FixIndexBoolArray}
+	 * labeled alternative in {@link LogicParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Exists}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
@@ -108,13 +129,6 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolFalse(LogicParser.BoolFalseContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Iff}
-	 * labeled alternative in {@link LogicParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIff(LogicParser.IffContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Forall}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
 	 * @param ctx the parse tree
@@ -129,13 +143,6 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolTrue(LogicParser.BoolTrueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code BoolVar}
-	 * labeled alternative in {@link LogicParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolVar(LogicParser.BoolVarContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Paren}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
 	 * @param ctx the parse tree
@@ -143,19 +150,12 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParen(LogicParser.ParenContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code QuantifyBool}
+	 * Visit a parse tree produced by the {@code QuantifyVar}
 	 * labeled alternative in {@link LogicParser#varDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitQuantifyBool(LogicParser.QuantifyBoolContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code QuantifyInt}
-	 * labeled alternative in {@link LogicParser#varDecl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitQuantifyInt(LogicParser.QuantifyIntContext ctx);
+	T visitQuantifyVar(LogicParser.QuantifyVarContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Equal}
 	 * labeled alternative in {@link LogicParser#relation}.
@@ -192,6 +192,20 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLessOrEqual(LogicParser.LessOrEqualContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ArithmeticVar}
+	 * labeled alternative in {@link LogicParser#arithmetic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithmeticVar(LogicParser.ArithmeticVarContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IntNum}
+	 * labeled alternative in {@link LogicParser#arithmetic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntNum(LogicParser.IntNumContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ArithParen}
 	 * labeled alternative in {@link LogicParser#arithmetic}.
 	 * @param ctx the parse tree
@@ -213,17 +227,31 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAddSub(LogicParser.AddSubContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Num}
+	 * Visit a parse tree produced by the {@code ExprIndexArithmeticArray}
 	 * labeled alternative in {@link LogicParser#arithmetic}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNum(LogicParser.NumContext ctx);
+	T visitExprIndexArithmeticArray(LogicParser.ExprIndexArithmeticArrayContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code IntVar}
+	 * Visit a parse tree produced by the {@code RealNum}
 	 * labeled alternative in {@link LogicParser#arithmetic}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntVar(LogicParser.IntVarContext ctx);
+	T visitRealNum(LogicParser.RealNumContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code PositiveNum}
+	 * labeled alternative in {@link LogicParser#arithmetic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPositiveNum(LogicParser.PositiveNumContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FixIndexArithmeticArray}
+	 * labeled alternative in {@link LogicParser#arithmetic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx);
 }

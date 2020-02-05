@@ -39,20 +39,31 @@ public interface Visitor {
 
 	void visitBoolVar(BoolVar v);
 	
+	void visitIntVar(IntVar v);
+	
+	void visitRealVar(RealVar realVar);
+	
+	
 	void visitBoolTrue(BoolTrue c);
 
 	void visitBoolFalse(BoolFalse c);
 	
 	
-	void visitIntVar(IntVar v);
-
-	void visitNumConst(NumConst c);
-
+	void visitIntConst(IntConst c);
 	
+	void visitRealConst(RealConst c);
+
 	
 	void visitForall(Forall q);
 
 	void visitExists(Exists q);
+	
+	
 
+	void visitBoolArrayVar(BoolArrayVar a);
+
+	void visitIntArrayVar(IntArrayVar a);
+
+	void visitRealArrayVar(RealArrayVar a);
 	
 }
