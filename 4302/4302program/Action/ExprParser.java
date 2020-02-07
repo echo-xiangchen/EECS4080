@@ -225,7 +225,7 @@ public class ExprParser extends Parser {
 						          				((ExprContext)_localctx).t =  new UnknowType();
 						          			}
 
-						          			if (!(((ExprContext)_localctx).b.t instanceof types.IntType)) {
+						          			else if (!(((ExprContext)_localctx).b.t instanceof types.IntType)) {
 						          				((ExprContext)_localctx).t =  new UnknowType();
 						          			}
 
@@ -252,7 +252,7 @@ public class ExprParser extends Parser {
 						          				((ExprContext)_localctx).t =  new UnknowType();
 						          			}
 
-						          			if (!(((ExprContext)_localctx).b.t instanceof types.IntType)) {
+						          			else if (!(((ExprContext)_localctx).b.t instanceof types.IntType)) {
 						          				((ExprContext)_localctx).t =  new UnknowType();
 						          			}
 
@@ -352,7 +352,7 @@ public class ExprParser extends Parser {
 						          				((TermContext)_localctx).t =  new UnknowType();
 						          			}
 
-						          			if (!(((TermContext)_localctx).b.t instanceof types.IntType)) {
+						          			else if (!(((TermContext)_localctx).b.t instanceof types.IntType)) {
 						          				((TermContext)_localctx).t =  new UnknowType();
 						          			}
 
@@ -379,7 +379,7 @@ public class ExprParser extends Parser {
 						          				((TermContext)_localctx).t =  new UnknowType();
 						          			}
 
-						          			if (!(((TermContext)_localctx).b.t instanceof types.IntType)) {
+						          			else if (!(((TermContext)_localctx).b.t instanceof types.IntType)) {
 						          				((TermContext)_localctx).t =  new UnknowType();
 						          			}
 

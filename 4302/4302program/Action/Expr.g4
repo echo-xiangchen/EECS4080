@@ -30,7 +30,7 @@ expr returns [types.VarType t]
 				$t = new UnknowType();
 			}
 
-			if (!($b.t instanceof types.IntType)) {
+			else if (!($b.t instanceof types.IntType)) {
 				$t = new UnknowType();
 			}
 
@@ -44,7 +44,7 @@ expr returns [types.VarType t]
 				$t = new UnknowType();
 			}
 
-			if (!($b.t instanceof types.IntType)) {
+			else if (!($b.t instanceof types.IntType)) {
 				$t = new UnknowType();
 			}
 
@@ -66,7 +66,7 @@ term returns [types.VarType t]
 				$t = new UnknowType();
 			}
 
-			if (!($b.t instanceof types.IntType)) {
+			else if (!($b.t instanceof types.IntType)) {
 				$t = new UnknowType();
 			}
 
@@ -80,7 +80,7 @@ term returns [types.VarType t]
 				$t = new UnknowType();
 			}
 
-			if (!($b.t instanceof types.IntType)) {
+			else if (!($b.t instanceof types.IntType)) {
 				$t = new UnknowType();
 			}
 
