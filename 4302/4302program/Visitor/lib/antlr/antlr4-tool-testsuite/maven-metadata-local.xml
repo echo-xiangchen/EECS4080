@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.antlr</groupId>
+  <artifactId>antlr4-tool-testsuite</artifactId>
+  <versioning>
+    <versions>
+      <version>4.7.3-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20190831220345</lastUpdated>
+  </versioning>
+</metadata>

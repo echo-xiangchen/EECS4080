@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{section.1}{Alias}{}% 1
+\BOOKMARK [1][-]{section.2}{Visitor\040Version}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Steps\040of\040Compiling\040the\040Grammar\040File}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Grammar}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Explaination}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Intermediate\040Class:\040AntlrToExpr}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{TypeCheker\040and\040PrettyPrinter}{section.2}% 7
+\BOOKMARK [3][-]{subsubsection.2.5.1}{TypeCheker}{subsection.2.5}% 8
+\BOOKMARK [3][-]{subsubsection.2.5.2}{PrettyPrinter}{subsection.2.5}% 9
+\BOOKMARK [2][-]{subsection.2.6}{Main\040Test\040Class:\040TestExpr}{section.2}% 10
+\BOOKMARK [1][-]{section.3}{Actions\040version}{}% 11
+\BOOKMARK [2][-]{subsection.3.1}{Grammar}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.2}{TypeChecker\040Class}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.3}{Steps\040of\040Compiling\040and\040Running\040the\040Program}{section.3}% 14
+\BOOKMARK [1][-]{section.4}{Comparison}{}% 15

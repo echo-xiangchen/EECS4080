@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Aug 31 18:03:45 EDT 2019
+antlr4-tool-testsuite-4.7.3-SNAPSHOT.jar>=
+antlr4-tool-testsuite-4.7.3-SNAPSHOT.pom>=
