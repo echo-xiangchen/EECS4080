@@ -1,8 +1,0 @@
--- test iff with uninitialized boolean variable declaration (with error)
-boolean p
-boolean q
-verify not p <=> q <=> s
-boolean s
-verify q <=> (s <=> not p) <=> not q
-boolean q
-verify p <=> (not s <=> q)

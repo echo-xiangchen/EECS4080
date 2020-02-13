@@ -72,11 +72,15 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	}
 	
 	
+	
+	
 	// verify the formula
 	@Override
-	public Logic visitEvalBoolExpr(EvalBoolExprContext ctx) {
+	public Logic visitVerifyBoolExpr(VerifyBoolExprContext ctx) {
 		return visit(ctx.boolExpr());
 	}
+	
+	
 	
 	/* *****************************************************************************************
 	 * Methods for boolExpr rule
@@ -120,10 +124,10 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	public Logic visitForall(ForallContext ctx) {
 		// create a list of Var
 		// recursively call visit(ctx.varDecl()) 
-		// which will return a Logic object (it's guaranteed to be BoolVar or IntVar)
-		List<Var> list = new ArrayList<Var>();
+		// which will return a Logic object (it's guaranteed to be BoolVar or IntVar or RealVar)
+		List<Logic> list = new ArrayList<Logic>();
 		for (int i = 0; i < ctx.varDecl().size(); i++) {
-			list.add((Var) visit(ctx.varDecl(i)));
+			list.add(visit(ctx.varDecl(i)));
 		}
 		// create a new Forall object, and copy all the declared variables into quantifyList
 		return new Forall(list, visit(ctx.boolExpr()));
@@ -135,10 +139,10 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	public Logic visitExists(ExistsContext ctx) {
 		// create a list of Var
 		// recursively call visit(ctx.varDecl()) 
-		// which will return a Logic object (it's guaranteed to be BoolVar or IntVar)
-		List<Var> list = new ArrayList<Var>();
+		// which will return a Logic object (it's guaranteed to be BoolVar or IntVar or RealVar)
+		List<Logic> list = new ArrayList<Logic>();
 		for (int i = 0; i < ctx.varDecl().size(); i++) {
-			list.add((Var) visit(ctx.varDecl(i)));
+			list.add(visit(ctx.varDecl(i)));
 		}
 		// create a new exists object, and copy all the declared variables into quantifyList
 		return new Exists(list, visit(ctx.boolExpr()));
@@ -149,6 +153,15 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	@Override
 	public Logic visitBoolVar(BoolVarContext ctx) {
 		return new BoolVar(ctx.ID().getText(), new Verification());
+	}
+	
+	
+	
+	
+	// expression index value boolean array verification
+	@Override
+	public Logic visitExprIndexBoolArray(ExprIndexBoolArrayContext ctx) {
+		return new BoolArrayVar(ctx.ID().getText(), visit(ctx.arithmetic()), new Verification());
 	}
 	
 	
@@ -288,19 +301,17 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	// arithmetic variable verification
 	@Override
 	public Logic visitArithmeticVar(ArithmeticVarContext ctx) {
-		if (IntOrReal.get(ctx.ID().getText()).equals("Int")) {
-			return new IntVar(ctx.ID().getText(), new Verification());
+		if (IntOrReal.containsKey(ctx.ID().getText())) {
+			if (IntOrReal.get(ctx.ID().getText()).equals("Int")) {
+				return new IntVar(ctx.ID().getText(), new Verification());
+			}
+			else {
+				return new RealVar(ctx.ID().getText(), new Verification());
+			}
 		}
 		else {
-			return new RealVar(ctx.ID().getText(), new Verification());
+			return new NIL(ctx.ID().getText(), new UninitializedDecl());
 		}
-	}
-
-	
-	// positive int number
-	@Override
-	public Logic visitPositiveNum(PositiveNumContext ctx) {
-		return new IntConst(ctx.POSITIVENUM().getText());
 	}
 	
 	

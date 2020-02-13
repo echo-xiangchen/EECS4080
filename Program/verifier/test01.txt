@@ -1,12 +1,2 @@
 -- test initialized boolean variable declaration with constant value (no error)
-p : BOOLEAN
-q : BOOLEAN
-r : BOOLEAN = p or q
-s : BOOLEAN
-k : BOOLEAN
-verify p and q <=> r
-verify p or (q and r) => p or q
-i : INTEGER
-j : REAL
-verify i >= j and j >= i <=> i = j
-verify i >= j and j >= i <=> i = j + 1
+b : ARRAY[INTEGER] = << 2, -4.5, 6>>

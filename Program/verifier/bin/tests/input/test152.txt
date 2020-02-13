@@ -1,6 +1,0 @@
--- Gries Theorems
--- Equivalence and true
--- (3.2) Axiom, Symmetry of <=>
-boolean p
-boolean q
-verify p <=> q <=> q <=> p

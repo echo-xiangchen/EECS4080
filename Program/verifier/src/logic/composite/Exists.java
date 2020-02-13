@@ -5,7 +5,7 @@ import logic.visitor.*;
 
 public class Exists extends Quantification {
 
-	public Exists(List<Var> list, Logic logic) {
+	public Exists(List<Logic> list, Logic logic) {
 		super(list, logic);
 	}
 	

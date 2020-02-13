@@ -5,7 +5,7 @@ import java.util.List;
 import logic.visitor.Visitor;
 import modes.mode;
 
-public class RealVar extends Var {
+public class RealVar extends NumVar {
 	
 	// mode 0: uninitialized declaration
 	// mode 1: verification

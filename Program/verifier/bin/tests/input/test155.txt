@@ -1,5 +1,0 @@
--- Gries Theorems
--- Equivalence and true
--- (3.5) Reflexivity of <=>
-boolean p
-verify p <=> p

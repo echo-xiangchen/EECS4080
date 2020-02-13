@@ -45,12 +45,19 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArrayDecl(LogicParser.ArrayDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code EvalBoolExpr}
+	 * Visit a parse tree produced by the {@code ArrayValueDecl}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEvalBoolExpr(LogicParser.EvalBoolExprContext ctx);
+	T visitArrayValueDecl(LogicParser.ArrayValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code VerifyBoolExpr}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Or}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
@@ -93,13 +100,6 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitImplies(LogicParser.ImpliesContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code FixIndexBoolArray}
-	 * labeled alternative in {@link LogicParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Exists}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
@@ -240,18 +240,4 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRealNum(LogicParser.RealNumContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code PositiveNum}
-	 * labeled alternative in {@link LogicParser#arithmetic}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPositiveNum(LogicParser.PositiveNumContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code FixIndexArithmeticArray}
-	 * labeled alternative in {@link LogicParser#arithmetic}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx);
 }

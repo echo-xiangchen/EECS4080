@@ -153,17 +153,6 @@ public class TypeChecker implements Visitor{
 	}
 	
 	
-	// helper method for checking binary expression
-//	public void BinaryChecker(BinaryExpr b) {
-//		TypeChecker checker1 = new TypeChecker();
-//		TypeChecker checker2 = new TypeChecker();
-//		
-//		b.left().accept(checker1);
-//		b.right().accept(checker2);
-//		
-//		errormsg.addAll(checker1.errormsg);
-//		errormsg.addAll(checker2.errormsg);
-//	}
 	
 	// helper method for checking unary expression
 	public void UnaryChecker(UnaryExpr u) {
@@ -416,7 +405,8 @@ public class TypeChecker implements Visitor{
 			
 			// check if the type of assigned value is type correct
 			// e.g. error: p : INTEGER = 2.1
-			if (!(varMap.containsKey(infixPrinter.infixOutput)) || varMap.get(infixPrinter.infixOutput).a instanceof types.RealType) {
+			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
+					|| varMap.get(infixPrinter.infixOutput).a instanceof types.RealType) {
 				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot perform this assignment.");
 			}
 			
@@ -436,6 +426,7 @@ public class TypeChecker implements Visitor{
 		}
 	}
 	
+	// real number variable
 	@Override
 	public void visitRealVar(RealVar v) {
 		// mode 0: uninitialized declaration
@@ -495,6 +486,73 @@ public class TypeChecker implements Visitor{
 		}
 	}
 	
+	// boolean array
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[BOOLEAN]
+	
+		if (a.mode instanceof modes.UninitializedDecl) {
+			// if this variable is declared for the first time, simply add it to the map
+			if (!varMap.containsKey(a.name)) {
+				varMap.put(a.name, new Pair<VarType, Logic>(new BoolArray(), null));
+			}
+			// if this variable is not declared for the first time, change its type to unknown type
+			// and add the error message
+			else {
+				varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+				errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+						+ "Please make sure each variable is declared exactly once.");
+			}
+		}
+		// mode 1: verification
+		// verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			
+			// type check this arithmetic variable's value first
+			TypeChecker checker = new TypeChecker();
+			a.value.accept(checker);
+			
+			InfixPrinter infixPrinter = new InfixPrinter();
+			a.value.accept(infixPrinter);
+			
+			// check if the type of the index is integer type
+			// e.g. error: verify a[2.1 * 2]
+			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
+					|| !(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
+				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot use it as array index value.");
+			}
+			
+			if (!varMap.containsKey(a.name)) {
+				errormsg.add("Error: variable " + a.name + " has not been declared.");
+			}
+			// if it has unknown type
+			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
+				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
+						+ "Please make sure each variable is declared exactly once.");
+			}
+			// if it's not declared as boolean array type
+			else if (varMap.containsKey(a.name) && !(varMap.get(a.name).a instanceof types.BoolArray)) {
+				errormsg.add("Error: variable " + a.name + " is not declared as a boolean array.");
+			}
+			
+			
+			// if there is no error, check the map first
+			else if (checker.errormsg.isEmpty()) {
+				if (!varMap.containsKey(a.name)) {
+					varMap.put(a.name, new Pair<VarType, Logic>(new BoolArray(), a.value));
+				}
+				else {
+					varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
+			}else {
+				errormsg.addAll(checker.errormsg);
+			}
+		}
+	}
+	
 	// boolean true
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
@@ -528,11 +586,7 @@ public class TypeChecker implements Visitor{
 	}
 
 
-	@Override
-	public void visitBoolArrayVar(BoolArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 
 	@Override
@@ -546,5 +600,12 @@ public class TypeChecker implements Visitor{
 	public void visitRealArrayVar(RealArrayVar a) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void visitNIL(NIL n) {
+		varMap.put(n.name, new Pair<VarType, Logic>(new UnknowType(), null));
+		errormsg.add("Error: variable " + n.name + " has not been declared.");
 	}
 }

@@ -77,13 +77,25 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEvalBoolExpr(LogicParser.EvalBoolExprContext ctx) { }
+	@Override public void enterArrayValueDecl(LogicParser.ArrayValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEvalBoolExpr(LogicParser.EvalBoolExprContext ctx) { }
+	@Override public void exitArrayValueDecl(LogicParser.ArrayValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -156,18 +168,6 @@ public class LogicBaseListener implements LogicListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitImplies(LogicParser.ImpliesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -408,30 +408,6 @@ public class LogicBaseListener implements LogicListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRealNum(LogicParser.RealNumContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPositiveNum(LogicParser.PositiveNumContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPositiveNum(LogicParser.PositiveNumContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

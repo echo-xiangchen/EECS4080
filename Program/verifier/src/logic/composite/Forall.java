@@ -5,7 +5,7 @@ import logic.visitor.*;
 
 public class Forall extends Quantification {
 
-	public Forall(List<Var> list, Logic logic) {
+	public Forall(List<Logic> list, Logic logic) {
 		super(list, logic);
 	}
 

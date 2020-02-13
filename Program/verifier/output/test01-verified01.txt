@@ -1,10 +1,10 @@
 Formula: ((p and q) = r)
 Where: 
-    p: Bool
-    q: Bool
-    r : Bool = (p or q)
+    p : BOOLEAN
+    q : BOOLEAN
+    r : BOOLEAN = (p or q)
 
 Is not a tautology. Here is a counter example: 
-    r: true
-    p: false
-    q: true
+    r : true
+    p : false
+    q : true

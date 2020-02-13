@@ -1,7 +1,0 @@
--- Gries Theorems
--- Conjunction
--- (3.37) Associativity of 'and': 
-boolean p
-boolean q
-boolean r
-verify (p and q) and r <=> p and (q and r)

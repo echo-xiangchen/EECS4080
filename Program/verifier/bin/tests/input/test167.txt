@@ -1,5 +1,0 @@
--- Gries Theorems
--- Disjunction
--- (3.28) Axiom, Excluded middle:
-boolean p
-verify p or not p

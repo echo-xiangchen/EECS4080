@@ -123,6 +123,12 @@ public class VarPrinter implements Visitor {
 	public void visitDivision(Division e) {
 		visitBinaryExpr(e);
 	}
+	
+	
+	/* *****************************************************************************************
+	 * Methods for normal Var
+	 * *****************************************************************************************
+	 */
 
 	@Override
 	public void visitBoolVar(BoolVar v) {
@@ -133,8 +139,8 @@ public class VarPrinter implements Visitor {
 		// e.g. forall p : BOOLEAN; | not p
 		if((v.mode instanceof modes.UninitializedDecl) || (v.mode instanceof modes.QuantifyBool)) {
 			// add the mode to both allVarMap and unusedVarMap
-			allVarMap.put(v.name, new Pair<String, String>("Bool", null));
-			unusedVarMap.put(v.name, new Pair<String, String>("Bool", null));
+			allVarMap.put(v.name, new Pair<String, String>("BOOLEAN", null));
+			unusedVarMap.put(v.name, new Pair<String, String>("BOOLEAN", null));
 		}
 		// mode 1: verification
 		// e.g. verify p => q
@@ -150,8 +156,8 @@ public class VarPrinter implements Visitor {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 					
-			allVarMap.put(v.name, new Pair<String, String>("Bool", h.infixOutput));
-			unusedVarMap.put(v.name, new Pair<String, String>("Bool", h.infixOutput));
+			allVarMap.put(v.name, new Pair<String, String>("BOOLEAN", h.infixOutput));
+			unusedVarMap.put(v.name, new Pair<String, String>("BOOLEAN", h.infixOutput));
 		}
 	}
 
@@ -165,8 +171,8 @@ public class VarPrinter implements Visitor {
 		// and mode 3: quantification declaration
 		// e.g. forall j: INTEGER; | i > 0
 		if((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {	
-			allVarMap.put(v.name, new Pair<String, String>("Int", null));
-			unusedVarMap.put(v.name, new Pair<String, String>("Int", null));
+			allVarMap.put(v.name, new Pair<String, String>("INTEGER", null));
+			unusedVarMap.put(v.name, new Pair<String, String>("INTEGER", null));
 		}
 		// mode 1: verification
 		// e.g. verify p > 0
@@ -182,8 +188,8 @@ public class VarPrinter implements Visitor {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 					
-			allVarMap.put(v.name, new Pair<String, String>("Int", h.infixOutput));
-			unusedVarMap.put(v.name, new Pair<String, String>("Int", h.infixOutput));
+			allVarMap.put(v.name, new Pair<String, String>("INTEGER", h.infixOutput));
+			unusedVarMap.put(v.name, new Pair<String, String>("INTEGER", h.infixOutput));
 		}
 	}
 	
@@ -196,8 +202,8 @@ public class VarPrinter implements Visitor {
 		// and mode 3: quantification declaration
 		// e.g. forall i : REAL; @ i > 0
 		if((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyReal)) {	
-			allVarMap.put(v.name, new Pair<String, String>("Real", null));
-			unusedVarMap.put(v.name, new Pair<String, String>("Real", null));
+			allVarMap.put(v.name, new Pair<String, String>("REAL", null));
+			unusedVarMap.put(v.name, new Pair<String, String>("REAL", null));
 		}
 		// mode 1: verification
 		// e.g. verify j >= 0
@@ -213,11 +219,41 @@ public class VarPrinter implements Visitor {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 							
-			allVarMap.put(v.name, new Pair<String, String>("Real", h.infixOutput));
-			unusedVarMap.put(v.name, new Pair<String, String>("Real", h.infixOutput));
+			allVarMap.put(v.name, new Pair<String, String>("REAL", h.infixOutput));
+			unusedVarMap.put(v.name, new Pair<String, String>("REAL", h.infixOutput));
+		}
+	}
+	
+	/* *****************************************************************************************
+	 * Methods for Array Var
+	 * *****************************************************************************************
+	 */
+	
+	// boolean array
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[BOOLEAN]
+				
+		if(a.mode instanceof modes.UninitializedDecl) {	
+			allVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", null));
+			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", null));
+		}
+		// mode 1: verification
+		// e.g. verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			// delete the mode if it has been used
+			if (unusedVarMap.containsKey(a.name)) {
+				unusedVarMap.remove(a.name);
+			}
 		}
 		
 	}
+	
+	
+	
+	
+	
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
 		
@@ -249,11 +285,7 @@ public class VarPrinter implements Visitor {
 	
 	
 	
-	@Override
-	public void visitBoolArrayVar(BoolArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public void visitIntArrayVar(IntArrayVar a) {
@@ -265,5 +297,10 @@ public class VarPrinter implements Visitor {
 	public void visitRealArrayVar(RealArrayVar a) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void visitNIL(NIL n) {
+		// TODO Auto-generated method stub
 	}
 }

@@ -11,13 +11,12 @@ public abstract class Var extends Logic {
 	
 	public mode mode;
 	
-	public List<Var> varDeclList;
-	
 	
 	//used for uninitialized declaration and verification
 	public Var(String name, mode mode) {
 		this.name = name;
 		this.mode = mode;
+		varDeclList = new ArrayList<Logic>();
 	}
 	
 	// used for initialized declaration
@@ -25,10 +24,11 @@ public abstract class Var extends Logic {
 		this.name = name;
 		this.value = value;
 		this.mode = mode;
+		varDeclList = new ArrayList<Logic>();
 	}
 	
 	// used for quantification declaration
 	public Var(List<String> list, mode mode) {
-		varDeclList = new ArrayList<Var>();
+		varDeclList = new ArrayList<Logic>();
 	}
 }

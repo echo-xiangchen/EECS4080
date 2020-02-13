@@ -1,5 +1,0 @@
--- Gries Theorems
--- Conjunction
--- (3.40) Zero of 'and': 
-boolean p
-verify p and false <=> false

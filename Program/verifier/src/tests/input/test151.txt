@@ -1,7 +1,0 @@
--- Gries Theorems
--- Equivalence and true
--- (3.1) Axiom, Associativitity of <=>
-boolean p
-boolean q
-boolean r
-verify ((p <=> q) <=> r) <=> (p <=> (q <=> r))

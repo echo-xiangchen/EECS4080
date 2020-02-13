@@ -1,5 +1,0 @@
--- Gries Theorems
--- Conjunction
--- (3.38) Idempotency of 'and': 
-boolean p
-verify p and p <=> p

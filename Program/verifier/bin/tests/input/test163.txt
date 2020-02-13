@@ -1,6 +1,0 @@
--- Gries Theorems
--- Disjunction
--- (3.24) Axiom, Symmetry of 'or':
-boolean p
-boolean q
-verify p or q <=> q or p

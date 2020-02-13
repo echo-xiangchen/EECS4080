@@ -1,7 +1,0 @@
--- Gries Theorems
--- Proof Techniques
--- (4.12) Proof by contrapositive:
--- to prove p => q, prove not q => not p
-boolean p
-boolean q
-verify (p => q) <=> (not q => not p)

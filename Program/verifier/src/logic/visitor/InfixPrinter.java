@@ -236,6 +236,15 @@ public class InfixPrinter implements Visitor{
 	public void visitRealConst(RealConst c) {
 		infixOutput = infixOutput.concat(c.name);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
@@ -253,5 +262,10 @@ public class InfixPrinter implements Visitor{
 	public void visitRealArrayVar(RealArrayVar a) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void visitNIL(NIL n) {
+		infixOutput = infixOutput.concat(n.name);
 	}
 }

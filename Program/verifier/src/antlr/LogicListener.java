@@ -66,17 +66,29 @@ public interface LogicListener extends ParseTreeListener {
 	 */
 	void exitArrayDecl(LogicParser.ArrayDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EvalBoolExpr}
+	 * Enter a parse tree produced by the {@code ArrayValueDecl}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
 	 */
-	void enterEvalBoolExpr(LogicParser.EvalBoolExprContext ctx);
+	void enterArrayValueDecl(LogicParser.ArrayValueDeclContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code EvalBoolExpr}
+	 * Exit a parse tree produced by the {@code ArrayValueDecl}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
 	 */
-	void exitEvalBoolExpr(LogicParser.EvalBoolExprContext ctx);
+	void exitArrayValueDecl(LogicParser.ArrayValueDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code VerifyBoolExpr}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void enterVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code VerifyBoolExpr}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void exitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Or}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
@@ -149,18 +161,6 @@ public interface LogicListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitImplies(LogicParser.ImpliesContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code FixIndexBoolArray}
-	 * labeled alternative in {@link LogicParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code FixIndexBoolArray}
-	 * labeled alternative in {@link LogicParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitFixIndexBoolArray(LogicParser.FixIndexBoolArrayContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Exists}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
@@ -401,28 +401,4 @@ public interface LogicListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRealNum(LogicParser.RealNumContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code PositiveNum}
-	 * labeled alternative in {@link LogicParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void enterPositiveNum(LogicParser.PositiveNumContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code PositiveNum}
-	 * labeled alternative in {@link LogicParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void exitPositiveNum(LogicParser.PositiveNumContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code FixIndexArithmeticArray}
-	 * labeled alternative in {@link LogicParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void enterFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code FixIndexArithmeticArray}
-	 * labeled alternative in {@link LogicParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void exitFixIndexArithmeticArray(LogicParser.FixIndexArithmeticArrayContext ctx);
 }

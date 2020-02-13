@@ -9,8 +9,11 @@ import logic.composite.*;
 public class PrettyPrinter implements Visitor {
 	
 	public String z3output;
+	// indicates "forall" or "exists"
 	public String quantifyIndicator;
+	// infix version of the formula
 	public static List<String> infixFormula = new ArrayList<String>();
+	// msg for unused variables
 	public static List<String> warningMsg = new ArrayList<String>();
 	
 	public static List<ArrayList<String>> usedVarList = new ArrayList<ArrayList<String>>();
@@ -155,63 +158,63 @@ public class PrettyPrinter implements Visitor {
 	@Override
 	public void visitForall(Forall q) {
 		// use the PrefixPrinter to return the output
-				PrefixPrinter p = new PrefixPrinter();
-				q.accept(p);
-				
-				// use the InfixPrinter to return the output
-				InfixPrinter p2 = new InfixPrinter();
-				q.accept(p2);
-				
-				// clone the inclusiveVarMap to usedVarList
-				// for "-v" version, printing the used variable for each formula
-				ArrayList<String> varNames = new ArrayList<String>();
-				
-				for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
-					varNames.add(entry.getKey());
-					
+		PrefixPrinter p = new PrefixPrinter();
+		q.accept(p);
+		
+		// use the InfixPrinter to return the output
+		InfixPrinter p2 = new InfixPrinter();
+		q.accept(p2);
+		
+		// clone the inclusiveVarMap to usedVarList
+		// for "-v" version, printing the used variable for each formula
+		ArrayList<String> varNames = new ArrayList<String>();
+		
+		for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
+			varNames.add(entry.getKey());
+			
+		}
+		usedVarList.add(varNames);
+		
+		
+		// check if any variable has been added to the list
+		if (PrefixPrinter.inclusiveVarMap != null) {
+			
+			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
+				if (entry.getValue().b == null || entry.getValue().b.equals("Quantification")) {
+					z3output = z3output.concat("(declare-const " + entry.getKey() 
+							+  " " + entry.getValue().a +")\n");
 				}
-				usedVarList.add(varNames);
-				
-				
-				// check if any variable has been added to the list
-				if (PrefixPrinter.inclusiveVarMap != null) {
-					
-					for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
-						if (entry.getValue().b == null || entry.getValue().b.equals("Quantification")) {
-							z3output = z3output.concat("(declare-const " + entry.getKey() 
-									+  " " + entry.getValue().a +")\n");
-						}
-						else {
-							z3output = z3output.concat("(declare-const " + entry.getKey() +  " " 
-									+ entry.getValue().a + ")\n"
-									+ "(assert (= " + entry.getKey() 
-									+ " " + entry.getValue().b + "))\n");
-						}
-					}
+				else {
+					z3output = z3output.concat("(declare-const " + entry.getKey() +  " " 
+							+ entry.getValue().a + ")\n"
+							+ "(assert (= " + entry.getKey() 
+							+ " " + entry.getValue().b + "))\n");
 				}
-				// add the remaining string
-				z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
-						+ "(check-sat)\n"
-						+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
-						+ ";(get-model)\n"
-						+ "split\n");
-				
-				// add the infix version to formulaList
-				infixFormula.add(p2.infixOutput);
-				
-				// iterate through differenceMap, and get the mode name, store it in warning message
-				String varString = "";
-				if (!VarPrinter.unusedVarMap.isEmpty()) {
-					for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
-						varString = varString.concat("<" + entry.getKey() + "> ");
-					}
-				}
-				// add to warning message
-				warningMsg.add(varString);
-				
-				
-				// clear the map
-				PrefixPrinter.inclusiveVarMap.clear();
+			}
+		}
+		// add the remaining string
+		z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
+				+ "(check-sat)\n"
+				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
+				+ ";(get-model)\n"
+				+ "split\n");
+		
+		// add the infix version to formulaList
+		infixFormula.add(p2.infixOutput);
+		
+		// iterate through differenceMap, and get the mode name, store it in warning message
+		String varString = "";
+		if (!VarPrinter.unusedVarMap.isEmpty()) {
+			for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
+				varString = varString.concat("<" + entry.getKey() + "> ");
+			}
+		}
+		// add to warning message
+		warningMsg.add(varString);
+		
+		
+		// clear the map
+		PrefixPrinter.inclusiveVarMap.clear();
 	}
 
 	@Override
@@ -354,6 +357,15 @@ public class PrettyPrinter implements Visitor {
 		c.accept(p);
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
 		// TODO Auto-generated method stub
@@ -368,6 +380,12 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitRealArrayVar(RealArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitNIL(NIL n) {
 		// TODO Auto-generated method stub
 		
 	}

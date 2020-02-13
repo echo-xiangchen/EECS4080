@@ -1,5 +1,0 @@
--- Gries Theorems
--- Disjunction
--- (3.29) Zero of 'or':
-boolean p
-verify p or true <=> true

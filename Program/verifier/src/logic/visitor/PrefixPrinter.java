@@ -273,6 +273,17 @@ public class PrefixPrinter implements Visitor{
 	public void visitRealConst(RealConst c) {
 		prefixOutput = prefixOutput.concat(c.name);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
@@ -288,6 +299,12 @@ public class PrefixPrinter implements Visitor{
 
 	@Override
 	public void visitRealArrayVar(RealArrayVar a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitNIL(NIL n) {
 		// TODO Auto-generated method stub
 		
 	}

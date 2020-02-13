@@ -1,7 +1,0 @@
--- Gries Theorems
--- Conjunction
--- (3.49) 
-boolean p
-boolean q
-boolean r
-verify p and (q <=> r) <=> p and q <=>p and r <=> p

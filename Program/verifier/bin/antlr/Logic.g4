@@ -4,12 +4,19 @@ grammar Logic;
 stat : line+ ;
 
 line 
-	: ID ':' type=(BOOL|INT|REAL) 							# SingleVar
-	| ID ':' BOOL '=' boolExpr 								# BoolValueDecl
-	| ID ':' type=(INT|REAL) '=' arithmetic					# NumValueDecl
-	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'				# ArrayDecl
-	| VERIFY boolExpr										# EvalBoolExpr
+	: ID ':' type=(BOOL|INT|REAL) 													# SingleVar
+	| ID ':' BOOL '=' boolExpr 														# BoolValueDecl
+	| ID ':' type=(INT|REAL) '=' arithmetic											# NumValueDecl
+	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'										# ArrayDecl
+	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']' 
+				'=' '<<' (NUM|boolExpr) (',' (NUM|boolExpr))* '>>'					# ArrayValueDecl
+	//| ID ':' PAIR '[' left=(BOOL|INT|REAL) ',' right=(BOOL|INT|REAL) ']'				# UnnamedPair
+	//| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPair
+	| VERIFY boolExpr																# VerifyBoolExpr
 	;
+
+
+
 
 boolExpr 
 	: NOT boolExpr									# Not
@@ -20,7 +27,6 @@ boolExpr
 	| FORALL (varDecl)+ '|' boolExpr 				# Forall
 	| EXISTS (varDecl)+ '|' boolExpr 				# Exists
 	| ID 											# BoolVar
-	| ID '[' POSITIVENUM ']'						# FixIndexBoolArray
 	| ID '[' arithmetic ']'							# ExprIndexBoolArray
 	| TRUE 											# BoolTrue
 	| FALSE 										# BoolFalse
@@ -44,9 +50,7 @@ arithmetic
 	: arithmetic op=(MUL|DIV) arithmetic				# MulDiv
 	| arithmetic op=(ADD|SUB) arithmetic				# AddSub
 	| ID 												# ArithmeticVar
-	| ID '[' POSITIVENUM ']'							# FixIndexArithmeticArray
 	| ID '[' arithmetic ']'								# ExprIndexArithmeticArray
-	| POSITIVENUM										# PositiveNum
 	| INTNUM											# IntNum
 	| REALNUM											# RealNum
 	| '(' arithmetic ')' 								# ArithParen
@@ -64,6 +68,7 @@ EXISTS : 'exists';
 
 TRUE : 'true';
 FALSE : 'false';
+
 
 NOT : 'not';
 AND : 'and';
@@ -86,6 +91,6 @@ COMMENT : '--' ~[\r\n]* -> skip;
 WS  :   [ \t\n]+ -> skip ;
 
 ID : [a-z][a-zA-Z0-9]*;
-POSITIVENUM : [1-9][0-9]*;
+NUM : INTNUM|REALNUM;
 INTNUM : '0'|'-'?[1-9][0-9]*;
 REALNUM : '-'?[0-9]* '.' [0-9]+;

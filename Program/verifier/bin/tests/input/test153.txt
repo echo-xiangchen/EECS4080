@@ -1,5 +1,0 @@
--- Gries Theorems
--- Equivalence and true
--- (3.3) Axiom, Identity of <=>
-boolean q
-verify true <=> q <=> q

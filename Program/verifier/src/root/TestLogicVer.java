@@ -72,7 +72,7 @@ public class TestLogicVer {
 			        	VarPrinter varPrinter = new VarPrinter();
  			        	PrettyPrinter printer = new PrettyPrinter();
  			        	
- 			        	// check to see if there is any unused mode
+ 			        	// check to see if there is any unused variable
  			        	for (int i = 0; i < logic.size(); i++) {
 							logic.get(i).accept(varPrinter);
 						}
@@ -118,7 +118,7 @@ public class TestLogicVer {
 										+ "\nOutput of this formula has been stored in " + path1 + "\n");
 								
 							}
-							// iterate through differenceMap, and get the mode name, store it in warning message
+							// iterate through differenceMap, and get the variable name, store it in warning message
 							String varString = "";
 							if (!VarPrinter.unusedVarMap.isEmpty()) {
 								for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
@@ -154,7 +154,7 @@ public class TestLogicVer {
 										+ "\nOutput of this formula has been stored in " + path2 + "\n");
 								
 							}
-							// iterate through differenceMap, and get the mode name, store it in warning message
+							// iterate through differenceMap, and get the variable name, store it in warning message
 							String varString = "";
 							if (!VarPrinter.unusedVarMap.isEmpty()) {
 								for (Entry<String, Pair<String, String>> entry : VarPrinter.unusedVarMap.entrySet()) {
@@ -219,7 +219,7 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
 			        
 			        
 			        
@@ -360,7 +360,7 @@ public class TestLogicVer {
 					            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
 										if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
 											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-													+ ": " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
+													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
 													+ "\n");     
 										}
 										else {
@@ -375,7 +375,7 @@ public class TestLogicVer {
 					            	writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {
 					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-					            				+ ": " + varOutput.get(j)[2] + "\n");
+					            				+ " : " + varOutput.get(j)[2] + "\n");
 									}
 					            } 
 					            else if(result == Status.UNSATISFIABLE) { 
@@ -462,7 +462,7 @@ public class TestLogicVer {
 					            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
 										if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
 											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-													+ ": " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a);     
+													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a);     
 										}
 										else {
 											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
@@ -474,7 +474,7 @@ public class TestLogicVer {
 					            	writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
 					            	for (int j = 0; j < varOutput.size(); j++) {
 					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-					            				+ ": " + varOutput.get(j)[2] + "\n");
+					            				+ " : " + varOutput.get(j)[2] + "\n");
 									}
 					            }  
 					            else if(result == Status.UNSATISFIABLE) {

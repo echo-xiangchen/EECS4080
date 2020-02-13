@@ -1,6 +1,0 @@
--- Gries Theorems
--- Negation, Inequivalence, and false
--- (3.11) 
-boolean p
-boolean q
-verify not p <=> q <=> p <=> not q

@@ -65,5 +65,9 @@ public interface Visitor {
 	void visitIntArrayVar(IntArrayVar a);
 
 	void visitRealArrayVar(RealArrayVar a);
+
+	
+	
+	void visitNIL(NIL n);
 	
 }
