@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Conjunction
 -- (3.52) Definition of <=>: 
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p <=> q <=> (p and q) or (not p and not q)

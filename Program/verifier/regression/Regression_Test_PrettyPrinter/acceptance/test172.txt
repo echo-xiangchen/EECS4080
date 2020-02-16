@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Conjunction
 -- (3.35) Axiom, Golden rule: 
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p and q <=> p <=> q <=> p or q

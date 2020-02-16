@@ -1,9 +1,9 @@
 -- test conjunction with initialized boolean variable declaration with constant value (no error)
-boolean p = true
-boolean q = false
+p : BOOLEAN = true
+q : BOOLEAN = false
 verify p and q
 verify not p and p and not q and q
-boolean s = false
+s : BOOLEAN = false
 verify s and p and q
-boolean r = true
+r : BOOLEAN = true
 verify s and r and not q

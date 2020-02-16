@@ -1,12 +1,12 @@
 -- test implication with initialized boolean variable declaration with constant value (with error)
-boolean p = true
-boolean q = false
-boolean k = true
-boolean k = false
+p : BOOLEAN = true
+q : BOOLEAN = false
+k : BOOLEAN = true
+k : BOOLEAN = false
 verify p => q
 verify (not p => q) => not k
-boolean s = false
+s : BOOLEAN = false
 verify s => (p => not q)
-boolean r = true
-boolean s = true
+r : BOOLEAN = true
+s : BOOLEAN = true
 verify r => (not p => q) => s

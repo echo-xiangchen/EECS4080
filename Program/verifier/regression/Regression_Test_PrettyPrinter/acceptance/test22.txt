@@ -1,11 +1,11 @@
 -- test negation with initialized boolean variable declaration with propositional value (with error)
-p = true : BOOL
+p : BOOLEAN = true
 verify not q
-q = not p : BOOL
-r = p and q : BOOL
-t1 = p or r : BOOL
+q : BOOLEAN = not p
+r : BOOLEAN = p and q
+t1 : BOOLEAN = p or r
 verify not r
 verify not t1
-t2 = t1 => q : BOOL
-t3 = p <=> t2 : BOOL
+t2 : BOOLEAN = t1 => q
+t3 : BOOLEAN = p <=> t2
 verify t3

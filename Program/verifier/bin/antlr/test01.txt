@@ -1,7 +1,3 @@
 -- test initialized boolean variable declaration with constant value (no error)
-a : ARRAY[INTEGER]
-b : ARRAY[INTEGER] = << 2, -4.5, 6>>
-c : ARRAY[REAL]
-d : ARRAY[REAL] = <<2.1, -4.3, 9.0>>
-e : ARRAY[BOOLEAN]
-f : ARRAY[BOOLEAN] = << p and q, s, true>>
+a:ARRAY[BOOLEAN]
+verify a[2] and true

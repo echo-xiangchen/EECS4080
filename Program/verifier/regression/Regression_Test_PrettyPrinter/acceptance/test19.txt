@@ -1,9 +1,9 @@
 -- test negation with initialized boolean variable declaration with constant value (no error)
-p = true : BOOL
-q = false : BOOL
+p : BOOLEAN = true
+q : BOOLEAN = false
 verify not p
 verify not q
-s = false : BOOL
+s : BOOLEAN = false
 verify not s
-r = true : BOOL
+r : BOOLEAN = true
 verify not r

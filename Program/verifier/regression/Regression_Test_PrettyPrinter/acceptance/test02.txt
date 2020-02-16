@@ -1,11 +1,10 @@
 -- test uninitialized boolean variable declaration (with error)
-p : BOOL
-p : BOOL
-s : BOOL
-r : BOOL
-t : BOOL
-r : BOOL
-y : BOOL
-p0 : BOOL
-q1 : BOOL
-p0 : BOOL
+p : BOOLEAN
+q : BOOLEAN
+s : BOOLEAN
+r : BOOLEAN
+t : BOOLEAN
+x : BOOLEAN
+y : BOOLEAN
+p : BOOLEAN
+t : BOOLEAN

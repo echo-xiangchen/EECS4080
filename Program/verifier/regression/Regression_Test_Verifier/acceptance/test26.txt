@@ -1,17 +1,16 @@
--- test negation with initialized boolean variable declaration with relational value + propositional value (with error)
-int i = 1 + 3
-int j = i * 2
-int m = 3 * 4 + 5
-boolean p = not i > 0
+-- test negation with initialized boolean variable declaration with relational value + propositional value (no error)
+i : INTEGER = 1 + 3
+j : INTEGER = i * 2
+m : INTEGER = 3 * 4 + 5
 verify not p
 verify not r
-boolean r = k >= m and p
-boolean s = j < 20 or m = 17
+p : BOOLEAN = not i > 0
+r : BOOLEAN = j >= m and p
+s : BOOLEAN = j < 20 or m = 17
 verify not s
-boolean s1 = j = i => s
+s1 : BOOLEAN = j = i => s
 verify not s1
-boolean r0 = i = j <=> s1
-boolean k = m < i and not r
+r0 : BOOLEAN = i = j <=> s1
+k : BOOLEAN = m < i and not r
 verify not r0
-boolean k = m = i and i >= j
 verify not k

@@ -1,10 +1,10 @@
 -- test greater or equal with uninitialized int variable declaration (with error)
-int i
-int j
-int m
+i : INTEGER
+j : INTEGER
+m : INTEGER
 verify i >= j
-int m
+m : INTEGER
 verify k >= m
-int k
-int n
+k : INTEGER
+n : INTEGER
 verify m >= n

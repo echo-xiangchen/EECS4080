@@ -1,11 +1,11 @@
 -- test initialized boolean variable declaration with relational value (with error)
-i = x + 3 :INT
-j = 6 * 2 : INT
-m = 3 * 4 + 5 : INT
-p = i > 0 : BOOL
-r = j >= m : BOOL
-s = j < 20 : BOOL
-s1 = j <= i : BOOL
-r0 = i = j : BOOL
-k = m < i : BOOL
+i : INTEGER = P + 3
+j : INTEGER = i * 2
+m : INTEGER = 3 * K + 5
+p : INTEGER = i > 0
+r : INTEGER = j >= m
+s : BOOLEAN = j < 20
+s1 : BOOLEAN = j <= i
+r0 : BOOLEAN = i = j
+k : BOOLEAN = m < i
 verify false

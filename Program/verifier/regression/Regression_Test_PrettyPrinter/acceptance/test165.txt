@@ -1,5 +1,5 @@
 -- Gries Theorems
 -- Disjunction
 -- (3.26) Axiom, Idempotency of 'or':
-boolean p
+p : BOOLEAN
 verify p or p <=> p

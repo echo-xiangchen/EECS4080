@@ -1,19 +1,19 @@
 -- test propositional logic and equal 
 -- with uninitialized boolean and int variable declaration (no error)
-int i
-int j
-int m
-boolean p
-boolean m
-boolean q
-int q
+i : INTEGER
+j : INTEGER
+m : INTEGER
+p : BOOLEAN
+m : BOOLEAN
+q : BOOLEAN
+q : INTEGER
 verify p <=> q and i = j + 1
-boolean r 
-boolean s
+r : BOOLEAN 
+s : BOOLEAN
 verify not r and (s or q) <=> p => m = i * j
-boolean s1
-boolean n
-int n
-boolean r0
-boolean k
+s1 : BOOLEAN
+n : BOOLEAN
+n : INTEGER
+r0 : BOOLEAN
+k : BOOLEAN
 verify not r0 <=> (s1 => (not k and r)) or i = j - m

@@ -1,7 +1,7 @@
 -- Gries Theorems
 -- Implication
 -- (3.63) Distributivity of '=>' over '<=>':
-boolean p
-boolean q
-boolean r
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN
 verify p => (q <=> r) <=> p => q <=> p => r

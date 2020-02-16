@@ -1,12 +1,12 @@
 -- test relational logic with initialized int variable declaration with arithmetic value (with error)
-int i = 1 + 3
-int j = i * 2
+i : INTEGER = 1 + 3
+j : INTEGER = i * 2
 verify i * j = j + 5
-int i = j - 5
+i : INTEGER = j - 5
 verify i >= j + 48
-int m = 3 * 4 + 5
+m : INTEGER = 3 * 4 + 5
 verify m * j <= m + 45
-int k = j / 2 + 5
+k : INTEGER = j / 2 + 5
 verify k + i * 2 < m * 9
-boolean m = true
+m : BOOLEAN = true
 verify m > j + i - 5

@@ -1,7 +1,7 @@
 -- Gries Theorems
 -- Lerbniz as an axiom
 -- (4.2) Monotonicity of 'or':
-boolean p
-boolean q
-boolean r
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN
 verify (p => q) => (p or r => q or r)

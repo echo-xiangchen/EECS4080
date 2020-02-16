@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Conjunction
 -- (3.36) Symmetry of 'and': 
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p and q <=> q and p

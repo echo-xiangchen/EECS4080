@@ -1,9 +1,9 @@
 -- test disjunction with uninitialized boolean variable declaration (with error)
-boolean p
+p : BOOLEAN
 verify not p or q or s
-boolean q
+q : BOOLEAN
 verify not p or q
-boolean k
-boolean s
-boolean s
+k : BOOLEAN
+s : BOOLEAN
+s : BOOLEAN
 verify p or not q or k or not s

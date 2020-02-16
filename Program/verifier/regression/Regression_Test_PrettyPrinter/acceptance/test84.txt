@@ -1,10 +1,10 @@
 -- test less than with initialized int variable declaration with expression value (with error)
-int i = 2 * 3 + 24
-int j = i / 5 -7
+i : INTEGER = 2 * 3 + 24
+j : INTEGER = i / 5 -7
 verify i < j
 verify m < i + 2
-int m = i * j / 2
-int k = (m + 30) * 2
+m : INTEGER = i * j / 2
+k : INTEGER = (m + 30) * 2
 verify n < i * j
-int n = m + 5 * j
+n : INTEGER = m + 5 * j
 verify n < i + j

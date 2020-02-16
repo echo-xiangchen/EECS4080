@@ -1,11 +1,11 @@
 -- test greater or equal with initialized int variable declaration with expression value (with error)
-int i = 2 * 3 + 24
-int j = i / 5 -7
-int j = m * i
+i : INTEGER = 2 * 3 + 24
+j : INTEGER = i / 5 -7
+j : INTEGER = m * i
 verify i >= j
-int m = i * j / 2
-int j = m * i
+m : INTEGER = i * j / 2
+j : INTEGER = m * i
 verify m >= i + 2
-int k = (m + 30) * 2
+k : INTEGER = (m + 30) * 2
 verify k >= i * j
 verify m >= i + j

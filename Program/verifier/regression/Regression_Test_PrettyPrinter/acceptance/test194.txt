@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Implication
 -- (3.59) Definition of implication: 
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p => q <=> not p or q

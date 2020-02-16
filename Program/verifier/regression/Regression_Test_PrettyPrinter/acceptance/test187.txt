@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Conjunction
 -- (3.50) 
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p and (q <=> p) <=> p and q

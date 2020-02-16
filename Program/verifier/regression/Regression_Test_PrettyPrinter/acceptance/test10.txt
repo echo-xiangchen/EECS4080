@@ -1,12 +1,12 @@
 -- test initialized boolean variable declaration with propositional value (with error)
-p = true : BOOL
-q = not p : BOOL
-r = p and q : BOOL
-t1 = p or s : BOOL
-t2 = p => q : BOOL
-t3 = s <=> q : BOOL
-m1 = not p and q : BOOL
-m2 = not p or q : BOOL
-m3 = not s => q : BOOL
-m4 = not p <=> s : BOOL
+p : BOOLEAN = true
+q : BOOLEAN = not p
+r : BOOLEAN = p and q
+t1 : BOOLEAN = p or s
+t2 : BOOLEAN = p => q
+t3 : BOOLEAN = p <=> t
+m1 : BOOLEAN = not p and q
+m2 : BOOLEAN = not p or q
+m3 : BOOLEAN = not p => q
+m4 : BOOLEAN = not p <=> q
 verify not r

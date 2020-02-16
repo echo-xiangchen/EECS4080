@@ -1,7 +1,7 @@
 -- test conjunction with uninitialized boolean variable declaration (with error)
-boolean p
+p : BOOLEAN
 verify not p and q
 verify q and s
-boolean q
-boolean s
+q : BOOLEAN
+s : BOOLEAN
 verify p and not s and q

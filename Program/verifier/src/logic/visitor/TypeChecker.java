@@ -40,23 +40,29 @@ public class TypeChecker implements Visitor{
 		errormsg.addAll(leftChecker.errormsg);
 		errormsg.addAll(rightChecker.errormsg);
 		
-		// if left child is not boolean type
-		if (!(varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType)) {
-			errormsg.add(leftPrinter.infixOutput + " is not boolean type.");
-		}
-		
-		// if right child is not boolean type
-		else if (!(varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType)) {
+		// only when there is no error on both left and right child checker
+		// then continue to check their type
+		if (errormsg.isEmpty()) {
+			// if left child is not boolean type
+			if (!(varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType)
+					&& !(varMap.get(leftPrinter.infixOutput).a instanceof types.BoolArray)) {
+				errormsg.add(leftPrinter.infixOutput + " is not boolean type.");
+			}
 			
-			errormsg.add(rightPrinter.infixOutput + " is not boolean type.");
-		}
-		
-		// if left and right child are both boolean type (no type error)
-		// add this expr to the varmap
-		else {
-			InfixPrinter infixPrinter = new InfixPrinter();
-			e.accept(infixPrinter);
-			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+			// if right child is not boolean type
+			else if (!(varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType)
+					&& !(varMap.get(rightPrinter.infixOutput).a instanceof types.BoolArray)) {
+				
+				errormsg.add(rightPrinter.infixOutput + " is not boolean type.");
+			}
+			
+			// if left and right child are both boolean type (no type error)
+			// add this expr to the varmap
+			else {
+				InfixPrinter infixPrinter = new InfixPrinter();
+				e.accept(infixPrinter);
+				varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+			}
 		}
 	}
 	
@@ -79,22 +85,26 @@ public class TypeChecker implements Visitor{
 		errormsg.addAll(leftChecker.errormsg);
 		errormsg.addAll(rightChecker.errormsg);
 		
-		// if left child is not int type of real type
-		if (varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType) {
-			errormsg.add(leftPrinter.infixOutput + " is boolean type.");
-		}
-		
-		// if right child is not int type of real type
-		else if (varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType) {
-			errormsg.add(rightPrinter.infixOutput + " is boolean type.");
-		}
-		
-		// if left and right child are both arithmetic type (no type error)
-		// add this expr to the varmap
-		else {
-			InfixPrinter infixPrinter = new InfixPrinter();
-			e.accept(infixPrinter);
-			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+		if (errormsg.isEmpty()) {
+			// if left child is not int type of real type
+			if (varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType
+					|| varMap.get(leftPrinter.infixOutput).a instanceof types.BoolArray) {
+				errormsg.add(leftPrinter.infixOutput + " is boolean type.");
+			}
+			
+			// if right child is not int type of real type
+			else if (varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType
+					|| varMap.get(rightPrinter.infixOutput).a instanceof types.BoolArray) {
+				errormsg.add(rightPrinter.infixOutput + " is boolean type.");
+			}
+			
+			// if left and right child are both arithmetic type (no type error)
+			// add this expr to the varmap
+			else {
+				InfixPrinter infixPrinter = new InfixPrinter();
+				e.accept(infixPrinter);
+				varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+			}
 		}
 	}
 	
@@ -117,38 +127,42 @@ public class TypeChecker implements Visitor{
 		errormsg.addAll(leftChecker.errormsg);
 		errormsg.addAll(rightChecker.errormsg);
 		
-		// if left child is not int type or real type
-		if (varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType) {
+		if (errormsg.isEmpty()) {
+			// if left child is not int type or real type
+			if (varMap.get(leftPrinter.infixOutput).a instanceof types.BoolType
+					|| varMap.get(leftPrinter.infixOutput).a instanceof types.BoolArray) {
+						
+				InfixPrinter infixPrinter = new InfixPrinter();
+				e.left().accept(infixPrinter);
+				errormsg.add(infixPrinter.infixOutput + " is boolean type.");
+			}
 					
-			InfixPrinter infixPrinter = new InfixPrinter();
-			e.left().accept(infixPrinter);
-			errormsg.add(infixPrinter.infixOutput + " is boolean type.");
-		}
-				
-		// if right child is not int type or real type
-		else if (varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType) {
-					
-			InfixPrinter infixPrinter = new InfixPrinter();
-			e.right().accept(infixPrinter);
-			errormsg.add(infixPrinter.infixOutput + " is not of any arithmetic type.");
-		}
-		
-		// if any one of left or right child is real type
-		// the whole expr will be real type
-		else if (varMap.get(leftPrinter.infixOutput).a instanceof types.RealType
-					||
-					varMap.get(rightPrinter.infixOutput).a instanceof types.RealType) {
+			// if right child is not int type or real type
+			else if (varMap.get(rightPrinter.infixOutput).a instanceof types.BoolType
+					|| varMap.get(rightPrinter.infixOutput).a instanceof types.BoolArray) {
+						
+				InfixPrinter infixPrinter = new InfixPrinter();
+				e.right().accept(infixPrinter);
+				errormsg.add(infixPrinter.infixOutput + " is boolean type.");
+			}
 			
-			InfixPrinter infixPrinter = new InfixPrinter();
-			e.accept(infixPrinter);
-			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new RealType(), null));
-		}
-		
-		// if both left and right child are int type, the whole expr will be int type
-		else {
-			InfixPrinter infixPrinter = new InfixPrinter();
-			e.accept(infixPrinter);
-			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new IntType(), null));
+			// if any one of left or right child is real type
+			// the whole expr will be real type
+			else if (varMap.get(leftPrinter.infixOutput).a instanceof types.RealType
+						||
+						varMap.get(rightPrinter.infixOutput).a instanceof types.RealType) {
+				
+				InfixPrinter infixPrinter = new InfixPrinter();
+				e.accept(infixPrinter);
+				varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new RealType(), null));
+			}
+			
+			// if both left and right child are int type, the whole expr will be int type
+			else {
+				InfixPrinter infixPrinter = new InfixPrinter();
+				e.accept(infixPrinter);
+				varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new IntType(), null));
+			}
 		}
 	}
 	
@@ -162,20 +176,22 @@ public class TypeChecker implements Visitor{
 		
 		errormsg.addAll(checker.errormsg);
 		
-		// if its child is not boolean type
-		if (!(varMap.get(u.child.name).a instanceof types.BoolType)) {
-			InfixPrinter infixPrinter = new InfixPrinter();
-			u.accept(infixPrinter);
-			errormsg.add(infixPrinter.infixOutput + " is not boolean type.");
-		}
-		
-		// if its child is boolean type (no type error)
-		else {
-			InfixPrinter infixPrinter = new InfixPrinter();
-			u.accept(infixPrinter);
-			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
-		}
-		
+		if (errormsg.isEmpty()) {
+			// if its child is not boolean type
+			if (!(varMap.get(u.child.name).a instanceof types.BoolType) 
+					&& !(varMap.get(u.child.name).a instanceof types.BoolArray)) {
+				InfixPrinter infixPrinter = new InfixPrinter();
+				u.accept(infixPrinter);
+				errormsg.add(infixPrinter.infixOutput + " is not boolean type.");
+			}
+			
+			// if its child is boolean type (no type error)
+			else {
+				InfixPrinter infixPrinter = new InfixPrinter();
+				u.accept(infixPrinter);
+				varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+			}
+		}		
 	}
 	
 	public void QuantifyChecker (Quantification q) {
@@ -509,12 +525,15 @@ public class TypeChecker implements Visitor{
 		// verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			
-			// type check this arithmetic variable's value first
+			// type check this arithmetic variable's index first
 			TypeChecker checker = new TypeChecker();
-			a.value.accept(checker);
+			a.index.accept(checker);
 			
 			InfixPrinter infixPrinter = new InfixPrinter();
-			a.value.accept(infixPrinter);
+			a.index.accept(infixPrinter);
+			
+			// e.g. a[1], also need to store its name and type to the varMap
+			String arrayElement = a.name + "[" + infixPrinter.infixOutput + "]";
 			
 			// check if the type of the index is integer type
 			// e.g. error: verify a[2.1 * 2]
@@ -539,10 +558,149 @@ public class TypeChecker implements Visitor{
 			
 			// if there is no error, check the map first
 			else if (checker.errormsg.isEmpty()) {
-				if (!varMap.containsKey(a.name)) {
-					varMap.put(a.name, new Pair<VarType, Logic>(new BoolArray(), a.value));
+				if (!varMap.containsKey(arrayElement)) {
+					varMap.put(arrayElement, new Pair<VarType, Logic>(new BoolType(), null));
 				}
-				else {
+				else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
+					varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
+			}else {
+				errormsg.addAll(checker.errormsg);
+			}
+		}
+	}
+	
+	// integer array
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[INTEGER]
+	
+		if (a.mode instanceof modes.UninitializedDecl) {
+			// if this variable is declared for the first time, simply add it to the map
+			if (!varMap.containsKey(a.name)) {
+				varMap.put(a.name, new Pair<VarType, Logic>(new IntArray(), null));
+			}
+			// if this variable is not declared for the first time, change its type to unknown type
+			// and add the error message
+			else {
+				varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+				errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+						+ "Please make sure each variable is declared exactly once.");
+			}
+		}
+		// mode 1: verification
+		// verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			
+			// type check this arithmetic variable's index first
+			TypeChecker checker = new TypeChecker();
+			a.index.accept(checker);
+			
+			InfixPrinter infixPrinter = new InfixPrinter();
+			a.index.accept(infixPrinter);
+			
+			// e.g. a[1], also need to store its name and type to the varMap
+			String arrayElement = a.name + "[" + infixPrinter.infixOutput + "]";
+			
+			// check if the type of the index is integer type
+			// e.g. error: verify a[2.1 * 2]
+			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
+					|| !(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
+				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot use it as array index value.");
+			}
+			
+			if (!varMap.containsKey(a.name)) {
+				errormsg.add("Error: variable " + a.name + " has not been declared.");
+			}
+			// if it has unknown type
+			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
+				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
+						+ "Please make sure each variable is declared exactly once.");
+			}
+			// if it's not declared as integer array type
+			else if (varMap.containsKey(a.name) && !(varMap.get(a.name).a instanceof types.IntArray)) {
+				errormsg.add("Error: variable " + a.name + " is not declared as a integer array.");
+			}
+			
+			
+			// if there is no error, check the map first
+			else if (checker.errormsg.isEmpty()) {
+				if (!varMap.containsKey(arrayElement)) {
+					varMap.put(arrayElement, new Pair<VarType, Logic>(new IntType(), null));
+				}
+				else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
+					varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
+			}else {
+				errormsg.addAll(checker.errormsg);
+			}
+		}
+	}
+	
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[REAL]
+	
+		if (a.mode instanceof modes.UninitializedDecl) {
+			// if this variable is declared for the first time, simply add it to the map
+			if (!varMap.containsKey(a.name)) {
+				varMap.put(a.name, new Pair<VarType, Logic>(new RealArray(), null));
+			}
+			// if this variable is not declared for the first time, change its type to unknown type
+			// and add the error message
+			else {
+				varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+				errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+						+ "Please make sure each variable is declared exactly once.");
+			}
+		}
+		// mode 1: verification
+		// verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			
+			// type check this arithmetic variable's index first
+			TypeChecker checker = new TypeChecker();
+			a.index.accept(checker);
+			
+			InfixPrinter infixPrinter = new InfixPrinter();
+			a.index.accept(infixPrinter);
+			
+			// e.g. a[1], also need to store its name and type to the varMap
+			String arrayElement = a.name + "[" + infixPrinter.infixOutput + "]";
+			
+			// check if the type of the index is integer type
+			// e.g. error: verify a[2.1 * 2]
+			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
+					|| !(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
+				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot use it as array index value.");
+			}
+			
+			if (!varMap.containsKey(a.name)) {
+				errormsg.add("Error: variable " + a.name + " has not been declared.");
+			}
+			// if it has unknown type
+			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
+				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
+						+ "Please make sure each variable is declared exactly once.");
+			}
+			// if it's not declared as integer array type
+			else if (varMap.containsKey(a.name) && !(varMap.get(a.name).a instanceof types.RealArray)) {
+				errormsg.add("Error: variable " + a.name + " is not declared as a real array.");
+			}
+			
+			
+			// if there is no error, check the map first
+			else if (checker.errormsg.isEmpty()) {
+				if (!varMap.containsKey(arrayElement)) {
+					varMap.put(arrayElement, new Pair<VarType, Logic>(new RealType(), null));
+				}
+				else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
 					varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
 					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
 							+ "Please make sure each variable is declared exactly once.");
@@ -589,23 +747,19 @@ public class TypeChecker implements Visitor{
 	
 
 
-	@Override
-	public void visitIntArrayVar(IntArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void visitRealArrayVar(RealArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 
 	@Override
 	public void visitNIL(NIL n) {
-		varMap.put(n.name, new Pair<VarType, Logic>(new UnknowType(), null));
-		errormsg.add("Error: variable " + n.name + " has not been declared.");
+		if (n.mode instanceof modes.Undeclared) {
+			varMap.put(n.name, new Pair<VarType, Logic>(new UnknowType(), null));
+			errormsg.add("Error: variable " + n.name + " has not been declared.");
+		}
+		else if (n.mode instanceof modes.Declared) {
+			varMap.put(n.name, new Pair<VarType, Logic>(new UnknowType(), null));
+			errormsg.add("Error: variable " + n.name + " has boolean type.");
+		}
+		
 	}
 }

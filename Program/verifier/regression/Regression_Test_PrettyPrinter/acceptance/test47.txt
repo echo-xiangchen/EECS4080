@@ -1,7 +1,7 @@
 -- test implication with uninitialized boolean variable declaration (no error)
-boolean p
-boolean q
-boolean s
+p : BOOLEAN
+q : BOOLEAN
+s : BOOLEAN
 verify not p => q => s
 verify q => (s => not p) => not q
 verify p => (not s or q)

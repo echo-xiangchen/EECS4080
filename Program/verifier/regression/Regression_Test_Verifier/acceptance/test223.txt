@@ -2,5 +2,5 @@
 -- Proof Techniques
 -- (4.9) Proof by contradiction
 -- to prove p, prove not p => false
-boolean p
+p : BOOLEAN
 verify p <=> (not p => false)

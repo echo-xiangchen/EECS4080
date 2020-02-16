@@ -1,18 +1,18 @@
 -- test propositional logic and relational logic
 -- with initialized boolean and int variable declaration with constant value(with error)
-int i = 5
-int j = 1
-int m = 35
-boolean p = true
-boolean q = false
+i : INTEGER = 5
+j : INTEGER = 1
+m : INTEGER = 35
+p : BOOLEAN = true
+q : BOOLEAN = false
 verify p <=> q and n >= j or not m = 0 and not q => i <= j or j > m + i
-boolean r = true
-boolean s = false
-int p = 9
+r : BOOLEAN = true
+s : BOOLEAN = false
+p : INTEGER = 9
 verify not r and (s or q and i + j = m) <=> p => m = i * j and not i >= m * j
-boolean s1 = true
-boolean i
-boolean r0 = false
-int n
-boolean k = false
+s1 : BOOLEAN = true
+i : BOOLEAN
+r0 : BOOLEAN = false
+n : INTEGER
+k : BOOLEAN = false
 verify not r0 and (s1 => (not k <=> r)) or i < j - m * 5 and m = 35 or k and n <= m + i + j

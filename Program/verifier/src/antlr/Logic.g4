@@ -9,7 +9,7 @@ line
 	| ID ':' type=(INT|REAL) '=' arithmetic											# NumValueDecl
 	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'										# ArrayDecl
 	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']' 
-				'=' '<<' (NUM|boolExpr) (',' (NUM|boolExpr))* '>>'					# ArrayValueDecl
+		 '=' '<<' (INTNUM|REALNUM|boolExpr) (',' (INTNUM|REALNUM|boolExpr))* '>>'	# ArrayValueDecl
 	//| ID ':' PAIR '[' left=(BOOL|INT|REAL) ',' right=(BOOL|INT|REAL) ']'				# UnnamedPair
 	//| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPair
 	| VERIFY boolExpr																# VerifyBoolExpr
@@ -27,7 +27,7 @@ boolExpr
 	| FORALL (varDecl)+ '|' boolExpr 				# Forall
 	| EXISTS (varDecl)+ '|' boolExpr 				# Exists
 	| ID 											# BoolVar
-	| ID '[' arithmetic ']'							# ExprIndexBoolArray
+	| ID '[' arithmetic ']'							# IndexBoolArray
 	| TRUE 											# BoolTrue
 	| FALSE 										# BoolFalse
 	| '(' boolExpr ')'								# Paren
@@ -50,7 +50,7 @@ arithmetic
 	: arithmetic op=(MUL|DIV) arithmetic				# MulDiv
 	| arithmetic op=(ADD|SUB) arithmetic				# AddSub
 	| ID 												# ArithmeticVar
-	| ID '[' arithmetic ']'								# ExprIndexArithmeticArray
+	| ID '[' arithmetic ']'								# IndexArithmeticArray
 	| INTNUM											# IntNum
 	| REALNUM											# RealNum
 	| '(' arithmetic ')' 								# ArithParen
@@ -91,6 +91,6 @@ COMMENT : '--' ~[\r\n]* -> skip;
 WS  :   [ \t\n]+ -> skip ;
 
 ID : [a-z][a-zA-Z0-9]*;
-NUM : INTNUM|REALNUM;
+
 INTNUM : '0'|'-'?[1-9][0-9]*;
 REALNUM : '-'?[0-9]* '.' [0-9]+;

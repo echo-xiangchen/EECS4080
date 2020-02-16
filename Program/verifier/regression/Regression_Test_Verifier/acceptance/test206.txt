@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Implication
 -- (3.71) Reflexivity of '=>':
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p => p <=> true

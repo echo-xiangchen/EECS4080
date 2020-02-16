@@ -6,22 +6,18 @@ import modes.mode;
 
 public class ArrayVar extends Var {
 	
-	List<String> arrayContent;
-	
 	// uninitialized declaration
 	public ArrayVar(String name, modes.mode mode) {
 		super(name, mode);
-		arrayContent = new ArrayList<String>();
 	}
 	
 	// verification
-	public ArrayVar(String name, Logic index, mode mode) {
-		super(name, index, mode);
-		arrayContent = new ArrayList<String>();
+	public ArrayVar(String name, mode mode, Logic index) {
+		super(name, mode, index);
 	}
 	
-	// used for quantification declaration
-	public ArrayVar(List<String> list, mode mode) {
-		super(list, mode);
+	// initialized declaration
+	public ArrayVar(String name, List<Logic> arrayValue, mode mode) {
+		super(name, arrayValue, mode);
 	}
 }

@@ -1,5 +1,5 @@
 -- Gries Theorems
 -- Disjunction
 -- (3.30) Identity of 'or':
-boolean p
+p : BOOLEAN
 verify p or false <=> p

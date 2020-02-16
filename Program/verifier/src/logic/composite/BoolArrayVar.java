@@ -1,21 +1,18 @@
 package logic.composite;
 
-import java.util.*;
-
 import logic.visitor.*;
+import modes.*;
 
 public class BoolArrayVar extends ArrayVar {
 	
 	// uninitialized declaration
-	public BoolArrayVar(String name, modes.mode mode) {
+	public BoolArrayVar(String name, mode mode) {
 		super(name, mode);
-		arrayContent = new ArrayList<String>();
 	}
 	
 	// verification
-	public BoolArrayVar(String name, Logic index, modes.mode mode) {
-		super(name, index, mode);
-		arrayContent = new ArrayList<String>();
+	public BoolArrayVar(String name, mode mode, Logic index) {
+		super(name, mode, index);
 	}
 	
 	public void accept(Visitor v) {

@@ -66,6 +66,7 @@ public class TestLogicVer {
 			        	logic.get(i).accept(checker);
 					}
 			        
+			        
 			        // check if error msg is empty
 			        // only when it's empty, call the pretty printer
 			        if (checker.errormsg.isEmpty()) {
@@ -220,7 +221,7 @@ public class TestLogicVer {
 			        
 			        
 			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
-			        
+			        System.out.println("AntlrToLogic.varMap: " + AntlrToLogic.varTypes + "\n");
 			        
 			        
 			        

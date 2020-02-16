@@ -1,7 +1,7 @@
 -- Gries Theorems
 -- Disjunction
 -- (3.27) Axiom, Distributivity of 'or' over '<=>':
-boolean p
-boolean q
-boolean r
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN
 verify p or (q <=> r) <=> p or q <=> p or r

@@ -1,7 +1,7 @@
 -- Gries Theorems
 -- Conjunction
 -- (3.41) Distributivity of 'and' over 'and': 
-boolean p
-boolean q
-boolean r
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN
 verify p and (q and r) <=> (p and q) and (p and r)

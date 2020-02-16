@@ -1,3 +1,5 @@
+// class to print the formula as infix version
+
 package logic.visitor;
 
 import java.util.*;
@@ -208,9 +210,85 @@ public class InfixPrinter implements Visitor{
 			v.value.accept(h);
 		}
 		// mode 3: quantification declaration
-		// e.g. forall p : REAL; @ not p
+		// e.g. forall p : REAL; | p > 0
 		else if (v.mode instanceof modes.QuantifyReal) {
 			quantifyVar.add(v.name);
+		}
+	}
+	
+	
+	// boolean array variable
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[BOOLEAN]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			
+		}
+		// mode 1: verification
+		// e.g. verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			InfixPrinter h = new InfixPrinter();
+			a.index.accept(h);
+			
+			infixOutput = infixOutput.concat(a.name + "[" + h.infixOutput + "]");
+		}
+		// mode 2: initialized declaration
+		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			
+			
+			
+		}
+	}
+	
+	// integer array
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[INTEGER]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			
+		}
+		// mode 1: verification
+		// e.g. verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			InfixPrinter h = new InfixPrinter();
+			a.index.accept(h);
+			
+			infixOutput = infixOutput.concat(a.name + "[" + h.infixOutput + "]");
+		}
+		// mode 2: initialized declaration
+		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			
+			
+			
+		}
+	}
+	
+	// real array
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[REAL]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			
+		}
+		// mode 1: verification
+		// e.g. verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			InfixPrinter h = new InfixPrinter();
+			a.index.accept(h);
+			
+			infixOutput = infixOutput.concat(a.name + "[" + h.infixOutput + "]");
+		}
+		// mode 2: initialized declaration
+		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			
+			
+			
 		}
 	}
 
@@ -246,23 +324,11 @@ public class InfixPrinter implements Visitor{
 	
 	
 
-	@Override
-	public void visitBoolArrayVar(BoolArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
-	@Override
-	public void visitIntArrayVar(IntArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
-	@Override
-	public void visitRealArrayVar(RealArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public void visitNIL(NIL n) {

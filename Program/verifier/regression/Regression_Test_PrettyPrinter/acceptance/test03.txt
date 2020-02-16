@@ -1,13 +1,8 @@
 -- test uninitialized int variable declaration (no error)
-i : INT
-j : INT
-i0 : INT
-k : INT
-m : INT
-j0 : INT
-j1 : INT
-i1 : INT
-k0 : INT
-m1 : INT
-n : INT
+i : INTEGER
+j : INTEGER
+i0 : INTEGER
+k : INTEGER
+m : INTEGER
+m1 : INTEGER
 verify true

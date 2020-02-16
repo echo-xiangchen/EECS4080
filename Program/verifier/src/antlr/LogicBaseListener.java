@@ -125,18 +125,6 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprIndexBoolArray(LogicParser.ExprIndexBoolArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExprIndexBoolArray(LogicParser.ExprIndexBoolArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBoolVar(LogicParser.BoolVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -216,6 +204,18 @@ public class LogicBaseListener implements LogicListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolFalse(LogicParser.BoolFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIndexBoolArray(LogicParser.IndexBoolArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndexBoolArray(LogicParser.IndexBoolArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -389,18 +389,6 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprIndexArithmeticArray(LogicParser.ExprIndexArithmeticArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExprIndexArithmeticArray(LogicParser.ExprIndexArithmeticArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterRealNum(LogicParser.RealNumContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -408,6 +396,18 @@ public class LogicBaseListener implements LogicListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRealNum(LogicParser.RealNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIndexArithmeticArray(LogicParser.IndexArithmeticArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndexArithmeticArray(LogicParser.IndexArithmeticArrayContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -1,13 +1,13 @@
 -- test implication with initialized boolean variable declaration with propositional value (with error)
-boolean p = true
-boolean q = not p => p
+p : BOOLEAN = true
+q : BOOLEAN = not p => p
 verify q => not p
-boolean r = p and q
-boolean t1 = p or q
-boolean q = r => t1
+r : BOOLEAN = p and q
+t1 : BOOLEAN = p or q
+q : BOOLEAN = r => t1
 verify r => (t1 => not p) => q
 verify t1 => r
-boolean r = p => not q
-boolean t2 = t1 => q
-boolean t3 = p <=> t2
+r : BOOLEAN = p => not q
+t2 : BOOLEAN = t1 => q
+t3 : BOOLEAN = p <=> t2
 verify t3 => (t2=> not t1) => r

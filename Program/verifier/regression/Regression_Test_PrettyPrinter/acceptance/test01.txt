@@ -1,11 +1,9 @@
 -- test uninitialized boolean variable declaration (no error)
-p : BOOL
-q : BOOL
-s : BOOL
-r : BOOL
-t : BOOL
-x : BOOL
-y : BOOL
-p0 : BOOL
-q1 : BOOL
+p : BOOLEAN
+q : BOOLEAN
+s : BOOLEAN
+r : BOOLEAN
+t : BOOLEAN
+x : BOOLEAN
+y : BOOLEAN
 verify not p

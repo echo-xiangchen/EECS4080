@@ -1,12 +1,12 @@
 -- test conjunction with initialized boolean variable declaration with propositional value (with error)
-boolean p = true
-boolean q = not p or p
+p : BOOLEAN = true
+q : BOOLEAN = not p or p
+q : BOOLEAN = not p
 verify q and not p
-boolean r = p and q
-boolean r = q or p
-boolean t1 = p or q
+r : BOOLEAN = p and q
+t : BOOLEAN = p or q
 verify r and t1 and not p and q
 verify t1 and r
-boolean t2 = t1 => s
-boolean t3 = p <=> t2
+t2 : BOOLEAN = t1 => q
+t3 : BOOLEAN = p <=> t2
 verify t3 and t2 and not t1

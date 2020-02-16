@@ -1,5 +1,5 @@
 -- Gries Theorems
 -- Negation, Inequivalence, and false
 -- (3.12) Double negation
-boolean p
+p : BOOLEAN
 verify not not p <=> p

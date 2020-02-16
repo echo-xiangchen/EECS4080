@@ -1,5 +1,5 @@
 -- Gries Theorems
 -- Implication
 -- (3.73) Left identity of '=>':
-boolean p
+p : BOOLEAN
 verify true => p <=> p

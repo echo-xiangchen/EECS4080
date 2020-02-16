@@ -15,7 +15,7 @@ public class PrettyPrinter implements Visitor {
 	public static List<String> infixFormula = new ArrayList<String>();
 	// msg for unused variables
 	public static List<String> warningMsg = new ArrayList<String>();
-	
+	// used variable list
 	public static List<ArrayList<String>> usedVarList = new ArrayList<ArrayList<String>>();
 	
 	public PrettyPrinter() {
@@ -54,6 +54,12 @@ public class PrettyPrinter implements Visitor {
 				}
 				else if (entry.getValue().b.equals("Quantification")) {
 					
+				}
+				// array declaration
+				// (declare-const a (Array Int Int))
+				else if (entry.getValue().b.equals("Array")) {
+					z3output = z3output.concat("(declare-const " + entry.getKey()
+							+ " (Array Int " + entry.getValue().a + "))\n");
 				}
 				else {
 					z3output = z3output.concat("(declare-const " + entry.getKey() +  " " 
@@ -298,7 +304,7 @@ public class PrettyPrinter implements Visitor {
 	@Override
 	public void visitBoolVar(BoolVar v) {
 		// mode 0: uninitialized declaration
-		// e.g. boolean p
+		// e.g. p : BOOLEAN
 		if(v.mode instanceof modes.UninitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
@@ -309,7 +315,7 @@ public class PrettyPrinter implements Visitor {
 			printExpr(v);
 		}
 		// mode 2: initialized declaration
-		// e.g. boolean p = not q
+		// e.g. p : BOOLEAN = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
@@ -332,6 +338,75 @@ public class PrettyPrinter implements Visitor {
 		PrefixPrinter p = new PrefixPrinter();
 		v.accept(p);
 	}
+	
+	// boolean array
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[BOOLEAN]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
+		// mode 1: verification
+		else if (a.mode instanceof modes.Verification) {
+			printExpr(a);
+		}
+		// mode 2: initialized declaration
+		// e.g. a : ARRAY[BOOLEAN] = <<true, false, p and q>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
+	}
+	
+	// integer array
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[INTEGER]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
+		// mode 1: verification
+		else if (a.mode instanceof modes.Verification) {
+			printExpr(a);
+		}
+		// mode 2: initialized declaration
+		// e.g. a : ARRAY[INTEGER] = <<1, 2, 6, 9>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
+	}
+	
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[REAL]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
+		// mode 1: verification
+		else if (a.mode instanceof modes.Verification) {
+			printExpr(a);
+		}
+		// mode 2: initialized declaration
+		// e.g. a : ARRAY[INTEGER] = <<1.2, 2.1, 6.0, 9.6>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
+	}
+	
 
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
@@ -361,28 +436,6 @@ public class PrettyPrinter implements Visitor {
 	
 	
 	
-	
-	
-	
-	
-	
-	@Override
-	public void visitBoolArrayVar(BoolArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitIntArrayVar(IntArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitRealArrayVar(RealArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void visitNIL(NIL n) {

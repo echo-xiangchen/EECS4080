@@ -1,15 +1,15 @@
 -- test propositional logic and less or equal than
 -- with initialized boolean and int variable declaration with expression value(no error)
-int i = 5 * 6 - 9
-int j = 1 + 9
-int m = 35 - 12 * 2
-boolean p = true
-boolean q = not p
+i : INTEGER = 5 * 6 - 9
+j : INTEGER = 1 + 9
+m : INTEGER = 35 - 12 * 2
+p : BOOLEAN = true
+q : BOOLEAN = not p
 verify p <=> q and (i <= j or not m <= 0)
-boolean r = not p => q and p
-boolean s = r and p <=> q and p
+r : BOOLEAN = not p => q and p
+s : BOOLEAN = r and p <=> q and p
 verify not r and (s or q) <=> (p => m <= i * j) and not i <= m
-boolean s1 = i <= j - 3
-boolean r0 = m = i * (j + 5)
-boolean k = i <= m - 7
+s1 : BOOLEAN = i <= j - 3
+r0 : BOOLEAN = m = i * (j + 5)
+k : BOOLEAN = i <= m - 7
 verify not r0 <=> (s1 => (not k and r)) or i <= j - m

@@ -73,13 +73,6 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIff(LogicParser.IffContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ExprIndexBoolArray}
-	 * labeled alternative in {@link LogicParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprIndexBoolArray(LogicParser.ExprIndexBoolArrayContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code BoolVar}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
 	 * @param ctx the parse tree
@@ -128,6 +121,13 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolFalse(LogicParser.BoolFalseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IndexBoolArray}
+	 * labeled alternative in {@link LogicParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexBoolArray(LogicParser.IndexBoolArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Forall}
 	 * labeled alternative in {@link LogicParser#boolExpr}.
@@ -227,17 +227,17 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAddSub(LogicParser.AddSubContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ExprIndexArithmeticArray}
-	 * labeled alternative in {@link LogicParser#arithmetic}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprIndexArithmeticArray(LogicParser.ExprIndexArithmeticArrayContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code RealNum}
 	 * labeled alternative in {@link LogicParser#arithmetic}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitRealNum(LogicParser.RealNumContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IndexArithmeticArray}
+	 * labeled alternative in {@link LogicParser#arithmetic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexArithmeticArray(LogicParser.IndexArithmeticArrayContext ctx);
 }

@@ -1,10 +1,10 @@
 -- test negation with initialized boolean variable declaration with relational value (no error)
-i = 1 + 3 : INT
-j = i * 2 : INT
-m = 3 * 4 + 5 : INT
-p = i > 0 : BOOL
+i : INTEGER = 1 + 3
+j : INTEGER = i * 2
+m : INTEGER = 3 * 4 + 5
+p : BOOLEAN = i > 0
 verify not p
-r = j >= m : BOOL
-s = j < 20 : BOOL
+r : BOOLEAN = j >= m
+s : BOOLEAN = j < 20
 verify not r
 verify not s

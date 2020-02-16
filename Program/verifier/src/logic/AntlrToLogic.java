@@ -12,7 +12,7 @@ import modes.*;
 
 public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	
-	public static Map<String, String> IntOrReal = new HashMap<String, String>();
+	public static Map<String, String> varTypes = new HashMap<String, String>();
 	
 	/* *****************************************************************************************
 	 * Methods for line rule
@@ -22,15 +22,17 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	// uninitialized boolean or int variable declaration
 	@Override
 	public Logic visitSingleVar(SingleVarContext ctx) {
+		// add the variable and their types to the map
 		if (ctx.type.getType() == LogicParser.BOOL) {
+			varTypes.put(ctx.ID().getText(), "Bool");
 			return new BoolVar(ctx.ID().getText(), new UninitializedDecl());
 		}
 		else if (ctx.type.getType() == LogicParser.INT) {
-			IntOrReal.put(ctx.ID().getText(), "Int");
+			varTypes.put(ctx.ID().getText(), "Int");
 			return new IntVar(ctx.ID().getText(), new UninitializedDecl());
 		} 
 		else {
-			IntOrReal.put(ctx.ID().getText(), "Real");
+			varTypes.put(ctx.ID().getText(), "Real");
 			return new RealVar(ctx.ID().getText(), new UninitializedDecl());
 		}
 	}
@@ -39,6 +41,7 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	// initialized boolean variable declaration
 	@Override
 	public Logic visitBoolValueDecl(BoolValueDeclContext ctx) {
+		varTypes.put(ctx.ID().getText(), "Bool");
 		return new BoolVar(ctx.ID().getText(), visit(ctx.boolExpr()), new InitializedDecl());
 	}
 	
@@ -47,11 +50,11 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	@Override
 	public Logic visitNumValueDecl(NumValueDeclContext ctx) {
 		if (ctx.type.getType() == LogicParser.INT) {
-			IntOrReal.put(ctx.ID().getText(), "Int");
+			varTypes.put(ctx.ID().getText(), "Int");
 			return new IntVar(ctx.ID().getText(), visit(ctx.arithmetic()), new InitializedDecl());
 		}
 		else {
-			IntOrReal.put(ctx.ID().getText(), "Real");
+			varTypes.put(ctx.ID().getText(), "Real");
 			return new RealVar(ctx.ID().getText(), visit(ctx.arithmetic()), new InitializedDecl());
 		}
 	}
@@ -61,17 +64,18 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	@Override
 	public Logic visitArrayDecl(ArrayDeclContext ctx) {
 		if (ctx.type.getType() == LogicParser.BOOL) {
+			varTypes.put(ctx.ID().getText(), "BoolArray");
 			return new BoolArrayVar(ctx.ID().getText(), new UninitializedDecl());
 		}
 		else if (ctx.type.getType() == LogicParser.INT) {
+			varTypes.put(ctx.ID().getText(), "IntArray");
 			return new IntArrayVar(ctx.ID().getText(), new UninitializedDecl());
 		}
 		else {
+			varTypes.put(ctx.ID().getText(), "RealArray");
 			return new RealArrayVar(ctx.ID().getText(), new UninitializedDecl());
 		}
 	}
-	
-	
 	
 	
 	// verify the formula
@@ -156,12 +160,10 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	}
 	
 	
-	
-	
 	// expression index value boolean array verification
 	@Override
-	public Logic visitExprIndexBoolArray(ExprIndexBoolArrayContext ctx) {
-		return new BoolArrayVar(ctx.ID().getText(), visit(ctx.arithmetic()), new Verification());
+	public Logic visitIndexBoolArray(IndexBoolArrayContext ctx) {
+		return new BoolArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmetic()));
 	}
 	
 	
@@ -215,7 +217,7 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < ctx.ID().size(); i++) {
 				list.add(ctx.ID(i).getText());
-				IntOrReal.put(ctx.ID(i).getText(), "Int");
+				varTypes.put(ctx.ID(i).getText(), "Int");
 			}
 			// create a new IntVar object, accepting the list
 			// and transform the list of String into a list of IntVar
@@ -226,7 +228,7 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < ctx.ID().size(); i++) {
 				list.add(ctx.ID(i).getText());
-				IntOrReal.put(ctx.ID(i).getText(), "Real");
+				varTypes.put(ctx.ID(i).getText(), "Real");
 			}
 			// create a new RealVar object, accepting the list
 			// and transform the list of String into a list of IntVar
@@ -301,19 +303,45 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	// arithmetic variable verification
 	@Override
 	public Logic visitArithmeticVar(ArithmeticVarContext ctx) {
-		if (IntOrReal.containsKey(ctx.ID().getText())) {
-			if (IntOrReal.get(ctx.ID().getText()).equals("Int")) {
+		if (varTypes.containsKey(ctx.ID().getText())) {
+			if (varTypes.get(ctx.ID().getText()).equals("Int")) {
 				return new IntVar(ctx.ID().getText(), new Verification());
 			}
-			else {
+			else if (varTypes.get(ctx.ID().getText()).equals("Real")) {
 				return new RealVar(ctx.ID().getText(), new Verification());
 			}
+			// Declared for NIL means the variable has been declared but with the wrong type
+			else {
+				return new NIL(ctx.ID().getText(), new Declared());
+			}
 		}
+		// Undeclared means the variable has not been declared
 		else {
-			return new NIL(ctx.ID().getText(), new UninitializedDecl());
+			return new NIL(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
+	// arithmetic array variable verification
+	@Override
+	public Logic visitIndexArithmeticArray(IndexArithmeticArrayContext ctx) {
+		// if the map contains the variable, check its type
+		if (varTypes.containsKey(ctx.ID().getText())) {
+			if (varTypes.get(ctx.ID().getText()).equals("IntArray")) {
+				return new IntArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmetic()));
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("RealArray")) {
+				return new RealArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmetic()));
+			}
+			// Declared for NIL means the variable has been declared but with the wrong type
+			else {
+				return new NIL(ctx.ID().getText(), new Declared());
+			}
+		}
+		// Undeclared means the variable has not been declared
+		else {
+			return new NIL(ctx.ID().getText(), new Undeclared());
+		}
+	}
 	
 	// int number
 	@Override

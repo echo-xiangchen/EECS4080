@@ -1,7 +1,7 @@
 -- Gries Theorems
 -- Disjunction
 -- (3.31) Distributivity of 'or' over 'or':
-boolean p
-boolean q
-boolean r
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN
 verify p or (q or r) <=> (p or q) or (p or r)

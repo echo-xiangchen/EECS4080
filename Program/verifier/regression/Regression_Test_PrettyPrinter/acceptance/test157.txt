@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Negation, Inequivalence, and false
 -- (3.9) Axiom, Distributivity of 'not' over '<=>':
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify not (p <=> q) <=> not p <=> q

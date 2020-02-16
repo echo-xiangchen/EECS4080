@@ -1,5 +1,5 @@
 -- Gries Theorems
 -- Implication
 -- (3.74) 
-boolean p
+p : BOOLEAN
 verify p => false <=> not p

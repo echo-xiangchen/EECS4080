@@ -1,19 +1,19 @@
 -- test propositional logic and relational logic
 -- with uninitialized boolean and int variable declaration (with error)
-int i
-int j
-int m
-boolean p
-boolean q
-boolean k
+i : INTEGER
+j : INTEGER
+m : INTEGER
+p : BOOLEAN
+q : BOOLEAN
+k : BOOLEAN
 verify not p and q => i > j * m <=> k or n = i - j and not (j / m >= 120)
-boolean r 
-boolean s
-int p
+r : BOOLEAN 
+s : BOOLEAN
+p : INTEGER
 verify not r and (s or q) <=> p => m = i * j and r <=> m < i or not k => i <= j
-boolean s1
-boolean j
-boolean r0
-int n
-boolean l
+s1 : BOOLEAN
+j : BOOLEAN
+r0 : BOOLEAN
+n : INTEGER
+l : BOOLEAN
 verify not r0 <=> (s1 => (not l and n < m + i * j)) or i = j - m => n >= m - i

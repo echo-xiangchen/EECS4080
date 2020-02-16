@@ -1,5 +1,6 @@
 package logic.visitor;
 
+// class that used for z3 encoding (prefix version)
 import org.antlr.v4.runtime.misc.Pair;
 import java.util.*;
 import logic.composite.*;
@@ -15,6 +16,8 @@ public class PrefixPrinter implements Visitor{
 	
 	// hashmap that only store the necessary variables
 	public static Map<String, Pair<String, String>> inclusiveVarMap = new HashMap<String, Pair<String,String>>();
+	
+	// map that stores the array name and its values
 	
 	public PrefixPrinter() {
 		prefixOutput = "";
@@ -252,6 +255,75 @@ public class PrefixPrinter implements Visitor{
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Real)");
 		}
 	}
+	
+	// boolean array variable
+	@Override
+	public void visitBoolArrayVar(BoolArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[BOOLEAN]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			
+			completeVarMap.put(a.name, new Pair<String, String>("Bool", "Array"));
+		}
+		// mode 1: verification
+		// e.g. verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			PrefixPrinter p = new PrefixPrinter();
+			a.index.accept(p);
+			// (select a 1)
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
+			
+			if (!inclusiveVarMap.containsKey(a.name)) {
+				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
+			}
+		}
+	}
+	
+	// integer array variable
+	@Override
+	public void visitIntArrayVar(IntArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[INTEGER]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			
+			completeVarMap.put(a.name, new Pair<String, String>("Int", "Array"));
+		}
+		// mode 1: verification
+		// e.g. verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			PrefixPrinter p = new PrefixPrinter();
+			a.index.accept(p);
+			// (select a 1)
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
+			
+			if (!inclusiveVarMap.containsKey(a.name)) {
+				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
+			}
+		}
+	}
+	
+	// real array variable
+	@Override
+	public void visitRealArrayVar(RealArrayVar a) {
+		// mode 0: uninitialized declaration
+		// e.g. a : ARRAY[REAL]
+		if(a.mode instanceof modes.UninitializedDecl) {
+			
+			completeVarMap.put(a.name, new Pair<String, String>("Real", "Array"));
+		}
+		// mode 1: verification
+		// e.g. verify a[1]
+		else if (a.mode instanceof modes.Verification) {
+			PrefixPrinter p = new PrefixPrinter();
+			a.index.accept(p);
+			// (select a 1)
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
+			
+			if (!inclusiveVarMap.containsKey(a.name)) {
+				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
+			}
+		}
+	}
 
 
 	@Override
@@ -276,32 +348,7 @@ public class PrefixPrinter implements Visitor{
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	@Override
-	public void visitBoolArrayVar(BoolArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitIntArrayVar(IntArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visitRealArrayVar(RealArrayVar a) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void visitNIL(NIL n) {

@@ -1,18 +1,18 @@
 -- test propositional logic and greater or equal than  
 -- with initialized boolean and int variable declaration with constant value(with error)
-int i = 5
-int j = 1
-int m = 35
-boolean j = false
-boolean p = true
-boolean q = false
+i : INTEGER = 5
+j : INTEGER = 1
+m : INTEGER = 35
+j : BOOLEAN = false
+p : BOOLEAN = true
+q : BOOLEAN = false
 verify p <=> q and i >= j or not m >= 0
-boolean r = true
-boolean s = false
-int p = 5
+r : BOOLEAN = true
+s : BOOLEAN = false
+p : INTEGER = 5
 verify not r and (s or q) <=> p => m >= i * j and not i >= m
-boolean s1 = true
-boolean r0 = false
-boolean k = false
-int s = 20
+s1 : BOOLEAN = true
+r0 : BOOLEAN = false
+k : BOOLEAN = false
+s : INTEGER = 20
 verify not r0 and (s1 => (not k <=> r)) or i >= j - m

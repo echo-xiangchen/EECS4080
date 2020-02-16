@@ -1,7 +1,7 @@
 -- Gries Theorems
 -- Implication
 -- (3.62) 
-boolean p
-boolean q
-boolean r
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN
 verify p => (q <=> r) <=> p and q <=> p and r

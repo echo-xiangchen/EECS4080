@@ -1,7 +1,7 @@
 -- Gries Theorems
 -- Conjunction
 -- (3.55) Exclusive or: 
-boolean p
-boolean q
-boolean r
+p : BOOLEAN
+q : BOOLEAN
+r : BOOLEAN
 verify (p and q) and r <=> p <=> q <=> r <=> p or q <=> q or r <=> r or p <=> p or q or r

@@ -1,6 +1,8 @@
 (declare-const p Bool)
-(declare-const q Bool)
-(assert (not (=> p (or p q))))
+(assert (= p (> i 0)))
+(declare-const i Int)
+(assert (= i (+ 1 3)))
+(assert (not (not p)))
 (check-sat)
 ;Uncomment the following line if the result of z3 online tool returns "sat"
 ;(get-model)

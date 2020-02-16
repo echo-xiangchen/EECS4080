@@ -1,12 +1,12 @@
 -- test of propositional logic with uninitialized boolean variable declaration (with error)
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify not p and q or s
-boolean s
-boolean r
-boolean q
+s : BOOLEAN
+r : BOOLEAN
+q : BOOLEAN
 verify p => not q and (s <=> r)
 verify not s or q <=> (p <=> q and k)
-boolean k
-boolean r
+k : BOOLEAN
+r : BOOLEAN
 verify not (k or s) => (p <=> (s and r))

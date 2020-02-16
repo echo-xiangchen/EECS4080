@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Implication
 -- (3.81) Antisymmetry:
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify (p => q) and (q => p) => (p <=> q)

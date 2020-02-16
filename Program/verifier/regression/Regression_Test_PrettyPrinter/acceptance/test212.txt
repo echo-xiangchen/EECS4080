@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Implication
 -- (3.77) Modus ponens:
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p and (p => q) => q

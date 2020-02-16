@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Implication
 -- (3.57) Axiom, Definition of Implication: 
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p => q <=> p or q <=> q

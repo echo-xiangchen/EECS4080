@@ -1,11 +1,11 @@
 -- test propositional logic with initialized boolean variable declaration with propositional value (no error)
-boolean p = true
-boolean q = not p or p
+p : BOOLEAN = true
+q : BOOLEAN = not p or p
 verify q and not p => not q
-boolean r = p and q
-boolean t1 = p or q
+r : BOOLEAN = p and q
+t1 : BOOLEAN = p or q
 verify r and t1 <=> not p or q
 verify t1 => (not r and (p and q))
-boolean t2 = t1 => q
-boolean t3 = p <=> t2
+t2 : BOOLEAN = t1 => q
+t3 : BOOLEAN = p <=> t2
 verify t3 and t2 => not (t1 or (r => q))

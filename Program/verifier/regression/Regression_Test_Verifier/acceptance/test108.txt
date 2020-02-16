@@ -1,12 +1,12 @@
 -- test relational logic with uninitialized int variable declaration (with error)
-int i
-int j
-int i
+i : INTEGER
+j : INTEGER
+i : INTEGER
 verify i * j = j + 5
 verify i >= j + 48
-int m
+m : INTEGER
 verify m * j <= m + 45
-int k
-int m
+k : INTEGER
+m : INTEGER
 verify k + i < m * 9
 verify m > j + i

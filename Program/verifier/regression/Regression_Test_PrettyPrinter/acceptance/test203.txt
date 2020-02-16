@@ -1,6 +1,6 @@
 -- Gries Theorems
 -- Implication
 -- (3.68)
-boolean p
-boolean q
+p : BOOLEAN
+q : BOOLEAN
 verify p or (p => q) <=> true

@@ -1,11 +1,11 @@
 -- test less than with uninitialized int variable declaration (with error)
-int i
-int j
-int k
+i : INTEGER
+j : INTEGER
+k : INTEGER
 verify i < j
-int j
-int k
+j : INTEGER
+k : INTEGER
 verify k < m
-int m
-int n
+m : INTEGER
+n : INTEGER
 verify m < n

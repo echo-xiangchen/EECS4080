@@ -1,18 +1,18 @@
 -- test propositional logic and equal
 -- with initialized boolean and int variable declaration with constant value(with error)
-int i = 5
-int j = 1
-int m = 35
-boolean p = true
-boolean q = false
-boolean m = false
+i : INTEGER = 5
+j : INTEGER = 1
+m : INTEGER = 35
+p : BOOLEAN = true
+q : BOOLEAN = false
+m : BOOLEAN = false
 verify p <=> q and i >= j or not m = 0
-boolean r = true
-boolean s = false
-int i = 30
+r : BOOLEAN = true
+s : BOOLEAN = false
+i : INTEGER = 30
 verify not r and (s or q) <=> p => m = i * j and not i = m
-boolean s1 = true
-boolean r0 = false
-boolean p = false
-boolean k = false
+s1 : BOOLEAN = true
+r0 : BOOLEAN = false
+p : BOOLEAN = false
+k : BOOLEAN = false
 verify not r0 and (s1 => (not k <=> r)) or i = j - m * 5 and m = 35

@@ -1,5 +1,5 @@
 -- Gries Theorems
 -- Conjunction
 -- (3.42) Contradiction: 
-boolean p
+p : BOOLEAN
 verify p and not p <=> false

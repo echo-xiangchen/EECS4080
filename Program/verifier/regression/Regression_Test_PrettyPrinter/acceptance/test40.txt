@@ -1,10 +1,10 @@
 -- test disjunction with initialized boolean variable declaration with constant value (with error)
-boolean p = true
-boolean q = false
-boolean q = true
-boolean r = false
+p : BOOLEAN = true
+q : BOOLEAN = false
+q : BOOLEAN = true
+r : BOOLEAN = false
 verify p or q
 verify not p or r
-boolean s = false
-boolean s = true
+s : BOOLEAN = false
+s : BOOLEAN = true
 verify p or q or not s

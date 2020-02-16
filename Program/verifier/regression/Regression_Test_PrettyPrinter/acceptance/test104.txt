@@ -1,13 +1,13 @@
 -- test propositional logic with initialized boolean variable declaration with relational value (with error)
-int i = 1 + 3
-int j = i * 2
-int m = 3 * 4 + 5
-boolean p = i > 0
-boolean q = j >= i
-int m = i / j - 4
+i : INTEGER = 1 + 3
+j : INTEGER = i * 2
+m : INTEGER = 3 * 4 + 5
+p : BOOLEAN = i > 0
+q : BOOLEAN = j >= i
+m : INTEGER = i / j - 4
 verify not p or q => q
-boolean r = j >= m
-boolean s = j < 20
+r : BOOLEAN = j >= m
+s : BOOLEAN = j < 20
 verify r => s and (not p <=> q)
-int s = m + i
+s : INTEGER = m + i
 verify not s <=> (p and (q => r or q))

@@ -1,9 +1,9 @@
 -- test iff with initialized boolean variable declaration with constant value (no error)
-boolean p = true
-boolean q = false
+p : BOOLEAN = true
+q : BOOLEAN = false
 verify p <=> q
 verify (not p <=> q) <=> not q
-boolean s = false
+s : BOOLEAN = false
 verify s <=> (p <=> not q)
-boolean r = true => false
+r : BOOLEAN = true => false
 verify r <=> (not p <=> q) <=> s

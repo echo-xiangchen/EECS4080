@@ -1,11 +1,11 @@
 -- test negation with initialized boolean variable declaration with constant value (with error)
-boolean p = true
+p : BOOLEAN = true
 verify not p
 verify not q
-boolean q = false
-boolean s = false
+q : BOOLEAN = false
+s : BOOLEAN = false
 verify not s
-boolean r = true
+r : BOOLEAN = true
 verify not r
-boolean r = false
+r : BOOLEAN = false
 verify not k

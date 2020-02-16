@@ -1,9 +1,9 @@
 -- test implication with uninitialized boolean variable declaration (with error)
-boolean p
-boolean q
-boolean k
-boolean q
+p : BOOLEAN
+q : BOOLEAN
+k : BOOLEAN
+q : BOOLEAN
 verify not p => q => s
 verify q => (s => not p) => not q
-boolean s
+s : BOOLEAN
 verify p => (not s or q)
