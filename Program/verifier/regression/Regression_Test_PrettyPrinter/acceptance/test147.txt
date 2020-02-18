@@ -10,7 +10,3 @@ verify p => q and (i >= j <=> not m = 0) or n <= i + j or (not q and not j > n -
 r : BOOLEAN = not p => q and p
 s : BOOLEAN = r and p <=> q and p
 verify not r and (s or q) <=> (p or m = i * n) and not i >= m => n > m * i + j
-s1 : BOOLEAN = i >= j - 3
-r0 : BOOLEAN = m = i * (j + 5)
-k : BOOLEAN = i = m - 7
-verify not r0 <=> (s1 => (not k or r)) and i = j - m or k and not m >= n

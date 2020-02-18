@@ -1,10 +1,5 @@
 -- test less or equal with initialized int variable declaration with expression value (with error)
 i : INTEGER = 2 * 3 + 24
-j : INTEGER = i / 5 -7
-verify i <= j
+j : INTEGER = i / 5 - 7
 j : INTEGER = 3 * i - 5
-m : INTEGER = i * j / 2
-verify m <= i + 2
-verify m <= i + j
-k : INTEGER = (m + 30) * 2
-verify k <= i * j
+verify i <= j

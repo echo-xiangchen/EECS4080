@@ -4,7 +4,3 @@ q : BOOLEAN = false
 k : BOOLEAN = true
 verify not p => (q and p)
 verify k <=> (not q and p => not p and q)
-s : BOOLEAN = false
-verify not (s <=> p or q)
-r : BOOLEAN = true
-verify (r => q) or (not p <=> (k and s))

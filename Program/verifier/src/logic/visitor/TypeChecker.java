@@ -174,12 +174,15 @@ public class TypeChecker implements Visitor{
 		TypeChecker checker = new TypeChecker();
 		u.child.accept(checker);
 		
+		InfixPrinter printer = new InfixPrinter();
+		u.child.accept(printer);
+		
 		errormsg.addAll(checker.errormsg);
 		
 		if (errormsg.isEmpty()) {
 			// if its child is not boolean type
-			if (!(varMap.get(u.child.name).a instanceof types.BoolType) 
-					&& !(varMap.get(u.child.name).a instanceof types.BoolArray)) {
+			if (!(varMap.get(printer.infixOutput).a instanceof types.BoolType) 
+					&& !(varMap.get(printer.infixOutput).a instanceof types.BoolArray)) {
 				InfixPrinter infixPrinter = new InfixPrinter();
 				u.accept(infixPrinter);
 				errormsg.add(infixPrinter.infixOutput + " is not boolean type.");
@@ -672,6 +675,14 @@ public class TypeChecker implements Visitor{
 				TypeChecker checker = new TypeChecker();
 				a.arrayValue.get(i).accept(checker);
 				errormsg.addAll(checker.errormsg);
+				
+				InfixPrinter printer = new InfixPrinter();
+				a.arrayValue.get(i).accept(printer);
+				
+				if (!(varMap.containsKey(printer.infixOutput)) 
+						|| varMap.get(printer.infixOutput).a instanceof types.RealType) {
+					errormsg.add(printer.infixOutput + " is not integer type, cannot perform this assignment.");
+				}
 			}
 			if (errormsg.isEmpty()) {
 				// if this variable is declared for the first time, simply add it to the map

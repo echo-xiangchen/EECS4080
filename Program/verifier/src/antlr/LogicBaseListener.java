@@ -41,6 +41,18 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDefineMethod(LogicParser.DefineMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDefineMethod(LogicParser.DefineMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -48,6 +60,66 @@ public class LogicBaseListener implements LogicListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVerifyProgram(LogicParser.VerifyProgramContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVerifyProgram(LogicParser.VerifyProgramContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMutatorMethod(LogicParser.MutatorMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMutatorMethod(LogicParser.MutatorMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAccessorMethod(LogicParser.AccessorMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAccessorMethod(LogicParser.AccessorMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMutator(LogicParser.MutatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMutator(LogicParser.MutatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAccessor(LogicParser.AccessorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAccessor(LogicParser.AccessorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -300,6 +372,42 @@ public class LogicBaseListener implements LogicListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNamedRealArithPairValueDecl(LogicParser.NamedRealArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarAssignment(LogicParser.VarAssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarAssignment(LogicParser.VarAssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolAssign(LogicParser.BoolAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolAssign(LogicParser.BoolAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithAssign(LogicParser.ArithAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithAssign(LogicParser.ArithAssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

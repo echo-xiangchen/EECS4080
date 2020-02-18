@@ -9,7 +9,3 @@ verify p <=> q and i >= j or not m >= 0
 r : BOOLEAN = true
 s : BOOLEAN = false
 verify not r and (s or q) <=> p => m >= i * j and not i >= m
-s1 : BOOLEAN = true
-r0 : BOOLEAN = false
-k : BOOLEAN = false
-verify not r0 and (s1 => (not k <=> r)) or i >= j - m

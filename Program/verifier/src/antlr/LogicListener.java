@@ -30,6 +30,18 @@ public interface LogicListener extends ParseTreeListener {
 	 */
 	void exitVarDeclaration(LogicParser.VarDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code DefineMethod}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void enterDefineMethod(LogicParser.DefineMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DefineMethod}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void exitDefineMethod(LogicParser.DefineMethodContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code VerifyBoolExpr}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
@@ -41,6 +53,62 @@ public interface LogicListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code VerifyProgram}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void enterVerifyProgram(LogicParser.VerifyProgramContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code VerifyProgram}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void exitVerifyProgram(LogicParser.VerifyProgramContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MutatorMethod}
+	 * labeled alternative in {@link LogicParser#method}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutatorMethod(LogicParser.MutatorMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutatorMethod}
+	 * labeled alternative in {@link LogicParser#method}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutatorMethod(LogicParser.MutatorMethodContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AccessorMethod}
+	 * labeled alternative in {@link LogicParser#method}.
+	 * @param ctx the parse tree
+	 */
+	void enterAccessorMethod(LogicParser.AccessorMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AccessorMethod}
+	 * labeled alternative in {@link LogicParser#method}.
+	 * @param ctx the parse tree
+	 */
+	void exitAccessorMethod(LogicParser.AccessorMethodContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LogicParser#mutator}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutator(LogicParser.MutatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LogicParser#mutator}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutator(LogicParser.MutatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LogicParser#accessor}.
+	 * @param ctx the parse tree
+	 */
+	void enterAccessor(LogicParser.AccessorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LogicParser#accessor}.
+	 * @param ctx the parse tree
+	 */
+	void exitAccessor(LogicParser.AccessorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SingleVar}
 	 * labeled alternative in {@link LogicParser#declaration}.
@@ -293,6 +361,42 @@ public interface LogicListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNamedRealArithPairValueDecl(LogicParser.NamedRealArithPairValueDeclContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code VarAssignment}
+	 * labeled alternative in {@link LogicParser#body}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarAssignment(LogicParser.VarAssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code VarAssignment}
+	 * labeled alternative in {@link LogicParser#body}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarAssignment(LogicParser.VarAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code BoolAssign}
+	 * labeled alternative in {@link LogicParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolAssign(LogicParser.BoolAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BoolAssign}
+	 * labeled alternative in {@link LogicParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolAssign(LogicParser.BoolAssignContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArithAssign}
+	 * labeled alternative in {@link LogicParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithAssign(LogicParser.ArithAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArithAssign}
+	 * labeled alternative in {@link LogicParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithAssign(LogicParser.ArithAssignContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Or}
 	 * labeled alternative in {@link LogicParser#boolExpr}.

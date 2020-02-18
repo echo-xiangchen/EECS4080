@@ -1,10 +1,10 @@
--- test implication  with initialized boolean variable declaration with relational value + propositional value (no error)
+-- test implication  with initialized boolean variable declaration with relational value + propositional value (with error)
 i : INTEGER = 1 + 3
 j : INTEGER = i * j
 m : INTEGER = 3 * 16 + 5
 j : INTEGER = 7
-p : BOOLEAN = not i > 0
-q : BOOLEAN = i > j or m = i * j
+p : BOOLEAN 
+q : BOOLEAN
 verify p => q
 j : INTEGER = i * 3 - 7
 r : BOOLEAN = j >= m and not p

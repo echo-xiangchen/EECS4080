@@ -24,12 +24,52 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarDeclaration(LogicParser.VarDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code DefineMethod}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefineMethod(LogicParser.DefineMethodContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code VerifyBoolExpr}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code VerifyProgram}
+	 * labeled alternative in {@link LogicParser#line}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVerifyProgram(LogicParser.VerifyProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MutatorMethod}
+	 * labeled alternative in {@link LogicParser#method}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMutatorMethod(LogicParser.MutatorMethodContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AccessorMethod}
+	 * labeled alternative in {@link LogicParser#method}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAccessorMethod(LogicParser.AccessorMethodContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LogicParser#mutator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMutator(LogicParser.MutatorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LogicParser#accessor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAccessor(LogicParser.AccessorContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code SingleVar}
 	 * labeled alternative in {@link LogicParser#declaration}.
@@ -177,6 +217,27 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNamedRealArithPairValueDecl(LogicParser.NamedRealArithPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code VarAssignment}
+	 * labeled alternative in {@link LogicParser#body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarAssignment(LogicParser.VarAssignmentContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BoolAssign}
+	 * labeled alternative in {@link LogicParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolAssign(LogicParser.BoolAssignContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArithAssign}
+	 * labeled alternative in {@link LogicParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithAssign(LogicParser.ArithAssignContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Or}
 	 * labeled alternative in {@link LogicParser#boolExpr}.

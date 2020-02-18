@@ -5,12 +5,38 @@ stat : line+ ;
 
 line 
 	: declaration				# VarDeclaration
-	| program 					# ProgramDefine		
+	| method 					# DefineMethod		
 	| VERIFY boolExpr			# VerifyBoolExpr
 	| VERIFY ID 				# VerifyProgram
 	;
 
 
+method
+	: mutator 	# MutatorMethod
+	| accessor 	# AccessorMethod
+	;
+
+mutator 
+	: declaration
+	  ID ('(' ID ':' type=(BOOL|INT|REAL) ')')?
+
+		REQUIRE boolExpr
+		DO 
+			body
+		ENSURE boolExpr 
+		END
+	;
+
+accessor
+	: ID ('(' ID ':' type1=(BOOL|INT|REAL) ')')? ID ':' type2=(BOOL|INT|REAL)
+		declaration
+		REQUIRE boolExpr
+		DO 
+			
+			body
+		ENSURE boolExpr 
+		END
+	;
 
 
 
@@ -22,8 +48,8 @@ declaration
 	// array variable declaration
 	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'											# ArrayDecl
 	| ID ':' ARRAY '[' BOOL ']' '=' '<<' boolExpr (',' boolExpr)* '>>'					# BoolArrayValueDecl
-	| ID ':' ARRAY '[' INT ']' '=' '<<' INTNUM (',' INTNUM)* '>>'						# IntArrayValueDecl
-	| ID ':' ARRAY '[' REAL ']' '=' '<<' REALNUM (',' REALNUM)* '>>'					# RealArrayValueDecl
+	| ID ':' ARRAY '[' INT ']' '=' '<<' arithmetic (',' arithmetic)* '>>'						# IntArrayValueDecl
+	| ID ':' ARRAY '[' REAL ']' '=' '<<' arithmetic (',' arithmetic)* '>>'					# RealArrayValueDecl
 	// pair without value
 	| ID ':' PAIR '[' left=(BOOL|INT|REAL) ';' right=(BOOL|INT|REAL) ']'				# UnnamedPairDecl
 	| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPairDecl
@@ -61,6 +87,14 @@ declaration
 			'=' '[' REALNUM ';' right=(INTNUM|REALNUM) ']'								# NamedRealArithPairValueDecl
 	;
 
+body
+	: assignment	# VarAssignment
+	;
+
+assignment
+	: ID ':=' boolExpr 		# BoolAssign
+	| ID ':=' arithmetic 	# ArithAssign
+	;
 
 boolExpr 
 	: NOT boolExpr									# Not
@@ -108,6 +142,13 @@ ARRAY : 'ARRAY';
 PAIR : 'PAIR';
 VERIFY : 'verify';
 
+
+REQUIRE : 'require';
+ENSURE : 'ensure';
+DO : 'do';
+END : 'end';
+
+
 FORALL : 'forall';
 EXISTS : 'exists';
 
@@ -135,7 +176,7 @@ SUB : '-';
 COMMENT : '--' ~[\r\n]* -> skip;
 WS  :   [ \t\n]+ -> skip ;
 
-ID : [a-z][a-zA-Z0-9]*;
+ID : [a-z][a-zA-Z0-9_]*;
 
 INTNUM : '0'|'-'?[1-9][0-9]*;
 REALNUM : '-'?[0-9]* '.' [0-9]+;

@@ -6,5 +6,3 @@ verify not p and q or s
 r : BOOLEAN
 verify p => not q and (s <=> r)
 verify not s or q <=> (p <=> q and r)
-k : BOOLEAN
-verify not (k or s) => (p <=> (s and r))

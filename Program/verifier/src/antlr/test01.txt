@@ -1,3 +1,8 @@
--- test initialized boolean variable declaration with constant value (no error)
-a:ARRAY[BOOLEAN]
-verify a[2] and true
+increment_by_9 (i : INTEGER)
+i : INTEGER
+require i > 3
+do
+i := i + 9
+ensure
+i > 13
+end

@@ -14,5 +14,5 @@ verify not r and (s or q) <=> (p => m < i * j) and not i < m
 s1 : BOOLEAN = i < j - 3
 r0 : BOOLEAN = m = i * (j + 5)
 s : INTEGER = m + i * j
-boolean k = i < m - 7
+k : BOOLEAN = i < m - 7
 verify not r0 <=> (s1 => (not k and r)) or i < j - m

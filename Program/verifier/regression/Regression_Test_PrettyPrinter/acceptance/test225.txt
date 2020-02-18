@@ -1,4 +1,4 @@
 -- Gries Theorems
 -- Universal Quantification
 -- (9.3) Trading
-verify forall p, q : BOOLEAN; @ p => q <=> not p or q
+verify forall p, q : BOOLEAN; | p => q <=> not p or q

@@ -1,7 +1,7 @@
 -- test initialized boolean variable declaration with relational value (with error)
-i : INTEGER = P + 3
+i : INTEGER = p + 3
 j : INTEGER = i * 2
-m : INTEGER = 3 * K + 5
+m : INTEGER = 3 * k + 5
 p : INTEGER = i > 0
 r : INTEGER = j >= m
 s : BOOLEAN = j < 20

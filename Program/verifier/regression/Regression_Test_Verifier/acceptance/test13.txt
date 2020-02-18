@@ -2,10 +2,10 @@
 i : INTEGER = 1 + 3
 j : INTEGER = i * 2
 m : INTEGER = 3 * 4 + 5
-p : INTEGER = i > 0
-r : INTEGER = j >= m
-s : BOOLEAN = j < 20
-s1 : BOOLEAN = j <= i
-r0 : BOOLEAN = i = j
-k : BOOLEAN = m < i
+p : INTEGER
+r : INTEGER
+s : BOOLEAN
+s1 : BOOLEAN
+r0 : BOOLEAN
+k : BOOLEAN
 verify false

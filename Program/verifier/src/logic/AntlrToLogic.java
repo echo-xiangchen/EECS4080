@@ -114,8 +114,8 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	public Logic visitIntArrayValueDecl(IntArrayValueDeclContext ctx) {
 		// create a list of Logic, and store all the elements
 		List<Logic> value = new ArrayList<Logic>();
-		for (int i = 0; i < ctx.INTNUM().size(); i++) {
-			value.add(new IntConst(ctx.INTNUM(i).getText()));
+		for (int i = 0; i < ctx.arithmetic().size(); i++) {
+			value.add(visit(ctx.arithmetic(i)));
 		}
 		varTypes.put(ctx.ID().getText(), "IntArray");
 		return new IntArrayVar(ctx.ID().getText(), value, new InitializedDecl());
@@ -126,8 +126,8 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	public Logic visitRealArrayValueDecl(RealArrayValueDeclContext ctx) {
 		// create a list of Logic, and store all the elements
 		List<Logic> value = new ArrayList<Logic>();
-		for (int i = 0; i < ctx.REALNUM().size(); i++) {
-			value.add(new RealConst(ctx.REALNUM(i).getText()));
+		for (int i = 0; i < ctx.arithmetic().size(); i++) {
+			value.add(visit(ctx.arithmetic(i)));
 		}
 		varTypes.put(ctx.ID().getText(), "RealArray");
 		

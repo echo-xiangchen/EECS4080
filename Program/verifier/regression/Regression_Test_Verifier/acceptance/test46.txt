@@ -2,8 +2,8 @@
 m : INTEGER = 3 * 4 + 5
 i : INTEGER = 1 + 3
 j : INTEGER = i * 2
-p : BOOLEAN = not i > 0
-q : BOOLEAN = i > j or k
+p : BOOLEAN
+q : BOOLEAN
 verify p or q
 r : BOOLEAN = j >= m and p
 s : BOOLEAN = j < 20 or m = 17

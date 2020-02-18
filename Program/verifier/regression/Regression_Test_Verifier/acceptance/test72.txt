@@ -1,6 +1,6 @@
 -- test equal with initialized int variable declaration with expression value (with error)
 i : INTEGER = 2 * 3 + 24
-j : INTEGER = i / 5 -7
+j : INTEGER = i / 5 - 7
 verify i = j
 m : INTEGER = i * j / 2
 i : INTEGER = m * 8 / 3

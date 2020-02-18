@@ -1,8 +1,1 @@
-Formula: (a[1] > b[4])
-Where: 
-    a : ARRAY[REAL] = << 1.0, 2.1, 9.8 >>
-    b : ARRAY[INTEGER]
-
-Is not a tautology. Here is a counter example: 
-    a : Real
-    b : Int
+Formula: (a[1] > 0) is a tautology.

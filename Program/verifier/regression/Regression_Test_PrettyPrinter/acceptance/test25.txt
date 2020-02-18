@@ -2,15 +2,11 @@
 i : INTEGER = 1 + 3
 j : INTEGER = i * 2
 m : INTEGER = 3 * 4 + 5
-p : BOOLEAN = not i > 0
+p : BOOLEAN
 verify not p
-r : BOOLEAN = j >= m and p
-s : BOOLEAN = j < 20 or m = 17
+r : BOOLEAN
+s : BOOLEAN
 verify not r
 verify not s
 s1 : BOOLEAN = j = i => s
 verify not s1
-r0 : BOOLEAN = i = j <=> s1
-k : BOOLEAN = m < i and not r
-verify not r0
-verify not k

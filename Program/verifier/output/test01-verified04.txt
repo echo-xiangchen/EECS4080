@@ -1,0 +1,16 @@
+Formula: ((t3 and t2) => (not (t1 or (r => q))))
+Where: 
+    p : BOOLEAN = true
+    q : BOOLEAN = ((not p) or p)
+    r : BOOLEAN = (p and q)
+    t1 : BOOLEAN = (p or q)
+    t2 : BOOLEAN = (t1 => q)
+    t3 : BOOLEAN = (p = t2)
+
+Is not a tautology. Here is a counter example: 
+    p : true
+    q : true
+    r : true
+    t1 : true
+    t2 : true
+    t3 : true
