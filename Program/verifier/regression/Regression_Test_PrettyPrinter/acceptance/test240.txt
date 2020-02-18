@@ -1,0 +1,5 @@
+-- test initialized boolean array declaration(no error)
+p : BOOLEAN
+q : BOOLEAN
+a : ARRAY[BOOLEAN] = <<p, q, p and q>>
+verify a[1]

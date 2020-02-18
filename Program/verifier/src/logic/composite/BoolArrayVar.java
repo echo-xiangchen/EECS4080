@@ -1,5 +1,7 @@
 package logic.composite;
 
+import java.util.List;
+
 import logic.visitor.*;
 import modes.*;
 
@@ -13,6 +15,11 @@ public class BoolArrayVar extends ArrayVar {
 	// verification
 	public BoolArrayVar(String name, mode mode, Logic index) {
 		super(name, mode, index);
+	}
+	
+	// initialized declaration
+	public BoolArrayVar(String name, List<Logic> arrayValue, mode mode) {
+		super(name, arrayValue, mode);
 	}
 	
 	public void accept(Visitor v) {

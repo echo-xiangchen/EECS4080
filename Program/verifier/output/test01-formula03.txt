@@ -1,6 +1,0 @@
-(declare-const s Bool)
-(assert (= s (< j 20)))
-(assert (not (not s)))
-(check-sat)
-;Uncomment the following line if the result of z3 online tool returns "sat"
-;(get-model)

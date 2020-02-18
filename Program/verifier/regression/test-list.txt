@@ -30,7 +30,15 @@ Gries-Theorems
 192 - 217: Implication
 218 - 220: Lerbniz as an axiom
 221 - 224: Proof techniques
-224 - 228: Quantification
+224 - 227: Quantification
 
 
-228 - 230: Real number
+228 - 231: Real number
+
+232 - 235: Int number and Real number type check
+
+236 - 240: Boolean Array
+
+241 - 250: Integer Array
+
+251 - 258: Real Array

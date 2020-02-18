@@ -1,0 +1,4 @@
+-- test initialized INTEGER and REAL number(with error)
+i : REAL = 2
+j: INTEGER = 2.5
+verify i = j

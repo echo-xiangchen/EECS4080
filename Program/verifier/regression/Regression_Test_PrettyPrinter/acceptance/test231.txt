@@ -1,0 +1,4 @@
+-- test initialized REAL number(with error)
+i : REAL = 2.1
+i : REAL
+verify i >= 0

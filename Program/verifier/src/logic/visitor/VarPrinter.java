@@ -134,17 +134,17 @@ public class VarPrinter implements Visitor {
 
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. p : BOOLEAN
 		
-		// and mode 3: quantification declaration
+		// and quantification declaration
 		// e.g. forall p : BOOLEAN; | not p
 		if((v.mode instanceof modes.UninitializedDecl) || (v.mode instanceof modes.QuantifyBool)) {
 			// add the mode to both allVarMap and unusedVarMap
 			allVarMap.put(v.name, new Pair<String, String>("BOOLEAN", null));
 			unusedVarMap.put(v.name, new Pair<String, String>("BOOLEAN", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify p => q
 		else if (v.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
@@ -152,7 +152,7 @@ public class VarPrinter implements Visitor {
 				unusedVarMap.remove(v.name);
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. p : BOOLEAN = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
@@ -167,16 +167,16 @@ public class VarPrinter implements Visitor {
 	// int number
 	@Override
 	public void visitIntVar(IntVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. j : INTEGER
 	
-		// and mode 3: quantification declaration
+		// and quantification declaration
 		// e.g. forall j: INTEGER; | i > 0
 		if((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {	
 			allVarMap.put(v.name, new Pair<String, String>("INTEGER", null));
 			unusedVarMap.put(v.name, new Pair<String, String>("INTEGER", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify p > 0
 		else if (v.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
@@ -184,7 +184,7 @@ public class VarPrinter implements Visitor {
 				unusedVarMap.remove(v.name);
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i: INTEGER = 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
@@ -198,16 +198,16 @@ public class VarPrinter implements Visitor {
 	// Real number
 	@Override
 	public void visitRealVar(RealVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. i : REAL
 				
-		// and mode 3: quantification declaration
+		// and quantification declaration
 		// e.g. forall i : REAL; @ i > 0
 		if((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyReal)) {	
 			allVarMap.put(v.name, new Pair<String, String>("REAL", null));
 			unusedVarMap.put(v.name, new Pair<String, String>("REAL", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify j >= 0
 		else if (v.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
@@ -215,7 +215,7 @@ public class VarPrinter implements Visitor {
 				unusedVarMap.remove(v.name);
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : REAL = 2.1
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
@@ -234,20 +234,37 @@ public class VarPrinter implements Visitor {
 	// boolean array
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
-		// mode 0: uninitialized declaration
-		// e.g. a : ARRAY[BOOLEAN]
-				
+		// uninitialized declaration
+		// e.g. a : ARRAY[BOOLEAN]		
 		if(a.mode instanceof modes.UninitializedDecl) {	
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", null));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
 			if (unusedVarMap.containsKey(a.name)) {
 				unusedVarMap.remove(a.name);
 			}
+		}
+		// initialized declaration
+		// e.g. a : ARRAY[BOOLEAN] = << p, q, p and q >>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			String value = "<< ";
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+				// for every element in the list, call varPrinter to removed used variable
+				VarPrinter p2 = new VarPrinter();
+				a.arrayValue.get(i).accept(p2);
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			allVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
+			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
 		}
 		
 	}
@@ -255,14 +272,14 @@ public class VarPrinter implements Visitor {
 	// Integer array
 	@Override
 	public void visitIntArrayVar(IntArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[INTEGER]
 				
 		if(a.mode instanceof modes.UninitializedDecl) {	
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", null));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
@@ -270,24 +287,54 @@ public class VarPrinter implements Visitor {
 				unusedVarMap.remove(a.name);
 			}
 		}
+		// initialized declaration
+		// e.g. a : ARRAY[INTEGER] = << 1, 2, 6, 0 >>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			String value = "<< ";
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			allVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
+			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
+		}
 	}
 
 	@Override
 	public void visitRealArrayVar(RealArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[REAL]
 				
 		if(a.mode instanceof modes.UninitializedDecl) {	
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", null));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			// delete the mode if it has been used
 			if (unusedVarMap.containsKey(a.name)) {
 				unusedVarMap.remove(a.name);
 			}
+		}
+		// initialized declaration
+		// e.g. a : ARRAY[REAL] = << 1.5, 2, 6.0, 0 >>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			String value = "<< ";
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			allVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", value));
+			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", value));
 		}
 	}
 	

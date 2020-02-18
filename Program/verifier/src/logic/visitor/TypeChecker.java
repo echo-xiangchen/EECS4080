@@ -306,10 +306,10 @@ public class TypeChecker implements Visitor{
 	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. q : BOOL
 		
-		// and mode 3: quantification declaration
+		// and quantification declaration
 		// e.g. forall p : BOOL; | not p
 		if ((v.mode instanceof modes.UninitializedDecl) || (v.mode instanceof modes.QuantifyBool)) {
 			// if this variable is declared for the first time, simply add it to the map
@@ -324,7 +324,7 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify p => q
 		else if (v.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(v.name)) {
@@ -340,7 +340,7 @@ public class TypeChecker implements Visitor{
 				errormsg.add("Error: variable " + v.name + " is not declared as boolean type.");
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. p : BOOL = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			// type check this boolean mode's value first
@@ -375,10 +375,10 @@ public class TypeChecker implements Visitor{
 	// int variable
 	@Override
 	public void visitIntVar(IntVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. i : INTEGER
 		
-		// and mode 3: quantification declaration
+		// and quantification declaration
 		// e.g. forall i : INTEGER; | i > 0
 		if ((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {
 			// if this variable is declared for the first time, simply add it to the map
@@ -393,7 +393,7 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// mode 1: verification
+		// verification
 		// verify i > 0
 		else if (v.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(v.name)) {
@@ -409,7 +409,7 @@ public class TypeChecker implements Visitor{
 				errormsg.add("Error: variable " + v.name + " is not declared as integer type.");
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// j : INTEGER = i + 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			// type check this arithmetic variable's value first
@@ -445,10 +445,10 @@ public class TypeChecker implements Visitor{
 	// real number variable
 	@Override
 	public void visitRealVar(RealVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. i : REAL
 				
-		// and mode 3: quantification declaration
+		// and quantification declaration
 		// e.g. forall i : REAL; | i > 0
 		if ((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {
 			// if this variable is declared for the first time, simply add it to the map
@@ -463,7 +463,7 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// mode 1: verification
+		// verification
 		// verify j >= 2.2
 		else if (v.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(v.name)) {
@@ -479,7 +479,7 @@ public class TypeChecker implements Visitor{
 				errormsg.add("Error: variable " + v.name + " is not declared as real type.");
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// j : REAL = i * 4
 		else if (v.mode instanceof modes.InitializedDecl) {
 			// type check this arithmetic variable's value first
@@ -505,7 +505,7 @@ public class TypeChecker implements Visitor{
 	// boolean array
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[BOOLEAN]
 	
 		if (a.mode instanceof modes.UninitializedDecl) {
@@ -521,7 +521,8 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// mode 1: verification
+		
+		// verification
 		// verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			
@@ -570,12 +571,35 @@ public class TypeChecker implements Visitor{
 				errormsg.addAll(checker.errormsg);
 			}
 		}
+		// initialized declaration
+		// e.g. a : ARRAY[BOOLEAN] = << p, q, p and q >>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			// type check its elements first
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				TypeChecker checker = new TypeChecker();
+				a.arrayValue.get(i).accept(checker);
+				errormsg.addAll(checker.errormsg);
+			}
+			if (errormsg.isEmpty()) {
+				// if this variable is declared for the first time, simply add it to the map
+				if (!varMap.containsKey(a.name)) {
+					varMap.put(a.name, new Pair<VarType, Logic>(new BoolArray(), null));
+				}
+				// if this variable is not declared for the first time, change its type to unknown type
+				// and add the error message
+				else {
+					varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
+			}
+		}
 	}
 	
 	// integer array
 	@Override
 	public void visitIntArrayVar(IntArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[INTEGER]
 	
 		if (a.mode instanceof modes.UninitializedDecl) {
@@ -591,7 +615,7 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// mode 1: verification
+		// verification
 		// verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			
@@ -640,11 +664,34 @@ public class TypeChecker implements Visitor{
 				errormsg.addAll(checker.errormsg);
 			}
 		}
+		// initialized declaration
+		// e.g. a : ARRAY[INTEGER] = << 1, 2, 6, 0 >>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			// type check its elements first
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				TypeChecker checker = new TypeChecker();
+				a.arrayValue.get(i).accept(checker);
+				errormsg.addAll(checker.errormsg);
+			}
+			if (errormsg.isEmpty()) {
+				// if this variable is declared for the first time, simply add it to the map
+				if (!varMap.containsKey(a.name)) {
+					varMap.put(a.name, new Pair<VarType, Logic>(new IntArray(), null));
+				}
+				// if this variable is not declared for the first time, change its type to unknown type
+				// and add the error message
+				else {
+					varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
+			}
+		}
 	}
 	
 	@Override
 	public void visitRealArrayVar(RealArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[REAL]
 	
 		if (a.mode instanceof modes.UninitializedDecl) {
@@ -660,8 +707,8 @@ public class TypeChecker implements Visitor{
 						+ "Please make sure each variable is declared exactly once.");
 			}
 		}
-		// mode 1: verification
-		// verify a[1]
+		// verification
+		// verify a[1] > 0
 		else if (a.mode instanceof modes.Verification) {
 			
 			// type check this arithmetic variable's index first
@@ -707,6 +754,29 @@ public class TypeChecker implements Visitor{
 				}
 			}else {
 				errormsg.addAll(checker.errormsg);
+			}
+		}
+		// initialized declaration
+		// e.g. a : ARRAY[REAL] = << 1, 2, 6, 0 >>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			// type check its elements first
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				TypeChecker checker = new TypeChecker();
+				a.arrayValue.get(i).accept(checker);
+				errormsg.addAll(checker.errormsg);
+			}
+			if (errormsg.isEmpty()) {
+				// if this variable is declared for the first time, simply add it to the map
+				if (!varMap.containsKey(a.name)) {
+					varMap.put(a.name, new Pair<VarType, Logic>(new RealArray(), null));
+				}
+				// if this variable is not declared for the first time, change its type to unknown type
+				// and add the error message
+				else {
+					varMap.replace(a.name, new Pair<VarType, Logic>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
 			}
 		}
 	}

@@ -19,5 +19,6 @@ public class ArrayVar extends Var {
 	// initialized declaration
 	public ArrayVar(String name, List<Logic> arrayValue, mode mode) {
 		super(name, arrayValue, mode);
+		this.arrayValue = arrayValue;
 	}
 }

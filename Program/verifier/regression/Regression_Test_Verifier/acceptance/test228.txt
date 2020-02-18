@@ -1,0 +1,3 @@
+-- test uninitialized REAL number(no error)
+i : REAL
+verify i > 0

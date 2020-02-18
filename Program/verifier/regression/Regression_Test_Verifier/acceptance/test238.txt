@@ -1,0 +1,2 @@
+-- test uninitialized boolean array declaration(with error)
+verify a[1]

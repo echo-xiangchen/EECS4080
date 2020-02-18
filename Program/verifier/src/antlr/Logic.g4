@@ -4,18 +4,62 @@ grammar Logic;
 stat : line+ ;
 
 line 
-	: ID ':' type=(BOOL|INT|REAL) 													# SingleVar
-	| ID ':' BOOL '=' boolExpr 														# BoolValueDecl
-	| ID ':' type=(INT|REAL) '=' arithmetic											# NumValueDecl
-	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'										# ArrayDecl
-	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']' 
-		 '=' '<<' (INTNUM|REALNUM|boolExpr) (',' (INTNUM|REALNUM|boolExpr))* '>>'	# ArrayValueDecl
-	//| ID ':' PAIR '[' left=(BOOL|INT|REAL) ',' right=(BOOL|INT|REAL) ']'				# UnnamedPair
-	//| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPair
-	| VERIFY boolExpr																# VerifyBoolExpr
+	: declaration				# VarDeclaration
+	| program 					# ProgramDefine		
+	| VERIFY boolExpr			# VerifyBoolExpr
+	| VERIFY ID 				# VerifyProgram
 	;
 
 
+
+
+
+declaration
+	// normal variable declaration
+	: ID ':' type=(BOOL|INT|REAL) 														# SingleVar
+	| ID ':' BOOL '=' boolExpr 															# BoolValueDecl
+	| ID ':' type=(INT|REAL) '=' arithmetic												# NumValueDecl
+	// array variable declaration
+	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'											# ArrayDecl
+	| ID ':' ARRAY '[' BOOL ']' '=' '<<' boolExpr (',' boolExpr)* '>>'					# BoolArrayValueDecl
+	| ID ':' ARRAY '[' INT ']' '=' '<<' INTNUM (',' INTNUM)* '>>'						# IntArrayValueDecl
+	| ID ':' ARRAY '[' REAL ']' '=' '<<' REALNUM (',' REALNUM)* '>>'					# RealArrayValueDecl
+	// pair without value
+	| ID ':' PAIR '[' left=(BOOL|INT|REAL) ';' right=(BOOL|INT|REAL) ']'				# UnnamedPairDecl
+	| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPairDecl
+	// unnamed pair with value
+	// Bool
+	| ID ':' PAIR '[' BOOL ';' BOOL ']' 
+			'=' '[' boolExpr ';' boolExpr ']'											# UnnamedBoolBoolPairValueDecl
+	| ID ':' PAIR '[' BOOL ';' type=(INT|REAL) ']' 
+			'=' '[' boolExpr ';' right=(INTNUM|REALNUM) ']'								# UnnamedBoolArithPairValueDecl
+	// Int
+	| ID ':' PAIR '[' INT ';' BOOL ']' 
+			'=' '[' INTNUM ';' boolExpr ']'												# UnnamedIntBoolPairValueDecl
+	| ID ':' PAIR '[' INT ';' type=(INT|REAL) ']' 
+			'=' '[' INTNUM ';' right=(INTNUM|REALNUM) ']'								# UnnamedIntArithPairValueDecl
+	// Real
+	| ID ':' PAIR '[' REAL ';' BOOL ']' 
+			'=' '[' REALNUM ';' boolExpr ']'											# UnnamedRealBoolPairValueDecl
+	| ID ':' PAIR '[' REAL ';' type=(INT|REAL) ']' 
+			'=' '[' REALNUM ';' right=(INTNUM|REALNUM) ']'								# UnnamedRealArithPairValueDecl
+	// named pair with value
+	// Bool
+	| ID ':' PAIR '[' ID ':' BOOL ';' ID ':' BOOL ']' 
+			'=' '[' boolExpr ';' boolExpr ']'											# NamedBoolBoolPairValueDecl
+	| ID ':' PAIR '[' ID ':' BOOL ';' ID ':' type=(INT|REAL) ']' 
+			'=' '[' boolExpr ';' right=(INTNUM|REALNUM) ']'								# NamedBoolArithPairValueDecl
+	// Int
+	| ID ':' PAIR '[' ID ':' INT ';' ID ':' BOOL ']' 
+			'=' '[' INTNUM ';' boolExpr ']'												# NamedIntBoolPairValueDecl
+	| ID ':' PAIR '[' ID ':' INT ';' ID ':' type=(INT|REAL) ']' 
+			'=' '[' INTNUM ';' right=(INTNUM|REALNUM) ']'								# NamedIntArithPairValueDecl
+	// Real
+	| ID ':' PAIR '[' ID ':' REAL ';' ID ':' BOOL ']' 
+			'=' '[' REALNUM ';' boolExpr ']'											# NamedRealBoolPairValueDecl
+	| ID ':' PAIR '[' ID ':' REAL ';' ID ':' type=(INT|REAL) ']' 
+			'=' '[' REALNUM ';' right=(INTNUM|REALNUM) ']'								# NamedRealArithPairValueDecl
+	;
 
 
 boolExpr 
@@ -61,6 +105,7 @@ BOOL : 'BOOLEAN';
 INT : 'INTEGER';
 REAL : 'REAL';
 ARRAY : 'ARRAY';
+PAIR : 'PAIR';
 VERIFY : 'verify';
 
 FORALL : 'forall';

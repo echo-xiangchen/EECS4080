@@ -140,23 +140,23 @@ public class InfixPrinter implements Visitor{
 	// boolean variable declaration
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. p : BOOLEAN
 		if(v.mode instanceof modes.UninitializedDecl) {
 			
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify p => q
 		else if (v.mode instanceof modes.Verification) {
 			infixOutput = infixOutput.concat(v.name);
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. p : BOOLEAN = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 		}
-		// mode 3: quantification declaration
+		// quantification declaration
 		// e.g. forall p : BOOLEAN; | not p
 		else if (v.mode instanceof modes.QuantifyBool) {
 			quantifyVar.add(v.name);
@@ -166,23 +166,23 @@ public class InfixPrinter implements Visitor{
 	// int variable declaration
 	@Override
 	public void visitIntVar(IntVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. j : INTEGER
 		if(v.mode instanceof modes.UninitializedDecl) {
 			
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify j > 2
 		else if (v.mode instanceof modes.Verification) {
 			infixOutput = infixOutput.concat(v.name);
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : INTEGER = 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 		}
-		// mode 3: quantification declaration
+		// quantification declaration
 		// e.g. forall p : BOOLEAN; @ not p
 		else if (v.mode instanceof modes.QuantifyInt) {
 			quantifyVar.add(v.name);
@@ -193,23 +193,23 @@ public class InfixPrinter implements Visitor{
 	// real variable declaration
 	@Override
 	public void visitRealVar(RealVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. j : REAL
 		if(v.mode instanceof modes.UninitializedDecl) {
 					
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify j > 2
 		else if (v.mode instanceof modes.Verification) {
 			infixOutput = infixOutput.concat(v.name);
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : REAL = 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			InfixPrinter h = new InfixPrinter();
 			v.value.accept(h);
 		}
-		// mode 3: quantification declaration
+		// quantification declaration
 		// e.g. forall p : REAL; | p > 0
 		else if (v.mode instanceof modes.QuantifyReal) {
 			quantifyVar.add(v.name);
@@ -220,12 +220,12 @@ public class InfixPrinter implements Visitor{
 	// boolean array variable
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[BOOLEAN]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			InfixPrinter h = new InfixPrinter();
@@ -233,7 +233,7 @@ public class InfixPrinter implements Visitor{
 			
 			infixOutput = infixOutput.concat(a.name + "[" + h.infixOutput + "]");
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			
@@ -245,12 +245,12 @@ public class InfixPrinter implements Visitor{
 	// integer array
 	@Override
 	public void visitIntArrayVar(IntArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[INTEGER]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			InfixPrinter h = new InfixPrinter();
@@ -258,7 +258,7 @@ public class InfixPrinter implements Visitor{
 			
 			infixOutput = infixOutput.concat(a.name + "[" + h.infixOutput + "]");
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			
@@ -270,12 +270,12 @@ public class InfixPrinter implements Visitor{
 	// real array
 	@Override
 	public void visitRealArrayVar(RealArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[REAL]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			InfixPrinter h = new InfixPrinter();
@@ -283,7 +283,7 @@ public class InfixPrinter implements Visitor{
 			
 			infixOutput = infixOutput.concat(a.name + "[" + h.infixOutput + "]");
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			

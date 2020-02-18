@@ -18,6 +18,7 @@ public class PrefixPrinter implements Visitor{
 	public static Map<String, Pair<String, String>> inclusiveVarMap = new HashMap<String, Pair<String,String>>();
 	
 	// map that stores the array name and its values
+	public static Map<String, List<String>> arrayMap = new HashMap<String, List<String>>();
 	
 	public PrefixPrinter() {
 		prefixOutput = "";
@@ -157,12 +158,12 @@ public class PrefixPrinter implements Visitor{
 	// boolean variable declaration
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. p : BOOLEAN
 		if(v.mode instanceof modes.UninitializedDecl) {
 			completeVarMap.put(v.name, new Pair<String, String>("Bool", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify p => q
 		else if (v.mode instanceof modes.Verification) {
 			prefixOutput = prefixOutput.concat(v.name);
@@ -172,7 +173,7 @@ public class PrefixPrinter implements Visitor{
 			}
 			
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. p : BOOLEAN = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			PrefixPrinter h = new PrefixPrinter();
@@ -180,7 +181,7 @@ public class PrefixPrinter implements Visitor{
 			
 			completeVarMap.put(v.name, new Pair<String, String>("Bool", h.prefixOutput));
 		}
-		// mode 3: quantification declaration
+		// quantification declaration
 		// e.g. forall p : BOOLEAN; @ not p
 		else if (v.mode instanceof modes.QuantifyBool) {
 			completeVarMap.put(v.name, new Pair<String, String>("Bool", "Quantification"));
@@ -191,13 +192,13 @@ public class PrefixPrinter implements Visitor{
 	// int variable declaration
 	@Override
 	public void visitIntVar(IntVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. j : INTEGER
 		if(v.mode instanceof modes.UninitializedDecl) {
 			
 			completeVarMap.put(v.name, new Pair<String, String>("Int", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify i > 0
 		else if (v.mode instanceof modes.Verification) {
 			prefixOutput = prefixOutput.concat(v.name);
@@ -206,7 +207,7 @@ public class PrefixPrinter implements Visitor{
 				inclusiveVarMap.put(v.name, new Pair<String, String>(completeVarMap.get(v.name).a, completeVarMap.get(v.name).b));
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : INT = 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			PrefixPrinter h = new PrefixPrinter();
@@ -214,7 +215,7 @@ public class PrefixPrinter implements Visitor{
 			
 			completeVarMap.put(v.name, new Pair<String, String>("Int", h.prefixOutput));
 		}
-		// mode 3: quantification declaration
+		// quantification declaration
 		// e.g. forall i : INT; @ i > 0
 		else if (v.mode instanceof modes.QuantifyInt) {
 			completeVarMap.put(v.name, new Pair<String, String>("Int", "Quantification"));
@@ -225,13 +226,13 @@ public class PrefixPrinter implements Visitor{
 	// real variable declaration
 	@Override
 	public void visitRealVar(RealVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. j : REAL
 		if(v.mode instanceof modes.UninitializedDecl) {
 			
 			completeVarMap.put(v.name, new Pair<String, String>("Real", null));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify i > 0
 		else if (v.mode instanceof modes.Verification) {
 			prefixOutput = prefixOutput.concat(v.name);
@@ -240,7 +241,7 @@ public class PrefixPrinter implements Visitor{
 				inclusiveVarMap.put(v.name, new Pair<String, String>(completeVarMap.get(v.name).a, completeVarMap.get(v.name).b));
 			}
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. i : REAL = 2
 		else if (v.mode instanceof modes.InitializedDecl) {
 			PrefixPrinter h = new PrefixPrinter();
@@ -248,7 +249,7 @@ public class PrefixPrinter implements Visitor{
 			
 			completeVarMap.put(v.name, new Pair<String, String>("Real", h.prefixOutput));
 		}
-		// mode 3: quantification declaration
+		// quantification declaration
 		// e.g. forall i : REAL; @ i > 0
 		else if (v.mode instanceof modes.QuantifyInt) {
 			completeVarMap.put(v.name, new Pair<String, String>("Real", "Quantification"));
@@ -259,13 +260,13 @@ public class PrefixPrinter implements Visitor{
 	// boolean array variable
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[BOOLEAN]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			
 			completeVarMap.put(a.name, new Pair<String, String>("Bool", "Array"));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			PrefixPrinter p = new PrefixPrinter();
@@ -277,18 +278,31 @@ public class PrefixPrinter implements Visitor{
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
 			}
 		}
+		// initialized declaration
+		// e.g. a : ARRAY[BOOLEAN] = <<p, q>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			completeVarMap.put(a.name, new Pair<String, String>("Bool", "ValuedArray"));
+			List<String> value = new ArrayList<String>();
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				PrefixPrinter p = new PrefixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value.add(p.prefixOutput);
+			}
+			arrayMap.put(a.name, value);
+		}
+		
 	}
 	
 	// integer array variable
 	@Override
 	public void visitIntArrayVar(IntArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[INTEGER]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			
 			completeVarMap.put(a.name, new Pair<String, String>("Int", "Array"));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			PrefixPrinter p = new PrefixPrinter();
@@ -299,19 +313,31 @@ public class PrefixPrinter implements Visitor{
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
 			}
+		}
+		// initialized declaration
+		// e.g. a : ARRAY[INTEGER] = <<1, 2, 9>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			completeVarMap.put(a.name, new Pair<String, String>("Int", "ValuedArray"));
+			List<String> value = new ArrayList<String>();
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				PrefixPrinter p = new PrefixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value.add(p.prefixOutput);
+			}
+			arrayMap.put(a.name, value);
 		}
 	}
 	
 	// real array variable
 	@Override
 	public void visitRealArrayVar(RealArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[REAL]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			
 			completeVarMap.put(a.name, new Pair<String, String>("Real", "Array"));
 		}
-		// mode 1: verification
+		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
 			PrefixPrinter p = new PrefixPrinter();
@@ -322,6 +348,18 @@ public class PrefixPrinter implements Visitor{
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
 			}
+		}
+		// initialized declaration
+		// e.g. a : ARRAY[INTEGER] = <<1, 2, 9>>
+		else if (a.mode instanceof modes.InitializedDecl) {
+			completeVarMap.put(a.name, new Pair<String, String>("Real", "ValuedArray"));
+			List<String> value = new ArrayList<String>();
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				PrefixPrinter p = new PrefixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value.add(p.prefixOutput);
+			}
+			arrayMap.put(a.name, value);
 		}
 	}
 

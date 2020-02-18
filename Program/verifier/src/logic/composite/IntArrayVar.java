@@ -1,6 +1,6 @@
 package logic.composite;
 
-import java.util.*;
+import java.util.List;
 
 import logic.visitor.*;
 import modes.*;
@@ -15,6 +15,11 @@ public class IntArrayVar extends ArrayVar {
 	// verification
 	public IntArrayVar(String name, mode mode, Logic index) {
 		super(name, mode, index);
+	}
+	
+	// initialized declaration
+	public IntArrayVar(String name, List<Logic> arrayValue, mode mode) {
+		super(name, arrayValue, mode);
 	}
 		
 		

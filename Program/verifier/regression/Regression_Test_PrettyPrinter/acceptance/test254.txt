@@ -1,0 +1,4 @@
+-- test uninitialized REAL array declaration(with error)
+a : ARRAY[REAL]
+b : ARRAY[INTEGER]
+verify a[1]

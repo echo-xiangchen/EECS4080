@@ -1,0 +1,4 @@
+-- test initialized REAL array declaration(with error)
+a : ARRAY[REAL] = <<1.0, 2.1, 9.8>>
+b : ARRAY[INTEGER]
+verify a[1] and b[4]

@@ -1,0 +1,3 @@
+-- test uninitialized REAL array declaration(no error)
+a : ARRAY[REAL]
+verify a[1] < a[2]

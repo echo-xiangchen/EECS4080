@@ -55,11 +55,22 @@ public class PrettyPrinter implements Visitor {
 				else if (entry.getValue().b.equals("Quantification")) {
 					
 				}
-				// array declaration
+				// uninitialized array declaration
 				// (declare-const a (Array Int Int))
 				else if (entry.getValue().b.equals("Array")) {
 					z3output = z3output.concat("(declare-const " + entry.getKey()
 							+ " (Array Int " + entry.getValue().a + "))\n");
+				}
+				// initialized array declaration
+				// (declare-const a (Array Int Int))
+				// (assert (= (select a 1) 10))
+				else if (entry.getValue().b.equals("ValuedArray")) {
+					z3output = z3output.concat("(declare-const " + entry.getKey()
+					+ " (Array Int " + entry.getValue().a + "))\n");
+					for (int i = 0; i < PrefixPrinter.arrayMap.get(entry.getKey()).size(); i++) {
+						z3output = z3output.concat("(assert (= (select " + entry.getKey() + " " + (i+1) 
+								+ ") " + PrefixPrinter.arrayMap.get(entry.getKey()).get(i) + "))\n");
+					}
 				}
 				else {
 					z3output = z3output.concat("(declare-const " + entry.getKey() +  " " 
@@ -303,18 +314,18 @@ public class PrettyPrinter implements Visitor {
 	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. p : BOOLEAN
 		if(v.mode instanceof modes.UninitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
 			v.accept(p);
 		}
-		// mode 1: verification
+		// verification
 		else if (v.mode instanceof modes.Verification) {
 			printExpr(v);
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. p : BOOLEAN = not q
 		else if (v.mode instanceof modes.InitializedDecl) {
 			// use the PrefixPrinter to return the output
@@ -342,18 +353,18 @@ public class PrettyPrinter implements Visitor {
 	// boolean array
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[BOOLEAN]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
 			a.accept(p);
 		}
-		// mode 1: verification
+		// verification
 		else if (a.mode instanceof modes.Verification) {
 			printExpr(a);
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. a : ARRAY[BOOLEAN] = <<true, false, p and q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			// use the PrefixPrinter to return the output
@@ -365,18 +376,18 @@ public class PrettyPrinter implements Visitor {
 	// integer array
 	@Override
 	public void visitIntArrayVar(IntArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[INTEGER]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
 			a.accept(p);
 		}
-		// mode 1: verification
+		// verification
 		else if (a.mode instanceof modes.Verification) {
 			printExpr(a);
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. a : ARRAY[INTEGER] = <<1, 2, 6, 9>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			// use the PrefixPrinter to return the output
@@ -387,18 +398,18 @@ public class PrettyPrinter implements Visitor {
 	
 	@Override
 	public void visitRealArrayVar(RealArrayVar a) {
-		// mode 0: uninitialized declaration
+		// uninitialized declaration
 		// e.g. a : ARRAY[REAL]
 		if(a.mode instanceof modes.UninitializedDecl) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
 			a.accept(p);
 		}
-		// mode 1: verification
+		// verification
 		else if (a.mode instanceof modes.Verification) {
 			printExpr(a);
 		}
-		// mode 2: initialized declaration
+		// initialized declaration
 		// e.g. a : ARRAY[INTEGER] = <<1.2, 2.1, 6.0, 9.6>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			// use the PrefixPrinter to return the output

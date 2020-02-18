@@ -19,6 +19,26 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 	 * *****************************************************************************************
 	 */
 	
+	
+	
+	// variable declaration
+	@Override
+	public Logic visitVarDeclaration(VarDeclarationContext ctx) {
+		return visit(ctx.declaration());
+	}
+	
+	
+	// verify the formula
+	@Override
+	public Logic visitVerifyBoolExpr(VerifyBoolExprContext ctx) {
+		return visit(ctx.boolExpr());
+	}
+	
+	/* *****************************************************************************************
+	 * Methods for declaration rule
+	 * *****************************************************************************************
+	 */
+	
 	// uninitialized boolean or int variable declaration
 	@Override
 	public Logic visitSingleVar(SingleVarContext ctx) {
@@ -77,14 +97,42 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 		}
 	}
 	
-	
-	// verify the formula
+	// boolean array declaration with initial value
 	@Override
-	public Logic visitVerifyBoolExpr(VerifyBoolExprContext ctx) {
-		return visit(ctx.boolExpr());
+	public Logic visitBoolArrayValueDecl(BoolArrayValueDeclContext ctx) {
+		// create a list of Logic, and store all the elements
+		List<Logic> value = new ArrayList<Logic>();
+		for (int i = 0; i < ctx.boolExpr().size(); i++) {
+			value.add(visit(ctx.boolExpr(i)));
+		}
+		varTypes.put(ctx.ID().getText(), "BoolArray");
+		return new BoolArrayVar(ctx.ID().getText(), value, new InitializedDecl());
 	}
 	
+	// integer array declaration with initial value
+	@Override
+	public Logic visitIntArrayValueDecl(IntArrayValueDeclContext ctx) {
+		// create a list of Logic, and store all the elements
+		List<Logic> value = new ArrayList<Logic>();
+		for (int i = 0; i < ctx.INTNUM().size(); i++) {
+			value.add(new IntConst(ctx.INTNUM(i).getText()));
+		}
+		varTypes.put(ctx.ID().getText(), "IntArray");
+		return new IntArrayVar(ctx.ID().getText(), value, new InitializedDecl());
+	}
 	
+	// real array declaration with initial value
+	@Override
+	public Logic visitRealArrayValueDecl(RealArrayValueDeclContext ctx) {
+		// create a list of Logic, and store all the elements
+		List<Logic> value = new ArrayList<Logic>();
+		for (int i = 0; i < ctx.REALNUM().size(); i++) {
+			value.add(new RealConst(ctx.REALNUM(i).getText()));
+		}
+		varTypes.put(ctx.ID().getText(), "RealArray");
+		
+		return new RealArrayVar(ctx.ID().getText(), value, new InitializedDecl());
+	}
 	
 	/* *****************************************************************************************
 	 * Methods for boolExpr rule

@@ -1,0 +1,3 @@
+-- test initialized REAL array declaration(no error)
+a : ARRAY[REAL] = <<1.0, 2.1, 9.8>>
+verify a[1] > a[2]

@@ -17,40 +17,12 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStat(LogicParser.StatContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code SingleVar}
+	 * Visit a parse tree produced by the {@code VarDeclaration}
 	 * labeled alternative in {@link LogicParser#line}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSingleVar(LogicParser.SingleVarContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code BoolValueDecl}
-	 * labeled alternative in {@link LogicParser#line}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolValueDecl(LogicParser.BoolValueDeclContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NumValueDecl}
-	 * labeled alternative in {@link LogicParser#line}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumValueDecl(LogicParser.NumValueDeclContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ArrayDecl}
-	 * labeled alternative in {@link LogicParser#line}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArrayDecl(LogicParser.ArrayDeclContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ArrayValueDecl}
-	 * labeled alternative in {@link LogicParser#line}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArrayValueDecl(LogicParser.ArrayValueDeclContext ctx);
+	T visitVarDeclaration(LogicParser.VarDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code VerifyBoolExpr}
 	 * labeled alternative in {@link LogicParser#line}.
@@ -58,6 +30,153 @@ public interface LogicVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SingleVar}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingleVar(LogicParser.SingleVarContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BoolValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolValueDecl(LogicParser.BoolValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NumValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumValueDecl(LogicParser.NumValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArrayDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayDecl(LogicParser.ArrayDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BoolArrayValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolArrayValueDecl(LogicParser.BoolArrayValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IntArrayValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntArrayValueDecl(LogicParser.IntArrayValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RealArrayValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRealArrayValueDecl(LogicParser.RealArrayValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnnamedPairDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnnamedPairDecl(LogicParser.UnnamedPairDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedPairDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedPairDecl(LogicParser.NamedPairDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnnamedBoolBoolPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnnamedBoolBoolPairValueDecl(LogicParser.UnnamedBoolBoolPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnnamedBoolArithPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnnamedBoolArithPairValueDecl(LogicParser.UnnamedBoolArithPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnnamedIntBoolPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnnamedIntBoolPairValueDecl(LogicParser.UnnamedIntBoolPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnnamedIntArithPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnnamedIntArithPairValueDecl(LogicParser.UnnamedIntArithPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnnamedRealBoolPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnnamedRealBoolPairValueDecl(LogicParser.UnnamedRealBoolPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnnamedRealArithPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnnamedRealArithPairValueDecl(LogicParser.UnnamedRealArithPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedBoolBoolPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedBoolBoolPairValueDecl(LogicParser.NamedBoolBoolPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedBoolArithPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedBoolArithPairValueDecl(LogicParser.NamedBoolArithPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedIntBoolPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedIntBoolPairValueDecl(LogicParser.NamedIntBoolPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedIntArithPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedIntArithPairValueDecl(LogicParser.NamedIntArithPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedRealBoolPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedRealBoolPairValueDecl(LogicParser.NamedRealBoolPairValueDeclContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NamedRealArithPairValueDecl}
+	 * labeled alternative in {@link LogicParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedRealArithPairValueDecl(LogicParser.NamedRealArithPairValueDeclContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Or}
 	 * labeled alternative in {@link LogicParser#boolExpr}.

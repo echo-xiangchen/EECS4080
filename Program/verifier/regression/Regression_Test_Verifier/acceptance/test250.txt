@@ -1,0 +1,3 @@
+-- test initialized integer array declaration(with error)
+a : ARRAY[INTEGER] = <<1, 2, 9.8>>
+verify a[1] < a[2]

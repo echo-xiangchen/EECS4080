@@ -1,0 +1,4 @@
+-- test uninitialized integer array declaration(no error)
+a : ARRAY[INTEGER]
+b : ARRAY[INTEGER]
+verify a[1] > b[2]

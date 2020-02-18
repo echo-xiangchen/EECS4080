@@ -29,6 +29,30 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVarDeclaration(LogicParser.VarDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarDeclaration(LogicParser.VarDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSingleVar(LogicParser.SingleVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -77,25 +101,205 @@ public class LogicBaseListener implements LogicListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayValueDecl(LogicParser.ArrayValueDeclContext ctx) { }
+	@Override public void enterBoolArrayValueDecl(LogicParser.BoolArrayValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArrayValueDecl(LogicParser.ArrayValueDeclContext ctx) { }
+	@Override public void exitBoolArrayValueDecl(LogicParser.BoolArrayValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
+	@Override public void enterIntArrayValueDecl(LogicParser.IntArrayValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVerifyBoolExpr(LogicParser.VerifyBoolExprContext ctx) { }
+	@Override public void exitIntArrayValueDecl(LogicParser.IntArrayValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRealArrayValueDecl(LogicParser.RealArrayValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRealArrayValueDecl(LogicParser.RealArrayValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedPairDecl(LogicParser.UnnamedPairDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedPairDecl(LogicParser.UnnamedPairDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedPairDecl(LogicParser.NamedPairDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedPairDecl(LogicParser.NamedPairDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedBoolBoolPairValueDecl(LogicParser.UnnamedBoolBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedBoolBoolPairValueDecl(LogicParser.UnnamedBoolBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedBoolArithPairValueDecl(LogicParser.UnnamedBoolArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedBoolArithPairValueDecl(LogicParser.UnnamedBoolArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedIntBoolPairValueDecl(LogicParser.UnnamedIntBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedIntBoolPairValueDecl(LogicParser.UnnamedIntBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedIntArithPairValueDecl(LogicParser.UnnamedIntArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedIntArithPairValueDecl(LogicParser.UnnamedIntArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedRealBoolPairValueDecl(LogicParser.UnnamedRealBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedRealBoolPairValueDecl(LogicParser.UnnamedRealBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedRealArithPairValueDecl(LogicParser.UnnamedRealArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedRealArithPairValueDecl(LogicParser.UnnamedRealArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedBoolBoolPairValueDecl(LogicParser.NamedBoolBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedBoolBoolPairValueDecl(LogicParser.NamedBoolBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedBoolArithPairValueDecl(LogicParser.NamedBoolArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedBoolArithPairValueDecl(LogicParser.NamedBoolArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedIntBoolPairValueDecl(LogicParser.NamedIntBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedIntBoolPairValueDecl(LogicParser.NamedIntBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedIntArithPairValueDecl(LogicParser.NamedIntArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedIntArithPairValueDecl(LogicParser.NamedIntArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedRealBoolPairValueDecl(LogicParser.NamedRealBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedRealBoolPairValueDecl(LogicParser.NamedRealBoolPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedRealArithPairValueDecl(LogicParser.NamedRealArithPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedRealArithPairValueDecl(LogicParser.NamedRealArithPairValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

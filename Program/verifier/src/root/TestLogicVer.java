@@ -220,8 +220,8 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
-			        System.out.println("AntlrToLogic.varMap: " + AntlrToLogic.varTypes + "\n");
+			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        //System.out.println("AntlrToLogic.varMap: " + AntlrToLogic.varTypes + "\n");
 			        
 			        
 			        
@@ -240,7 +240,6 @@ public class TestLogicVer {
  			        	for (int i = 0; i < logic.size(); i++) {
 							logic.get(i).accept(varPrinter);
 						}
- 			        	
  			        	
  			        	
  			        	

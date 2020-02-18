@@ -1,0 +1,3 @@
+-- test uninitialized integer array declaration(with error)
+a : ARRAY[INTEGER]
+verify a[1.3] > 0

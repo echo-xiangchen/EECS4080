@@ -1,0 +1,4 @@
+-- test uninitialized boolean array declaration(with error)
+a : ARRAY[BOOLEAN]
+a : ARRAY[BOOLEAN]
+verify a[1]
