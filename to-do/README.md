@@ -82,3 +82,34 @@ For each sample.txt write a header comment summarizing what the test is supposed
 5. Move the type check for V2 to a visitor.
 6. V2 is a much better design: the AST of logic should be completely independent of the AST of syntax (whcih corresponds to how the grammar is defined). For example: having interleaved declarations of named predicates and checks VERSUS having centralized sections of variable, predicates, and checks, should not affect the definition of AST logic.
 7. Question to answer: how do you tell wheter an ID toeken is used for named predicate, or varaible, or formula to check?
+
+
+==============================================
+To do: Feb 20
+1. Test cases for nested forall, nested exists. (forall x, ... exists y, ...)
+2. Test cases for nested forall and exists. (forall x >= 1 and x<= 10 | exists y | x * 2 = y and y < 20)
+3. When exists is stand-along, we do not negate the formula because when the exists is satisfiable, we want to provide a witness for satisfaction.
+4. For nested forall and exist, try to decide what to do, need to test it in z3. (forall x exists y, exists y forall x)
+5. Test cases of and, or, implies, where either left hand side or right hand side or both, is one of the following:
+    (1) stand along forall, exist
+    (2) nested forall, nested exist
+    (3) nested forall and exist
+6. Support function call for VERIFY.
+    e.g. 
+        a: ARRAY[INTEGER]
+        find_max(input: ARRAY[INTEGER])
+         .
+         .
+         .
+        VERIFY forall i: INTEGER | 1 <= i <= a.count implies sorted(a)
+                => find_max(a) = a[a.count]
+
+        VERIFY find_max (will return pre => wp, and sent it to z3 for verification)
+7. Find out if Z3 support method call such as find_max(a).
+8. Try to finish the swap method(grammar, test cases).
+    - correct version
+    - wrong version (wrong precondition or postcondition)
+
+
+
+
