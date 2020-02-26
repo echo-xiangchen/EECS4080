@@ -1,0 +1,3 @@
+-- test Negation and nested quantifier (no error)
+-- single exists
+verify not (exists x:INTEGER;|x > 0)

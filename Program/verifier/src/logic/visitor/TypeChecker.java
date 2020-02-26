@@ -8,7 +8,7 @@ import logic.composite.*;
 
 public class TypeChecker implements Visitor{
 	// hashmap for type checking
-	public static Map<String, Pair<VarType, Logic>> varMap = new HashMap<String, Pair<VarType, Logic>>();
+	public static Map<String, Pair<VarType, Logic>> varMap = new LinkedHashMap<String, Pair<VarType, Logic>>();
 	
 	
 	// error message
@@ -208,6 +208,12 @@ public class TypeChecker implements Visitor{
 		TypeChecker c2 = new TypeChecker();
 		q.expr.accept(c2);
 		errormsg.addAll(c2.errormsg);
+		// if errormsg is empty, add the formula to the map
+		if (errormsg.isEmpty()) {
+			InfixPrinter infixPrinter = new InfixPrinter();
+			q.accept(infixPrinter);
+			varMap.put(infixPrinter.infixOutput, new Pair<VarType, Logic>(new BoolType(), null));
+		}
 	}
 	
 	// for all
@@ -306,6 +312,11 @@ public class TypeChecker implements Visitor{
 		arithmeticBinaryChecker(e);
 	}
 
+	/* *****************************************************************************************
+	 * normal variable
+	 * *****************************************************************************************
+	 */
+	
 	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
@@ -355,8 +366,11 @@ public class TypeChecker implements Visitor{
 			
 			// check if the type of assigned value is type correct
 			// e.g. error: p : BOOL = 2 * 3
-			if (!(varMap.containsKey(infixPrinter.infixOutput)) || !(varMap.get(infixPrinter.infixOutput).a instanceof types.BoolType)) {
-				errormsg.add(infixPrinter.infixOutput + "is not boolean type, cannot perform this assignment.");
+			if (!(varMap.containsKey(infixPrinter.infixOutput))) {
+				errormsg.add("Error: Cannot recognize " + infixPrinter.infixOutput + ".");
+			}
+			else if (!(varMap.get(infixPrinter.infixOutput).a instanceof types.BoolType)) {
+				errormsg.add("Error: " + infixPrinter.infixOutput + " is not boolean type, cannot perform this assignment.");
 			}
 			
 			// if there is no error, add it to the map
@@ -424,8 +438,10 @@ public class TypeChecker implements Visitor{
 			
 			// check if the type of assigned value is type correct
 			// e.g. error: p : INTEGER = 2.1
-			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
-					|| varMap.get(infixPrinter.infixOutput).a instanceof types.RealType) {
+			if (!(varMap.containsKey(infixPrinter.infixOutput))) {
+				errormsg.add("Error: Cannot recognize " + infixPrinter.infixOutput + ".");
+			}
+			else if (varMap.get(infixPrinter.infixOutput).a instanceof types.RealType) {
 				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot perform this assignment.");
 			}
 			
@@ -453,7 +469,7 @@ public class TypeChecker implements Visitor{
 				
 		// and quantification declaration
 		// e.g. forall i : REAL; | i > 0
-		if ((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyInt)) {
+		if ((v.mode instanceof modes.UninitializedDecl) ||  (v.mode instanceof modes.QuantifyReal)) {
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
 				varMap.put(v.name, new Pair<VarType, Logic>(new RealType(), null));
@@ -505,6 +521,17 @@ public class TypeChecker implements Visitor{
 		}
 	}
 	
+	
+	
+	
+	
+	/* *****************************************************************************************
+	 * array variable
+	 * *****************************************************************************************
+	 */
+	
+	
+	
 	// boolean array
 	@Override
 	public void visitBoolArrayVar(BoolArrayVar a) {
@@ -541,8 +568,10 @@ public class TypeChecker implements Visitor{
 			
 			// check if the type of the index is integer type
 			// e.g. error: verify a[2.1 * 2]
-			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
-					|| !(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
+			if (!(varMap.containsKey(infixPrinter.infixOutput))) {
+				errormsg.add("Error: Cannot recognize " + infixPrinter.infixOutput + ".");
+			}
+			else if (!(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
 				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot use it as array index value.");
 			}
 			
@@ -634,8 +663,10 @@ public class TypeChecker implements Visitor{
 			
 			// check if the type of the index is integer type
 			// e.g. error: verify a[2.1 * 2]
-			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
-					|| !(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
+			if (!(varMap.containsKey(infixPrinter.infixOutput))) {
+				errormsg.add("Error: Cannot recognize " + infixPrinter.infixOutput + ".");
+			}
+			else if (!(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
 				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot use it as array index value.");
 			}
 			
@@ -679,8 +710,10 @@ public class TypeChecker implements Visitor{
 				InfixPrinter printer = new InfixPrinter();
 				a.arrayValue.get(i).accept(printer);
 				
-				if (!(varMap.containsKey(printer.infixOutput)) 
-						|| varMap.get(printer.infixOutput).a instanceof types.RealType) {
+				if (!(varMap.containsKey(printer.infixOutput))) {
+					errormsg.add("Error: Cannot recognize " + printer.infixOutput + ".");
+				}
+				else if (varMap.get(printer.infixOutput).a instanceof types.RealType) {
 					errormsg.add(printer.infixOutput + " is not integer type, cannot perform this assignment.");
 				}
 			}
@@ -734,8 +767,10 @@ public class TypeChecker implements Visitor{
 			
 			// check if the type of the index is integer type
 			// e.g. error: verify a[2.1 * 2]
-			if (!(varMap.containsKey(infixPrinter.infixOutput)) 
-					|| !(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
+			if (!(varMap.containsKey(infixPrinter.infixOutput))) {
+				errormsg.add("Error: Cannot recognize " + infixPrinter.infixOutput + ".");
+			}
+			else if (!(varMap.get(infixPrinter.infixOutput).a instanceof types.IntType)) {
 				errormsg.add(infixPrinter.infixOutput + " is not integer type, cannot use it as array index value.");
 			}
 			

@@ -1,0 +1,4 @@
+-- test Negation and nested quantifier (with error)
+-- nested forall
+x: REAL
+verify not (forall x:INTEGER;|forall y:INTEGER;|x > 0 or y < 10 and z >= 23)

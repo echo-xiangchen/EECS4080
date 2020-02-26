@@ -29,7 +29,12 @@ public class TestLogicVer {
 			}
 			// if there is at least one argument
 			else {
-				// if the first argument is "-p"
+				
+				/* *****************************************************************************************
+				 * if the first argument is "-p"
+				 * *****************************************************************************************
+				 */
+				
 				if (args[0].equals(printerStr)) {
 					// test to see if there is a input file
 			        String inputFile = null;
@@ -175,8 +180,11 @@ public class TestLogicVer {
 					}
 				}
 				
+				/* *****************************************************************************************
+				 * if the first argument is "-v"
+				 * *****************************************************************************************
+				 */
 				
-				// if the first argument is "-v"
 				else if (args[0].equals(verifierStr)) {
 					// test to see if there is a input file
 			        String inputFile = null;
@@ -220,8 +228,8 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
-			        System.out.println("AntlrToLogic.varMap: " + AntlrToLogic.varTypes + "\n");
+			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        //System.out.println("AntlrToLogic.varTypes: " + AntlrToLogic.varTypes + "\n");
 			        
 			        
 			        
@@ -244,7 +252,7 @@ public class TestLogicVer {
  			        	
  			        	
  			        	
- 			        	//System.out.println("varPrinter.allVarMap: " + varPrinter.allVarMap + "\n");
+ 			       //System.out.println("varPrinter.allVarMap: " + varPrinter.allVarMap + "\n");
  			        	
  			        	
  			        	
@@ -264,7 +272,7 @@ public class TestLogicVer {
 						
 						
 						//System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap + "\n");
-						
+
 						
 						
 						
@@ -344,7 +352,8 @@ public class TestLogicVer {
 										
 										// grab the necessary output
 										if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
-											varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") + varValue[6].replaceAll("\\)", "");
+											varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+													+ varValue[6].replaceAll("\\)", "");
 										}
 										else if (varValue[4].charAt(0) == '(') {
 											varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
@@ -372,10 +381,21 @@ public class TestLogicVer {
 									}
 					            	
 				            	
-					            	writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
-					            	for (int j = 0; j < varOutput.size(); j++) {
-					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-					            				+ " : " + varOutput.get(j)[2] + "\n");
+					            	// test to see if the counterexample is available
+					            	// if it contains "forall" or "exists" or "Array"
+					            	// then counterexample is not available
+					            	if (splitedOutput[i - 1].contains("forall") 
+					            			|| splitedOutput[i - 1].contains("exists")
+					            			|| splitedOutput[i - 1].contains("Array")) {
+					            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
+									}
+					            	// if it does not contain all of them, then the counterexample is available
+					            	else {
+					            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
+						            	for (int j = 0; j < varOutput.size(); j++) {
+						            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+						            				+ " : " + varOutput.get(j)[2] + "\n");
+										}
 									}
 					            } 
 					            else if(result == Status.UNSATISFIABLE) { 
@@ -471,10 +491,22 @@ public class TestLogicVer {
 													+ "\n");
 										}
 									}
-					            	writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
-					            	for (int j = 0; j < varOutput.size(); j++) {
-					            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-					            				+ " : " + varOutput.get(j)[2] + "\n");
+					            	
+					            	// test to see if the counterexample is available
+					            	// if it contains "forall" or "exists" or "Array"
+					            	// then counterexample is not available
+					            	if (splitedOutput[i - 1].contains("forall") 
+					            			|| splitedOutput[i - 1].contains("exists")
+					            			|| splitedOutput[i - 1].contains("Array")) {
+					            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
+									}
+					            	// if it does not contain all of them, then the counterexample is available
+					            	else {
+					            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
+						            	for (int j = 0; j < varOutput.size(); j++) {
+						            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+						            				+ " : " + varOutput.get(j)[2] + "\n");
+										}
 									}
 					            }  
 					            else if(result == Status.UNSATISFIABLE) {

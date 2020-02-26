@@ -1,0 +1,4 @@
+-- test Implication and nested quantifier (no error)
+-- single forall
+x: BOOLEAN = false
+verify x=> forall y:INTEGER;|y < 0

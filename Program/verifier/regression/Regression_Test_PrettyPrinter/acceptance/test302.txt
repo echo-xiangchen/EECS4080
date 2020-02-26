@@ -1,0 +1,5 @@
+-- test Disjunction and nested quantifier (no error)
+-- nested exists
+a: BOOLEAN
+x: BOOLEAN = a or not a
+verify x or exists y:INTEGER;| exists z:INTEGER;|z >= 10 or y < 0

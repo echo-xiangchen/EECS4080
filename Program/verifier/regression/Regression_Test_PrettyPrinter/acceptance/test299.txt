@@ -1,0 +1,5 @@
+-- test Disjunction and nested quantifier (with error)
+-- single exists
+i: REAL
+x: BOOLEAN = i
+verify x or exists y:INTEGER;|y < 0

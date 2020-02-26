@@ -1,8 +1,9 @@
-increment_by_9 (i : INTEGER)
 i : INTEGER
+
+increment_by_9
 require i > 3
 do
-i := i + 9
+	i := i + 9
 ensure
-i > 13
+	i > 13
 end

@@ -1,0 +1,4 @@
+-- test Disjunction and nested quantifier (no error)
+-- single forall
+x: BOOLEAN = false
+verify x or forall y:INTEGER;|y < 0

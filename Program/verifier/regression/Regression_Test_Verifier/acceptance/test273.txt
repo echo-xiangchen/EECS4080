@@ -1,0 +1,4 @@
+-- test Negation and nested quantifier (with error)
+-- single forall
+x: REAL
+verify not (forall x:INTEGER;|y > 0)

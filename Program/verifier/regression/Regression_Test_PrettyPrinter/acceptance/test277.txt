@@ -1,0 +1,4 @@
+-- test Negation and nested quantifier (with error)
+-- single exists
+x: REAL
+verify not (exists x:INTEGER;|x > 0)

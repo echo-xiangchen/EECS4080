@@ -1,0 +1,4 @@
+-- test Iff and nested quantifier (with error)
+-- single forall
+x: BOOLEAN = i
+verify x <=> forall y:INTEGER;|y < 0 <=> y < -1

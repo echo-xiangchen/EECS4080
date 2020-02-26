@@ -1,0 +1,5 @@
+-- test nested quantifier (with error)
+-- nested exists
+x: REAL
+y: BOOLEAN
+verify exists y:INTEGER;|exists x:INTEGER;|y < 20 and x > 10

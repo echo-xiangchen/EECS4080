@@ -1,1 +1,0 @@
-Formula: ((r and t1) = ((not p) or q)) is a tautology.

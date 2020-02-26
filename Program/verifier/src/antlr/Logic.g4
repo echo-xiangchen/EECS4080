@@ -1,5 +1,8 @@
 grammar Logic;
 
+@header {
+	package antlr;
+}
 
 stat : line+ ;
 
@@ -19,7 +22,6 @@ method
 mutator 
 	: declaration
 	  ID ('(' ID ':' type=(BOOL|INT|REAL) ')')?
-
 		REQUIRE boolExpr
 		DO 
 			body
@@ -28,11 +30,10 @@ mutator
 	;
 
 accessor
-	: ID ('(' ID ':' type1=(BOOL|INT|REAL) ')')? ID ':' type2=(BOOL|INT|REAL)
-		declaration
+	: declaration
+	  ID ('(' ID ':' type1=(BOOL|INT|REAL) ')')? ID ':' type2=(BOOL|INT|REAL)
 		REQUIRE boolExpr
 		DO 
-			
 			body
 		ENSURE boolExpr 
 		END
@@ -48,8 +49,8 @@ declaration
 	// array variable declaration
 	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'											# ArrayDecl
 	| ID ':' ARRAY '[' BOOL ']' '=' '<<' boolExpr (',' boolExpr)* '>>'					# BoolArrayValueDecl
-	| ID ':' ARRAY '[' INT ']' '=' '<<' arithmetic (',' arithmetic)* '>>'						# IntArrayValueDecl
-	| ID ':' ARRAY '[' REAL ']' '=' '<<' arithmetic (',' arithmetic)* '>>'					# RealArrayValueDecl
+	| ID ':' ARRAY '[' INT ']' '=' '<<' arithmetic (',' arithmetic)* '>>'				# IntArrayValueDecl
+	| ID ':' ARRAY '[' REAL ']' '=' '<<' arithmetic (',' arithmetic)* '>>'				# RealArrayValueDecl
 	// pair without value
 	| ID ':' PAIR '[' left=(BOOL|INT|REAL) ';' right=(BOOL|INT|REAL) ']'				# UnnamedPairDecl
 	| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPairDecl
@@ -88,7 +89,7 @@ declaration
 	;
 
 body
-	: assignment	# VarAssignment
+	: (assignment)+		# VarAssignment
 	;
 
 assignment

@@ -1,0 +1,5 @@
+-- test Conjunction and nested quantifier (with error)
+-- nested exists and forall
+x: BOOLEAN
+z: INTEGER
+verify x and exists y:INTEGER;| forall z:REAL;|z >= 10 or y < 0

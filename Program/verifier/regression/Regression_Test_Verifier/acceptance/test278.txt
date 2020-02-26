@@ -1,0 +1,3 @@
+-- test Negation and nested quantifier (no error)
+-- nested exists
+verify not (exists x:INTEGER;|exists y:INTEGER;|x > 0 and y < 0)

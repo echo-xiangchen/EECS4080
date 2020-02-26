@@ -1,0 +1,4 @@
+-- test Negation and nested quantifier (with error)
+-- nested forall and exists
+y: INTEGER
+verify not (forall x:INTEGER;|exists y:INTEGER;|x > 0 and y < 0 <=> z = 0)

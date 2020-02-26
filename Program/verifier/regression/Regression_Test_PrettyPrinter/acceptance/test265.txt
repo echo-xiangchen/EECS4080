@@ -1,0 +1,3 @@
+-- test nested quantifier (no error)
+-- nested forall and exists
+verify forall x:INTEGER;|exists y: INTEGER;| x > 0 and y < 0

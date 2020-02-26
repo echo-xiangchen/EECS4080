@@ -1,0 +1,4 @@
+-- test Conjunction and nested quantifier (no error)
+-- single exists
+x: BOOLEAN
+verify x and exists y:INTEGER;|y < 0

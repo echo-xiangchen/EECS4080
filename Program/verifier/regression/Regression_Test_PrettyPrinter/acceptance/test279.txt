@@ -1,0 +1,4 @@
+-- test Negation and nested quantifier (with error)
+-- nested exists
+x: REAL
+verify not (exists x:INTEGER;|exists y:INTEGER;|x > 0 and y < 0 => z <= 22)

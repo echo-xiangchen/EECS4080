@@ -1,0 +1,5 @@
+-- test Disjunction and nested quantifier (no error)
+-- nested exists and forall
+a: REAL
+x: BOOLEAN = a <= 10 or a > -1
+verify x or exists y:INTEGER;| forall z:BOOLEAN;|not z or y < 0

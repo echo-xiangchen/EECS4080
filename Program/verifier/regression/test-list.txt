@@ -42,3 +42,14 @@ Gries-Theorems
 241 - 250: Integer Array
 
 251 - 258: Real Array
+
+259 - 261: Nested quantifier(nested exists)
+262 - 264: Nested quantifier(nested forall)
+265 - 267: Nested quantifier(nested forall and exists)
+268 - 270: Nested quantifier(nested exists and forall)
+
+271 - 283: Negation and nested quantifier 
+284 - 295: Conjunction and nested quantifier
+296 - 307: Disjunction and nested quantifier
+308 - 319: Implication and nested quantifier
+320 - 331: Iff and nested quantifier

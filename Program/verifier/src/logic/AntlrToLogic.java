@@ -255,6 +255,7 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < ctx.ID().size(); i++) {
 				list.add(ctx.ID(i).getText());
+				varTypes.put(ctx.ID(i).getText(), "Bool");
 			}
 			// create a new BoolVar object, accepting the list
 			// and transform the list of String into a list of BoolVar
@@ -279,8 +280,8 @@ public class AntlrToLogic extends LogicBaseVisitor<Logic>{
 				varTypes.put(ctx.ID(i).getText(), "Real");
 			}
 			// create a new RealVar object, accepting the list
-			// and transform the list of String into a list of IntVar
-			return new RealVar(list, new QuantifyInt());
+			// and transform the list of String into a list of RealVar
+			return new RealVar(list, new QuantifyReal());
 		}
 	}
 	

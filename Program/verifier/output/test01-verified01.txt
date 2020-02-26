@@ -1,1 +1,9 @@
-Formula: (a[1] > 0) is a tautology.
+Formula: (x = exists y;forall z;((not z) => (y < 0)))
+Where: 
+    a : REAL
+    x : BOOLEAN = ((a <= 10) => (not (a > -1)))
+    z : BOOLEAN
+    y : INTEGER
+
+Is not a tautology.
+Counterexample is not available.

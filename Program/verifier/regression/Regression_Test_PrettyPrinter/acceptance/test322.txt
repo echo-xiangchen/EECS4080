@@ -1,0 +1,5 @@
+-- test Iff and nested quantifier (no error)
+-- single exists
+i: REAL
+x: BOOLEAN = i > 100
+verify x <=> exists y:INTEGER;|y < 0 => y < 1

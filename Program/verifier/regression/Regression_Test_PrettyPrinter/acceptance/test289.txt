@@ -1,0 +1,4 @@
+-- test Conjunction and nested quantifier (with error)
+-- nested forall
+x: REAL
+verify x and forall y:INTEGER;|forall z:INTEGER;|z >= 10 or y < 0

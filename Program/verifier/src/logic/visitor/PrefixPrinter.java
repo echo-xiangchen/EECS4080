@@ -9,36 +9,62 @@ public class PrefixPrinter implements Visitor{
 	
 	public String prefixOutput;
 	
+	// prints the variable for quantification declaration
 	public String quantifyVar;
 	
+	// indicates "forall" or "exists"
+	public String quantifyIndicator;
+	
+	// indicates if contains nested quantification
+	public static boolean isNestedQuantifier;
+	
 	// map that stores all the declared variables
-	public static Map<String, Pair<String, String>> completeVarMap = new HashMap<String, Pair<String,String>>();  
+	public static Map<String, Pair<String, String>> completeVarMap = new LinkedHashMap<String, Pair<String,String>>();  
 	
 	// hashmap that only store the necessary variables
-	public static Map<String, Pair<String, String>> inclusiveVarMap = new HashMap<String, Pair<String,String>>();
+	public static Map<String, Pair<String, String>> inclusiveVarMap = new LinkedHashMap<String, Pair<String,String>>();
 	
 	// map that stores the array name and its values
-	public static Map<String, List<String>> arrayMap = new HashMap<String, List<String>>();
+	public static Map<String, List<String>> arrayMap = new LinkedHashMap<String, List<String>>();
 	
 	public PrefixPrinter() {
 		prefixOutput = "";
 		quantifyVar = "";
+		quantifyIndicator = "";
 	}
 	
 	public void visitBinaryExpr (BinaryExpr b, String op) {
 		PrefixPrinter leftPrinter = new PrefixPrinter();
 		PrefixPrinter rightPrinter = new PrefixPrinter();
 		
+		// check if left child is quantifier
+		if (b.left() instanceof logic.composite.Quantification) {
+			isNestedQuantifier = true;
+		}
 		b.left().accept(leftPrinter);
+		isNestedQuantifier = false;
+		
+		// check if right child is quantifier
+		if (b.right() instanceof logic.composite.Quantification) {
+			isNestedQuantifier = true;
+		}
 		b.right().accept(rightPrinter);
-		prefixOutput = prefixOutput.concat("(" + op + " " + leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + ")");
+		isNestedQuantifier = false;
+		
+		prefixOutput = prefixOutput.concat("(" + op + " " 
+				+ leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + ")");
 	}
 	
 	public void visitUnaryExpr(UnaryExpr u, String op) {
 		
 		PrefixPrinter p = new PrefixPrinter();
 		
+		// check if child is quantifier
+		if (u.child instanceof logic.composite.Quantification) {
+			isNestedQuantifier = true;
+		}
 		u.child.accept(p);
+		isNestedQuantifier = false;
 		
 		prefixOutput = prefixOutput.concat("(" + op + " " + p.prefixOutput + ")");
 	}
@@ -54,7 +80,7 @@ public class PrefixPrinter implements Visitor{
 		PrefixPrinter p2 = new PrefixPrinter();
 		q.expr.accept(p2);
 		
-		prefixOutput = "(" + quantifyVar + ")(not " + p2.prefixOutput + ")";
+		prefixOutput = "(" + quantifyIndicator + "(" + quantifyVar + ")" + p2.prefixOutput + ")";
 		
 	}
 	
@@ -62,23 +88,46 @@ public class PrefixPrinter implements Visitor{
 	
 	@Override
 	public void visitForall(Forall q) {
-		// recursively accept all the variables in the list first
-		PrefixPrinter p1 = new PrefixPrinter();
-		for (int i = 0; i < q.quantifyList.size(); i++) {
-			q.quantifyList.get(i).accept(p1);
+		// if the boolean expr is another exists quantifier
+		// set "isNestedQuantifier" to be true
+		if (q.expr instanceof logic.composite.Exists) {
+			isNestedQuantifier = true;
 		}
-		quantifyVar = p1.quantifyVar;
-		// then accept the boolexpr next
-		PrefixPrinter p2 = new PrefixPrinter();
-		q.expr.accept(p2);
-				
-		prefixOutput = p2.prefixOutput;
-		//System.out.println(prefixOutput);
+		
+		
+		// check if "isNestedQuantifier" is true
+		// check to see if "isNestedQuantifier" in PrettyPrinter is true as well
+		if (isNestedQuantifier || PrettyPrinter.isNestedQuantifier) {
+			quantifyIndicator = "forall";
+			QuantifyPrinter(q);
+			// after calling the method, set "isNestedQuantifier" to false again
+			isNestedQuantifier = false;
+		}
+		// if it is stand alone quantifier
+		else {
+			// recursively accept all the variables in the list first
+			PrefixPrinter p1 = new PrefixPrinter();
+			for (int i = 0; i < q.quantifyList.size(); i++) {
+				q.quantifyList.get(i).accept(p1);
+			}
+			quantifyVar = p1.quantifyVar;
+			// then accept the boolexpr next
+			PrefixPrinter p2 = new PrefixPrinter();
+			q.expr.accept(p2);
+					
+			prefixOutput = p2.prefixOutput;
+		}
 	}
 
 	@Override
 	public void visitExists(Exists q) {
+		if (q.expr instanceof logic.composite.Quantification) {
+			isNestedQuantifier = true;
+		}
+		
+		quantifyIndicator = "exists";
 		QuantifyPrinter(q);
+		isNestedQuantifier = false;
 		//System.out.println(prefixOutput);
 	}
 	
@@ -168,6 +217,10 @@ public class PrefixPrinter implements Visitor{
 		else if (v.mode instanceof modes.Verification) {
 			prefixOutput = prefixOutput.concat(v.name);
 			
+			if (TypeChecker.varMap.get(v.name).b != null) {
+				PrefixPrinter p = new PrefixPrinter();
+				TypeChecker.varMap.get(v.name).b.accept(p);
+			}
 			if (!inclusiveVarMap.containsKey(v.name)) {
 				inclusiveVarMap.put(v.name, new Pair<String, String>(completeVarMap.get(v.name).a, completeVarMap.get(v.name).b));
 			}
@@ -251,7 +304,7 @@ public class PrefixPrinter implements Visitor{
 		}
 		// quantification declaration
 		// e.g. forall i : REAL; @ i > 0
-		else if (v.mode instanceof modes.QuantifyInt) {
+		else if (v.mode instanceof modes.QuantifyReal) {
 			completeVarMap.put(v.name, new Pair<String, String>("Real", "Quantification"));
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Real)");
 		}

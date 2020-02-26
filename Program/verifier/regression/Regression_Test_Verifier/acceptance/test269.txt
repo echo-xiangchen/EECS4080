@@ -1,0 +1,5 @@
+-- test nested quantifier (with error)
+-- nested exists and forall
+x: REAL
+y: BOOLEAN
+verify exists x:INTEGER;|forall y: INTEGER;| x > 0 and y < 0

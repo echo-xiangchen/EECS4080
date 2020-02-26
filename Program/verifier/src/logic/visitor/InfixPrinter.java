@@ -56,13 +56,13 @@ public class InfixPrinter implements Visitor{
 	@Override
 	public void visitForall(Forall q) {
 		visitQuantifier(q);
-		infixOutput = "Forall " + infixOutput;
+		infixOutput = "forall " + infixOutput;
 	}
 
 	@Override
 	public void visitExists(Exists q) {
 		visitQuantifier(q);
-		infixOutput = "There exists " + infixOutput;
+		infixOutput = "exists " + infixOutput;
 	}
 	
 	

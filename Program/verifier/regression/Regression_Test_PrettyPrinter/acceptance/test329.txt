@@ -1,0 +1,5 @@
+-- test Iff and nested quantifier (with error)
+-- nested forall and exists
+a: REAL
+x: BOOLEAN = a <= 10 or  not a
+verify x <=> forall y:INTEGER;| exists z:INTEGER;|z >= 10 <=> y < 0

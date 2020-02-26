@@ -7,4 +7,7 @@ public class Methods extends Logic {
 	
 	// postcondition expression
 	Logic postcondition;
+	
+	// wp expression
+	Logic wp;
 }

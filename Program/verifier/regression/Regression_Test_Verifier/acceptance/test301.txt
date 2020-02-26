@@ -1,0 +1,5 @@
+-- test Disjunction and nested quantifier (with error)
+-- nested forall
+a: BOOLEAN
+x: BOOLEAN = a > 90
+verify x or forall y:INTEGER;|forall z:BOOLEAN;|z >= 10 or y < 0

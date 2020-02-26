@@ -1,0 +1,5 @@
+-- test Implication and nested quantifier (with error)
+-- single exists
+i: BOOLEAN
+x: BOOLEAN = i = 100
+verify x => exists y:INTEGER;|y < 0 => y < 1

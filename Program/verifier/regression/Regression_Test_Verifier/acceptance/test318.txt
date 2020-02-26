@@ -1,0 +1,5 @@
+-- test Implication and nested quantifier (no error)
+-- nested exists and forall
+a: REAL
+x: BOOLEAN = a <= 10 => a > -1
+verify x => exists y:INTEGER;| forall z:BOOLEAN;|not z => y < 0

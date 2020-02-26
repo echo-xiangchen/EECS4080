@@ -9,10 +9,10 @@ public class VarPrinter implements Visitor {
 	// Map<name, Pair<type, value>>
 
 	// map that stores all the declared variables
-	public static Map<String, Pair<String, String>> allVarMap = new HashMap<String, Pair<String,String>>();  
+	public static Map<String, Pair<String, String>> allVarMap = new LinkedHashMap<String, Pair<String,String>>();  
 		
 	// hashmap that only store the unused variables
-	public static Map<String, Pair<String, String>> unusedVarMap = new HashMap<String, Pair<String,String>>();
+	public static Map<String, Pair<String, String>> unusedVarMap = new LinkedHashMap<String, Pair<String,String>>();
 	
 	public void visitBinaryExpr (BinaryExpr b) {
 		VarPrinter leftPrinter = new VarPrinter();
