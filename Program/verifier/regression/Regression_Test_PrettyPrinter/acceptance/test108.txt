@@ -1,4 +1,4 @@
--- test relational logic with uninitialized int variable declaration (with error)
+-- test relational verifier with uninitialized int variable declaration (with error)
 i : INTEGER
 j : INTEGER
 i : INTEGER

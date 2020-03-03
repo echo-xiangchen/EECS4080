@@ -1,9 +1,12 @@
-Formula: (x = exists y;forall z;((not z) => (y < 0)))
-Where: 
-    a : REAL
-    x : BOOLEAN = ((a <= 10) => (not (a > -1)))
-    z : BOOLEAN
-    y : INTEGER
+increment_by_9require: (i > 3)
+do
+i := (i + 9)
 
-Is not a tautology.
-Counterexample is not available.
+end
+ensure (i > 13)
+
+Where: 
+    i : INTEGER
+
+Is not a tautology. Here is a counter example: 
+    i : 4

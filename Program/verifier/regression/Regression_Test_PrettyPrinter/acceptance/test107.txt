@@ -1,4 +1,4 @@
--- test relational logic with uninitialized int variable declaration (no error)
+-- test relational verifier with uninitialized int variable declaration (no error)
 i : INTEGER
 j : INTEGER
 verify i * j = j + 5

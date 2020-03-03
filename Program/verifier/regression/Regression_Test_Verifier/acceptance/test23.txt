@@ -4,7 +4,7 @@ j : INTEGER = i * 2
 m : INTEGER = 3 * 4 + 5
 p : BOOLEAN = i > 0
 verify not p
-r : BOOLEAN = j >= m
-s : BOOLEAN = j < 20
+r : BOOLEAN = i >= m
+s : BOOLEAN = m < 20
 verify not r
 verify not s

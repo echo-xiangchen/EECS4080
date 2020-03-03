@@ -1,4 +1,4 @@
--- test relational logic with initialized int variable declaration with constant value (with error)
+-- test relational verifier with initialized int variable declaration with constant value (with error)
 i : INTEGER = 1 
 j : INTEGER = 2
 verify i * j = j + 5

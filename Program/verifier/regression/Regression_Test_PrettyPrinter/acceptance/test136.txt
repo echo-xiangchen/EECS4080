@@ -1,4 +1,4 @@
--- test propositional logic and less or equal than
+-- test propositional verifier and less or equal than
 -- with initialized boolean and int variable declaration with expression value(with error)
 i : INTEGER = 5 * 6 - 9
 j : INTEGER = 1 + 9

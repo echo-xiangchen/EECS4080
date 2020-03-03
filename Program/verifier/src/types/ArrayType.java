@@ -1,5 +1,5 @@
 package types;
 
-public class ArrayType extends VarType {
+public class ArrayType extends ReferenceType {
 
 }

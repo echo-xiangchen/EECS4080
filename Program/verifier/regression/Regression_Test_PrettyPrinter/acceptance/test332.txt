@@ -1,0 +1,10 @@
+-- test program verification
+-- single assignment
+i:REAL
+increment_by_9
+require i > 3
+do
+	i := i + 9
+ensure
+	i > 13
+end

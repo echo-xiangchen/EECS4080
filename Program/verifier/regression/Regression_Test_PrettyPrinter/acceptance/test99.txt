@@ -1,4 +1,4 @@
--- test of propositional logic with initialized boolean variable declaration with constant value (no error)
+-- test of propositional verifier with initialized boolean variable declaration with constant value (no error)
 p : BOOLEAN = true
 q : BOOLEAN = false
 k : BOOLEAN = true

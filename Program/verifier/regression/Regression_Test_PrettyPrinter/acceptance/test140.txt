@@ -1,4 +1,4 @@
--- test propositional logic and equal
+-- test propositional verifier and equal
 -- with initialized boolean and int variable declaration with constant value(with error)
 i : INTEGER = 5
 j : INTEGER = 1

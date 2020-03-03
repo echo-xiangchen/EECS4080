@@ -3,9 +3,9 @@ i : INTEGER = 1 + 3
 j : INTEGER = i * 2
 m : INTEGER = 3 * 4 + 5
 p : BOOLEAN = i > 0
-q : BOOLEAN = j >= i
+q : BOOLEAN = m >= i
 verify p <=> (q <=> not p)
-r : BOOLEAN = j >= m
-s : BOOLEAN = j < 20
+r : BOOLEAN = i >= m
+s : BOOLEAN = m < 20
 verify p <=> (q <=> r) <=> not s
 verify q <=> (not p <=> r and s)

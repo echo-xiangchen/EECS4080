@@ -1,6 +1,6 @@
 i : INTEGER
 
-increment_by_9
+increment_by_9（i:REAL)
 require i > 3
 do
 	i := i + 9

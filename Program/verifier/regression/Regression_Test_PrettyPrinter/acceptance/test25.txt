@@ -8,5 +8,5 @@ r : BOOLEAN
 s : BOOLEAN
 verify not r
 verify not s
-s1 : BOOLEAN = j = i => s
+s1 : BOOLEAN = m = i => s
 verify not s1

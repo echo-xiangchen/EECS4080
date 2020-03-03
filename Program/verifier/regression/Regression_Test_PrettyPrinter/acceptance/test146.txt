@@ -1,4 +1,4 @@
--- test propositional logic and relational logic
+-- test propositional verifier and relational verifier
 -- with initialized boolean and int variable declaration with constant value(with error)
 i : INTEGER = 5
 j : INTEGER = 1

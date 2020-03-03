@@ -1,6 +1,6 @@
--- test relational logic with initialized int variable declaration with arithmetic value (no error)
+-- test relational verifier with initialized int variable declaration with arithmetic value (no error)
 i : INTEGER = 1 + 3
-j : INTEGER = i * 2
+j : INTEGER = 2
 verify i * j = j + 5
 verify i >= j + 48
 m : INTEGER = 3 * 4 + 5

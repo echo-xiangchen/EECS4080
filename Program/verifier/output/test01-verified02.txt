@@ -1,0 +1,6 @@
+(i > 0)
+Where: 
+    i : INTEGER
+
+Is not a tautology. Here is a counter example: 
+    i : 0

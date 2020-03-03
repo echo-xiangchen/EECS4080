@@ -1,4 +1,4 @@
--- test propositional logic with initialized boolean variable declaration with propositional value (with error)
+-- test propositional verifier with initialized boolean variable declaration with propositional value (with error)
 p : BOOLEAN = true
 q : BOOLEAN = not p or p
 verify q and not p => not q

@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 
 import com.microsoft.z3.*;
 import antlr.*;
-import logic.*;
-import logic.composite.*;
-import logic.visitor.*;
+import verifier.*;
+import verifier.composite.*;
+import verifier.visitor.*;
 
 public class TestLogicVer {
 	public static void main(String[] args) {
@@ -46,29 +46,29 @@ public class TestLogicVer {
 			        
 			        @SuppressWarnings("deprecation")
 					ANTLRInputStream input = new ANTLRInputStream(is);
-			        LogicLexer lexer = new LogicLexer(input);
+			        VerifierLexer lexer = new VerifierLexer(input);
 			        CommonTokenStream tokens = new CommonTokenStream(lexer);
-			        LogicParser parser = new LogicParser(tokens);
+			        VerifierParser parser = new VerifierParser(tokens);
 			        parser.setBuildParseTree(true);      // tell ANTLR to build a parse tree
 			        ParseTree tree = parser.stat(); // parse
 			        
 			        //System.out.println(tree.getText());
 			        
-			        AntlrToLogic AntlrToLogic = new AntlrToLogic();
+			        AntlrToVerifier AntlrToVerifier = new AntlrToVerifier();
 			        
 			        // list that stores the subtree separately
-			        List<Logic> logic = new ArrayList<Logic>();
+			        List<Verifier> verifier = new ArrayList<Verifier>();
 			        
 			        for (int i = 0; i < tree.getChildCount(); i++) {
-			        	logic.add(AntlrToLogic.visit(tree.getChild(i)));
+			        	verifier.add(AntlrToVerifier.visit(tree.getChild(i)));
 					}
 			       
 			        // create new TypeChecker
 			        TypeChecker checker = new TypeChecker();
 			        
 			        // Recursively accept TypeChecker
-			        for (int i = 0; i < logic.size(); i++) {
-			        	logic.get(i).accept(checker);
+			        for (int i = 0; i < verifier.size(); i++) {
+			        	verifier.get(i).accept(checker);
 					}
 			        
 			        
@@ -79,13 +79,13 @@ public class TestLogicVer {
  			        	PrettyPrinter printer = new PrettyPrinter();
  			        	
  			        	// check to see if there is any unused variable
- 			        	for (int i = 0; i < logic.size(); i++) {
-							logic.get(i).accept(varPrinter);
+ 			        	for (int i = 0; i < verifier.size(); i++) {
+ 			        		verifier.get(i).accept(varPrinter);
 						}
 						
  			        	// call the pretty printer
-						for (int i = 0; i < logic.size(); i++) {
-							logic.get(i).accept(printer);
+						for (int i = 0; i < verifier.size(); i++) {
+							verifier.get(i).accept(printer);
 						}
 						
 						// split the output
@@ -119,8 +119,7 @@ public class TestLogicVer {
 								outStream.close();
 								
 								// print the result to the console
-								System.out.println("Formula: " 
-										+ PrettyPrinter.infixFormula.get(i - 1) 
+								System.out.println(PrettyPrinter.infixFormula.get(i - 1) 
 										+ "\nOutput of this formula has been stored in " + path1 + "\n");
 								
 							}
@@ -196,29 +195,31 @@ public class TestLogicVer {
 			        
 			        @SuppressWarnings("deprecation")
 					ANTLRInputStream input = new ANTLRInputStream(is);
-			        LogicLexer lexer = new LogicLexer(input);
+			        VerifierLexer lexer = new VerifierLexer(input);
 			        CommonTokenStream tokens = new CommonTokenStream(lexer);
-			        LogicParser parser = new LogicParser(tokens);
+			        VerifierParser parser = new VerifierParser(tokens);
 			        parser.setBuildParseTree(true);      // tell ANTLR to build a parse tree
 			        ParseTree tree = parser.stat(); // parse
 			       
 			        
-			        AntlrToLogic AntlrToLogic = new AntlrToLogic(); 
+			        AntlrToVerifier AntlrToVerifier = new AntlrToVerifier(); 
 			        
 			        
 			        // list that stores the subtree separately
-			        List<Logic> logic = new ArrayList<Logic>();
+			        List<Verifier> verifier = new ArrayList<Verifier>();
 			        
 			        for (int i = 0; i < tree.getChildCount(); i++) {
-			        	logic.add(AntlrToLogic.visit(tree.getChild(i)));
+			        	verifier.add(AntlrToVerifier.visit(tree.getChild(i)));
 					}
+			        
+			        //System.out.println("AntlrToVerifier.varTypes: " + AntlrToVerifier.varTypes + "\n");
 			       
 			        // create new TypeChecker
 			        TypeChecker checker = new TypeChecker();
 			        
 			        // Recursively accept TypeChecker
-			        for (int i = 0; i < logic.size(); i++) {
-			        	logic.get(i).accept(checker);
+			        for (int i = 0; i < verifier.size(); i++) {
+			        	verifier.get(i).accept(checker);
 					}
 			        
 			        
@@ -228,8 +229,8 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
-			        //System.out.println("AntlrToLogic.varTypes: " + AntlrToLogic.varTypes + "\n");
+			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        
 			        
 			        
 			        
@@ -245,8 +246,8 @@ public class TestLogicVer {
 			        	VarPrinter varPrinter = new VarPrinter();
  			        	
  			        	// check to see if there is any unused variable
- 			        	for (int i = 0; i < logic.size(); i++) {
-							logic.get(i).accept(varPrinter);
+ 			        	for (int i = 0; i < verifier.size(); i++) {
+ 			        		verifier.get(i).accept(varPrinter);
 						}
  			        	
  			        	
@@ -264,8 +265,8 @@ public class TestLogicVer {
  			        	// call the pretty printer
  			        	PrettyPrinter printer = new PrettyPrinter();
  			        	
-						for (int i = 0; i < logic.size(); i++) {
-							logic.get(i).accept(printer);
+						for (int i = 0; i < verifier.size(); i++) {
+							verifier.get(i).accept(printer);
 						}
 						
 						
@@ -327,7 +328,7 @@ public class TestLogicVer {
 								
 								
 								if (result == Status.SATISFIABLE){  
-					        		writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+					        		writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
 					        		
 					        		// get the model
 					            	Model m = s.getModel();
@@ -399,8 +400,7 @@ public class TestLogicVer {
 									}
 					            } 
 					            else if(result == Status.UNSATISFIABLE) { 
-					            	writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1)
-					            				+ " is a tautology.\n";
+					            	writeToFile = PrettyPrinter.infixFormula.get(i - 1) + " is a tautology.\n";
 					            }
 					            else  {
 					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -447,7 +447,7 @@ public class TestLogicVer {
 								Status result = s.check();
 								
 								if (result == Status.SATISFIABLE){  
-									writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+									writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
 					        		
 					        		// get the model
 					            	Model m = s.getModel();
@@ -510,7 +510,7 @@ public class TestLogicVer {
 									}
 					            }  
 					            else if(result == Status.UNSATISFIABLE) {
-					            	writeToFile = "Formula: " + PrettyPrinter.infixFormula.get(i - 1)
+					            	writeToFile = PrettyPrinter.infixFormula.get(i - 1)
 		            				+ " is a tautology.\n";
 					            }
 					            else { 

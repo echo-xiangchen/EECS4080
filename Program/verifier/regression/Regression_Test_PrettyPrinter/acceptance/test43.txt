@@ -5,6 +5,6 @@ m : INTEGER = 3 * 4 + 5
 p : BOOLEAN = i > 0
 q : BOOLEAN = j >= i
 verify p or q or not p
-r : BOOLEAN = j >= m
-s : BOOLEAN = j < 20
+r : BOOLEAN = i >= m
+s : BOOLEAN = m < 20
 verify p or q or r or not s

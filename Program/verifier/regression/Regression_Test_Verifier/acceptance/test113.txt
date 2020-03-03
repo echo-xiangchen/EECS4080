@@ -1,4 +1,4 @@
--- test propositional logic and greater than  with uninitialized boolean and int variable declaration (no error)
+-- test propositional verifier and greater than  with uninitialized boolean and int variable declaration (no error)
 i : INTEGER
 j : INTEGER
 m : INTEGER
