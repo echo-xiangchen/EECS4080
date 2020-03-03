@@ -123,6 +123,6 @@ To do: Mar 3
 6. Support local variable.       
 7. Parameter cannot appear on the left hand side of the assignments, generate the error msg.           
 8. Support the old keyword.             
-    - Old keyword should only be used in a context where:
+    - Old keyword should only be used in a context where:                   
         (1) postcondition             
         (2) command                
