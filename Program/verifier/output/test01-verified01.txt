@@ -1,12 +1,18 @@
-increment_by_9require: (i > 3)
+swap
+require: true
 do
-i := (i + 9)
+tmp := x
+x := y
+y := tmp
 
 end
-ensure (i > 13)
+ensure (x > y)
 
 Where: 
-    i : INTEGER
+    x : INTEGER
+    y : INTEGER
+    tmp : INTEGER
 
 Is not a tautology. Here is a counter example: 
-    i : 4
+    x : 0
+    y : 0

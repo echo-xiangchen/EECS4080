@@ -414,6 +414,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSingleVarAssign(VerifierParser.SingleVarAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSingleVarAssign(VerifierParser.SingleVarAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolAssign(VerifierParser.BoolAssignContext ctx) { }
 	/**
 	 * {@inheritDoc}

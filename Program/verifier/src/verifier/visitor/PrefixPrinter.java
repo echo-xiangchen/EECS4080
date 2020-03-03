@@ -540,11 +540,22 @@ public class PrefixPrinter implements Visitor{
 				methodImpMap.get(m.name).get(i).accept(calculator);
 			}
 			
-			
+			//System.out.println(WpCalculator.substituteMap);
 			// do the substitution for postcondition
-			for (Entry<String, String> entry : WpCalculator.substituteMap.entrySet()) {
+			
+			// for assignments, tranverse the substitution map in reverse order
+			ListIterator<Map.Entry<String,String>> i = new ArrayList<Map.Entry<String,String>>
+				(WpCalculator.substituteMap.entrySet()).listIterator(WpCalculator.substituteMap.size());
+			
+			while(i.hasPrevious()) {
+				Map.Entry<String, String> entry= i.previous();
 				postPrinter.prefixOutput = postPrinter.prefixOutput.replaceAll(entry.getKey(), entry.getValue());
 			}
+			
+			
+//			for (Entry<String, String> entry : WpCalculator.substituteMap.entrySet()) {
+//				postPrinter.prefixOutput = postPrinter.prefixOutput.replaceAll(entry.getKey(), entry.getValue());
+//			}
 			
 			prefixOutput = prefixOutput.concat("(=> " 
 					+ prePrinter.prefixOutput + " " + postPrinter.prefixOutput + ")");	

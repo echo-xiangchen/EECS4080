@@ -243,6 +243,13 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarAssignment(VerifierParser.VarAssignmentContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code SingleVarAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingleVarAssign(VerifierParser.SingleVarAssignContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BoolAssign}
 	 * labeled alternative in {@link VerifierParser#assignment}.
 	 * @param ctx the parse tree

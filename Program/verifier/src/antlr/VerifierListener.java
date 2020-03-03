@@ -404,6 +404,18 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitVarAssignment(VerifierParser.VarAssignmentContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code SingleVarAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleVarAssign(VerifierParser.SingleVarAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SingleVarAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleVarAssign(VerifierParser.SingleVarAssignContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BoolAssign}
 	 * labeled alternative in {@link VerifierParser#assignment}.
 	 * @param ctx the parse tree

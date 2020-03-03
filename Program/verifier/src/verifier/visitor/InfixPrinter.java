@@ -352,7 +352,7 @@ public class InfixPrinter implements Visitor{
 		}
 		// if parameters are empty, simply add the method name
 		else {
-			infixOutput = infixOutput.concat(m.name);
+			infixOutput = infixOutput.concat(m.name + "\n");
 		}
 		
 		// if the return value is not null

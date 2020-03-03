@@ -1,5 +1,7 @@
-(declare-const i Real)
-(assert (not (=> (> i 3) (> (+ i 9) 13))))
+(declare-const x Int)
+(declare-const y Int)
+(declare-const tmp Int)
+(assert (not (=> true (> y x))))
 (check-sat)
 ;Uncomment the following line if the result of z3 online tool returns "sat"
 ;(get-model)

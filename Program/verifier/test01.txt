@@ -1,11 +1,13 @@
-
-increment_by_9(i:INTEGER)
-require i > 3
+tmp:INTEGER
+swap(x:INTEGER; y:INTEGER)
+require true
 do
-	i := i + 9
+	tmp := x;
+	x := y;
+	y := tmp;
+	
 ensure
-	i > 13
+	x > y
 end
 
-verify increment_by_9
-verify i > 0
+verify swap

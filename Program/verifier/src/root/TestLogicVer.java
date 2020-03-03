@@ -214,6 +214,13 @@ public class TestLogicVer {
 			        
 			        //System.out.println("AntlrToVerifier.varTypes: " + AntlrToVerifier.varTypes + "\n");
 			       
+			        
+			        
+			        
+			        
+			        
+			        
+			        
 			        // create new TypeChecker
 			        TypeChecker checker = new TypeChecker();
 			        
@@ -229,7 +236,7 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
 			        
 			        
 			        
@@ -400,7 +407,7 @@ public class TestLogicVer {
 									}
 					            } 
 					            else if(result == Status.UNSATISFIABLE) { 
-					            	writeToFile = PrettyPrinter.infixFormula.get(i - 1) + " is a tautology.\n";
+					            	writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nIs a tautology.\n";
 					            }
 					            else  {
 					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -511,7 +518,7 @@ public class TestLogicVer {
 					            }  
 					            else if(result == Status.UNSATISFIABLE) {
 					            	writeToFile = PrettyPrinter.infixFormula.get(i - 1)
-		            				+ " is a tautology.\n";
+		            				+ "\nIs a tautology.\n";
 					            }
 					            else { 
 					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";

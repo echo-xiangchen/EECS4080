@@ -285,6 +285,28 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 */
 	
 	@Override
+	public Verifier visitSingleVarAssign(SingleVarAssignContext ctx) {
+		if (varTypes.containsKey(ctx.ID(1).getText())) {
+			if (varTypes.get(ctx.ID(1).getText()).equals("Bool")) {
+				return new Assignments(ctx.ID(0).getText(), 
+						new BoolVar(ctx.ID(1).getText(), new Verification()));
+			}
+			else if (varTypes.get(ctx.ID(1).getText()).equals("Int")) {
+				return new Assignments(ctx.ID(0).getText(), 
+						new IntVar(ctx.ID(1).getText(), new Verification()));
+			}
+			else if (varTypes.get(ctx.ID(1).getText()).equals("Real")) {
+				return new Assignments(ctx.ID(0).getText(), 
+						new RealVar(ctx.ID(1).getText(), new Verification()));
+			}
+		}
+		
+		return new Assignments(ctx.ID(0).getText(), 
+				new BoolVar(ctx.ID(1).getText(), new Verification()));
+		
+	}
+	
+	@Override
 	public Verifier visitBoolAssign(BoolAssignContext ctx) {
 		return new Assignments(ctx.ID().getText(), visit(ctx.boolExpr()));
 	}

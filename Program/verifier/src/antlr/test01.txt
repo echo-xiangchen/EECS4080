@@ -1,9 +1,8 @@
-i : INTEGER
 
-increment_by_9（i:REAL)
+increment_by_9 (i:INTEGER)
 require i > 3
 do
-	i := i + 9
+	i := i + 9;
 ensure
 	i > 13
 end

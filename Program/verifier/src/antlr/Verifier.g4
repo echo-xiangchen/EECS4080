@@ -20,7 +20,7 @@ method
 	;
 
 mutator 
-	: ID ('(' (uninitialDecl)+ ')')?
+	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')?
 		REQUIRE boolExpr
 		DO 
 			(implementation)+
@@ -29,7 +29,7 @@ mutator
 	;
 
 accessor
-	: ID ('(' (uninitialDecl)+ ')')? uninitialDecl
+	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')? uninitialDecl
 		REQUIRE boolExpr
 		DO 
 			(implementation)+
@@ -104,8 +104,9 @@ implementation
 
 
 assignment
-	: ID ':=' boolExpr 		# BoolAssign
-	| ID ':=' arithmetic 	# ArithAssign
+	: ID ':=' ID ';'			# SingleVarAssign
+	| ID ':=' boolExpr ';'		# BoolAssign
+	| ID ':=' arithmetic ';'	# ArithAssign
 	;
 
 boolExpr 
