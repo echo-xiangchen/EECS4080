@@ -112,4 +112,17 @@ To do: Feb 20
 
 
 
-
+==============================================
+To do: Mar 3        
+1. Make "require" and "ensure" optional, when users do not specify requires and ensures, give users warning msg.      
+    In order to do verification,..       
+2. Fix the indentation of the output, fix the prettyprinter.               
+3. Change the output message.             
+4. Support tag for pre and postconditions.                 
+5. Support the change_at method.
+6. Support local variable.       
+7. Parameter cannot appear on the left hand side of the assignments, generate the error msg.           
+8. Support the old keyword.             
+    - Old keyword should only be used in a context where:
+        (1) postcondition             
+        (2) command                
