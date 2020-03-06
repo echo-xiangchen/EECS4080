@@ -19,8 +19,12 @@ public abstract class Var extends Logic {
 	// array variable index
 	public Verifier index;
 	
+	// anonymous variable declaration
+	public Var(mode mode) {
+		this.mode = mode;
+	}
 	
-	//used for uninitialized declaration and verification
+	// uninitialized declaration and verification
 	public Var(String name, mode mode) {
 		this.name = name;
 		this.mode = mode;
@@ -28,7 +32,7 @@ public abstract class Var extends Logic {
 		arrayValue = new ArrayList<Verifier>();
 	}
 	
-	// used for normal variable initialized declaration
+	// initialized normal variable declaration
 	public Var(String name, Verifier verifier, mode mode) {
 		this.name = name;
 		this.value = verifier;
@@ -37,7 +41,7 @@ public abstract class Var extends Logic {
 		arrayValue = new ArrayList<Verifier>();
 	}
 	
-	// used for array variable verification with index value
+	// array variable verification with index value
 	public Var(String name, mode mode, Verifier index) {
 		this.name = name;
 		this.index = index;
@@ -46,14 +50,14 @@ public abstract class Var extends Logic {
 		arrayValue = new ArrayList<Verifier>();
 	}
 	
-	// used for quantification declaration
+	// quantification declaration
 	public Var(List<String> list, mode mode) {
 		varDeclList = new ArrayList<Verifier>();
 		arrayValue = new ArrayList<Verifier>();
 	}
 	
-	// used for initialized array declaration
-	// List<Logic> contains all the elements of its values
+	// initialized array declaration
+	// List<Verifier> contains all the elements of its values
 	public Var(String name, List<Verifier> arrayValue, mode mode) {
 		this.name = name;
 		this.arrayValue = arrayValue;

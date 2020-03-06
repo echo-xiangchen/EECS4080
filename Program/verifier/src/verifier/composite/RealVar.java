@@ -7,22 +7,23 @@ import verifier.visitor.Visitor;
 
 public class RealVar extends NumVar {
 	
-	// mode 0: uninitialized declaration
-	// mode 1: verification
-	// mode 2: initialized declaration
-	// mode 3: quantification declaration
 	
-	// mode 0 and 1 and 3
+	// uninitialized declaration and verification
 	public RealVar(String name, mode mode) {
 		super(name, mode);
 	}
 	
-	// mode 2
+	// initialized declaration
 	public RealVar(String name, Verifier verifier, mode mode) {
 		super(name, verifier, mode);
 	}
 	
-	// mode 3 
+	// anonymous variable declaration
+	public RealVar(mode mode) {
+		super(mode);
+	}
+	
+	// quantification declaration
 	public RealVar(List<String> list, mode mode) {
 		super(list, mode);
 		for (int i = 0; i < list.size(); i++) {

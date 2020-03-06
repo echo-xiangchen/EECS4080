@@ -76,6 +76,13 @@ public interface Visitor {
 	void visitMethods(Methods methods);
 	
 	void visitAssignment(Assignments a);
+	
+	
+	
+
+	void visitPreconditions(Preconditions p);
+
+	void visitPostconditions(Postconditions p);
 
 	
 	

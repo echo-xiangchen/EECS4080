@@ -22,6 +22,11 @@ public class RealArrayVar extends ArrayVar{
 		super(name, arrayValue, mode);
 	}
 	
+	// anonymous variable declaration
+	public RealArrayVar(mode mode) {
+		super(mode);
+	}
+	
 	public void accept(Visitor v) {
 		v.visitRealArrayVar(this);
 	}

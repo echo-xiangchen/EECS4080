@@ -882,39 +882,10 @@ public class TypeChecker implements Visitor{
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-
-	@Override
-	public void visitAssignment(Assignments a) {
-		// typecheck its assigned value first
-		TypeChecker checker = new TypeChecker();
-		a.assignValue.accept(checker);
-		errormsg.addAll(checker.errormsg);
-		
-		// call infixprinter to check assigned value's type
-		InfixPrinter printer = new InfixPrinter();
-		a.assignValue.accept(printer);
-		
-		
-		// only when 
-		if (errormsg.isEmpty()) {
-			if (!varMap.containsKey(a.name)) {
-				errormsg.add("Error: variable " + a.name + " has not been declared.");
-			}
-			
-			else if (!(varMap.get(a.name).a.getClass().equals(varMap.get(printer.infixOutput).a.getClass()))) {
-				errormsg.add("Error: variable " + a.name + " does not have the same type as " 
-						+ printer.infixOutput + ". Cannot perform this assignment.");
-			}
-		}
-		
-	}
+	/* *****************************************************************************************
+	 * Methods
+	 * *****************************************************************************************
+	 */
 
 
 	@Override
@@ -954,7 +925,16 @@ public class TypeChecker implements Visitor{
 			errormsg.addAll(postChecker.errormsg);
 			
 			if (errormsg.isEmpty()) {
-				varMap.put(m.name, new Pair<VarType, Verifier>(new MethodType(), null));
+				// check if the method is mutator or accesstor
+				// return value is not null means this method is accessor
+				// otherwise this method is mutator
+				if (m.returnValue != null) {
+					varMap.put(m.name, new Pair<VarType, Verifier>(new AccessorType(), null));
+				}
+				else {
+					varMap.put(m.name, new Pair<VarType, Verifier>(new MutatorType(), null));
+				}
+				
 			}
 		}
 		else if (m.mode instanceof modes.Verification) {
@@ -971,5 +951,46 @@ public class TypeChecker implements Visitor{
 				errormsg.add("Error: " + m.name + " is not declared as a method.");
 			}
 		}
+	}
+	
+	// assignment
+	@Override
+	public void visitAssignment(Assignments a) {
+		// typecheck its assigned value first
+		TypeChecker checker = new TypeChecker();
+		a.assignValue.accept(checker);
+		errormsg.addAll(checker.errormsg);
+		
+		// call infixprinter to check assigned value's type
+		InfixPrinter printer = new InfixPrinter();
+		a.assignValue.accept(printer);
+		
+		
+		// only when 
+		if (errormsg.isEmpty()) {
+			if (!varMap.containsKey(a.name)) {
+				errormsg.add("Error: variable " + a.name + " has not been declared.");
+			}
+			
+			else if (!(varMap.get(a.name).a.getClass().equals(varMap.get(printer.infixOutput).a.getClass()))) {
+				errormsg.add("Error: variable " + a.name + " does not have the same type as " 
+						+ printer.infixOutput + ". Cannot perform this assignment.");
+			}
+		}
+	}
+
+
+	// preconditions
+	@Override
+	public void visitPreconditions(Preconditions p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	// postconditions
+	@Override
+	public void visitPostconditions(Postconditions p) {
+		// TODO Auto-generated method stub
+		
 	}
 }

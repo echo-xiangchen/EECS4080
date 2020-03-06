@@ -7,23 +7,24 @@ import verifier.visitor.*;
 
 public class IntVar extends NumVar {
 
-	// mode 0: uninitialized declaration
-	// mode 1: verification
-	// mode 2: initialized declaration
-	// mode 3: quantification declaration
 	
-	// mode 0 and 1
+	// uninitialized declaration and verification
 	public IntVar(String name, mode mode) {
 		super(name, mode);
 	}
 	
-	// mode 2
+	// initialized declaration
 	public IntVar(String name, Verifier verifier, mode mode) {
 		super(name, verifier, mode);
 			
 	}
 	
-	// mode 3 
+	// anonymous variable declaration
+	public IntVar(mode mode) {
+		super(mode);
+	}
+	
+	// quantification declaration
 	public IntVar(List<String> list, mode mode) {
 		super(list, mode);
 		for (int i = 0; i < list.size(); i++) {

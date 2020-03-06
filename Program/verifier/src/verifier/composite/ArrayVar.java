@@ -21,4 +21,9 @@ public class ArrayVar extends Var {
 		super(name, arrayValue, mode);
 		this.arrayValue = arrayValue;
 	}
+	
+	// anonymous variable declaration
+	public ArrayVar(mode mode) {
+		super(mode);
+	}
 }

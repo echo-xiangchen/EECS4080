@@ -22,6 +22,11 @@ public class BoolArrayVar extends ArrayVar {
 		super(name, arrayValue, mode);
 	}
 	
+	// anonymous variable declaration
+	public BoolArrayVar(mode mode) {
+		super(mode);
+	}
+	
 	public void accept(Visitor v) {
 		v.visitBoolArrayVar(this);
 	}

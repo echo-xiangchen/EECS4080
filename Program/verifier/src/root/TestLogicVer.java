@@ -236,7 +236,7 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
 			        
 			        
 			        

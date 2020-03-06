@@ -5,7 +5,7 @@ import java.util.List;
 import modes.*;
 import verifier.visitor.*;
 
-public class Methods extends ProgramVerify {
+public class Methods extends Verifier {
 	
 	// method mode
 	public mode mode;

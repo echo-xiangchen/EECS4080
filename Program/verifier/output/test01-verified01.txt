@@ -1,9 +1,10 @@
 swap
 require: true
 do
-tmp := x
-x := y
-y := tmp
+
+tmp := x;
+x := y;
+y := tmp;
 
 end
 ensure (x > y)

@@ -20,28 +20,50 @@ method
 	;
 
 mutator 
-	: ID ('(' (uninitialDecl)+ ')')?
-		REQUIRE boolExpr
+	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')?
+		precondition
 		DO 
 			(implementation)+
-		ENSURE boolExpr 
+		postcondition 
 		END 										# Mutators
 	;
 
 accessor
-	: ID ('(' (uninitialDecl)+ ')')? uninitialDecl
-		REQUIRE boolExpr
+	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')? uninitialDecl
+		precondition
 		DO 
 			(implementation)+
-		ENSURE boolExpr 
+		postcondition 
 		END 										# Accessors
 	;
 
+implementation
+	: assignment		# VarAssignment
+	;
 
+
+assignment
+	: ID ':=' ID ';'			# SingleVarAssign
+	| ID ':=' boolExpr ';'		# BoolAssign
+	| ID ':=' arithmetic ';'	# ArithAssign
+	;
+
+
+precondition
+	: REQUIRE (ID)? ':' boolExpr 		# preContract
+	;
+
+postcondition
+	: ENSURE (ID)? ':' boolExpr  		# postContract
+	;
+
+local
+	:
 
 declaration
 	: uninitialDecl  			# UninitialVarDecl
 	| initialDecl 				# InitialVarDecl
+	| unnamedDecl 				# UnnamedVarDecl
 	;
 	
 
@@ -51,7 +73,6 @@ uninitialDecl
 	// array variable
 	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'											# ArrayDecl
 	// pair variable
-	| ID ':' PAIR '[' left=(BOOL|INT|REAL) ';' right=(BOOL|INT|REAL) ']'				# UnnamedPairDecl
 	| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPairDecl
 	;
 
@@ -98,15 +119,10 @@ initialDecl
 			'=' '[' REALNUM ';' right=(INTNUM|REALNUM) ']'								# NamedRealArithPairValueDecl
 	;
 
-implementation
-	: assignment		# VarAssignment
-	;
-
-
-assignment
-	: ID ':=' boolExpr 		# BoolAssign
-	| ID ':=' arithmetic 	# ArithAssign
-	;
+unnamedDecl
+	: type=(BOOL|INT|REAL) 													# UnnamedSingleVarDecl
+	| ARRAY '[' type=(BOOL|INT|REAL) ']' 									# UnnamedArrayDecl
+	| ID ':' PAIR '[' left=(BOOL|INT|REAL) ';' right=(BOOL|INT|REAL) ']'	# UnnamedPairDecl
 
 boolExpr 
 	: NOT boolExpr									# Not
@@ -155,10 +171,13 @@ PAIR : 'PAIR';
 VERIFY : 'verify';
 
 
+LOCAL : 'local';
 REQUIRE : 'require';
 ENSURE : 'ensure';
 DO : 'do';
 END : 'end';
+OLD : 'old';
+RESULT : 'Result';
 
 
 FORALL : 'forall';

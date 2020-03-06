@@ -1,13 +1,17 @@
 tmp:INTEGER
+a:BOOLEAN
+b:INTEGER
 swap(x:INTEGER; y:INTEGER)
 require true
 do
 	tmp := x;
-	x := y;
+	x := y; -- warning: cannot assign directly to parameters 
 	y := tmp;
 	
 ensure
 	x > y
+	-- x = old x
+	-- y = old y
 end
 
 verify swap

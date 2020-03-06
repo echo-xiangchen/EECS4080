@@ -333,7 +333,7 @@ public class InfixPrinter implements Visitor{
 	public void visitAssignment(Assignments a) {
 		InfixPrinter assignedPrinter = new InfixPrinter();
 		a.assignValue.accept(assignedPrinter);
-		infixOutput = infixOutput.concat(a.name + " := " + assignedPrinter.infixOutput);
+		infixOutput = infixOutput.concat(a.name + " := " + assignedPrinter.infixOutput + ";");
 	}
 
 	@Override
@@ -377,7 +377,7 @@ public class InfixPrinter implements Visitor{
 			PrefixPrinter.methodImpMap.get(m.name).get(i).accept(impPrinter);
 			impStr = impStr + impPrinter.infixOutput + "\n";
 		}
-		infixOutput = infixOutput.concat("do\n" + impStr + "\nend\n");
+		infixOutput = infixOutput.concat("do\n\n" + impStr + "\nend\n");
 		
 		// print the postcondition
 		// postcondition in methodMap starts at index 1

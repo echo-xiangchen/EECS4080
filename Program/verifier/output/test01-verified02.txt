@@ -1,6 +1,6 @@
-(i > 0)
+(tmp > 0)
 Where: 
-    i : INTEGER
+    tmp : INTEGER
 
 Is not a tautology. Here is a counter example: 
-    i : 0
+    tmp : 0

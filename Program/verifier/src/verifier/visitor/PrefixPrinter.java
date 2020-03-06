@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.misc.Pair;
 
 import verifier.composite.*;
 import java.util.*;
-import java.util.Map.*;
 
 public class PrefixPrinter implements Visitor{
 	

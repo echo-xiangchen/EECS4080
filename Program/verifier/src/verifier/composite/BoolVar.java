@@ -7,22 +7,24 @@ import verifier.visitor.*;
 
 public class BoolVar extends Var {
 
-	// mode 0: uninitialized declaration
-	// mode 1: verification
-	// mode 2: initialized declaration
-	// mode 3: quantification declaration
 	
-	// mode 0 and 1
+	
+	// uninitialized declaration and verification
 	public BoolVar(String name, mode mode) {
 		super(name, mode);
 	}
 	
-	// mode 2
+	// initialized declaration
 	public BoolVar(String name, Verifier verifier, mode mode) {
 		super(name, verifier, mode);
 	}
 	
-	// mode 3 
+	// anonymous variable declaration
+	public BoolVar(mode mode) {
+		super(mode);
+	}
+	
+	// quantification declaration
 	public BoolVar(List<String> list, mode mode) {
 		super(list, mode);
 		for (int i = 0; i < list.size(); i++) {

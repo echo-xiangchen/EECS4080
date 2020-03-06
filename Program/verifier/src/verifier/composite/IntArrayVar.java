@@ -21,6 +21,11 @@ public class IntArrayVar extends ArrayVar {
 	public IntArrayVar(String name, List<Verifier> arrayValue, mode mode) {
 		super(name, arrayValue, mode);
 	}
+	
+	// anonymous variable declaration
+	public IntArrayVar(mode mode) {
+		super(mode);
+	}
 		
 		
 	public void accept(Visitor v) {
