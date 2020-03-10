@@ -125,4 +125,10 @@ To do: Mar 3
 8. Support the old keyword.             
     - Old keyword should only be used in a context where:                   
         (1) postcondition             
-        (2) command                
+        (2) command         
+        
+
+==============================================              
+To do: Mar 10            
+1. Modify the declaration of arrays to force the user specify the length of the array.                   
+2. Add the two type of errors about array.
