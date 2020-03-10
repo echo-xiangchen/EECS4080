@@ -1,6 +1,5 @@
 package verifier.visitor;
 
-
 import org.antlr.v4.runtime.misc.Pair;
 import java.util.*;
 import types.*;
@@ -10,6 +9,11 @@ public class TypeChecker implements Visitor{
 	// hashmap for type checking
 	public static Map<String, Pair<VarType, Verifier>> varMap = new LinkedHashMap<String, Pair<VarType, Verifier>>();
 	
+	// indicate whether is inside a method
+	public static boolean isMethod;
+	
+	// indicate whether is inside postcondition
+	public static boolean isPostcondition;
 	
 	// error message
 	public List<String> errormsg;
@@ -846,9 +850,23 @@ public class TypeChecker implements Visitor{
 	// int number constant
 	@Override
 	public void visitIntConst(IntConst c) {
-		if (!varMap.containsKey(c.name)) {
-			varMap.put(c.name, new Pair<VarType, Verifier>(new IntType(), null));
+		if (c.isArrayCount) {
+			if (!varMap.containsKey(c.name)) {
+				errormsg.add("Error: Array " + c.name + " has not been declared.");
+			}
+			else {
+				InfixPrinter arrayCountPrinter = new InfixPrinter();
+				c.accept(arrayCountPrinter);
+				
+				varMap.put(arrayCountPrinter.infixOutput, new Pair<VarType, Verifier>(new IntType(), null));
+			}
 		}
+		else {
+			if (!varMap.containsKey(c.name)) {
+				varMap.put(c.name, new Pair<VarType, Verifier>(new IntType(), null));
+			}
+		}
+		
 	}
 
 	// real number constant
@@ -857,26 +875,6 @@ public class TypeChecker implements Visitor{
 		if (!varMap.containsKey(c.name)) {
 			varMap.put(c.name, new Pair<VarType, Verifier>(new RealType(), null));
 		}
-	}
-
-
-	
-
-
-	
-
-
-	@Override
-	public void visitNIL(NIL n) {
-		if (n.mode instanceof modes.Undeclared) {
-			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
-			errormsg.add("Error: variable " + n.name + " has not been declared.");
-		}
-		else if (n.mode instanceof modes.Declared) {
-			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
-			errormsg.add("Error: variable " + n.name + " has boolean type.");
-		}
-		
 	}
 
 	
@@ -890,6 +888,9 @@ public class TypeChecker implements Visitor{
 
 	@Override
 	public void visitMethods(Methods m) {
+		// set isMethod to true for old keyword type check
+		isMethod = true;
+		
 		// for declaration mode
 		if (m.mode instanceof modes.Declaration) {
 			// type check the parameters first
@@ -907,10 +908,26 @@ public class TypeChecker implements Visitor{
 				m.returnValue.accept(returnChecker);
 				errormsg.addAll(returnChecker.errormsg);
 			}
+			
+			
 			// type check the precondition
-			TypeChecker preChecker = new TypeChecker();
-			m.precondition.accept(preChecker);
-			errormsg.addAll(preChecker.errormsg);
+			if (m.precondition != null) {
+				TypeChecker preChecker = new TypeChecker();
+				m.precondition.accept(preChecker);
+				errormsg.addAll(preChecker.errormsg);
+			}
+			// if precondition is empty
+			else {
+				errormsg.add("Error: To verify any program, you need to specify the preconditions.");
+			}
+			
+			
+			//type check the local variables
+			if (m.locals != null) {
+				TypeChecker localChecker = new TypeChecker();
+				m.locals.accept(localChecker);
+				errormsg.addAll(localChecker.errormsg);
+			}
 			
 			// type check the implementations
 			for (int i = 0; i < m.implementations.size(); i++) {
@@ -920,9 +937,16 @@ public class TypeChecker implements Visitor{
 			}
 			
 			// type check the postcondition
-			TypeChecker postChecker = new TypeChecker();
-			m.postcondition.accept(postChecker);
-			errormsg.addAll(postChecker.errormsg);
+			if (m.postcondition != null) {
+				TypeChecker postChecker = new TypeChecker();
+				m.postcondition.accept(postChecker);
+				errormsg.addAll(postChecker.errormsg);
+			}
+			// if postcondition is empty
+			else {
+				errormsg.add("Error: To verify any program, you need to specify the postconditions.\"");
+			}
+			
 			
 			if (errormsg.isEmpty()) {
 				// check if the method is mutator or accesstor
@@ -936,6 +960,9 @@ public class TypeChecker implements Visitor{
 				}
 				
 			}
+			
+			// reset isMethod
+			isMethod = false;
 		}
 		else if (m.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(m.name)) {
@@ -957,24 +984,63 @@ public class TypeChecker implements Visitor{
 	@Override
 	public void visitAssignment(Assignments a) {
 		// typecheck its assigned value first
-		TypeChecker checker = new TypeChecker();
-		a.assignValue.accept(checker);
-		errormsg.addAll(checker.errormsg);
+		TypeChecker assignValuechecker = new TypeChecker();
+		a.assignValue.accept(assignValuechecker);
+		errormsg.addAll(assignValuechecker.errormsg);
 		
 		// call infixprinter to check assigned value's type
-		InfixPrinter printer = new InfixPrinter();
-		a.assignValue.accept(printer);
+		InfixPrinter assignValueprinter = new InfixPrinter();
+		a.assignValue.accept(assignValueprinter);
 		
-		
-		// only when 
-		if (errormsg.isEmpty()) {
-			if (!varMap.containsKey(a.name)) {
-				errormsg.add("Error: variable " + a.name + " has not been declared.");
-			}
+		// typecheck the index if it's array assignment
+		if (a.index != null) {
+			TypeChecker indexChecker = new TypeChecker();
+			a.index.accept(indexChecker);
+			errormsg.addAll(indexChecker.errormsg);
 			
-			else if (!(varMap.get(a.name).a.getClass().equals(varMap.get(printer.infixOutput).a.getClass()))) {
-				errormsg.add("Error: variable " + a.name + " does not have the same type as " 
-						+ printer.infixOutput + ". Cannot perform this assignment.");
+			// check to see if the index is integer type
+			InfixPrinter indexPrinter = new InfixPrinter();
+			a.index.accept(indexPrinter);
+			if (!(varMap.get(indexPrinter.infixOutput).a instanceof IntType)) {
+				errormsg.add("Error: " + indexPrinter.infixOutput 
+						+ " is not integer type, cannot use it as array index value.");
+			}
+		}
+		
+		// only when there are no errors on both hand side
+		if (errormsg.isEmpty()) {
+			// check to see if it's normal variable assignment
+			if (a.index == null) {
+				if (!varMap.containsKey(a.name)) {
+					errormsg.add("Error: variable " + a.name + " has not been declared.");
+				}
+				else if (varMap.get(a.name).a instanceof RealType && varMap.get(assignValueprinter.infixOutput).a instanceof IntType) {
+					
+				}
+				else if (!(varMap.get(a.name).a.getClass().equals(varMap.get(assignValueprinter.infixOutput).a.getClass()))) {
+					errormsg.add("Error: variable " + a.name + " does not have the same type as " 
+							+ assignValueprinter.infixOutput + ". Cannot perform this assignment.");
+				}
+			}
+			// if it's array element assignment
+			else {
+				InfixPrinter indexPrinter = new InfixPrinter();
+				a.index.accept(indexPrinter);
+				
+				if (!varMap.containsKey(a.name)) {
+					errormsg.add("Error: variable " + a.name + " has not been declared.");
+				}
+				// no error if assign integer to real
+				else if (varMap.get(a.name).a instanceof RealArray && varMap.get(assignValueprinter.infixOutput).a instanceof IntType) {
+					
+				}
+				else if ((varMap.get(a.name).a instanceof BoolArray && !(varMap.get(assignValueprinter.infixOutput).a instanceof BoolType))
+						|| (varMap.get(a.name).a instanceof IntArray && !(varMap.get(assignValueprinter.infixOutput).a instanceof IntType))
+						|| (varMap.get(a.name).a instanceof RealArray && !(varMap.get(assignValueprinter.infixOutput).a instanceof RealType))) {
+					errormsg.add("Error: variable " + a.name + "[" + indexPrinter.infixOutput + "]" 
+							+ " does not have the same type as " 
+							+ assignValueprinter.infixOutput + ". Cannot perform this assignment.");		
+				}
 			}
 		}
 	}
@@ -983,14 +1049,168 @@ public class TypeChecker implements Visitor{
 	// preconditions
 	@Override
 	public void visitPreconditions(Preconditions p) {
-		// TODO Auto-generated method stub
-		
+		// loop the list to type check each contract
+		for (int i = 0; i < p.contracts.size(); i++) {
+			TypeChecker checker = new TypeChecker();
+			p.contracts.get(i).accept(checker);
+			errormsg.addAll(checker.errormsg);
+		}
 	}
 
 	// postconditions
 	@Override
 	public void visitPostconditions(Postconditions p) {
-		// TODO Auto-generated method stub
+		// set isPostcondition to true for old keyword type check
+		isPostcondition = true;
+		// loop the list to type check each contract
+		for (int i = 0; i < p.contracts.size(); i++) {
+			TypeChecker checker = new TypeChecker();
+			p.contracts.get(i).accept(checker);
+			errormsg.addAll(checker.errormsg);
+		}
+		// reset isPostcondition
+		isPostcondition = false;
+	}
+
+	
+	// each contract
+	@Override
+	public void visitContractExpr(ContractExpr c) {
+		// type check the expr
+		// Pair<String, Verifier> contract
+		TypeChecker checker = new TypeChecker();
+		c.contract.b.accept(checker);
+		errormsg.addAll(checker.errormsg);
+		
+		// add the expr to the map if there is no error
+		if (errormsg.isEmpty()) {
+			if (c.contract.a != null) {
+				if (varMap.containsKey(c.contract.a)) {
+					errormsg.add("Error: The tag name " + c.contract.a + " has already been used."
+							+ " Please change another name.");
+				}
+				else {
+					varMap.put(c.contract.a, new Pair<VarType, Verifier>
+						(new TagType(), c.contract.b));
+				}
+			}
+		}
+	}
+
+	// local variables
+	@Override
+	public void visitLocals(Locals l) {
+		// List<Verifier> localVars;
+		for (int i = 0; i < l.localVars.size(); i++) {
+			TypeChecker checker = new TypeChecker();
+			l.localVars.get(i).accept(checker);
+			errormsg.addAll(checker.errormsg);
+		}
+	}
+	
+	
+	@Override
+	public void visitOlds(Olds o) {
+		// if use old keyword outside a method
+		if (!isMethod) {
+			errormsg.add("Error: You can only use the old keyword inside a method.");
+		}
+		// if use old keyword outside the postcondition
+		else if (!isPostcondition) {
+			errormsg.add("Error: You can only use the old keyword in the postcondition.");
+		}
+		// if the map does not contain the variable
+		else if (!varMap.containsKey(o.name)) {
+			varMap.put(o.name, new Pair<VarType, Verifier>(new UnknowType(), null));
+			errormsg.add("Error: variable " + o.name + " has not been declared.");
+		}
+		else {
+			if (o.type instanceof BoolType) {
+				if (!(varMap.get(o.name).a instanceof BoolType)) {
+					errormsg.add("Error: variable " + o.name + " is not boolean type.");
+				}
+				else {
+					InfixPrinter printer = new InfixPrinter();
+					o.accept(printer);
+					varMap.put(printer.infixOutput, new Pair<VarType, Verifier>(new BoolType(), null));
+				}
+			}
+			else if (o.type instanceof IntType) {
+				if (!(varMap.get(o.name).a instanceof IntType)) {
+					errormsg.add("Error: variable " + o.name + " is not integer type.");
+				}
+				else {
+					InfixPrinter printer = new InfixPrinter();
+					o.accept(printer);
+					varMap.put(printer.infixOutput, new Pair<VarType, Verifier>(new IntType(), null));
+				}
+			}
+			else if (o.type instanceof RealType) {
+				if (!(varMap.get(o.name).a instanceof RealType)) {
+					errormsg.add("Error: variable " + o.name + " is not real type.");
+				}
+				else {
+					InfixPrinter printer = new InfixPrinter();
+					o.accept(printer);
+					varMap.put(printer.infixOutput, new Pair<VarType, Verifier>(new RealType(), null));
+				}
+			}
+			else if (o.type instanceof BoolArray) {
+				if (!(varMap.get(o.name).a instanceof BoolArray)) {
+					errormsg.add("Error: variable " + o.name + " is not boolean array type.");
+				}
+				else {
+					InfixPrinter printer = new InfixPrinter();
+					o.accept(printer);
+					varMap.put(printer.infixOutput, new Pair<VarType, Verifier>(new BoolArray(), null));
+				}
+			}
+			else if (o.type instanceof IntArray) {
+				if (!(varMap.get(o.name).a instanceof IntArray)) {
+					errormsg.add("Error: variable " + o.name + " is not integer array type.");
+				}
+				else {
+					InfixPrinter printer = new InfixPrinter();
+					o.accept(printer);
+					varMap.put(printer.infixOutput, new Pair<VarType, Verifier>(new IntArray(), null));
+				}
+			}
+			else if (o.type instanceof RealArray) {
+				if (!(varMap.get(o.name).a instanceof RealArray)) {
+					errormsg.add("Error: variable " + o.name + " is not real array type.");
+				}
+				else {
+					InfixPrinter printer = new InfixPrinter();
+					o.accept(printer);
+					varMap.put(printer.infixOutput, new Pair<VarType, Verifier>(new RealArray(), null));
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void visitNIL(NIL n) {
+		if (n.mode instanceof modes.Undeclared) {
+			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
+			errormsg.add("Error: variable " + n.name + " has not been declared.");
+		}
+		else if (n.mode instanceof modes.Declared) {
+			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
+			errormsg.add("Error: variable " + n.name + " has boolean type.");
+		}
 		
 	}
 }

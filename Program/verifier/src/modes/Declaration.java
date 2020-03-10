@@ -1,5 +1,5 @@
 package modes;
 
-public abstract class Declaration extends mode {
+public class Declaration extends mode {
 
 }

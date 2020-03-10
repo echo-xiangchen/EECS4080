@@ -1,17 +1,21 @@
 package verifier.composite;
 
+import java.util.*;
+import org.antlr.v4.runtime.misc.Pair;
+
 public class Contracts extends ProgramVerify{
 	
-	Verifier expr;
+	// single contract
+	public Pair<String, Verifier> contract;
 	
-	// contracts with tag
-	Contracts(String name, Verifier expr){
-		this.name = name;
-		this.expr = expr;
+	public Contracts(Pair<String, Verifier> contract) {
+		this.contract = contract;
 	}
 	
-	// contracts without tag
-	Contracts(Verifier expr){
-		this.expr = expr;
+	// list of contract
+	public List<Verifier> contracts;
+	
+	public Contracts(List<Verifier> contracts) {
+		this.contracts = contracts;
 	}
 }

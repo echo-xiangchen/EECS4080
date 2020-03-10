@@ -6,4 +6,9 @@ public class NumConst extends Const{
 	public NumConst(String name) {
 		super(name);
 	}
+	
+	// used for array count
+	public NumConst(String name, boolean value) {
+		super(name, value);
+	}
 }

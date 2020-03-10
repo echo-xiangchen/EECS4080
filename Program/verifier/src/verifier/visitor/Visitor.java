@@ -83,6 +83,19 @@ public interface Visitor {
 	void visitPreconditions(Preconditions p);
 
 	void visitPostconditions(Postconditions p);
+	
+	void visitContractExpr(ContractExpr c);
+	
+	
+	
+	void visitLocals(Locals l);
+
+	
+	
+	
+	void visitOlds(Olds o);
+
+	
 
 	
 	

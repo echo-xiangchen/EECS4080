@@ -1,19 +1,27 @@
-swap
-require: true
+change_at(a : [REAL];i : INTEGER;nv : REAL)
+require
+   valid_index : ((1 <= i) and (i <= a.count))
+local
+   x : INTEGER
+   y : BOOLEAN
 do
-
-tmp := x;
-x := y;
-y := tmp;
-
+  a[i] := nv;
+ensure
+   changed : (a[i] = nv)
+   unchanged : forall j;((((1 <= j) and (j <= a.count)) and (not (i = j))) => (old a[j] = a[j]))
 end
-ensure (x > y)
 
 Where: 
-    x : INTEGER
-    y : INTEGER
-    tmp : INTEGER
+Precondition(P) : 
+   valid_index : ((1 <= i) and (i <= a.count))
+Implementation(S) : 
+  a[i] := nv;
+Postcondition(Q) : 
+   changed : (a[i] = nv)
+   unchanged : forall j;((((1 <= j) and (j <= a.count)) and (not (i = j))) => (old a[j] = a[j]))
+wp(S, Q) : 
+      changed : (a[i] = nv)
+   unchanged : forall j;((((1 <= j) and (j <= a.count)) and (not (i = j))) => (old a[j] = a[j]))
+Proof Obligation: P => wp(S, Q)
 
-Is not a tautology. Here is a counter example: 
-    x : 0
-    y : 0
+Discharged.

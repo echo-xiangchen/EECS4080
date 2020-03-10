@@ -90,6 +90,17 @@ public class TestLogicVer {
 						
 						// split the output
 						String[] splitedPrinterOutput = printer.z3output.split("split\n");
+						
+						
+						// remove the first line
+						for (int a = 1; a <= splitedPrinterOutput.length; a++) {
+							String [] strArr = splitedPrinterOutput[a - 1].split("\\n");
+							String updatedStr = "";
+							for (int i = 1; i < strArr.length; i++) {
+								updatedStr = updatedStr + strArr[i] + "\n";
+							}
+							splitedPrinterOutput[a - 1] = updatedStr;
+						}
 					
 						// if there is an input file
 						if (inputFile != null) {
@@ -236,7 +247,7 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
 			        
 			        
 			        
@@ -261,7 +272,9 @@ public class TestLogicVer {
  			        	
  			        	
  			       //System.out.println("varPrinter.allVarMap: " + varPrinter.allVarMap + "\n");
- 			        	
+ 			       //System.out.println("varPrinter.arrayCount: " + varPrinter.arrayCount + "\n");
+ 			       //System.out.println("varPrinter.unusedVarMap: " + varPrinter.unusedVarMap + "\n");
+ 			      
  			        	
  			        	
  			        	
@@ -280,7 +293,7 @@ public class TestLogicVer {
 						
 						
 						//System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap + "\n");
-
+						
 						
 						
 						
@@ -288,6 +301,29 @@ public class TestLogicVer {
 						// split the output
 						String[] splitedOutput = printer.z3output.split("split\n");
 						//System.out.println(splitedOutput[1]);
+						
+						// indicates if it's method verification
+						boolean isMethod = false;
+						String methondName = "";
+						
+						// remove the first line
+						for (int a = 1; a <= splitedOutput.length; a++) {
+							String [] strArr = splitedOutput[a - 1].split("\\n");
+							isMethod = !strArr[0].equals(";formula\n");
+							if (isMethod) {
+								methondName = strArr[0].replaceAll(";", "");
+							}
+							
+							
+							String updatedStr = "";
+							for (int i = 1; i < strArr.length; i++) {
+								updatedStr = updatedStr + strArr[i] + "\n";
+							}
+							splitedOutput[a - 1] = updatedStr;
+						}
+						
+						
+						
 						
 						// if there is an input file
 						if (inputFile != null) {
@@ -334,80 +370,196 @@ public class TestLogicVer {
 								Status result = s.check();
 								
 								
-								if (result == Status.SATISFIABLE){  
-					        		writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
-					        		
-					        		// get the model
-					            	Model m = s.getModel();
-					            	
-					            	//System.out.println(m.toString());
-					            	
-					            	// create the list to store only the necessary output string
-					            	List<String[]> varOutput = new ArrayList<String[]>();
-					            	
-					            	// split the z3 outputed model string
-					            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
-					            	 
-					            	
-					            	
-					            	for (int j = 1; j < splitModel.length; j++) {
-				
-										String[] varValue = splitModel[j].split(" ");
+								if (result == Status.SATISFIABLE){
+									// if it's method verification
+									if (isMethod) {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
 										
-//										for (int k = 0; k < varValue.length; k++) {
-//											System.out.println(k + " " + varValue[k]);
+										// print the precondition
+										writeToFile = writeToFile.concat("Precondition(P) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
+										//print the implementations
+										writeToFile = writeToFile.concat("Implementation(S) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
+										// print postcondition
+										writeToFile = writeToFile.concat("Postcondition(Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
+										// print wp
+										writeToFile = writeToFile.concat("wp(S, Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
+										// add the rest output
+										writeToFile = writeToFile.concat("Proof Obligation: P => wp(S, Q)\n\n");
+										writeToFile = writeToFile.concat("Not discharged.\n");
+										
+										// get the model
+						            	Model m = s.getModel();
+						            	
+						            	//System.out.println(m.toString());
+						            	
+						            	// create the list to store only the necessary output string
+						            	List<String[]> varOutput = new ArrayList<String[]>();
+						            	
+						            	// split the z3 outputed model string
+						            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+						            	 
+						            	
+						            	
+						            	for (int j = 1; j < splitModel.length; j++) {
+					
+											String[] varValue = splitModel[j].split(" ");
+											
+//											for (int k = 0; k < varValue.length; k++) {
+//												System.out.println(k + " " + varValue[k]);
+//											}
+											
+											// grab the necessary output
+											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(') {
+												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+											}
+											
+											
+											
+											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+											varOutput.add(str);
+										}
+						            	
+//						            	// also include the initialized variable value
+//						            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
+//						            		
+//											if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
+//												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+//														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
+//														+ "\n");     
+//											}
+//											else {
+//												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+//														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
+//														+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
+//														+ "\n");
+//											}
 //										}
-										
-										// grab the necessary output
-										if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
-											varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
-													+ varValue[6].replaceAll("\\)", "");
-										}
-										else if (varValue[4].charAt(0) == '(') {
-											varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
-										}
-										
-										
-										
-										String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
-										varOutput.add(str);
-									}
+						            	
 					            	
-					            	// also include the initialized variable value
-					            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
-										if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
-											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
-													+ "\n");     
+						            	// test to see if the counterexample is available
+						            	// if it contains "forall" or "exists" or "Array"
+						            	// then counterexample is not available
+						            	if (splitedOutput[i - 1].contains("forall") 
+						            			|| splitedOutput[i - 1].contains("exists")
+						            			|| splitedOutput[i - 1].contains("Array")) {
+						            		writeToFile = writeToFile.concat("Counterexample is not available.");
 										}
-										else {
-											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
-													+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
-													+ "\n");
+						            	// if it does not contain all of them, then the counterexample is available
+						            	else {
+						            		writeToFile = writeToFile.concat("Counterexample: \n");
+							            	for (int j = 0; j < varOutput.size(); j++) {
+							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+							            				+ " : " + varOutput.get(j)[2] + "\n");
+											}
 										}
 									}
+									// if it's normal formula verification
+									else {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+						        		
+						        		// get the model
+						            	Model m = s.getModel();
+						            	
+						            	//System.out.println(m.toString());
+						            	
+						            	// create the list to store only the necessary output string
+						            	List<String[]> varOutput = new ArrayList<String[]>();
+						            	
+						            	// split the z3 outputed model string
+						            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+						            	 
+						            	
+						            	
+						            	for (int j = 1; j < splitModel.length; j++) {
+					
+											String[] varValue = splitModel[j].split(" ");
+											
+//											for (int k = 0; k < varValue.length; k++) {
+//												System.out.println(k + " " + varValue[k]);
+//											}
+											
+											// grab the necessary output
+											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(') {
+												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+											}
+											
+											
+											
+											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+											varOutput.add(str);
+										}
+						            	
+						            	// also include the initialized variable value
+						            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
+						            		
+											if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
+												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
+														+ "\n");     
+											}
+											else {
+												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
+														+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
+														+ "\n");
+											}
+										}
+						            	
 					            	
-				            	
-					            	// test to see if the counterexample is available
-					            	// if it contains "forall" or "exists" or "Array"
-					            	// then counterexample is not available
-					            	if (splitedOutput[i - 1].contains("forall") 
-					            			|| splitedOutput[i - 1].contains("exists")
-					            			|| splitedOutput[i - 1].contains("Array")) {
-					            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
-									}
-					            	// if it does not contain all of them, then the counterexample is available
-					            	else {
-					            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
-						            	for (int j = 0; j < varOutput.size(); j++) {
-						            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-						            				+ " : " + varOutput.get(j)[2] + "\n");
+						            	// test to see if the counterexample is available
+						            	// if it contains "forall" or "exists" or "Array"
+						            	// then counterexample is not available
+						            	if (splitedOutput[i - 1].contains("forall") 
+						            			|| splitedOutput[i - 1].contains("exists")
+						            			|| splitedOutput[i - 1].contains("Array")) {
+						            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
+										}
+						            	// if it does not contain all of them, then the counterexample is available
+						            	else {
+						            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
+							            	for (int j = 0; j < varOutput.size(); j++) {
+							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+							            				+ " : " + varOutput.get(j)[2] + "\n");
+											}
 										}
 									}
 					            } 
 					            else if(result == Status.UNSATISFIABLE) { 
-					            	writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nIs a tautology.\n";
+					            	// if it's method verification
+									if (isMethod) {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+										
+										// print the precondition
+										writeToFile = writeToFile.concat("Precondition(P) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
+										//print the implementations
+										writeToFile = writeToFile.concat("Implementation(S) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
+										// print postcondition
+										writeToFile = writeToFile.concat("Postcondition(Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
+										// print wp
+										writeToFile = writeToFile.concat("wp(S, Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
+										// add the rest output
+										writeToFile = writeToFile.concat("Proof Obligation: P => wp(S, Q)\n\n");
+										writeToFile = writeToFile.concat("Discharged.\n");
+									}
+									else {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nIs a tautology.\n";
+									}
 					            }
 					            else  {
 					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -454,71 +606,196 @@ public class TestLogicVer {
 								Status result = s.check();
 								
 								if (result == Status.SATISFIABLE){  
-									writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+									// if it's method verification
+									if (isMethod) {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+										
+										// print the precondition
+										writeToFile = writeToFile.concat("Precondition(P) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
+										//print the implementations
+										writeToFile = writeToFile.concat("Implementation(S) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
+										// print postcondition
+										writeToFile = writeToFile.concat("Postcondition(Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
+										// print wp
+										writeToFile = writeToFile.concat("wp(S, Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
+										// add the rest output
+										writeToFile = writeToFile.concat("Proof Obligation: P => wp(S, Q)\n\n");
+										writeToFile = writeToFile.concat("Not discharged.\n");
+										
+										// get the model
+						            	Model m = s.getModel();
+						            	
+						            	//System.out.println(m.toString());
+						            	
+						            	// create the list to store only the necessary output string
+						            	List<String[]> varOutput = new ArrayList<String[]>();
+						            	
+						            	// split the z3 outputed model string
+						            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+						            	 
+						            	
+						            	
+						            	for (int j = 1; j < splitModel.length; j++) {
+					
+											String[] varValue = splitModel[j].split(" ");
+											
+//											for (int k = 0; k < varValue.length; k++) {
+//												System.out.println(k + " " + varValue[k]);
+//											}
+											
+											// grab the necessary output
+											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(') {
+												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+											}
+											
+											
+											
+											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+											varOutput.add(str);
+										}
+						            	
+						            	// also include the initialized variable value
+						            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
+						            		
+											if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
+												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
+														+ "\n");     
+											}
+											else {
+												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
+														+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
+														+ "\n");
+											}
+										}
+						            	
+					            	
+						            	// test to see if the counterexample is available
+						            	// if it contains "forall" or "exists" or "Array"
+						            	// then counterexample is not available
+						            	if (splitedOutput[i - 1].contains("forall") 
+						            			|| splitedOutput[i - 1].contains("exists")
+						            			|| splitedOutput[i - 1].contains("Array")) {
+						            		writeToFile = writeToFile.concat("Counterexample is not available.");
+										}
+						            	// if it does not contain all of them, then the counterexample is available
+						            	else {
+						            		writeToFile = writeToFile.concat("Counterexample: \n");
+							            	for (int j = 0; j < varOutput.size(); j++) {
+							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+							            				+ " : " + varOutput.get(j)[2] + "\n");
+											}
+										}
+									}
+									// if it's normal formula verification
+									else {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+						        		
+						        		// get the model
+						            	Model m = s.getModel();
+						            	
+						            	//System.out.println(m.toString());
+						            	
+						            	// create the list to store only the necessary output string
+						            	List<String[]> varOutput = new ArrayList<String[]>();
+						            	
+						            	// split the z3 outputed model string
+						            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+						            	 
+						            	
+						            	
+						            	for (int j = 1; j < splitModel.length; j++) {
+					
+											String[] varValue = splitModel[j].split(" ");
+											
+//											for (int k = 0; k < varValue.length; k++) {
+//												System.out.println(k + " " + varValue[k]);
+//											}
+											
+											// grab the necessary output
+											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(') {
+												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+											}
+											
+											
+											
+											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+											varOutput.add(str);
+										}
+						            	
+						            	// also include the initialized variable value
+						            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
+						            		
+											if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
+												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
+														+ "\n");     
+											}
+											else {
+												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
+														+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
+														+ "\n");
+											}
+										}
+						            	
+					            	
+						            	// test to see if the counterexample is available
+						            	// if it contains "forall" or "exists" or "Array"
+						            	// then counterexample is not available
+						            	if (splitedOutput[i - 1].contains("forall") 
+						            			|| splitedOutput[i - 1].contains("exists")
+						            			|| splitedOutput[i - 1].contains("Array")) {
+						            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
+										}
+						            	// if it does not contain all of them, then the counterexample is available
+						            	else {
+						            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
+							            	for (int j = 0; j < varOutput.size(); j++) {
+							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+							            				+ " : " + varOutput.get(j)[2] + "\n");
+											}
+										}
+									}
 					        		
-					        		// get the model
-					            	Model m = s.getModel();
-					            	
-					            	// create the list to store only the necessary output string
-					            	List<String[]> varOutput = new ArrayList<String[]>();
-					            	
-					            	// split the z3 outputed model string
-					            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
-					            	 
-					            	for (int j = 1; j < splitModel.length; j++) {
-					            		
-					            		
-				
-										String[] varValue = splitModel[j].split(" ");
-										
-										
-										// grab the necessary output
-										if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
-											varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") + varValue[6].replaceAll("\\)", "");
-										}
-										else if (varValue[4].charAt(0) == '(') {
-											varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
-										}
-										
-										// grab the necessary output
-										String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
-										varOutput.add(str);
-									}
-					            	
-					            	// also include the initialized variable value
-					            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
-										if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
-											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a);     
-										}
-										else {
-											writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-													+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
-													+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
-													+ "\n");
-										}
-									}
-					            	
-					            	// test to see if the counterexample is available
-					            	// if it contains "forall" or "exists" or "Array"
-					            	// then counterexample is not available
-					            	if (splitedOutput[i - 1].contains("forall") 
-					            			|| splitedOutput[i - 1].contains("exists")
-					            			|| splitedOutput[i - 1].contains("Array")) {
-					            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
-									}
-					            	// if it does not contain all of them, then the counterexample is available
-					            	else {
-					            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
-						            	for (int j = 0; j < varOutput.size(); j++) {
-						            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
-						            				+ " : " + varOutput.get(j)[2] + "\n");
-										}
-									}
-					            }  
+					            } 
 					            else if(result == Status.UNSATISFIABLE) {
-					            	writeToFile = PrettyPrinter.infixFormula.get(i - 1)
-		            				+ "\nIs a tautology.\n";
+					            	// if it's method verification
+									if (isMethod) {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+										
+										// print the precondition
+										writeToFile = writeToFile.concat("Precondition(P) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
+										//print the implementations
+										writeToFile = writeToFile.concat("Implementation(S) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
+										// print postcondition
+										writeToFile = writeToFile.concat("Postcondition(Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
+										// print wp
+										writeToFile = writeToFile.concat("wp(S, Q) : \n");
+										writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
+										// add the rest output
+										writeToFile = writeToFile.concat("Proof Obligation: P => wp(S, Q)\n\n");
+										writeToFile = writeToFile.concat("Discharged.\n");
+									}
+									else {
+										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nIs a tautology.\n";
+									}
 					            }
 					            else { 
 					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";

@@ -1,8 +1,9 @@
-
-increment_by_9 (i:INTEGER)
-require i > 3
+change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
+require
+	valid_index: 1 <= i
 do
-	i := i + 9;
+	a[i] := nv
 ensure
-	i > 13
+	changed: a[i] = nv
+	unchanged: forall j:INTEGER; | (1 <=j and not i = j) => old a[i] = a[i]
 end

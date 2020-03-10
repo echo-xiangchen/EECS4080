@@ -30,7 +30,7 @@ mutator
 	;
 
 accessor
-	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')? uninitialDecl
+	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')? unnamedDecl
 		(precondition)?
 		(local)?
 		DO 
@@ -39,34 +39,44 @@ accessor
 		END 										# Accessors
 	;
 
+
+precondition
+	: REQUIRE (contract)+ 		# preContract
+	;
+
+
+postcondition
+	: ENSURE (contract)+  		# postContract
+	;
+
+
+contract 
+	: (ID ':')? boolExpr 		# Contracts
+	;
+
+
+local
+	: LOCAL declaration+ 	#LocalDecl
+	;
+
+
 implementation
 	: assignment		# VarAssignment
 	;
 
 
 assignment
-	: ID ':=' ID ';'			# SingleVarAssign
-	| ID ':=' boolExpr ';'		# BoolAssign
-	| ID ':=' arithmetic ';'	# ArithAssign
+	: ID ':=' ID ';'							# SingleVarAssign
+	| ID ':=' boolExpr ';'						# BoolAssign
+	| ID ':=' arithmetic ';'					# ArithAssign
+	| ID '[' arithmetic ']' ':=' ID ';'			# ArraySingleVarAssign 
+	| ID '[' arithmetic ']' ':=' boolExpr 		# BoolArrayAssign
+	| ID '[' arithmetic ']' ':=' arithmetic 	# ArithArrayAssign
 	;
-
-
-precondition
-	: REQUIRE (ID ':')? boolExpr 		# preContract
-	;
-
-postcondition
-	: ENSURE (ID ':')? boolExpr  		# postContract
-	;
-
-local
-	: uninitialDecl 			# UninitialLocal
-	| initialDecl 				# InitialLocal
 
 declaration
 	: uninitialDecl  			# UninitialVarDecl
 	| initialDecl 				# InitialVarDecl
-	| unnamedDecl 				# UnnamedVarDecl
 	;
 	
 
@@ -122,10 +132,15 @@ initialDecl
 			'=' '[' REALNUM ';' right=(INTNUM|REALNUM) ']'								# NamedRealArithPairValueDecl
 	;
 
+
 unnamedDecl
-	: type=(BOOL|INT|REAL) 													# UnnamedSingleVarDecl
-	| ARRAY '[' type=(BOOL|INT|REAL) ']' 									# UnnamedArrayDecl
-	| ID ':' PAIR '[' left=(BOOL|INT|REAL) ';' right=(BOOL|INT|REAL) ']'	# UnnamedPairDecl
+	: type=(BOOL|INT|REAL) 								# UnnamedSingleVarDecl
+	| ARRAY '[' type=(BOOL|INT|REAL) ']' 				# UnnamedArrayDecl
+	| PAIR '[' unnamedDecl ';' unnamedDecl ']'			# UnnamedPairValueDecl
+	| PAIR '[' uninitialDecl ';' uninitialDecl ']' 		# UnnamedPairDecl
+	;
+
+
 
 boolExpr 
 	: NOT boolExpr									# Not
@@ -137,15 +152,21 @@ boolExpr
 	| EXISTS (varDecl)+ '|' boolExpr 				# Exists
 	| ID 											# BoolVar
 	| ID '[' arithmetic ']'							# IndexBoolArray
+	| OLD ID 										# OldBoolVar
+	| OLD ID '[' arithmetic ']'						# OldBoolArray
+	| RESULT 										# BoolResult
+	| RESULT '[' arithmetic ']'						# BoolArrayResult
 	| TRUE 											# BoolTrue
 	| FALSE 										# BoolFalse
 	| '(' boolExpr ')'								# Paren
 	| relation										# Relate 
 	;
 
+
 varDecl
 	: ID (',' ID)* ':' type=(BOOL|INT|REAL) ';'		# QuantifyVar
 	;
+
 
 relation
 	: arithmetic EQUAL arithmetic			# Equal
@@ -155,25 +176,35 @@ relation
 	| arithmetic LESSOREQUAL arithmetic		# LessOrEqual
 	;
 
+
 arithmetic
 	: arithmetic op=(MUL|DIV) arithmetic				# MulDiv
 	| arithmetic op=(ADD|SUB) arithmetic				# AddSub
 	| ID 												# ArithmeticVar
 	| ID '[' arithmetic ']'								# IndexArithmeticArray
+	| OLD ID 											# OldArithVar
+	| OLD ID '[' arithmetic ']' 						# OldArithArray
+	| RESULT 											# ArithResult
+	| RESULT '[' arithmetic ']' 						# ArithArrayResult
 	| INTNUM											# IntNum
+	| ID '.' COUNT 										# CountArray
 	| REALNUM											# RealNum
 	| '(' arithmetic ')' 								# ArithParen
 	;
 
-
+// type keywords
 BOOL : 'BOOLEAN';
 INT : 'INTEGER';
 REAL : 'REAL';
 ARRAY : 'ARRAY';
 PAIR : 'PAIR';
+
+
 VERIFY : 'verify';
 
+COUNT : 'count';
 
+// method keywords
 LOCAL : 'local';
 REQUIRE : 'require';
 ENSURE : 'ensure';
@@ -182,35 +213,40 @@ END : 'end';
 OLD : 'old';
 RESULT : 'Result';
 
-
+// quantification keywords
 FORALL : 'forall';
 EXISTS : 'exists';
 
+// boolean constant keywords
 TRUE : 'true';
 FALSE : 'false';
 
-
+// logical expr keywords
 NOT : 'not';
 AND : 'and';
 OR : 'or';
 IMPLIES : '=>';
 IFF : '<=>';
 
+// relational expr keywords
 EQUAL : '=';
 GREATERTHAN : '>';
 LESSTHAN : '<';
 GREATEROREQUAL : '>=';
 LESSOREQUAL : '<=';
 
+// arithmetic expr keyworkds
 MUL : '*';
 DIV : '/';
 ADD : '+';
 SUB : '-';
 
+// ignore the comments and whitespace
 COMMENT : '--' ~[\r\n]* -> skip;
 WS  :   [ \t\n]+ -> skip ;
 
 ID : [a-z][a-zA-Z0-9_]*;
 
+// number lexer rules
 INTNUM : '0'|'-'?[1-9][0-9]*;
 REALNUM : '-'?[0-9]* '.' [0-9]+;

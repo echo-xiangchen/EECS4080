@@ -1,6 +1,0 @@
-(tmp > 0)
-Where: 
-    tmp : INTEGER
-
-Is not a tautology. Here is a counter example: 
-    tmp : 0

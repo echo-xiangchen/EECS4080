@@ -1,17 +1,14 @@
 package verifier.composite;
 
+import java.util.*;
+
 import verifier.visitor.*;
 
 public class Preconditions extends Contracts {
 
-	// precondition with tag
-	Preconditions(String name, Verifier expr) {
-		super(name, expr);
-	}
-	
-	// precondition without tag
-	Preconditions(Verifier expr){
-		super(expr);
+	// add the contracts to the list
+	public Preconditions(List<Verifier> contracts) {
+		super(contracts);
 	}
 	
 	

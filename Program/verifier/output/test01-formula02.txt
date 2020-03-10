@@ -1,5 +1,0 @@
-(declare-const i Real)
-(assert (not (> i 0)))
-(check-sat)
-;Uncomment the following line if the result of z3 online tool returns "sat"
-;(get-model)

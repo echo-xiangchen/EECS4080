@@ -1,17 +1,15 @@
-tmp:INTEGER
-a:BOOLEAN
-b:INTEGER
-swap(x:INTEGER; y:INTEGER)
-require true
+
+change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
+require
+	valid_index: 1 <= i and i <= a.count
+local
+	x: INTEGER
+	y: BOOLEAN
 do
-	tmp := x;
-	x := y; -- warning: cannot assign directly to parameters 
-	y := tmp;
-	
+	a[i] := nv;
 ensure
-	x > y
-	-- x = old x
-	-- y = old y
+	changed: a[i] = nv
+	unchanged: forall j:INTEGER; |(1 <= j and j <= a.count and not i = j) => old a[j] = a[j]
 end
 
-verify swap
+verify change_at

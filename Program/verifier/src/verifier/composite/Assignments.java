@@ -7,9 +7,17 @@ public class Assignments extends Implementations{
 	
 	public Verifier assignValue;
 	
+	public Verifier index;
+	
 	
 	public Assignments(String variable, Verifier assignValue) {
 		this.name = variable;
+		this.assignValue = assignValue;
+	}
+	
+	public Assignments(String variable, Verifier index, Verifier assignValue) {
+		this.name = variable;
+		this.index = index;
 		this.assignValue = assignValue;
 	}
 	

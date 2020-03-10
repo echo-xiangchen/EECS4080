@@ -1,17 +1,15 @@
 package verifier.composite;
 
+import java.util.*;
+
 import verifier.visitor.*;
 
 public class Postconditions extends Contracts {
-
-	// postcondition with tag
-	public Postconditions(String name, Verifier expr) {
-		super(name, expr);
-	}
 	
-	// postcondition without tag
-	public Postconditions(Verifier expr) {
-		super(expr);
+
+	// add the contracts to the list
+	public Postconditions(List<Verifier> contracts) {
+		super(contracts);
 	}
 	
 	public void accept(Visitor v) {

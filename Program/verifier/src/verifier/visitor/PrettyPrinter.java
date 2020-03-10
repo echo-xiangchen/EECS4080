@@ -68,6 +68,9 @@ public class PrettyPrinter implements Visitor {
 		}
 		usedVarList.add(varNames);
 		
+		// used to indicate if it's formula or method
+		z3output = z3output.concat(";formula\n");
+		
 		// check if any variable has been added to the list
 		if (PrefixPrinter.inclusiveVarMap != null) {
 			
@@ -160,6 +163,9 @@ public class PrettyPrinter implements Visitor {
 		}
 		usedVarList.add(varNames);
 		
+		// used to indicate if it's formula or method
+		z3output = z3output.concat(";formula\n");
+				
 		// check if any variable has been added to the list
 		if (PrefixPrinter.inclusiveVarMap != null) {
 			
@@ -244,7 +250,9 @@ public class PrettyPrinter implements Visitor {
 		}
 		usedVarList.add(varNames);
 		
-		
+		// used to indicate if it's formula or method
+		z3output = z3output.concat(";formula\n");
+				
 		// check if any variable has been added to the list
 		if (PrefixPrinter.inclusiveVarMap != null) {
 			
@@ -328,6 +336,9 @@ public class PrettyPrinter implements Visitor {
 			
 		}
 		usedVarList.add(varNames);
+		
+		// used to indicate if it's formula or method
+		z3output = z3output.concat(";formula\n");
 		
 		// check if any variable has been added to the list
 		if (PrefixPrinter.inclusiveVarMap != null) {
@@ -427,6 +438,8 @@ public class PrettyPrinter implements Visitor {
 			}
 			usedVarList.add(varNames);
 			
+			// used to indicate if it's formula or method
+			z3output = z3output.concat(";formula\n");
 			
 			// check if any variable has been added to the list
 			if (PrefixPrinter.inclusiveVarMap != null) {
@@ -567,6 +580,10 @@ public class PrettyPrinter implements Visitor {
 		printOtherExpr(e);
 	}
 
+	/* *****************************************************************************************
+	 * normal variable
+	 * *****************************************************************************************
+	 */
 	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
@@ -605,6 +622,13 @@ public class PrettyPrinter implements Visitor {
 		PrefixPrinter p = new PrefixPrinter();
 		v.accept(p);
 	}
+	
+	
+	
+	/* *****************************************************************************************
+	 * array variable
+	 * *****************************************************************************************
+	 */
 	
 	// boolean array
 	@Override
@@ -698,33 +722,14 @@ public class PrettyPrinter implements Visitor {
 		PrefixPrinter p = new PrefixPrinter();
 		c.accept(p);
 	}
+	
+	
+	/* *****************************************************************************************
+	 * Methods
+	 * *****************************************************************************************
+	 */
+	
 
-	
-	
-	
-	
-
-	@Override
-	public void visitNIL(NIL n) {
-		// TODO Auto-generated method stub
-	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public void visitAssignment(Assignments a) {
 		// TODO Auto-generated method stub
@@ -739,7 +744,11 @@ public class PrettyPrinter implements Visitor {
 			m.accept(p);
 		}
 		else if (m.mode instanceof modes.Verification) {
+			z3output = z3output.concat(";" + m.name + "\n");
 			
+			
+			// set isNestedQuantifier to be true
+			isNestedQuantifier = true;
 			
 			PrefixPrinter p = new PrefixPrinter();
 			m.accept(p);
@@ -755,7 +764,7 @@ public class PrettyPrinter implements Visitor {
 			usedVarList.add(varNames);
 			
 			// check if any variable has been added to the list
-			if (PrefixPrinter.inclusiveVarMap != null) {
+			if (!PrefixPrinter.inclusiveVarMap.isEmpty()) {
 				
 				for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
 					if (entry.getValue().b == null) {
@@ -790,6 +799,22 @@ public class PrettyPrinter implements Visitor {
 					}
 				}
 			}
+			
+			// check if there is any old variable caches
+			if (!PrefixPrinter.oldVarMap.isEmpty()) {
+				for (Entry<String, String> entry : PrefixPrinter.oldVarMap.entrySet()) {
+					z3output = z3output.concat("(assert (= " + entry.getKey() + " " + entry.getValue() + "))\n");
+					
+				}
+			}
+			
+			// check if there is any assignments
+			
+			if (!PrefixPrinter.assignMap.isEmpty()) {
+				for (Entry<String, String> entry : PrefixPrinter.assignMap.entrySet()) {
+					z3output = z3output.concat("(assert (= " + entry.getKey() + " " + entry.getValue() + "))\n");
+				}
+			}
 			// add the remaining string
 			z3output = z3output.concat("(assert (not " + p.prefixOutput +  "))\n"
 					+ "(check-sat)\n"
@@ -814,6 +839,49 @@ public class PrettyPrinter implements Visitor {
 			
 			// clear the map
 			PrefixPrinter.inclusiveVarMap.clear();
+			
+			isNestedQuantifier = false;
 		}
 	}
+
+	@Override
+	public void visitPreconditions(Preconditions p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitPostconditions(Postconditions p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public void visitContractExpr(ContractExpr c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitLocals(Locals l) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void visitOlds(Olds o) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+	
+	@Override
+	public void visitNIL(NIL n) {
+		// TODO Auto-generated method stub
+	}
+
+	
 }

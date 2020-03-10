@@ -4,10 +4,14 @@ import verifier.visitor.*;
 
 public class IntConst extends NumConst {
 
-	// mode 0: declaration
-	// mode 1: verification
+	// normal constant
 	public IntConst(String name) {
 		super(name);
+	}
+	
+	// array count
+	public IntConst(String name, boolean value) {
+		super(name, value);
 	}
 	
 	public void accept(Visitor v) {

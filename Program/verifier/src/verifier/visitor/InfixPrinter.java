@@ -10,6 +10,18 @@ public class InfixPrinter implements Visitor{
 	public String infixOutput;
 	public List<String> quantifyVar;
 	
+	// map that stores the method preconditions
+	public static Map<String, String> preconditions = new LinkedHashMap<String, String>();
+	
+	// map that stores the method implementations
+	public static Map<String, String> imps = new LinkedHashMap<String, String>();
+	
+	// map that stores the method postconditions
+	public static Map<String, String> postconditions = new LinkedHashMap<String, String>();
+	
+	// map that stores the wps
+	public static Map<String, String> wps = new LinkedHashMap<String, String>();
+	
 	public InfixPrinter() {
 		infixOutput = "";
 		quantifyVar = new ArrayList<String>();
@@ -142,7 +154,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. p : BOOLEAN
 		if(v.mode instanceof modes.UninitializedDecl) {
-			
+			infixOutput = infixOutput.concat(v.name + " : BOOLEAN");
 		}
 		// verification
 		// e.g. verify p => q
@@ -168,7 +180,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. j : INTEGER
 		if(v.mode instanceof modes.UninitializedDecl) {
-			
+			infixOutput = infixOutput.concat(v.name + " : INTEGER");
 		}
 		// verification
 		// e.g. verify j > 2
@@ -195,7 +207,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. j : REAL
 		if(v.mode instanceof modes.UninitializedDecl) {
-					
+			infixOutput = infixOutput.concat(v.name + " : REAL");
 		}
 		// verification
 		// e.g. verify j > 2
@@ -222,7 +234,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. a : ARRAY[BOOLEAN]
 		if(a.mode instanceof modes.UninitializedDecl) {
-			
+			infixOutput = infixOutput.concat(a.name + " : [BOOLEAN]");
 		}
 		// verification
 		// e.g. verify a[1]
@@ -247,7 +259,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. a : ARRAY[INTEGER]
 		if(a.mode instanceof modes.UninitializedDecl) {
-			
+			infixOutput = infixOutput.concat(a.name + " : [INTEGER]");
 		}
 		// verification
 		// e.g. verify a[1]
@@ -272,7 +284,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. a : ARRAY[REAL]
 		if(a.mode instanceof modes.UninitializedDecl) {
-			
+			infixOutput = infixOutput.concat(a.name + " : [REAL]");
 		}
 		// verification
 		// e.g. verify a[1]
@@ -305,8 +317,12 @@ public class InfixPrinter implements Visitor{
 
 	@Override
 	public void visitIntConst(IntConst c) {
-		infixOutput = infixOutput.concat(c.name);
-		
+		if (c.isArrayCount) {
+			infixOutput = infixOutput.concat(c.name + ".count");
+		}
+		else {
+			infixOutput = infixOutput.concat(c.name);
+		}
 	}
 
 	@Override
@@ -329,46 +345,54 @@ public class InfixPrinter implements Visitor{
 	
 	
 	
-	@Override
-	public void visitAssignment(Assignments a) {
-		InfixPrinter assignedPrinter = new InfixPrinter();
-		a.assignValue.accept(assignedPrinter);
-		infixOutput = infixOutput.concat(a.name + " := " + assignedPrinter.infixOutput + ";");
-	}
+	
 
 	@Override
 	public void visitMethods(Methods m) {
 		String parameterStr = "";
 		// if the parameters are not empty
 		
-		// the parameter value start from index 3
-		if (PrefixPrinter.methodMap.get(m.name).size() < 4) {
-			for (int i = 3; i < PrefixPrinter.methodMap.get(m.name).size(); i++) {
+		// print the parameters
+		if (PrefixPrinter.methodParameterMap.containsKey(m.name)) {
+			for (int i = 0; i < PrefixPrinter.methodParameterMap.get(m.name).size(); i++) {
 				InfixPrinter paraPrinter = new InfixPrinter();
-				PrefixPrinter.methodMap.get(m.name).get(i).accept(paraPrinter);
-				parameterStr = parameterStr + paraPrinter.infixOutput + ",";
+				PrefixPrinter.methodParameterMap.get(m.name).get(i).accept(paraPrinter);
+				parameterStr = parameterStr + paraPrinter.infixOutput + ";";
 			}
-			infixOutput = infixOutput.concat(m.name + "( " + parameterStr + " )\n");
+			parameterStr = parameterStr.substring(0, parameterStr.length() - 1);
+			infixOutput = infixOutput.concat(m.name + "(" + parameterStr + ")"+ "\n");
 		}
 		// if parameters are empty, simply add the method name
 		else {
-			infixOutput = infixOutput.concat(m.name + "\n");
+			infixOutput = infixOutput.concat(m.name + " "+ "\n");
 		}
 		
 		// if the return value is not null
+		
+		
 		// the return value in methodMap is at index 2
-		if (PrefixPrinter.methodMap.get(m.name).get(2) != null) {
+		if (PrefixPrinter.methodReturnMap.containsKey(m.name)) {
 			InfixPrinter returnPrinter = new InfixPrinter();
-			PrefixPrinter.methodMap.get(m.name).get(2).accept(returnPrinter);
-			infixOutput = infixOutput.concat(returnPrinter.infixOutput + "\n");
+			PrefixPrinter.methodReturnMap.get(m.name).accept(returnPrinter);
+			infixOutput = infixOutput.concat(returnPrinter.infixOutput);
 			
 		}
 		// print the precondition
 		// precondition in methodMap starts at index 0
 		InfixPrinter prePrinter = new InfixPrinter();
 		// use the methodMap in prefixprinter to print the precondition
-		PrefixPrinter.methodMap.get(m.name).get(0).accept(prePrinter);
-		infixOutput = infixOutput.concat("require: " + prePrinter.infixOutput + "\n");
+		PrefixPrinter.methodContractMap.get(m.name).get(0).accept(prePrinter);
+		infixOutput = infixOutput.concat("require\n");
+		infixOutput = infixOutput.concat(prePrinter.infixOutput);
+		
+		// add the output to the map for printing method output
+		preconditions.put(m.name, prePrinter.infixOutput);
+		
+		
+		// print the local variables
+		InfixPrinter localPrinter = new InfixPrinter();
+		PrefixPrinter.methodLocalMap.get(m.name).accept(localPrinter);
+		infixOutput = infixOutput.concat(localPrinter.infixOutput);
 		
 		// print the implementations
 		String impStr = "";
@@ -377,12 +401,108 @@ public class InfixPrinter implements Visitor{
 			PrefixPrinter.methodImpMap.get(m.name).get(i).accept(impPrinter);
 			impStr = impStr + impPrinter.infixOutput + "\n";
 		}
-		infixOutput = infixOutput.concat("do\n\n" + impStr + "\nend\n");
+		infixOutput = infixOutput.concat("do\n" + impStr);
+		
+		// add the output to the map for printing method output
+		imps.put(m.name, impStr);
 		
 		// print the postcondition
 		// postcondition in methodMap starts at index 1
 		InfixPrinter postPrinter = new InfixPrinter();
-		PrefixPrinter.methodMap.get(m.name).get(1).accept(postPrinter);
-		infixOutput = infixOutput.concat("ensure " + postPrinter.infixOutput+ "\n");
+		PrefixPrinter.methodContractMap.get(m.name).get(1).accept(postPrinter);
+		infixOutput = infixOutput.concat("ensure\n");
+		infixOutput = infixOutput.concat(postPrinter.infixOutput);
+		
+		infixOutput = infixOutput.concat("end\n");
+		
+		postconditions.put(m.name, postPrinter.infixOutput);
 	}
+	
+	
+	// 
+	@Override
+	public void visitPreconditions(Preconditions p) {
+		// public List<Verifier> contracts;
+		
+		for (int i = 0; i < p.contracts.size(); i++) {
+			InfixPrinter prePrinter = new InfixPrinter();
+			p.contracts.get(i).accept(prePrinter);
+			
+			infixOutput = infixOutput.concat("   " + prePrinter.infixOutput);
+		}
+		
+	}
+
+	@Override
+	public void visitPostconditions(Postconditions p) {
+		// public List<Verifier> contracts;
+		for (int i = 0; i < p.contracts.size(); i++) {
+			InfixPrinter prePrinter = new InfixPrinter();
+			p.contracts.get(i).accept(prePrinter);
+			
+			infixOutput = infixOutput.concat("   " + prePrinter.infixOutput);
+		}
+	}
+
+	@Override
+	public void visitContractExpr(ContractExpr c) {
+		InfixPrinter contractPrinter = new InfixPrinter();
+		c.contract.b.accept(contractPrinter);
+		// check if tag is empty
+		if (c.contract.a != null) {
+			infixOutput = infixOutput.concat(c.contract.a + " : " + contractPrinter.infixOutput + "\n");
+		}
+		else {
+			infixOutput = infixOutput.concat(contractPrinter.infixOutput + "\n");
+		}
+	}
+	
+	@Override
+	public void visitAssignment(Assignments a) {
+		if (a.index != null) {
+			InfixPrinter assignedPrinter = new InfixPrinter();
+			a.assignValue.accept(assignedPrinter);
+			
+			InfixPrinter indexPrinter = new InfixPrinter();
+			a.index.accept(indexPrinter);
+			
+			infixOutput = infixOutput.concat("  " + a.name + "[" + indexPrinter.infixOutput
+					+ "]" + " := " + assignedPrinter.infixOutput + ";");
+		}
+		else {
+			InfixPrinter assignedPrinter = new InfixPrinter();
+			a.assignValue.accept(assignedPrinter);
+			infixOutput = infixOutput.concat("  " + a.name + " := " + assignedPrinter.infixOutput + ";");
+		}
+	}
+	
+	@Override
+	public void visitOlds(Olds o) {
+		// if it's array 
+		if (o.index != null) {
+			InfixPrinter indexPrinter = new InfixPrinter();
+			o.index.accept(indexPrinter);
+			
+			infixOutput = infixOutput.concat("old " + o.name + "[" + indexPrinter.infixOutput + "]");
+		}
+		// it it's normal variable
+		else {
+			infixOutput = infixOutput.concat("old " + o.name);
+		}
+		
+	}
+
+	@Override
+	public void visitLocals(Locals l) {
+		infixOutput = infixOutput.concat("local" + "\n");
+		
+		for (int i = 0; i < l.localVars.size(); i++) {
+			InfixPrinter localPrinter = new InfixPrinter();
+			l.localVars.get(i).accept(localPrinter);
+			
+			infixOutput = infixOutput.concat("   " + localPrinter.infixOutput + "\n");
+		}
+	}
+
+	
 }

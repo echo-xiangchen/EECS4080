@@ -2,7 +2,6 @@ package verifier.visitor;
 
 // class that used for z3 encoding (prefix version)
 import org.antlr.v4.runtime.misc.Pair;
-
 import verifier.composite.*;
 import java.util.*;
 
@@ -25,15 +24,34 @@ public class PrefixPrinter implements Visitor{
 	// hashmap that only store the necessary variables
 	public static Map<String, Pair<String, String>> inclusiveVarMap = new LinkedHashMap<String, Pair<String,String>>();
 	
+	
 	// map that stores the array name and its values
 	public static Map<String, List<String>> arrayMap = new LinkedHashMap<String, List<String>>();
+	
+	
+	/* *****************************************************************************************
+	 * methods
+	 * *****************************************************************************************
+	 */
+	
+	// hashmap that stores the old variable caches
+	public static Map<String, String> oldVarMap = new LinkedHashMap<String, String>();
+	
+	// hashmap that stores the assignments
+	public static Map<String, String> assignMap = new LinkedHashMap<String, String>();
 	
 	// map that stores the method name and its precondition, postcondition
 	// 0: precondition
 	// 1: postcondition
-	// 2: return value
-	// 3 - size: parameters
-	public static Map<String, List<Verifier>> methodMap = new LinkedHashMap<String, List<Verifier>>();
+	public static Map<String, List<Verifier>> methodContractMap = new LinkedHashMap<String, List<Verifier>>();
+	
+	// method local variables
+	public static Map<String, Verifier> methodLocalMap = new LinkedHashMap<String, Verifier>();
+	
+	// method return value
+	public static Map<String, Verifier> methodReturnMap = new LinkedHashMap<String, Verifier>();
+	// method parameters
+	public static Map<String, List<Verifier>> methodParameterMap = new LinkedHashMap<String, List<Verifier>>();
 	
 	// map that stores the method name and its implementations
 	public static Map<String, List<Implementations>> methodImpMap = new LinkedHashMap<String, List<Implementations>>();
@@ -214,6 +232,11 @@ public class PrefixPrinter implements Visitor{
 	public void visitDivision(Division e) {
 		visitBinaryExpr(e, "/");
 	}
+	
+	/* *****************************************************************************************
+	 * normal variable
+	 * *****************************************************************************************
+	 */
 
 	// boolean variable declaration
 	@Override
@@ -320,6 +343,13 @@ public class PrefixPrinter implements Visitor{
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Real)");
 		}
 	}
+	
+	
+	/* *****************************************************************************************
+	 * array variable
+	 * *****************************************************************************************
+	 */
+	
 	
 	// boolean array variable
 	@Override
@@ -440,7 +470,13 @@ public class PrefixPrinter implements Visitor{
 
 	@Override
 	public void visitIntConst(IntConst c) {
-		prefixOutput = prefixOutput.concat(c.name);
+		if (c.isArrayCount) {
+			prefixOutput = prefixOutput.concat(VarPrinter.arrayCount.get(c.name));
+		}
+		else {
+			prefixOutput = prefixOutput.concat(c.name);
+		}
+		
 	}
 
 	@Override
@@ -450,26 +486,12 @@ public class PrefixPrinter implements Visitor{
 	
 	
 	
-
-
-	@Override
-	public void visitNIL(NIL n) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/* *****************************************************************************************
+	 * Methods
+	 * *****************************************************************************************
+	 */
 	
 
 	@Override
@@ -477,6 +499,26 @@ public class PrefixPrinter implements Visitor{
 		// add the used variable to the inclusiveVarMap
 		if (!inclusiveVarMap.containsKey(a.name)) {
 			inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
+		}
+		// test if it's array assignment
+		if (a.index != null) {
+			PrefixPrinter indexPrinter = new PrefixPrinter();
+			a.index.accept(indexPrinter);
+			
+			PrefixPrinter valuePrinter = new PrefixPrinter();
+			a.assignValue.accept(valuePrinter);
+		
+			inclusiveVarMap.put("new_" + a.name, new Pair<String, String>
+				(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
+		
+			assignMap.put("new_" + a.name, "(store " + a.name + " " + indexPrinter.prefixOutput 
+						+ " " + valuePrinter.prefixOutput + ")");
+		}
+		else {
+			PrefixPrinter valuePrinter = new PrefixPrinter();
+			a.assignValue.accept(valuePrinter);
+			
+			assignMap.put(a.name, valuePrinter.prefixOutput);
 		}
 		
 	}
@@ -487,77 +529,221 @@ public class PrefixPrinter implements Visitor{
 		if (m.mode instanceof modes.Declaration) {
 			completeVarMap.put(m.name, new Pair<String, String>("Method", "Method"));
 			
-			// add the contracts to the map
-			List<Verifier> list = new ArrayList<Verifier>();
-			list.add(m.precondition);
-			list.add(m.postcondition);
-			
-			// add the return value to the map
-			list.add(m.returnValue);
-			
 			
 			// add the parameters to the map
-			if (m.parameters != null) {
+			if (!m.parameters.isEmpty()) {
+				List<Verifier> parameterlist = new ArrayList<Verifier>();
 				for (int i = 0; i < m.parameters.size(); i++) {
-					PrefixPrinter p = new PrefixPrinter();
-					m.parameters.get(i).accept(p);
-					list.add(m.parameters.get(i));
+					// add each parameters to the list
+					parameterlist.add(m.parameters.get(i));
 				}
+				methodParameterMap.put(m.name, parameterlist);
+			}		
+						
+			// add the contracts to the map
+			List<Verifier> conatraclist = new ArrayList<Verifier>();
+			conatraclist.add(m.precondition);
+			conatraclist.add(m.postcondition);
+			methodContractMap.put(m.name, conatraclist);
+			
+			// add the return value
+			if (m.returnValue != null) {
+				methodReturnMap.put(m.name, m.returnValue);
 			}
 			
+			// add the local variable
+			methodLocalMap.put(m.name, m.locals);
 			
-			methodMap.put(m.name, list);
 			
 			// add the implementations to the map
 			List<Implementations> impList = new ArrayList<Implementations>();
 			for (int i = 0; i < m.implementations.size(); i++) {
+				// add each implementation to the list
 				impList.add(m.implementations.get(i));
 			}
 			methodImpMap.put(m.name, impList);
-			
-			
 		}
 		else if (m.mode instanceof modes.Verification) {
-			
-			if (m.parameters != null) {
-				for (int i = 0; i < m.parameters.size(); i++) {
+			isNestedQuantifier = true;
+			// call prefixprinter to print each parameters
+			if (methodParameterMap.containsKey(m.name)) {
+				for (int i = 0; i < methodParameterMap.get(m.name).size(); i++) {
 					PrefixPrinter paraPrinter = new PrefixPrinter();
-					m.parameters.get(i).accept(paraPrinter);
+					methodParameterMap.get(m.name).get(i).accept(paraPrinter);
 				}
 			}
-			// call prefixprinter to print the precondition
+			
+			
+			// print the precondition
 			PrefixPrinter prePrinter = new PrefixPrinter();
-			methodMap.get(m.name).get(0).accept(prePrinter);
+			methodContractMap.get(m.name).get(0).accept(prePrinter);
 			
-			// call prefixprinter to print the postcondition
+			// print the implementation
+			for (int i = 0; i < methodImpMap.get(m.name).size(); i++) {
+				PrefixPrinter impPrinter = new PrefixPrinter();
+				methodImpMap.get(m.name).get(i).accept(impPrinter);
+			}
+			
+			// print the postcondition
 			PrefixPrinter postPrinter = new PrefixPrinter();
-			methodMap.get(m.name).get(1).accept(postPrinter);
+			methodContractMap.get(m.name).get(1).accept(postPrinter);
 			
-			// call wpcalculator to do the wp calculation
+			// do the wp calculation
 			WpCalculator calculator = new WpCalculator();
 			for (int i = 0; i < methodImpMap.get(m.name).size(); i++) {
 				methodImpMap.get(m.name).get(i).accept(calculator);
 			}
 			
-			//System.out.println(WpCalculator.substituteMap);
-			// do the substitution for postcondition
 			
+			//System.out.println(WpCalculator.z3SubstituteMap);
+			//System.out.println(WpCalculator.counteregSubstituteMap);
+			
+			
+			// do the substitution for postcondition
 			// for assignments, tranverse the substitution map in reverse order
 			ListIterator<Map.Entry<String,String>> i = new ArrayList<Map.Entry<String,String>>
-				(WpCalculator.substituteMap.entrySet()).listIterator(WpCalculator.substituteMap.size());
+				(WpCalculator.z3SubstituteMap.entrySet()).listIterator(WpCalculator.z3SubstituteMap.size());
 			
 			while(i.hasPrevious()) {
 				Map.Entry<String, String> entry= i.previous();
 				postPrinter.prefixOutput = postPrinter.prefixOutput.replaceAll(entry.getKey(), entry.getValue());
 			}
 			
+			// also do the substitution for infix output
+			InfixPrinter wpPrinter = new InfixPrinter();
+			methodContractMap.get(m.name).get(1).accept(wpPrinter);
 			
-//			for (Entry<String, String> entry : WpCalculator.substituteMap.entrySet()) {
-//				postPrinter.prefixOutput = postPrinter.prefixOutput.replaceAll(entry.getKey(), entry.getValue());
-//			}
+			// do the substitution for postcondition
+			// for assignments, tranverse the substitution map in reverse order
+			ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
+				(WpCalculator.counteregSubstituteMap.entrySet()).listIterator(WpCalculator.counteregSubstituteMap.size());
 			
+			while(j.hasPrevious()) {
+				Map.Entry<String, String> entry= j.previous();
+				wpPrinter.infixOutput = wpPrinter.infixOutput.replaceAll(entry.getKey(), entry.getValue());
+			}
+			// add the weakest precondition to the list
+			InfixPrinter.wps.put(m.name, "   " + wpPrinter.infixOutput);
+						
 			prefixOutput = prefixOutput.concat("(=> " 
 					+ prePrinter.prefixOutput + " " + postPrinter.prefixOutput + ")");	
+		
+			isNestedQuantifier = false;
+		}
+		
+	}
+
+	@Override
+	public void visitPreconditions(Preconditions p) {
+		// if there is only one contract
+		if (p.contracts.size() <= 1) {
+			PrefixPrinter p1 = new PrefixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			prefixOutput = prefixOutput.concat(p1.prefixOutput);
+		}
+		// if there are more than one contract
+		else {
+			PrefixPrinter p1 = new PrefixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			PrefixPrinter p2 = new PrefixPrinter();
+			p.contracts.get(1).accept(p2);
+			
+			prefixOutput = prefixOutput.concat("(and " + p1.prefixOutput 
+						+ " " + p2.prefixOutput + ")");
+			
+			for (int i = 2; i < p.contracts.size(); i++) {
+				PrefixPrinter printer = new PrefixPrinter();
+				p.contracts.get(i).accept(printer);
+				
+				prefixOutput = "(and " + prefixOutput + " " + printer.prefixOutput;
+			}
 		}
 	}
+
+	@Override
+	public void visitPostconditions(Postconditions p) {
+		// if there is only one contract
+		if (p.contracts.size() <= 1) {
+			PrefixPrinter p1 = new PrefixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			prefixOutput = prefixOutput.concat(p1.prefixOutput);
+		}
+		// if there are more than one contract
+		else {
+			PrefixPrinter p1 = new PrefixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			PrefixPrinter p2 = new PrefixPrinter();
+			p.contracts.get(1).accept(p2);
+			
+			prefixOutput = prefixOutput.concat("(and " + p1.prefixOutput + p2.prefixOutput + ")");
+			
+			for (int i = 2; i < p.contracts.size(); i++) {
+				PrefixPrinter printer = new PrefixPrinter();
+				p.contracts.get(i).accept(printer);
+				
+				prefixOutput = "(and " + prefixOutput + printer.prefixOutput;
+			}
+		}
+	}
+
+	@Override
+	public void visitContractExpr(ContractExpr c) {
+		PrefixPrinter contractPrinter = new PrefixPrinter();
+		c.contract.b.accept(contractPrinter);
+		
+		prefixOutput = prefixOutput.concat(contractPrinter.prefixOutput);
+		
+	}
+
+	@Override
+	public void visitLocals(Locals l) {
+		// List<Verifier> localVars;
+		PrefixPrinter localPrinter = new PrefixPrinter();
+		for (int i = 0; i < l.localVars.size(); i++) {
+			l.localVars.get(i).accept(localPrinter);
+		}
+	}
+	
+	@Override
+	public void visitOlds(Olds o) {
+		// store the variable cache
+		completeVarMap.put("old_" + o.name, new Pair<String, String>
+			(completeVarMap.get(o.name).a, completeVarMap.get(o.name).b));
+		
+		inclusiveVarMap.put("old_" + o.name, new Pair<String, String>
+			(completeVarMap.get(o.name).a, completeVarMap.get(o.name).b));
+		
+		oldVarMap.put("old_" + o.name, o.name);
+		
+		if (o.index != null) {
+			PrefixPrinter indexPrinter = new PrefixPrinter();
+			o.index.accept(indexPrinter);
+			
+			prefixOutput = prefixOutput.concat("(select " + "old_" 
+					+ o.name + " " + indexPrinter.prefixOutput + ")");
+		}
+		else {
+			prefixOutput = prefixOutput.concat("old_" + o.name);
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	@Override
+	public void visitNIL(NIL n) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
 }
