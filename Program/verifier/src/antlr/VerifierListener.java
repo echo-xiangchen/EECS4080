@@ -32,6 +32,18 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitVarDeclaration(VerifierParser.VarDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code AssignDecl}
+	 * labeled alternative in {@link VerifierParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignDecl(VerifierParser.AssignDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AssignDecl}
+	 * labeled alternative in {@link VerifierParser#line}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignDecl(VerifierParser.AssignDeclContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code DefineMethod}
 	 * labeled alternative in {@link VerifierParser#line}.
 	 * @param ctx the parse tree
@@ -212,6 +224,30 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitArithAssign(VerifierParser.ArithAssignContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code BoolArrayInitialize}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolArrayInitialize(VerifierParser.BoolArrayInitializeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BoolArrayInitialize}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolArrayInitialize(VerifierParser.BoolArrayInitializeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArithArrayInitialize}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithArrayInitialize(VerifierParser.ArithArrayInitializeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArithArrayInitialize}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithArrayInitialize(VerifierParser.ArithArrayInitializeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ArraySingleVarAssign}
 	 * labeled alternative in {@link VerifierParser#assignment}.
 	 * @param ctx the parse tree
@@ -247,6 +283,30 @@ public interface VerifierListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArithArrayAssign(VerifierParser.ArithArrayAssignContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code SingleVarResultAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleVarResultAssign(VerifierParser.SingleVarResultAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SingleVarResultAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleVarResultAssign(VerifierParser.SingleVarResultAssignContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrayValueResultAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayValueResultAssign(VerifierParser.ArrayValueResultAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrayValueResultAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayValueResultAssign(VerifierParser.ArrayValueResultAssignContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UninitialVarDecl}
 	 * labeled alternative in {@link VerifierParser#declaration}.

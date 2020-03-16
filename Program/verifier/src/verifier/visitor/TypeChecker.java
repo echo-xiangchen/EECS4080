@@ -9,8 +9,13 @@ public class TypeChecker implements Visitor{
 	// hashmap for type checking
 	public static Map<String, Pair<VarType, Verifier>> varMap = new LinkedHashMap<String, Pair<VarType, Verifier>>();
 	
+	// hashmap to store the array name and its value for type check
+	public static Map<String, List<Verifier>> arrayMap = new LinkedHashMap<String, List<Verifier>>();
 	// indicate whether is inside a method
 	public static boolean isMethod;
+	
+	// indicate if the method is accessor
+	public static boolean isAccessor;
 	
 	// indicate whether is inside postcondition
 	public static boolean isPostcondition;
@@ -391,6 +396,17 @@ public class TypeChecker implements Visitor{
 				errormsg.addAll(checker.errormsg);
 			}
 		}
+		
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			if (v.name != null) {
+				if (!varMap.containsKey(v.name)) {
+					varMap.put(v.name, new Pair<VarType, Verifier>(new BoolType(), null));
+				}
+			}
+		}
 	}
 	
 	// int variable
@@ -463,6 +479,17 @@ public class TypeChecker implements Visitor{
 				errormsg.addAll(checker.errormsg);
 			}
 		}
+		
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			if (v.name != null) {
+				if (!varMap.containsKey(v.name)) {
+					varMap.put(v.name, new Pair<VarType, Verifier>(new IntType(), null));
+				}
+			}
+		}
 	}
 	
 	// real number variable
@@ -521,6 +548,17 @@ public class TypeChecker implements Visitor{
 				}
 			}else {
 				errormsg.addAll(checker.errormsg);
+			}
+		}
+		
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			if (v.name != null) {
+				if (!varMap.containsKey(v.name)) {
+					varMap.put(v.name, new Pair<VarType, Verifier>(new RealType(), null));
+				}
 			}
 		}
 	}
@@ -582,6 +620,10 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(a.name)) {
 				errormsg.add("Error: variable " + a.name + " has not been declared.");
 			}
+			// if array is declared but not initialized
+			else if (!arrayMap.containsKey(a.name)) {
+				errormsg.add("Error: variable " + a.name + " has not been initialized.");
+			}
 			// if it has unknown type
 			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
 				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
@@ -620,6 +662,7 @@ public class TypeChecker implements Visitor{
 				// if this variable is declared for the first time, simply add it to the map
 				if (!varMap.containsKey(a.name)) {
 					varMap.put(a.name, new Pair<VarType, Verifier>(new BoolArray(), null));
+					arrayMap.put(a.name, a.arrayValue);
 				}
 				// if this variable is not declared for the first time, change its type to unknown type
 				// and add the error message
@@ -627,6 +670,38 @@ public class TypeChecker implements Visitor{
 					varMap.replace(a.name, new Pair<VarType, Verifier>(new UnknowType(), null));
 					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
 							+ "Please make sure each variable is declared exactly once.");
+				}
+			}
+		}
+		else if (a.mode instanceof modes.Assignment) {
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				TypeChecker checker = new TypeChecker();
+				a.arrayValue.get(i).accept(checker);
+				errormsg.addAll(checker.errormsg);
+			}
+			if (errormsg.isEmpty()) {
+				if (!varMap.containsKey(a.name)) {
+					errormsg.add("Error: variable " + a.name + " has not been declared.");
+				}
+				else if (!(varMap.get(a.name).a instanceof types.BoolArray)) {
+					errormsg.add("Error: variable " + a.name + " is not declared as a boolean array.");
+				}
+				else if (arrayMap.containsKey(a.name)) {
+					errormsg.add("Error: Cannot re-assign values to an array.");
+				}
+				else {
+					arrayMap.put(a.name, a.arrayValue);
+				}
+			}
+		}
+		
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			if (a.name != null) {
+				if (!varMap.containsKey(a.name)) {
+					varMap.put(a.name, new Pair<VarType, Verifier>(new BoolArray(), null));
 				}
 			}
 		}
@@ -677,6 +752,10 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(a.name)) {
 				errormsg.add("Error: variable " + a.name + " has not been declared.");
 			}
+			// if array is declared but not initialized
+			else if (!arrayMap.containsKey(a.name)) {
+				errormsg.add("Error: variable " + a.name + " has not been initialized.");
+			}
 			// if it has unknown type
 			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
 				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
@@ -725,6 +804,7 @@ public class TypeChecker implements Visitor{
 				// if this variable is declared for the first time, simply add it to the map
 				if (!varMap.containsKey(a.name)) {
 					varMap.put(a.name, new Pair<VarType, Verifier>(new IntArray(), null));
+					arrayMap.put(a.name, a.arrayValue);
 				}
 				// if this variable is not declared for the first time, change its type to unknown type
 				// and add the error message
@@ -732,6 +812,37 @@ public class TypeChecker implements Visitor{
 					varMap.replace(a.name, new Pair<VarType, Verifier>(new UnknowType(), null));
 					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
 							+ "Please make sure each variable is declared exactly once.");
+				}
+			}
+		}
+		
+		// assignment
+		else if (a.mode instanceof modes.Assignment) {
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				TypeChecker checker = new TypeChecker();
+				a.arrayValue.get(i).accept(checker);
+				errormsg.addAll(checker.errormsg);
+			}
+			if (errormsg.isEmpty()) {
+				if (!varMap.containsKey(a.name)) {
+					errormsg.add("Error: variable " + a.name + " has not been declared.");
+				}
+				else if (arrayMap.containsKey(a.name)) {
+					errormsg.add("Error: Cannot re-assign values to an array.");
+				}
+				else {
+					arrayMap.put(a.name, a.arrayValue);
+				}
+			}
+		}
+		
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			if (a.name != null) {
+				if (!varMap.containsKey(a.name)) {
+					varMap.put(a.name, new Pair<VarType, Verifier>(new IntArray(), null));
 				}
 			}
 		}
@@ -781,6 +892,10 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(a.name)) {
 				errormsg.add("Error: variable " + a.name + " has not been declared.");
 			}
+			// if array is declared but not initialized
+			else if (!arrayMap.containsKey(a.name)) {
+				errormsg.add("Error: variable " + a.name + " has not been initialized.");
+			}
 			// if it has unknown type
 			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
 				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
@@ -819,6 +934,7 @@ public class TypeChecker implements Visitor{
 				// if this variable is declared for the first time, simply add it to the map
 				if (!varMap.containsKey(a.name)) {
 					varMap.put(a.name, new Pair<VarType, Verifier>(new RealArray(), null));
+					arrayMap.put(a.name, a.arrayValue);
 				}
 				// if this variable is not declared for the first time, change its type to unknown type
 				// and add the error message
@@ -826,6 +942,37 @@ public class TypeChecker implements Visitor{
 					varMap.replace(a.name, new Pair<VarType, Verifier>(new UnknowType(), null));
 					errormsg.add("Error: Type declaration of variable " + a.name + " is ambigous. "
 							+ "Please make sure each variable is declared exactly once.");
+				}
+			}
+		}
+		
+		// assignment
+		else if (a.mode instanceof modes.Assignment) {
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				TypeChecker checker = new TypeChecker();
+				a.arrayValue.get(i).accept(checker);
+				errormsg.addAll(checker.errormsg);
+			}
+			if (errormsg.isEmpty()) {
+				if (!varMap.containsKey(a.name)) {
+					errormsg.add("Error: variable " + a.name + " has not been declared.");
+				}
+				else if (arrayMap.containsKey(a.name)) {
+					errormsg.add("Error: Cannot re-assign values to an array.");
+				}
+				else {
+					arrayMap.put(a.name, a.arrayValue);
+				}
+			}
+		}
+		
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			if (a.name != null) {
+				if (!varMap.containsKey(a.name)) {
+					varMap.put(a.name, new Pair<VarType, Verifier>(new RealArray(), null));
 				}
 			}
 		}
@@ -854,6 +1001,9 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(c.name)) {
 				errormsg.add("Error: Array " + c.name + " has not been declared.");
 			}
+			else if (!arrayMap.containsKey(c.name)) {
+				errormsg.add("Error: variable " + c.name + " has not been initialized.");
+			}
 			else {
 				InfixPrinter arrayCountPrinter = new InfixPrinter();
 				c.accept(arrayCountPrinter);
@@ -866,7 +1016,6 @@ public class TypeChecker implements Visitor{
 				varMap.put(c.name, new Pair<VarType, Verifier>(new IntType(), null));
 			}
 		}
-		
 	}
 
 	// real number constant
@@ -904,6 +1053,7 @@ public class TypeChecker implements Visitor{
 			
 			// if the return value is not null
 			if (m.returnValue != null) {
+				isAccessor = true;
 				TypeChecker returnChecker = new TypeChecker();
 				m.returnValue.accept(returnChecker);
 				errormsg.addAll(returnChecker.errormsg);
@@ -963,6 +1113,9 @@ public class TypeChecker implements Visitor{
 			
 			// reset isMethod
 			isMethod = false;
+			
+			// reset isAccessor
+			isAccessor = false;
 		}
 		else if (m.mode instanceof modes.Verification) {
 			if (!varMap.containsKey(m.name)) {
@@ -1014,7 +1167,12 @@ public class TypeChecker implements Visitor{
 				if (!varMap.containsKey(a.name)) {
 					errormsg.add("Error: variable " + a.name + " has not been declared.");
 				}
-				else if (varMap.get(a.name).a instanceof RealType && varMap.get(assignValueprinter.infixOutput).a instanceof IntType) {
+				// check if left hand side is array type
+				else if (varMap.get(a.name).a instanceof ArrayType) {
+					errormsg.add("Error: Array assignment is not allowed.");
+				}
+				else if (varMap.get(a.name).a instanceof RealType 
+						&& varMap.get(assignValueprinter.infixOutput).a instanceof IntType) {
 					
 				}
 				else if (!(varMap.get(a.name).a.getClass().equals(varMap.get(assignValueprinter.infixOutput).a.getClass()))) {
@@ -1029,6 +1187,9 @@ public class TypeChecker implements Visitor{
 				
 				if (!varMap.containsKey(a.name)) {
 					errormsg.add("Error: variable " + a.name + " has not been declared.");
+				}
+				else if (arrayMap.containsKey(a.name)) {
+					errormsg.add("Error: Cannot re-assign values to an array.");
 				}
 				// no error if assign integer to real
 				else if (varMap.get(a.name).a instanceof RealArray && varMap.get(assignValueprinter.infixOutput).a instanceof IntType) {
@@ -1189,7 +1350,12 @@ public class TypeChecker implements Visitor{
 	}
 	
 	
-	
+	@Override
+	public void visitResults(Results r) {
+		if (!isAccessor) {
+			errormsg.add("Error: You cannot use the \"Result\" keyword outside an accessor.");
+		}
+	}
 	
 	
 	
@@ -1211,6 +1377,13 @@ public class TypeChecker implements Visitor{
 			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
 			errormsg.add("Error: variable " + n.name + " has boolean type.");
 		}
+		else if (n.mode instanceof modes.ArrayAssign) {
+			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
+			errormsg.add("Error: Array assignment is not allowed.");
+		}
 		
 	}
+
+
+	
 }

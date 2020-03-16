@@ -95,6 +95,8 @@ public interface Visitor {
 	
 	void visitOlds(Olds o);
 
+	void visitResults(Results r);
+
 	
 
 	

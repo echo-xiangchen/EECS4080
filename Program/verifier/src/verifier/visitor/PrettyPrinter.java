@@ -108,8 +108,8 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("(assert (not (" + op + " " + left.prefixOutput 
-				+ " " + right.prefixOutput + ")))\n"
+		z3output = z3output.concat("(assert ( not ( " + op + " " + left.prefixOutput 
+				+ " " + right.prefixOutput + " )))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -203,7 +203,7 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("(assert (not (" + op + " " + printer.prefixOutput + ")))\n"
+		z3output = z3output.concat("(assert ( not ( " + op + " " + printer.prefixOutput + " )))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -290,7 +290,7 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
+		z3output = z3output.concat("( assert ( not " + p.prefixOutput + " ))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -378,7 +378,7 @@ public class PrettyPrinter implements Visitor {
 		}
 		
 		// add the remaining string
-		z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
+		z3output = z3output.concat("(assert ( not " + p.prefixOutput + " ))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -475,7 +475,7 @@ public class PrettyPrinter implements Visitor {
 				}
 			}
 			// add the remaining string
-			z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
+			z3output = z3output.concat("(assert ( not " + p.prefixOutput + " ))\n"
 					+ "(check-sat)\n"
 					+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 					+ ";(get-model)\n"
@@ -816,7 +816,7 @@ public class PrettyPrinter implements Visitor {
 				}
 			}
 			// add the remaining string
-			z3output = z3output.concat("(assert (not " + p.prefixOutput +  "))\n"
+			z3output = z3output.concat("(assert ( not " + p.prefixOutput +  " ))\n"
 					+ "(check-sat)\n"
 					+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 					+ ";(get-model)\n"
@@ -875,6 +875,10 @@ public class PrettyPrinter implements Visitor {
 		
 	}
 	
+	@Override
+	public void visitResults(Results r) {
+		// TODO Auto-generated method stub
+	}
 	
 	
 	
@@ -882,6 +886,8 @@ public class PrettyPrinter implements Visitor {
 	public void visitNIL(NIL n) {
 		// TODO Auto-generated method stub
 	}
+
+	
 
 	
 }

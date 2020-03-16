@@ -1,27 +1,24 @@
-change_at(a : [REAL];i : INTEGER;nv : REAL)
+return_value() : INTEGER
 require
-   valid_index : ((1 <= i) and (i <= a.count))
-local
-   x : INTEGER
-   y : BOOLEAN
+   true
 do
-  a[i] := nv;
+  Result := a[3];
 ensure
-   changed : (a[i] = nv)
-   unchanged : forall j;((((1 <= j) and (j <= a.count)) and (not (i = j))) => (old a[j] = a[j]))
+   changed :  ( Result = a[3] ) 
+   sured :  ( Result > 0 ) 
 end
 
 Where: 
 Precondition(P) : 
-   valid_index : ((1 <= i) and (i <= a.count))
+   true
 Implementation(S) : 
-  a[i] := nv;
+  Result := a[3];
 Postcondition(Q) : 
-   changed : (a[i] = nv)
-   unchanged : forall j;((((1 <= j) and (j <= a.count)) and (not (i = j))) => (old a[j] = a[j]))
+   changed :  ( Result = a[3] ) 
+   sured :  ( Result > 0 ) 
 wp(S, Q) : 
-      changed : (a[i] = nv)
-   unchanged : forall j;((((1 <= j) and (j <= a.count)) and (not (i = j))) => (old a[j] = a[j]))
+   ( ( a[3] = a[3] )  and  ( a[3] > 0 ) )
 Proof Obligation: P => wp(S, Q)
 
-Discharged.
+Not discharged.
+Counterexample is not available.

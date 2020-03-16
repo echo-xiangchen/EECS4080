@@ -309,7 +309,7 @@ public class TestLogicVer {
 						// remove the first line
 						for (int a = 1; a <= splitedOutput.length; a++) {
 							String [] strArr = splitedOutput[a - 1].split("\\n");
-							isMethod = !strArr[0].equals(";formula\n");
+							isMethod = !strArr[0].equals(";formula");
 							if (isMethod) {
 								methondName = strArr[0].replaceAll(";", "");
 							}

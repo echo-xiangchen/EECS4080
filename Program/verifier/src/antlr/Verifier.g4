@@ -8,6 +8,7 @@ stat : line+ ;
 
 line 
 	: declaration				# VarDeclaration
+	| assignment 				# AssignDecl
 	| method 					# DefineMethod		
 	| VERIFY boolExpr			# VerifyBoolExpr
 	| VERIFY ID 				# VerifyMethod
@@ -20,7 +21,7 @@ method
 	;
 
 mutator 
-	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')?
+	: ID '(' ('(' uninitialDecl (';' uninitialDecl)* ')')? ')'
 		(precondition)?
 		(local)?
 		DO 
@@ -30,7 +31,7 @@ mutator
 	;
 
 accessor
-	: ID ('(' uninitialDecl (';' uninitialDecl)* ')')? unnamedDecl
+	: ID '(' ('(' uninitialDecl (';' uninitialDecl)* ')')? ')' ':' unnamedDecl
 		(precondition)?
 		(local)?
 		DO 
@@ -66,12 +67,16 @@ implementation
 
 
 assignment
-	: ID ':=' ID ';'							# SingleVarAssign
-	| ID ':=' boolExpr ';'						# BoolAssign
-	| ID ':=' arithmetic ';'					# ArithAssign
-	| ID '[' arithmetic ']' ':=' ID ';'			# ArraySingleVarAssign 
-	| ID '[' arithmetic ']' ':=' boolExpr 		# BoolArrayAssign
-	| ID '[' arithmetic ']' ':=' arithmetic 	# ArithArrayAssign
+	: ID ':=' ID ';'										# SingleVarAssign
+	| ID ':=' boolExpr ';'									# BoolAssign
+	| ID ':=' arithmetic ';'								# ArithAssign
+	| ID ':=' '<<' (boolExpr (',' boolExpr)*)? '>>' ';' 	# BoolArrayInitialize
+	| ID ':=' '<<' (arithmetic (',' arithmetic)*)? '>>' ';'	# ArithArrayInitialize
+	| ID '[' arithmetic ']' ':=' ID ';'						# ArraySingleVarAssign 
+	| ID '[' arithmetic ']' ':=' boolExpr ';'				# BoolArrayAssign
+	| ID '[' arithmetic ']' ':=' arithmetic ';'				# ArithArrayAssign
+	| RESULT ':=' ID ';' 									# SingleVarResultAssign
+	| RESULT ':=' ID '[' arithmetic ']' ';'					# ArrayValueResultAssign
 	;
 
 declaration

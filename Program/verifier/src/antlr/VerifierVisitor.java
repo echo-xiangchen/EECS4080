@@ -26,6 +26,13 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarDeclaration(VerifierParser.VarDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code AssignDecl}
+	 * labeled alternative in {@link VerifierParser#line}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignDecl(VerifierParser.AssignDeclContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code DefineMethod}
 	 * labeled alternative in {@link VerifierParser#line}.
 	 * @param ctx the parse tree
@@ -131,6 +138,20 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArithAssign(VerifierParser.ArithAssignContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code BoolArrayInitialize}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolArrayInitialize(VerifierParser.BoolArrayInitializeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArithArrayInitialize}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithArrayInitialize(VerifierParser.ArithArrayInitializeContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ArraySingleVarAssign}
 	 * labeled alternative in {@link VerifierParser#assignment}.
 	 * @param ctx the parse tree
@@ -151,6 +172,20 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArithArrayAssign(VerifierParser.ArithArrayAssignContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SingleVarResultAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingleVarResultAssign(VerifierParser.SingleVarResultAssignContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArrayValueResultAssign}
+	 * labeled alternative in {@link VerifierParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayValueResultAssign(VerifierParser.ArrayValueResultAssignContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code UninitialVarDecl}
 	 * labeled alternative in {@link VerifierParser#declaration}.

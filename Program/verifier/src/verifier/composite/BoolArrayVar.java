@@ -13,8 +13,8 @@ public class BoolArrayVar extends ArrayVar {
 	}
 	
 	// verification
-	public BoolArrayVar(String name, mode mode, Verifier verifier) {
-		super(name, mode, verifier);
+	public BoolArrayVar(String name, mode mode, Verifier index) {
+		super(name, mode, index);
 	}
 	
 	// initialized declaration

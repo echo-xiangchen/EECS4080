@@ -54,7 +54,7 @@ public class PrefixPrinter implements Visitor{
 	public static Map<String, List<Verifier>> methodParameterMap = new LinkedHashMap<String, List<Verifier>>();
 	
 	// map that stores the method name and its implementations
-	public static Map<String, List<Implementations>> methodImpMap = new LinkedHashMap<String, List<Implementations>>();
+	public static Map<String, List<Verifier>> methodImpMap = new LinkedHashMap<String, List<Verifier>>();
 	
 	public PrefixPrinter() {
 		prefixOutput = "";
@@ -80,8 +80,8 @@ public class PrefixPrinter implements Visitor{
 		b.right().accept(rightPrinter);
 		isNestedQuantifier = false;
 		
-		prefixOutput = prefixOutput.concat("(" + op + " " 
-				+ leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + ")");
+		prefixOutput = prefixOutput.concat("( " + op + " " 
+				+ leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + " )");
 	}
 	
 	public void visitUnaryExpr(UnaryExpr u, String op) {
@@ -95,7 +95,7 @@ public class PrefixPrinter implements Visitor{
 		u.child.accept(p);
 		isNestedQuantifier = false;
 		
-		prefixOutput = prefixOutput.concat("(" + op + " " + p.prefixOutput + ")");
+		prefixOutput = prefixOutput.concat("( " + op + " " + p.prefixOutput + " )");
 	}
 	
 	public void QuantifyPrinter (Quantification q) {
@@ -109,7 +109,7 @@ public class PrefixPrinter implements Visitor{
 		PrefixPrinter p2 = new PrefixPrinter();
 		q.expr.accept(p2);
 		
-		prefixOutput = "(" + quantifyIndicator + "(" + quantifyVar + ")" + p2.prefixOutput + ")";
+		prefixOutput = "( " + quantifyIndicator + " ( " + quantifyVar + " ) " + p2.prefixOutput + " ) ";
 		
 	}
 	
@@ -274,6 +274,14 @@ public class PrefixPrinter implements Visitor{
 			completeVarMap.put(v.name, new Pair<String, String>("Bool", "Quantification"));
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Bool)");
 		}
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			if (v.name != null) {
+				completeVarMap.put(v.name, new Pair<String, String>("Bool", null));
+			}
+		}
 	}
 	
 	// int variable declaration
@@ -307,6 +315,14 @@ public class PrefixPrinter implements Visitor{
 		else if (v.mode instanceof modes.QuantifyInt) {
 			completeVarMap.put(v.name, new Pair<String, String>("Int", "Quantification"));
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Int)");
+		}
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			if (v.name != null) {
+				completeVarMap.put(v.name, new Pair<String, String>("Int", null));
+			}
 		}
 	}
 	
@@ -342,6 +358,14 @@ public class PrefixPrinter implements Visitor{
 			completeVarMap.put(v.name, new Pair<String, String>("Real", "Quantification"));
 			quantifyVar = quantifyVar.concat("(" + v.name + " " + "Real)");
 		}
+		// unnamed decl
+		// used for method return value - find_max(a : ARRAY[INTEGER]) : INTEGER
+		// or pair element - p : PAIR[BOOLEAN; INTEGER]
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			if (v.name != null) {
+				completeVarMap.put(v.name, new Pair<String, String>("Real", null));
+			}
+		}
 	}
 	
 	
@@ -366,7 +390,7 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p = new PrefixPrinter();
 			a.index.accept(p);
 			// (select a 1)
-			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
+			prefixOutput = prefixOutput.concat("( select " + a.name + " " + p.prefixOutput + " ) ");
 			
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
@@ -375,6 +399,17 @@ public class PrefixPrinter implements Visitor{
 		// initialized declaration
 		// e.g. a : ARRAY[BOOLEAN] = <<p, q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
+			completeVarMap.put(a.name, new Pair<String, String>("Bool", "ValuedArray"));
+			List<String> value = new ArrayList<String>();
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				PrefixPrinter p = new PrefixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value.add(p.prefixOutput);
+			}
+			arrayMap.put(a.name, value);
+		}
+		// array assignment
+		else if (a.mode instanceof modes.Assignment) {
 			completeVarMap.put(a.name, new Pair<String, String>("Bool", "ValuedArray"));
 			List<String> value = new ArrayList<String>();
 			for (int i = 0; i < a.arrayValue.size(); i++) {
@@ -402,7 +437,7 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p = new PrefixPrinter();
 			a.index.accept(p);
 			// (select a 1)
-			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + " ) ");
 			
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
@@ -411,6 +446,17 @@ public class PrefixPrinter implements Visitor{
 		// initialized declaration
 		// e.g. a : ARRAY[INTEGER] = <<1, 2, 9>>
 		else if (a.mode instanceof modes.InitializedDecl) {
+			completeVarMap.put(a.name, new Pair<String, String>("Int", "ValuedArray"));
+			List<String> value = new ArrayList<String>();
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				PrefixPrinter p = new PrefixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value.add(p.prefixOutput);
+			}
+			arrayMap.put(a.name, value);
+		}
+		// array assignment
+		else if (a.mode instanceof modes.Assignment) {
 			completeVarMap.put(a.name, new Pair<String, String>("Int", "ValuedArray"));
 			List<String> value = new ArrayList<String>();
 			for (int i = 0; i < a.arrayValue.size(); i++) {
@@ -437,7 +483,7 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p = new PrefixPrinter();
 			a.index.accept(p);
 			// (select a 1)
-			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + " ) ");
 			
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
@@ -455,6 +501,18 @@ public class PrefixPrinter implements Visitor{
 			}
 			arrayMap.put(a.name, value);
 		}
+		// array assignment
+		else if (a.mode instanceof modes.Assignment) {
+			completeVarMap.put(a.name, new Pair<String, String>("Real", "ValuedArray"));
+			List<String> value = new ArrayList<String>();
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				PrefixPrinter p = new PrefixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value.add(p.prefixOutput);
+			}
+			arrayMap.put(a.name, value);
+		}
+		
 	}
 
 
@@ -507,12 +565,13 @@ public class PrefixPrinter implements Visitor{
 			
 			PrefixPrinter valuePrinter = new PrefixPrinter();
 			a.assignValue.accept(valuePrinter);
-		
+			
+			// for array assignments, need to create a new array in Z3
 			inclusiveVarMap.put("new_" + a.name, new Pair<String, String>
 				(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
 		
 			assignMap.put("new_" + a.name, "(store " + a.name + " " + indexPrinter.prefixOutput 
-						+ " " + valuePrinter.prefixOutput + ")");
+						+ " " + valuePrinter.prefixOutput + " ) ");
 		}
 		else {
 			PrefixPrinter valuePrinter = new PrefixPrinter();
@@ -552,11 +611,14 @@ public class PrefixPrinter implements Visitor{
 			}
 			
 			// add the local variable
-			methodLocalMap.put(m.name, m.locals);
+			if (m.locals != null) {
+				methodLocalMap.put(m.name, m.locals);
+			}
+			
 			
 			
 			// add the implementations to the map
-			List<Implementations> impList = new ArrayList<Implementations>();
+			List<Verifier> impList = new ArrayList<Verifier>();
 			for (int i = 0; i < m.implementations.size(); i++) {
 				// add each implementation to the list
 				impList.add(m.implementations.get(i));
@@ -571,6 +633,12 @@ public class PrefixPrinter implements Visitor{
 					PrefixPrinter paraPrinter = new PrefixPrinter();
 					methodParameterMap.get(m.name).get(i).accept(paraPrinter);
 				}
+			}
+			
+			// print the return value
+			if (methodReturnMap.containsKey(m.name)) {
+				PrefixPrinter returnvaluePrinter = new PrefixPrinter();
+				methodReturnMap.get(m.name).accept(returnvaluePrinter);
 			}
 			
 			
@@ -595,8 +663,8 @@ public class PrefixPrinter implements Visitor{
 			}
 			
 			
-			//System.out.println(WpCalculator.z3SubstituteMap);
-			//System.out.println(WpCalculator.counteregSubstituteMap);
+			System.out.println(WpCalculator.z3SubstituteMap);
+			System.out.println(WpCalculator.counteregSubstituteMap);
 			
 			
 			// do the substitution for postcondition
@@ -609,28 +677,12 @@ public class PrefixPrinter implements Visitor{
 				postPrinter.prefixOutput = postPrinter.prefixOutput.replaceAll(entry.getKey(), entry.getValue());
 			}
 			
-			// also do the substitution for infix output
-			InfixPrinter wpPrinter = new InfixPrinter();
-			methodContractMap.get(m.name).get(1).accept(wpPrinter);
-			
-			// do the substitution for postcondition
-			// for assignments, tranverse the substitution map in reverse order
-			ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
-				(WpCalculator.counteregSubstituteMap.entrySet()).listIterator(WpCalculator.counteregSubstituteMap.size());
-			
-			while(j.hasPrevious()) {
-				Map.Entry<String, String> entry= j.previous();
-				wpPrinter.infixOutput = wpPrinter.infixOutput.replaceAll(entry.getKey(), entry.getValue());
-			}
-			// add the weakest precondition to the list
-			InfixPrinter.wps.put(m.name, "   " + wpPrinter.infixOutput);
 						
 			prefixOutput = prefixOutput.concat("(=> " 
-					+ prePrinter.prefixOutput + " " + postPrinter.prefixOutput + ")");	
+					+ prePrinter.prefixOutput + " " + postPrinter.prefixOutput + " ) ");	
 		
 			isNestedQuantifier = false;
 		}
-		
 	}
 
 	@Override
@@ -729,13 +781,13 @@ public class PrefixPrinter implements Visitor{
 		else {
 			prefixOutput = prefixOutput.concat("old_" + o.name);
 		}
-		
-		
-		
-		
 	}
 	
-	
+	@Override
+	public void visitResults(Results r) {
+		// TODO Auto-generated method stub
+		prefixOutput = prefixOutput.concat("Result");
+	}
 	
 	
 	@Override
@@ -743,6 +795,8 @@ public class PrefixPrinter implements Visitor{
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 	
 	

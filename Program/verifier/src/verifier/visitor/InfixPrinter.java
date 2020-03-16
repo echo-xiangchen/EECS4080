@@ -9,6 +9,7 @@ public class InfixPrinter implements Visitor{
 	
 	public String infixOutput;
 	public List<String> quantifyVar;
+	public String wpStr;
 	
 	// map that stores the method preconditions
 	public static Map<String, String> preconditions = new LinkedHashMap<String, String>();
@@ -23,6 +24,7 @@ public class InfixPrinter implements Visitor{
 	public static Map<String, String> wps = new LinkedHashMap<String, String>();
 	
 	public InfixPrinter() {
+		wpStr = "";
 		infixOutput = "";
 		quantifyVar = new ArrayList<String>();
 	}
@@ -33,7 +35,7 @@ public class InfixPrinter implements Visitor{
 		
 		b.left().accept(leftPrinter);
 		b.right().accept(rightPrinter);
-		infixOutput = infixOutput.concat("(" + leftPrinter.infixOutput + " " + op + " " + rightPrinter.infixOutput + ")");
+		infixOutput = infixOutput.concat(" ( " + leftPrinter.infixOutput + " " + op + " " + rightPrinter.infixOutput + " ) ");
 	}
 	
 	public void visitUnaryExpr(UnaryExpr u, String op) {
@@ -42,7 +44,7 @@ public class InfixPrinter implements Visitor{
 		
 		u.child.accept(p);
 		
-		infixOutput = infixOutput.concat("(" + op + " " + p.infixOutput + ")");
+		infixOutput = infixOutput.concat(" ( " + op + " " + p.infixOutput + " ) ");
 	}
 	
 	
@@ -172,6 +174,10 @@ public class InfixPrinter implements Visitor{
 		else if (v.mode instanceof modes.QuantifyBool) {
 			quantifyVar.add(v.name);
 		}
+		// unnamed declaration
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			infixOutput = infixOutput.concat("BOOLEAN");
+		}
 	}
 	
 	// int variable declaration
@@ -197,6 +203,10 @@ public class InfixPrinter implements Visitor{
 		// e.g. forall p : BOOLEAN; @ not p
 		else if (v.mode instanceof modes.QuantifyInt) {
 			quantifyVar.add(v.name);
+		}
+		// unnamed declaration
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			infixOutput = infixOutput.concat("INTEGER");
 		}
 	}
 	
@@ -225,6 +235,10 @@ public class InfixPrinter implements Visitor{
 		else if (v.mode instanceof modes.QuantifyReal) {
 			quantifyVar.add(v.name);
 		}
+		// unnamed declaration
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			infixOutput = infixOutput.concat("REAL");
+		}
 	}
 	
 	
@@ -234,7 +248,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. a : ARRAY[BOOLEAN]
 		if(a.mode instanceof modes.UninitializedDecl) {
-			infixOutput = infixOutput.concat(a.name + " : [BOOLEAN]");
+			infixOutput = infixOutput.concat(a.name + " : ARRAY[BOOLEAN]");
 		}
 		// verification
 		// e.g. verify a[1]
@@ -248,8 +262,27 @@ public class InfixPrinter implements Visitor{
 		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			
+		}
+		// unnamed declaration
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			infixOutput = infixOutput.concat("ARRAY[BOOLEAN]");
+		}
+		// assignment
+		else if (a.mode instanceof modes.Assignment) {
+			String value = "<< ";
 			
-			
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+				// for every element in the list, call varPrinter to removed used variable
+				VarPrinter p2 = new VarPrinter();
+				a.arrayValue.get(i).accept(p2);
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			infixOutput = infixOutput.concat("  " + a.name + " := " + value);
 		}
 	}
 	
@@ -259,7 +292,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. a : ARRAY[INTEGER]
 		if(a.mode instanceof modes.UninitializedDecl) {
-			infixOutput = infixOutput.concat(a.name + " : [INTEGER]");
+			infixOutput = infixOutput.concat(a.name + " : ARRAY[INTEGER]");
 		}
 		// verification
 		// e.g. verify a[1]
@@ -272,9 +305,28 @@ public class InfixPrinter implements Visitor{
 		// initialized declaration
 		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
+
+		}
+		// unnamed declaration
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			infixOutput = infixOutput.concat("ARRAY[INTEGER]");
+		}
+		// assignment
+		else if (a.mode instanceof modes.Assignment) {
+			String value = "<< ";
 			
-			
-			
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+				// for every element in the list, call varPrinter to removed used variable
+				VarPrinter p2 = new VarPrinter();
+				a.arrayValue.get(i).accept(p2);
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			infixOutput = infixOutput.concat("  " + a.name + " := " + value);
 		}
 	}
 	
@@ -284,7 +336,7 @@ public class InfixPrinter implements Visitor{
 		// uninitialized declaration
 		// e.g. a : ARRAY[REAL]
 		if(a.mode instanceof modes.UninitializedDecl) {
-			infixOutput = infixOutput.concat(a.name + " : [REAL]");
+			infixOutput = infixOutput.concat(a.name + " : ARRAY[REAL]");
 		}
 		// verification
 		// e.g. verify a[1]
@@ -298,8 +350,27 @@ public class InfixPrinter implements Visitor{
 		// e.g. i : ARRAY[BOOLEAN] = <<true, p and q>>
 		else if (a.mode instanceof modes.InitializedDecl) {
 			
+		}
+		// unnamed declaration
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			infixOutput = infixOutput.concat("ARRAY[REAL]");
+		}
+		// assignment
+		else if (a.mode instanceof modes.Assignment) {
+			String value = "<< ";
 			
-			
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+				// for every element in the list, call varPrinter to removed used variable
+				VarPrinter p2 = new VarPrinter();
+				a.arrayValue.get(i).accept(p2);
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			infixOutput = infixOutput.concat("  " + a.name + " := " + value);
 		}
 	}
 
@@ -360,23 +431,36 @@ public class InfixPrinter implements Visitor{
 				parameterStr = parameterStr + paraPrinter.infixOutput + ";";
 			}
 			parameterStr = parameterStr.substring(0, parameterStr.length() - 1);
-			infixOutput = infixOutput.concat(m.name + "(" + parameterStr + ")"+ "\n");
+			
+			// if there is return type
+			if (PrefixPrinter.methodReturnMap.containsKey(m.name)) {
+				InfixPrinter returnPrinter = new InfixPrinter();
+				PrefixPrinter.methodReturnMap.get(m.name).accept(returnPrinter);
+				
+				infixOutput = infixOutput.concat(m.name + "(" + parameterStr + ")" 
+						+ " : " + returnPrinter.infixOutput + "\n");
+				
+			}
+			// if return type is empty
+			else {
+				infixOutput = infixOutput.concat(m.name + "(" + parameterStr + ")"+ "\n");
+			}
 		}
 		// if parameters are empty, simply add the method name
 		else {
-			infixOutput = infixOutput.concat(m.name + " "+ "\n");
+			if (PrefixPrinter.methodReturnMap.containsKey(m.name)) {
+				InfixPrinter returnPrinter = new InfixPrinter();
+				PrefixPrinter.methodReturnMap.get(m.name).accept(returnPrinter);
+				
+				infixOutput = infixOutput.concat(m.name + "()" +  " : " 
+						+ returnPrinter.infixOutput + "\n");
+			}
+			else {
+				infixOutput = infixOutput.concat(m.name + "()"+ "\n");
+			}
 		}
 		
-		// if the return value is not null
 		
-		
-		// the return value in methodMap is at index 2
-		if (PrefixPrinter.methodReturnMap.containsKey(m.name)) {
-			InfixPrinter returnPrinter = new InfixPrinter();
-			PrefixPrinter.methodReturnMap.get(m.name).accept(returnPrinter);
-			infixOutput = infixOutput.concat(returnPrinter.infixOutput);
-			
-		}
 		// print the precondition
 		// precondition in methodMap starts at index 0
 		InfixPrinter prePrinter = new InfixPrinter();
@@ -390,9 +474,12 @@ public class InfixPrinter implements Visitor{
 		
 		
 		// print the local variables
-		InfixPrinter localPrinter = new InfixPrinter();
-		PrefixPrinter.methodLocalMap.get(m.name).accept(localPrinter);
-		infixOutput = infixOutput.concat(localPrinter.infixOutput);
+		if (PrefixPrinter.methodLocalMap.containsKey(m.name)) {
+			InfixPrinter localPrinter = new InfixPrinter();
+			PrefixPrinter.methodLocalMap.get(m.name).accept(localPrinter);
+			infixOutput = infixOutput.concat(localPrinter.infixOutput);
+		}
+		
 		
 		// print the implementations
 		String impStr = "";
@@ -416,6 +503,18 @@ public class InfixPrinter implements Visitor{
 		infixOutput = infixOutput.concat("end\n");
 		
 		postconditions.put(m.name, postPrinter.infixOutput);
+		
+		// print the wps
+		// do the substitution for postcondition
+		// for assignments, tranverse the substitution map in reverse order
+		ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
+			(WpCalculator.counteregSubstituteMap.entrySet()).listIterator(WpCalculator.counteregSubstituteMap.size());
+		
+		while(j.hasPrevious()) {
+			Map.Entry<String, String> entry= j.previous();
+			postPrinter.wpStr = postPrinter.wpStr.replaceAll(entry.getKey(), entry.getValue());
+		}
+		wps.put(m.name, "   " + postPrinter.wpStr + "\n");
 	}
 	
 	
@@ -442,6 +541,32 @@ public class InfixPrinter implements Visitor{
 			
 			infixOutput = infixOutput.concat("   " + prePrinter.infixOutput);
 		}
+		
+		// generate the wp output
+		// if there is only one contract
+		if (p.contracts.size() <= 1) {
+			InfixPrinter p1 = new InfixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			wpStr = wpStr.concat(p1.wpStr);
+		}
+		// if there are more than one contract
+		else {
+			InfixPrinter p1 = new InfixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			InfixPrinter p2 = new InfixPrinter();
+			p.contracts.get(1).accept(p2);
+			
+			wpStr = wpStr.concat("(" + p1.wpStr + " and " + p2.wpStr + ")");
+			
+			for (int i = 2; i < p.contracts.size(); i++) {
+				InfixPrinter printer = new InfixPrinter();
+				p.contracts.get(i).accept(printer);
+				
+				wpStr = "(" + wpStr + " and " + printer.wpStr;
+			}
+		}
 	}
 
 	@Override
@@ -455,6 +580,9 @@ public class InfixPrinter implements Visitor{
 		else {
 			infixOutput = infixOutput.concat(contractPrinter.infixOutput + "\n");
 		}
+		
+		// set up the output for wp
+		wpStr = contractPrinter.infixOutput;
 	}
 	
 	@Override
@@ -504,5 +632,11 @@ public class InfixPrinter implements Visitor{
 		}
 	}
 
-	
+	@Override
+	public void visitResults(Results r) {
+		// TODO Auto-generated method stub
+		infixOutput = infixOutput.concat("Result");
+		
+	}
+
 }

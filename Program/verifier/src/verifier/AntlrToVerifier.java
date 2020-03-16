@@ -18,6 +18,8 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	public static Map<String, String> varTypes = new HashMap<String, String>();
 	
+	public static boolean isPair = false;
+	
 	/* *****************************************************************************************
 	 * Methods for line rule
 	 * *****************************************************************************************
@@ -25,9 +27,16 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	// variable declaration
+	// declaration
 	@Override
 	public Verifier visitVarDeclaration(VarDeclarationContext ctx) {
 		return visit(ctx.declaration());
+	}
+	
+	// assignment
+	@Override
+	public Verifier visitAssignDecl(AssignDeclContext ctx) {
+		return visit(ctx.assignment());
 	}
 	
 	// method declaration
@@ -38,12 +47,14 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	// verify the formula
+	// VERIFY boolExpr
 	@Override
 	public Verifier visitVerifyBoolExpr(VerifyBoolExprContext ctx) {
 		if (!varTypes.containsKey(visit(ctx.boolExpr()).name)) {
 			return visit(ctx.boolExpr());
 		}
-		else if (varTypes.get(visit(ctx.boolExpr()).name).equals("Bool")) {
+		else if (varTypes.get(visit(ctx.boolExpr()).name).equals("Bool")
+				|| varTypes.get(visit(ctx.boolExpr()).name).equals("BoolArray")) {
 			return visit(ctx.boolExpr());
 		}
 		else {
@@ -53,6 +64,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	// verify the method
+	// VERIFY ID
 	@Override
 	public Verifier visitVerifyMethod(VerifyMethodContext ctx) {
 		if (!varTypes.containsKey(ctx.ID().getText())) {
@@ -91,6 +103,13 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 */
 	
 	
+//	ID '(' ('(' uninitialDecl (';' uninitialDecl)* ')')? ')'
+//		(precondition)?
+//		(local)?
+//		DO 
+//			(implementation)+
+//		(postcondition)? 
+//		END
 	@Override
 	public Verifier visitMutators(MutatorsContext ctx) {
 		// copy all the paremeters first
@@ -129,9 +148,9 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		}
 		
 		// copy all the implementations then
-		List<Implementations> imp = new ArrayList<Implementations>();
+		List<Verifier> imp = new ArrayList<Verifier>();
 		for (int i = 0; i < ctx.implementation().size(); i++) {
-			imp.add((Implementations) visit(ctx.implementation(i)));
+			imp.add(visit(ctx.implementation(i)));
 		}
 		
 		varTypes.put(ctx.ID().getText(), "Method");
@@ -144,6 +163,15 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 * Methods for accessor rule
 	 * *****************************************************************************************
 	 */
+	
+	
+//	ID '(' ('(' uninitialDecl (';' uninitialDecl)* ')')? ')' ':' unnamedDecl
+//		(precondition)?
+//		(local)?
+//		DO 
+//			(implementation)+
+//		(postcondition)? 
+//		END
 	
 	@Override
 	public Verifier visitAccessors(AccessorsContext ctx) {
@@ -183,9 +211,9 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		}
 		
 		// copy all the implementations then
-		List<Implementations> imp = new ArrayList<Implementations>();
+		List<Verifier> imp = new ArrayList<Verifier>();
 		for (int i = 0; i < ctx.implementation().size(); i++) {
-			imp.add((Implementations) visit(ctx.implementation(i)));
+			imp.add(visit(ctx.implementation(i)));
 		}
 		
 		varTypes.put(ctx.ID().getText(), "Method");
@@ -198,6 +226,9 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 * Methods for precondition rule
 	 * *****************************************************************************************
 	 */
+	
+	// REQUIRE (contract)+
+	
 	@Override
 	public Verifier visitPreContract(PreContractContext ctx) {
 		// copy all the contracts
@@ -213,6 +244,8 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 * Methods for postcondition rule
 	 * *****************************************************************************************
 	 */
+	
+	// ENSURE (contract)+
 	@Override
 	public Verifier visitPostContract(PostContractContext ctx) {
 		// copy all the contracts
@@ -228,6 +261,9 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 * Methods for contract rule
 	 * *****************************************************************************************
 	 */
+	
+	// (ID ':')? boolExpr
+	
 	@Override
 	public Verifier visitContracts(ContractsContext ctx) {
 		if (ctx.ID() != null) {
@@ -244,6 +280,9 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 * Methods for local rule
 	 * *****************************************************************************************
 	 */
+	
+	// LOCAL declaration+
+	
 	@Override
 	public Verifier visitLocalDecl(LocalDeclContext ctx) {
 		List<Verifier> vars = new ArrayList<Verifier>();
@@ -270,6 +309,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 * *****************************************************************************************
 	 */
 	
+	// ID ':=' ID ';'
 	@Override
 	public Verifier visitSingleVarAssign(SingleVarAssignContext ctx) {
 		if (varTypes.containsKey(ctx.ID(1).getText())) {
@@ -285,24 +325,75 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 				return new Assignments(ctx.ID(0).getText(), 
 						new RealVar(ctx.ID(1).getText(), new Verification()));
 			}
+			else {
+				// if it is array assignment, it's not allowed
+				return new NIL(ctx.ID(0).getText(), new ArrayAssign());
+			}
 		}
-		
-		return new Assignments(ctx.ID(0).getText(), 
-				new BoolVar(ctx.ID(1).getText(), new Verification()));
-		
+		// if the variable is not declared, cannot do the assignment
+		else {
+			return new NIL(ctx.ID(1).getText(), new Undeclared());
+		}
 	}
 	
+	// ID ':=' boolExpr ';'
 	@Override
 	public Verifier visitBoolAssign(BoolAssignContext ctx) {
 		return new Assignments(ctx.ID().getText(), visit(ctx.boolExpr()));
 	}
 	
 	
+	// ID ':=' arithmetic ';'
 	@Override
 	public Verifier visitArithAssign(ArithAssignContext ctx) {
 		return new Assignments(ctx.ID().getText(), visit(ctx.arithmetic()));
 	}
 	
+	// ID ':=' '<<' (boolExpr (',' boolExpr)*)? '>>' ';'
+	@Override
+	public Verifier visitBoolArrayInitialize(BoolArrayInitializeContext ctx) {
+		if (varTypes.containsKey(ctx.ID().getText())) {
+			// create a list of Logic, and store all the elements
+			List<Verifier> value = new ArrayList<Verifier>();
+			for (int i = 0; i < ctx.boolExpr().size(); i++) {
+				value.add(visit(ctx.boolExpr(i)));
+			}
+			
+			return new BoolArrayVar(ctx.ID().getText(), value, new Assignment());
+		}
+		else {
+			return new NIL(ctx.ID().getText(), new Undeclared());
+		}
+		
+	}
+	
+	// ID ':=' '<<' (arithmetic (',' arithmetic)*)? '>>' ';'
+	@Override
+	public Verifier visitArithArrayInitialize(ArithArrayInitializeContext ctx) {
+		// if the map contains the variable, check its type
+		if (varTypes.containsKey(ctx.ID().getText())) {
+			List<Verifier> value = new ArrayList<Verifier>();
+			for (int i = 0; i < ctx.arithmetic().size(); i++) {
+				value.add(visit(ctx.arithmetic(i)));
+			}
+			if (varTypes.get(ctx.ID().getText()).equals("IntArray")) {
+				return new IntArrayVar(ctx.ID().getText(), value, new Assignment());
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("RealArray")) {
+				return new RealArrayVar(ctx.ID().getText(), value, new Assignment());
+			}
+			// Declared for NIL means the variable has been declared but with the wrong type
+			else {
+				return new NIL(ctx.ID().getText(), new Declared());
+			}
+		}
+		// Undeclared means the variable has not been declared
+		else {
+			return new NIL(ctx.ID().getText(), new Undeclared());
+		}
+	}
+	
+	// ID '[' arithmetic ']' ':=' ID ';'
 	@Override
 	public Verifier visitArraySingleVarAssign(ArraySingleVarAssignContext ctx) {
 		if (varTypes.containsKey(ctx.ID(1).getText())) {
@@ -318,23 +409,81 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 				return new Assignments(ctx.ID(0).getText(), visit(ctx.arithmetic()), 
 						new RealVar(ctx.ID(1).getText(), new Verification()));
 			}
+			else {
+				// if it is array assignment, it's not allowed
+				return new NIL(ctx.ID(0).getText(), new ArrayAssign());
+			}
 		}
 		
 		return new Assignments(ctx.ID(0).getText(), visit(ctx.arithmetic()),
 				new BoolVar(ctx.ID(1).getText(), new Verification()));
 	}
 	
+	// ID '[' arithmetic ']' ':=' boolExpr
 	@Override
 	public Verifier visitBoolArrayAssign(BoolArrayAssignContext ctx) {
 		return new Assignments(ctx.ID().getText(), 
 				visit(ctx.arithmetic()), visit(ctx.boolExpr()));
 	}
 	
+	// ID '[' arithmetic ']' ':=' arithmetic
 	@Override
 	public Verifier visitArithArrayAssign(ArithArrayAssignContext ctx) {
 		return new Assignments(ctx.ID().getText(), 
 				visit(ctx.arithmetic(0)), visit(ctx.arithmetic(1)));
 	}
+	
+	// RESULT ':=' ID ';'
+	@Override
+	public Verifier visitSingleVarResultAssign(SingleVarResultAssignContext ctx) {
+		if (varTypes.containsKey(ctx.ID().getText())) {
+			if (varTypes.get(ctx.ID().getText()).equals("Bool")) {
+				return new Assignments(ctx.RESULT().getText(), 
+						new BoolVar(ctx.ID().getText(), new Verification()));
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("Int")) {
+				return new Assignments(ctx.RESULT().getText(), 
+						new IntVar(ctx.ID().getText(), new Verification()));
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("Real")) {
+				return new Assignments(ctx.RESULT().getText(), 
+						new RealVar(ctx.ID().getText(), new Verification()));
+			}
+			else {
+				// if it is array assignment, it's not allowed
+				return new NIL(ctx.ID().getText(), new ArrayAssign());
+			}
+		}
+		else {
+			return new NIL(ctx.ID().getText(), new Undeclared());
+		}
+	}
+	
+	// RESULT ':=' ID '[' arithmetic ']'
+	@Override
+	public Verifier visitArrayValueResultAssign(ArrayValueResultAssignContext ctx) {
+		if (varTypes.containsKey(ctx.ID().getText())) {
+			if (varTypes.get(ctx.ID().getText()).equals("BoolArray")) {
+				return new Assignments(ctx.RESULT().getText(), 
+						new BoolArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmetic())));
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("IntArray")) {
+				return new Assignments(ctx.RESULT().getText(), 
+						new IntArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmetic())));
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("RealArray")) {
+				return new Assignments(ctx.RESULT().getText(), 
+						new RealArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmetic())));
+			}
+			return new Assignments(ctx.RESULT().getText(), 
+					new BoolArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmetic())));
+		}
+		else {
+			return new NIL(ctx.ID().getText(), new Undeclared());
+		}
+	}
+	
+	
 	
 	
 	/* *****************************************************************************************
@@ -465,34 +614,63 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for initialDecl rule
+	 * Methods for unnamedDecl rule
 	 * *****************************************************************************************
 	 */
 	
 	@Override
 	public Verifier visitUnnamedSingleVarDecl(UnnamedSingleVarDeclContext ctx) {
-		// add the variable and their types to the map
-		if (ctx.type.getType() == VerifierParser.BOOL) {
-			return new BoolVar(new AnonymousDecl());
+		// check if it's pair value
+		if (isPair) {
+			// add the variable and their types to the map
+			if (ctx.type.getType() == VerifierParser.BOOL) {
+				return new BoolVar(new AnonymousDecl());
+			}
+			else if (ctx.type.getType() == VerifierParser.INT) {
+				return new IntVar(new AnonymousDecl());
+			} 
+			else {
+				return new RealVar(new AnonymousDecl());
+			}
 		}
-		else if (ctx.type.getType() == VerifierParser.INT) {
-			return new IntVar(new AnonymousDecl());
-		} 
 		else {
-			return new RealVar(new AnonymousDecl());
+			// add the variable and their types to the map
+			if (ctx.type.getType() == VerifierParser.BOOL) {
+				return new BoolVar("Result", new AnonymousDecl());
+			}
+			else if (ctx.type.getType() == VerifierParser.INT) {
+				return new IntVar("Result", new AnonymousDecl());
+			} 
+			else {
+				return new RealVar("Result", new AnonymousDecl());
+			}
 		}
 	}
 	
 	@Override
 	public Verifier visitUnnamedArrayDecl(UnnamedArrayDeclContext ctx) {
-		if (ctx.type.getType() == VerifierParser.BOOL) {
-			return new BoolArrayVar(new AnonymousDecl());
-		}
-		else if (ctx.type.getType() == VerifierParser.INT) {
-			return new IntArrayVar(new AnonymousDecl());
+		// check if it's pair value
+		if (isPair) {
+			if (ctx.type.getType() == VerifierParser.BOOL) {
+				return new BoolArrayVar(new AnonymousDecl());
+			}
+			else if (ctx.type.getType() == VerifierParser.INT) {
+				return new IntArrayVar(new AnonymousDecl());
+			}
+			else {
+				return new RealArrayVar(new AnonymousDecl());
+			}
 		}
 		else {
-			return new RealArrayVar(new AnonymousDecl());
+			if (ctx.type.getType() == VerifierParser.BOOL) {
+				return new BoolArrayVar("Result", new AnonymousDecl());
+			}
+			else if (ctx.type.getType() == VerifierParser.INT) {
+				return new IntArrayVar("Result", new AnonymousDecl());
+			}
+			else {
+				return new RealArrayVar("Result", new AnonymousDecl());
+			}
 		}
 	}
 	
@@ -591,6 +769,18 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	@Override
 	public Verifier visitOldBoolArray(OldBoolArrayContext ctx) {
 		return new Olds(ctx.ID().getText(), visit(ctx.arithmetic()), new BoolType());
+	}
+	
+	// result variable
+	@Override
+	public Verifier visitBoolResult(BoolResultContext ctx) {
+		return new Results();
+	}
+	
+	// result array
+	@Override
+	public Verifier visitBoolArrayResult(BoolArrayResultContext ctx) {
+		return new Results(visit(ctx.arithmetic()));
 	}
 	
 	
@@ -792,6 +982,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		}
 	}
 	
+	// old array variable
 	@Override
 	public Verifier visitOldArithArray(OldArithArrayContext ctx) {
 		// if the map contains the variable, check its type
@@ -811,6 +1002,18 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		else {
 			return new NIL(ctx.ID().getText(), new Undeclared());
 		}
+	}
+	
+	// result variable
+	@Override
+	public Verifier visitArithResult(ArithResultContext ctx) {
+		return new Results();
+	}
+	
+	// result array variable
+	@Override
+	public Verifier visitArithArrayResult(ArithArrayResultContext ctx) {
+		return new Results(visit(ctx.arithmetic()));
 	}
 	
 	// int number

@@ -13,8 +13,8 @@ public class IntArrayVar extends ArrayVar {
 	}
 	
 	// verification
-	public IntArrayVar(String name, mode mode, Verifier verifier) {
-		super(name, mode, verifier);
+	public IntArrayVar(String name, mode mode, Verifier index) {
+		super(name, mode, index);
 	}
 	
 	// initialized declaration

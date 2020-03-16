@@ -33,6 +33,7 @@ public abstract class Var extends Logic {
 	}
 	
 	// initialized normal variable declaration
+	// and normal variable assignment
 	public Var(String name, Verifier verifier, mode mode) {
 		this.name = name;
 		this.value = verifier;
@@ -57,6 +58,7 @@ public abstract class Var extends Logic {
 	}
 	
 	// initialized array declaration
+	// and array assignment
 	// List<Verifier> contains all the elements of its values
 	public Var(String name, List<Verifier> arrayValue, mode mode) {
 		this.name = name;

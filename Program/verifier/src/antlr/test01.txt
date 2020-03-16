@@ -1,9 +1,2 @@
-change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
-require
-	valid_index: 1 <= i
-do
-	a[i] := nv
-ensure
-	changed: a[i] = nv
-	unchanged: forall j:INTEGER; | (1 <=j and not i = j) => old a[i] = a[i]
-end
+a:ARRAY[BOOLEAN]
+verify a[1]

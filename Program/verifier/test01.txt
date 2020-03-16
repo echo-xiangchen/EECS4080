@@ -1,15 +1,11 @@
-
-change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
-require
-	valid_index: 1 <= i and i <= a.count
-local
-	x: INTEGER
-	y: BOOLEAN
+a:ARRAY[INTEGER]
+a := << 1, 2, 3, 6>>;
+return_value() : INTEGER
+require true
 do
-	a[i] := nv;
+Result := a[3];
 ensure
-	changed: a[i] = nv
-	unchanged: forall j:INTEGER; |(1 <= j and j <= a.count and not i = j) => old a[j] = a[j]
+	changed : Result = a[3]
+	sured: Result > 0
 end
-
-verify change_at
+verify return_value

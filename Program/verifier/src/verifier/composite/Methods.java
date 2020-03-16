@@ -23,7 +23,7 @@ public class Methods extends Verifier {
 	public Verifier locals;
 	
 	// implementations of the method
-	public List<Implementations> implementations;
+	public List<Verifier> implementations;
 	
 	// postcondition expression
 	public Verifier postcondition;
@@ -31,7 +31,7 @@ public class Methods extends Verifier {
 	
 	// method declaration
 	public Methods(String name, List<Verifier> parameters, Verifier returnValue, 
-			Verifier pre, Verifier locals, List<Implementations> imp, 
+			Verifier pre, Verifier locals, List<Verifier> imp, 
 			Verifier post, mode mode) {
 		this.name = name;
 		this.parameters = parameters;

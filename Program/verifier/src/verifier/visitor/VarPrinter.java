@@ -18,6 +18,8 @@ public class VarPrinter implements Visitor {
 	
 	// hashmap that store the array count
 	public static Map<String, String> arrayCount = new LinkedHashMap<String, String>();
+	
+	
 	public void visitBinaryExpr (BinaryExpr b) {
 		VarPrinter leftPrinter = new VarPrinter();
 		VarPrinter rightPrinter = new VarPrinter();
@@ -253,7 +255,6 @@ public class VarPrinter implements Visitor {
 		if(a.mode instanceof modes.UninitializedDecl) {	
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", null));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", null));
-			arrayCount.put(a.name, String.valueOf(Integer.MAX_VALUE));
 		}
 		// verification
 		// e.g. verify a[1]
@@ -282,7 +283,24 @@ public class VarPrinter implements Visitor {
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
 		}
-		
+		else if (a.mode instanceof modes.Assignment) {
+			String value = "<< ";
+			arrayCount.put(a.name, String.valueOf(a.arrayValue.size()));
+			
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+				// for every element in the list, call varPrinter to removed used variable
+				VarPrinter p2 = new VarPrinter();
+				a.arrayValue.get(i).accept(p2);
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			allVarMap.replace(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
+			unusedVarMap.replace(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
+		}
 	}
 	
 	// Integer array
@@ -294,7 +312,6 @@ public class VarPrinter implements Visitor {
 		if(a.mode instanceof modes.UninitializedDecl) {	
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", null));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", null));
-			arrayCount.put(a.name, String.valueOf(Integer.MAX_VALUE));
 		}
 		// verification
 		// e.g. verify a[1]
@@ -324,6 +341,24 @@ public class VarPrinter implements Visitor {
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
 		}
+		else if (a.mode instanceof modes.Assignment) {
+			String value = "<< ";
+			arrayCount.put(a.name, String.valueOf(a.arrayValue.size()));
+			
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+				// for every element in the list, call varPrinter to removed used variable
+				VarPrinter p2 = new VarPrinter();
+				a.arrayValue.get(i).accept(p2);
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			allVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
+			unusedVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
+		}
 	}
 
 	@Override
@@ -334,7 +369,6 @@ public class VarPrinter implements Visitor {
 		if(a.mode instanceof modes.UninitializedDecl) {	
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", null));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", null));
-			arrayCount.put(a.name, String.valueOf(Integer.MAX_VALUE));
 		}
 		// verification
 		// e.g. verify a[1]
@@ -364,6 +398,25 @@ public class VarPrinter implements Visitor {
 			allVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", value));
 			unusedVarMap.put(a.name, new Pair<String, String>("ARRAY[REAL]", value));
 		}
+		else if (a.mode instanceof modes.Assignment) {
+			String value = "<< ";
+			arrayCount.put(a.name, String.valueOf(a.arrayValue.size()));
+			
+			for (int i = 0; i < a.arrayValue.size(); i++) {
+				// use infixprinter to output the element value
+				InfixPrinter p = new InfixPrinter();
+				a.arrayValue.get(i).accept(p);
+				value = value + p.infixOutput + ", ";
+				
+				// for every element in the list, call varPrinter to removed used variable
+				VarPrinter p2 = new VarPrinter();
+				a.arrayValue.get(i).accept(p2);
+			}
+			value = value.substring(0, value.length() - 2) + " >>";
+			allVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
+			unusedVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
+		}
+		
 	}
 	
 	
@@ -380,7 +433,12 @@ public class VarPrinter implements Visitor {
 	
 	@Override
 	public void visitIntConst(IntConst c) {
-
+		if (c.isArrayCount) {
+			// delete the mode if it has been used
+			if (unusedVarMap.containsKey(c.name)) {
+				unusedVarMap.remove(c.name);
+			}
+		}
 	}
 
 	@Override
@@ -497,6 +555,12 @@ public class VarPrinter implements Visitor {
 	@Override
 	public void visitNIL(NIL n) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void visitResults(Results r) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

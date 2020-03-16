@@ -41,18 +41,24 @@ public class WpCalculator implements Visitor{
 			// store the substitution value for z3 encoding
 			PrefixPrinter printer = new PrefixPrinter();
 			a.assignValue.accept(printer);
-			z3SubstituteMap.put(a.name, printer.prefixOutput);
+			z3SubstituteMap.put(" " + a.name + " ", " " + printer.prefixOutput + " ");
 			
 			// store the value for counterexample output
 			InfixPrinter infixPrinter = new InfixPrinter();
 			a.assignValue.accept(infixPrinter);
-			counteregSubstituteMap.put(a.name, infixPrinter.infixOutput);
+			counteregSubstituteMap.put(" " + a.name + " "," " + infixPrinter.infixOutput + " ");
 		}
 		
 	}
 	
 	@Override
 	public void visitOlds(Olds o) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void visitResults(Results r) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -238,25 +244,9 @@ public class WpCalculator implements Visitor{
 		
 	}
 
-
 	
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 
 }

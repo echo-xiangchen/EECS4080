@@ -12,8 +12,9 @@ public class ArrayVar extends Var {
 	}
 	
 	// verification
-	public ArrayVar(String name, mode mode, Verifier verifier) {
-		super(name, mode, verifier);
+	// name, mode, index
+	public ArrayVar(String name, mode mode, Verifier index) {
+		super(name, mode, index);
 	}
 	
 	// initialized declaration
