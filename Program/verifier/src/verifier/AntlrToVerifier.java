@@ -300,8 +300,14 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	 */
 	
 	@Override
-	public Verifier visitVarAssignment(VarAssignmentContext ctx) {
+	public Verifier visitImpAssignment(ImpAssignmentContext ctx) {
 		return visit(ctx.assignment());
+	}
+	
+	
+	@Override
+	public Verifier visitImpAlternation(ImpAlternationContext ctx) {
+		return visit(ctx.alternations());
 	}
 	
 	/* *****************************************************************************************
@@ -1022,9 +1028,22 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		return new IntConst(ctx.INTNUM().getText());
 	}
 	
+	// a.count
 	@Override
 	public Verifier visitCountArray(CountArrayContext ctx) {
-		return new IntConst(ctx.ID().getText(), true);
+		return new IntConst(ctx.ID().getText(), "count", true);
+	}
+	
+	// a.lower
+	@Override
+	public Verifier visitLowerArray(LowerArrayContext ctx) {
+		return new IntConst(ctx.ID().getText(), "lower", true);
+	}
+	
+	// a.upper
+	@Override
+	public Verifier visitUpperArray(UpperArrayContext ctx) {
+		return new IntConst(ctx.ID().getText(), "upper", true);
 	}
 	
 	

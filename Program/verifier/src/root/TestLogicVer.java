@@ -292,7 +292,7 @@ public class TestLogicVer {
 						
 						
 						
-						//System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap + "\n");
+						System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap + "\n");
 						
 						
 						

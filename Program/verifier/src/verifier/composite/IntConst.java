@@ -10,8 +10,8 @@ public class IntConst extends NumConst {
 	}
 	
 	// array count
-	public IntConst(String name, boolean value) {
-		super(name, value);
+	public IntConst(String name, String indicator, boolean value) {
+		super(name, indicator, value);
 	}
 	
 	public void accept(Visitor v) {

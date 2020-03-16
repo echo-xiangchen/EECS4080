@@ -62,7 +62,8 @@ local
 
 
 implementation
-	: assignment		# VarAssignment
+	: assignment		# ImpAssignment
+	| alternations 		# ImpAlternation
 	;
 
 
@@ -77,6 +78,15 @@ assignment
 	| ID '[' arithmetic ']' ':=' arithmetic ';'				# ArithArrayAssign
 	| RESULT ':=' ID ';' 									# SingleVarResultAssign
 	| RESULT ':=' ID '[' arithmetic ']' ';'					# ArrayValueResultAssign
+	;
+
+alternations
+	: IF boolExpr THEN 
+		// differentiate the if body implementations and else body implementations
+		imp1+=implementation (imp1+=implementation)*
+	  (ELSE
+	  	imp2+=implementation (imp2+=implementation)*)?
+	  END 													# AlternationBody
 	;
 
 declaration
@@ -193,6 +203,8 @@ arithmetic
 	| RESULT '[' arithmetic ']' 						# ArithArrayResult
 	| INTNUM											# IntNum
 	| ID '.' COUNT 										# CountArray
+	| ID '.' LOWER 										# LowerArray
+	| ID '.' UPPER 										# UpperArray
 	| REALNUM											# RealNum
 	| '(' arithmetic ')' 								# ArithParen
 	;
@@ -208,6 +220,8 @@ PAIR : 'PAIR';
 VERIFY : 'verify';
 
 COUNT : 'count';
+LOWER : 'lower';
+UPPER : 'upper';
 
 // method keywords
 LOCAL : 'local';
@@ -217,6 +231,9 @@ DO : 'do';
 END : 'end';
 OLD : 'old';
 RESULT : 'Result';
+IF : 'if';
+THEN : 'then';
+ELSE : 'else';
 
 // quantification keywords
 FORALL : 'forall';

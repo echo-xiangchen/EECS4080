@@ -176,17 +176,29 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitLocalDecl(VerifierParser.LocalDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code VarAssignment}
+	 * Enter a parse tree produced by the {@code ImpAssignment}
 	 * labeled alternative in {@link VerifierParser#implementation}.
 	 * @param ctx the parse tree
 	 */
-	void enterVarAssignment(VerifierParser.VarAssignmentContext ctx);
+	void enterImpAssignment(VerifierParser.ImpAssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code VarAssignment}
+	 * Exit a parse tree produced by the {@code ImpAssignment}
 	 * labeled alternative in {@link VerifierParser#implementation}.
 	 * @param ctx the parse tree
 	 */
-	void exitVarAssignment(VerifierParser.VarAssignmentContext ctx);
+	void exitImpAssignment(VerifierParser.ImpAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ImpAlternation}
+	 * labeled alternative in {@link VerifierParser#implementation}.
+	 * @param ctx the parse tree
+	 */
+	void enterImpAlternation(VerifierParser.ImpAlternationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ImpAlternation}
+	 * labeled alternative in {@link VerifierParser#implementation}.
+	 * @param ctx the parse tree
+	 */
+	void exitImpAlternation(VerifierParser.ImpAlternationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SingleVarAssign}
 	 * labeled alternative in {@link VerifierParser#assignment}.
@@ -307,6 +319,18 @@ public interface VerifierListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArrayValueResultAssign(VerifierParser.ArrayValueResultAssignContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AlternationBody}
+	 * labeled alternative in {@link VerifierParser#alternations}.
+	 * @param ctx the parse tree
+	 */
+	void enterAlternationBody(VerifierParser.AlternationBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AlternationBody}
+	 * labeled alternative in {@link VerifierParser#alternations}.
+	 * @param ctx the parse tree
+	 */
+	void exitAlternationBody(VerifierParser.AlternationBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UninitialVarDecl}
 	 * labeled alternative in {@link VerifierParser#declaration}.
@@ -896,18 +920,6 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitLessOrEqual(VerifierParser.LessOrEqualContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code OldArithArray}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void enterOldArithArray(VerifierParser.OldArithArrayContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code OldArithArray}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void exitOldArithArray(VerifierParser.OldArithArrayContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ArithmeticVar}
 	 * labeled alternative in {@link VerifierParser#arithmetic}.
 	 * @param ctx the parse tree
@@ -931,18 +943,6 @@ public interface VerifierListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIntNum(VerifierParser.IntNumContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ArithResult}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void enterArithResult(VerifierParser.ArithResultContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ArithResult}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void exitArithResult(VerifierParser.ArithResultContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ArithParen}
 	 * labeled alternative in {@link VerifierParser#arithmetic}.
@@ -980,6 +980,18 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitAddSub(VerifierParser.AddSubContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code UpperArray}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void enterUpperArray(VerifierParser.UpperArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UpperArray}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void exitUpperArray(VerifierParser.UpperArrayContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code RealNum}
 	 * labeled alternative in {@link VerifierParser#arithmetic}.
 	 * @param ctx the parse tree
@@ -992,18 +1004,6 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitRealNum(VerifierParser.RealNumContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ArithArrayResult}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void enterArithArrayResult(VerifierParser.ArithArrayResultContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ArithArrayResult}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
-	 * @param ctx the parse tree
-	 */
-	void exitArithArrayResult(VerifierParser.ArithArrayResultContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code IndexArithmeticArray}
 	 * labeled alternative in {@link VerifierParser#arithmetic}.
 	 * @param ctx the parse tree
@@ -1015,6 +1015,54 @@ public interface VerifierListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIndexArithmeticArray(VerifierParser.IndexArithmeticArrayContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code OldArithArray}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void enterOldArithArray(VerifierParser.OldArithArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code OldArithArray}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void exitOldArithArray(VerifierParser.OldArithArrayContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArithResult}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithResult(VerifierParser.ArithResultContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArithResult}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithResult(VerifierParser.ArithResultContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code LowerArray}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void enterLowerArray(VerifierParser.LowerArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code LowerArray}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void exitLowerArray(VerifierParser.LowerArrayContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArithArrayResult}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithArrayResult(VerifierParser.ArithArrayResultContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArithArrayResult}
+	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithArrayResult(VerifierParser.ArithArrayResultContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CountArray}
 	 * labeled alternative in {@link VerifierParser#arithmetic}.

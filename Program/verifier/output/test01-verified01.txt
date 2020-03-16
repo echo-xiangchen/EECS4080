@@ -20,5 +20,4 @@ wp(S, Q) :
    ( ( a[3] = a[3] )  and  ( a[3] > 0 ) )
 Proof Obligation: P => wp(S, Q)
 
-Not discharged.
-Counterexample is not available.
+Discharged.

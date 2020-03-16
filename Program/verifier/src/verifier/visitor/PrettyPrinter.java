@@ -651,6 +651,12 @@ public class PrettyPrinter implements Visitor {
 			PrefixPrinter p = new PrefixPrinter();
 			a.accept(p);
 		}
+		// array assignment
+		else if (a.mode instanceof modes.Assignment) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
 	}
 	
 	// integer array
@@ -674,6 +680,12 @@ public class PrettyPrinter implements Visitor {
 			PrefixPrinter p = new PrefixPrinter();
 			a.accept(p);
 		}
+		// array assignment
+		else if (a.mode instanceof modes.Assignment) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
 	}
 	
 	@Override
@@ -692,6 +704,12 @@ public class PrettyPrinter implements Visitor {
 		// initialized declaration
 		// e.g. a : ARRAY[INTEGER] = <<1.2, 2.1, 6.0, 9.6>>
 		else if (a.mode instanceof modes.InitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter p = new PrefixPrinter();
+			a.accept(p);
+		}
+		// array assignment
+		else if (a.mode instanceof modes.Assignment) {
 			// use the PrefixPrinter to return the output
 			PrefixPrinter p = new PrefixPrinter();
 			a.accept(p);
