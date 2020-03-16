@@ -433,7 +433,7 @@ public class VarPrinter implements Visitor {
 	
 	@Override
 	public void visitIntConst(IntConst c) {
-		if (c.isArrayCount) {
+		if (c.isArray) {
 			// delete the mode if it has been used
 			if (unusedVarMap.containsKey(c.name)) {
 				unusedVarMap.remove(c.name);

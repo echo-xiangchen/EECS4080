@@ -3,7 +3,7 @@ package verifier.composite;
 public abstract class Const extends Logic{
 	
 	// indicates if it's used for array count
-	public boolean isArrayCount;
+	public boolean isArray;
 	
 	// indicates if it's for count, lower, or upper
 	public String indicator;
@@ -17,7 +17,7 @@ public abstract class Const extends Logic{
 	public Const(String name, String indicator,boolean value) {
 		this.name = name;
 		this.indicator = indicator;
-		this.isArrayCount = value;
+		this.isArray = value;
 	}
 	
 	

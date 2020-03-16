@@ -1,11 +1,4 @@
-(declare-const Result Int)
-(declare-const a (Array Int Int))
-(assert (= (select a 1) 1))
-(assert (= (select a 2) 2))
-(assert (= (select a 3) 3))
-(assert (= (select a 4) 6))
-(assert (= Result (select a 3 ) ))
-(assert ( not (=> true (and ( = (select a 3 )  (select a 3 )  )( > (select a 3 )  0 )) )  ))
+( assert ( not ( > 2 0 ) ))
 (check-sat)
 ;Uncomment the following line if the result of z3 online tool returns "sat"
 ;(get-model)

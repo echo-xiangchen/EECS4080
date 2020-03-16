@@ -677,6 +677,14 @@ public class TypeChecker implements Visitor{
 			for (int i = 0; i < a.arrayValue.size(); i++) {
 				TypeChecker checker = new TypeChecker();
 				a.arrayValue.get(i).accept(checker);
+				
+				InfixPrinter printer = new InfixPrinter();
+				a.arrayValue.get(i).accept(printer);
+				
+				if (!(varMap.get(printer.infixOutput).a instanceof BoolType)) {
+					errormsg.add("Error: " + printer.infixOutput + " is not boolean type. "
+							+ "Cannot perform this assignment.");
+				}
 				errormsg.addAll(checker.errormsg);
 			}
 			if (errormsg.isEmpty()) {
@@ -821,6 +829,14 @@ public class TypeChecker implements Visitor{
 			for (int i = 0; i < a.arrayValue.size(); i++) {
 				TypeChecker checker = new TypeChecker();
 				a.arrayValue.get(i).accept(checker);
+				
+				InfixPrinter printer = new InfixPrinter();
+				a.arrayValue.get(i).accept(printer);
+				
+				if (!(varMap.get(a.name).a instanceof IntType)) {
+					errormsg.add("Error: " + printer.infixOutput + " is not integer type. "
+							+ "Cannot perform this assignment.");
+				}
 				errormsg.addAll(checker.errormsg);
 			}
 			if (errormsg.isEmpty()) {
@@ -951,6 +967,15 @@ public class TypeChecker implements Visitor{
 			for (int i = 0; i < a.arrayValue.size(); i++) {
 				TypeChecker checker = new TypeChecker();
 				a.arrayValue.get(i).accept(checker);
+				
+				InfixPrinter printer = new InfixPrinter();
+				a.arrayValue.get(i).accept(printer);
+				
+				if (!(varMap.get(a.name).a instanceof IntType) 
+						|| !(varMap.get(a.name).a instanceof RealType)) {
+					errormsg.add("Error: " + printer.infixOutput + " is not real type. "
+							+ "Cannot perform this assignment.");
+				}
 				errormsg.addAll(checker.errormsg);
 			}
 			if (errormsg.isEmpty()) {
@@ -997,7 +1022,7 @@ public class TypeChecker implements Visitor{
 	// int number constant
 	@Override
 	public void visitIntConst(IntConst c) {
-		if (c.isArrayCount) {
+		if (c.isArray) {
 			if (!varMap.containsKey(c.name)) {
 				errormsg.add("Error: Array " + c.name + " has not been declared.");
 			}

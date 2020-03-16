@@ -388,8 +388,17 @@ public class InfixPrinter implements Visitor{
 
 	@Override
 	public void visitIntConst(IntConst c) {
-		if (c.isArrayCount) {
-			infixOutput = infixOutput.concat(c.name + ".count");
+		if (c.isArray) {
+			if (c.indicator.equals("count")) {
+				infixOutput = infixOutput.concat(c.name + ".count");
+			}
+			else if (c.indicator.equals("lower")) {
+				infixOutput = infixOutput.concat(c.name + ".lower");
+			}
+			else if (c.indicator.equals("upper")) {
+				infixOutput = infixOutput.concat(c.name + ".upper");
+			}
+			
 		}
 		else {
 			infixOutput = infixOutput.concat(c.name);

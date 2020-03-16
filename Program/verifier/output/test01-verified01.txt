@@ -1,23 +1,2 @@
-return_value() : INTEGER
-require
-   true
-do
-  Result := a[3];
-ensure
-   changed :  ( Result = a[3] ) 
-   sured :  ( Result > 0 ) 
-end
-
-Where: 
-Precondition(P) : 
-   true
-Implementation(S) : 
-  Result := a[3];
-Postcondition(Q) : 
-   changed :  ( Result = a[3] ) 
-   sured :  ( Result > 0 ) 
-wp(S, Q) : 
-   ( ( a[3] = a[3] )  and  ( a[3] > 0 ) )
-Proof Obligation: P => wp(S, Q)
-
-Discharged.
+ ( a.lower > 0 ) 
+Is a tautology.

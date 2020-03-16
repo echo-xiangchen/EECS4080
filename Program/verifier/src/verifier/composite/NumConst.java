@@ -9,6 +9,6 @@ public class NumConst extends Const{
 	
 	// used for array count
 	public NumConst(String name, String indicator, boolean value) {
-		super(name, name, value);
+		super(name, indicator, value);
 	}
 }

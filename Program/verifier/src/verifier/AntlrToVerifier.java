@@ -365,7 +365,18 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 				value.add(visit(ctx.boolExpr(i)));
 			}
 			
+			if (varTypes.get(ctx.ID().getText()).equals("BoolArray")) {
+				return new BoolArrayVar(ctx.ID().getText(), value, new Assignment());
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("IntArray")) {
+				return new IntArrayVar(ctx.ID().getText(), value, new Assignment());
+			}
+			else if (varTypes.get(ctx.ID().getText()).equals("RealArray")) {
+				return new RealArrayVar(ctx.ID().getText(), value, new Assignment());
+			}
+			
 			return new BoolArrayVar(ctx.ID().getText(), value, new Assignment());
+			
 		}
 		else {
 			return new NIL(ctx.ID().getText(), new Undeclared());

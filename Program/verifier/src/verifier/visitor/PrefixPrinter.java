@@ -528,13 +528,18 @@ public class PrefixPrinter implements Visitor{
 
 	@Override
 	public void visitIntConst(IntConst c) {
-		if (c.isArrayCount) {
-			prefixOutput = prefixOutput.concat(VarPrinter.arrayCount.get(c.name));
+		if (c.isArray) {
+			if (c.indicator.equals("count") || c.indicator.equals("upper")) {
+				prefixOutput = prefixOutput.concat(VarPrinter.arrayCount.get(c.name));
+			}
+			else if (c.indicator.equals("lower")) {
+				prefixOutput = prefixOutput.concat(" 1 ");
+			}
+			
 		}
 		else {
 			prefixOutput = prefixOutput.concat(c.name);
 		}
-		
 	}
 
 	@Override

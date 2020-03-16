@@ -51,4 +51,6 @@ Gries-Theorems
 308 - 319: Implication and nested quantifier
 320 - 331: Iff and nested quantifier
 
-332 - : Program assignments
+332: Program assignments
+333: Old keyword
+334: Result keyword

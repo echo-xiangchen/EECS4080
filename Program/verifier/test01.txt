@@ -1,11 +1,3 @@
-a:ARRAY[INTEGER]
-a := << 1, 2, 3, 6>>;
-return_value() : INTEGER
-require true
-do
-Result := a[3];
-ensure
-	changed : Result = a[3]
-	sured: Result > 0
-end
-verify return_value
+a:ARRAY[REAL]
+a := <<true, false>>;
+verify a.upper > 0
