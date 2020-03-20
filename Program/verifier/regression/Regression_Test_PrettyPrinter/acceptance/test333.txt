@@ -1,16 +1,15 @@
 -- test program verification
--- old keyword
-change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
-require
-	valid_index: 1 <= i and i <= a.count
-local
-	x: INTEGER
-	y: BOOLEAN
+-- sequencial assignments
+tmp: INTEGER
+x: INTEGER
+y: INTEGER
+swap()
+require x > y
 do
-	a[i] := nv;
+	tmp := x;
+	x := y;
+	y := tmp;
 ensure
-	changed: a[i] = nv
-	unchanged: forall j:INTEGER; |(1 <= j and j <= a.count and not i = j) => old a[j] = a[j]
+	y > x
 end
-
-verify change_at
+verify swap

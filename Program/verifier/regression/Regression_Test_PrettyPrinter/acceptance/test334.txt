@@ -1,13 +1,16 @@
 -- test program verification
--- Result keyword
-a:ARRAY[INTEGER]
-return_value() : INTEGER
-require true
+-- old keyword
+change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
+require
+	valid_index: 1 <= i and i <= a.count
+local
+	x: INTEGER
+	y: BOOLEAN
 do
-a := << 1, 2, 3, 6>>;
-Result := a[3];
+	a[i] := nv;
 ensure
-	changed : Result = a[3]
-	sured: Result > 0
+	changed: a[i] = nv
+	unchanged: forall j:INTEGER; |(1 <= j and j <= a.count and not i = j) => old a[j] = a[j]
 end
-verify return_value
+
+verify change_at

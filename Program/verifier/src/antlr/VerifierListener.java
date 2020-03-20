@@ -321,13 +321,13 @@ public interface VerifierListener extends ParseTreeListener {
 	void exitArrayValueResultAssign(VerifierParser.ArrayValueResultAssignContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AlternationBody}
-	 * labeled alternative in {@link VerifierParser#alternations}.
+	 * labeled alternative in {@link VerifierParser#alternation}.
 	 * @param ctx the parse tree
 	 */
 	void enterAlternationBody(VerifierParser.AlternationBodyContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code AlternationBody}
-	 * labeled alternative in {@link VerifierParser#alternations}.
+	 * labeled alternative in {@link VerifierParser#alternation}.
 	 * @param ctx the parse tree
 	 */
 	void exitAlternationBody(VerifierParser.AlternationBodyContext ctx);

@@ -307,7 +307,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	@Override
 	public Verifier visitImpAlternation(ImpAlternationContext ctx) {
-		return visit(ctx.alternations());
+		return visit(ctx.alternation());
 	}
 	
 	/* *****************************************************************************************
@@ -500,8 +500,32 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		}
 	}
 	
+	/* *****************************************************************************************
+	 * Methods for alternation rule
+	 * *****************************************************************************************
+	 */
 	
+//	IF boolExpr THEN 
+//		// differentiate the if body implementations and else body implementations
+//		imp1+=implementation (imp1+=implementation)*
+//    (ELSE
+//    		imp2+=implementation (imp2+=implementation)*)?
+//    END
 	
+	@Override
+	public Verifier visitAlternationBody(AlternationBodyContext ctx) {
+		List<Verifier> ifimps = new ArrayList<Verifier>();
+		for (int i = 0; i < ctx.imp1.size(); i++) {
+			ifimps.add(visit(ctx.imp1.get(i)));
+		}
+		
+		List<Verifier> elseimps = new ArrayList<Verifier>();
+		for (int i = 0; i < ctx.imp2.size(); i++) {
+			elseimps.add(visit(ctx.imp2.get(i)));
+		}
+		
+		return new Alternations(visit(ctx.boolExpr()), ifimps, elseimps);
+	}
 	
 	/* *****************************************************************************************
 	 * Methods for declaration rule

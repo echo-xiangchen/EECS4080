@@ -6,9 +6,30 @@ import verifier.composite.*;
 
 public class WpCalculator implements Visitor{
 	
-	public static Map<String, String> z3SubstituteMap = new LinkedHashMap<String, String>();
+	public  Map<String, String> z3SubstituteMap = new LinkedHashMap<String, String>();
 
-	public static Map<String, String> counteregSubstituteMap = new LinkedHashMap<String, String>();
+	public  Map<String, String> counteregSubstituteMap = new LinkedHashMap<String, String>();
+	
+	// prefix version of postcondition
+	public String prefixPostcondition;
+	
+	// infix version of postcondition
+	public String infixPostcondition;
+	
+	// prefix version of wp
+	public String prefixWp;
+	
+	// infix version of wp
+	public String infixWp;
+	
+	public WpCalculator(String prefixPostcondition, String infixPostcondition) {
+		this.prefixPostcondition = prefixPostcondition;
+		this.infixPostcondition = infixPostcondition;
+		prefixWp = "";
+		infixWp = "";
+	}
+	
+	
 	@Override
 	public void visitAssignment(Assignments a) {
 		
@@ -20,6 +41,7 @@ public class WpCalculator implements Visitor{
 			PrefixPrinter indexPrinter = new PrefixPrinter();
 			a.index.accept(indexPrinter);
 			
+			// need to use escape symbol
 			String arraystr = "\\(select " + a.name + " " + indexPrinter.prefixOutput + "\\)";
 			
 			String newArraystr = "\\(select new_" + a.name + " " + indexPrinter.prefixOutput + "\\)";
@@ -33,9 +55,34 @@ public class WpCalculator implements Visitor{
 			InfixPrinter infixIndexPrinter = new InfixPrinter();
 			a.index.accept(infixIndexPrinter);
 			
-			String infixArraystr = a.name + "[" + infixIndexPrinter.infixOutput + "]";
+			// need to use escape symbol
+			String infixArraystr = a.name + "\\[" + infixIndexPrinter.infixOutput + "\\]";
 			
-			counteregSubstituteMap.put(infixArraystr, infixAssignPrinter.infixOutput);
+			counteregSubstituteMap.put(" " + infixArraystr + " ", " " + infixAssignPrinter.infixOutput + " ");
+			
+			
+			// calculate the prefixWp
+			prefixWp = prefixPostcondition;
+			
+			ListIterator<Map.Entry<String,String>> i = new ArrayList<Map.Entry<String,String>>
+			(z3SubstituteMap.entrySet()).listIterator(z3SubstituteMap.size());
+		
+			while(i.hasPrevious()) {
+				Map.Entry<String, String> entry= i.previous();
+				prefixWp = prefixWp.replaceAll(entry.getKey(), entry.getValue());
+			}
+			
+			
+			// calculate the infixWp
+			infixWp = infixPostcondition;
+			
+			ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
+			(counteregSubstituteMap.entrySet()).listIterator(counteregSubstituteMap.size());
+		
+			while(j.hasPrevious()) {
+				Map.Entry<String, String> entry= j.previous();
+				infixWp = infixWp.replaceAll(entry.getKey(), entry.getValue());
+			}
 		}
 		else {
 			// store the substitution value for z3 encoding
@@ -47,8 +94,30 @@ public class WpCalculator implements Visitor{
 			InfixPrinter infixPrinter = new InfixPrinter();
 			a.assignValue.accept(infixPrinter);
 			counteregSubstituteMap.put(" " + a.name + " "," " + infixPrinter.infixOutput + " ");
-		}
+			
+			// calculate the prefixWp
+			prefixWp = prefixPostcondition;
+			
+			ListIterator<Map.Entry<String,String>> i = new ArrayList<Map.Entry<String,String>>
+			(z3SubstituteMap.entrySet()).listIterator(z3SubstituteMap.size());
 		
+			while(i.hasPrevious()) {
+				Map.Entry<String, String> entry= i.previous();
+				prefixWp = prefixWp.replaceAll(entry.getKey(), entry.getValue());
+			}
+			
+			
+			// calculate the infixWp
+			infixWp = infixPostcondition;
+			
+			ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
+			(counteregSubstituteMap.entrySet()).listIterator(counteregSubstituteMap.size());
+		
+			while(j.hasPrevious()) {
+				Map.Entry<String, String> entry= j.previous();
+				infixWp = infixWp.replaceAll(entry.getKey(), entry.getValue());
+			}
+		}
 	}
 	
 	@Override

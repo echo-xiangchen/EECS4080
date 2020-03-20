@@ -833,7 +833,7 @@ public class TypeChecker implements Visitor{
 				InfixPrinter printer = new InfixPrinter();
 				a.arrayValue.get(i).accept(printer);
 				
-				if (!(varMap.get(a.name).a instanceof IntType)) {
+				if (!(varMap.get(printer.infixOutput).a instanceof IntType)) {
 					errormsg.add("Error: " + printer.infixOutput + " is not integer type. "
 							+ "Cannot perform this assignment.");
 				}
@@ -971,8 +971,8 @@ public class TypeChecker implements Visitor{
 				InfixPrinter printer = new InfixPrinter();
 				a.arrayValue.get(i).accept(printer);
 				
-				if (!(varMap.get(a.name).a instanceof IntType) 
-						|| !(varMap.get(a.name).a instanceof RealType)) {
+				if (!(varMap.get(printer.infixOutput).a instanceof IntType) 
+						&& !(varMap.get(printer.infixOutput).a instanceof RealType)) {
 					errormsg.add("Error: " + printer.infixOutput + " is not real type. "
 							+ "Cannot perform this assignment.");
 				}
@@ -1213,9 +1213,7 @@ public class TypeChecker implements Visitor{
 				if (!varMap.containsKey(a.name)) {
 					errormsg.add("Error: variable " + a.name + " has not been declared.");
 				}
-				else if (arrayMap.containsKey(a.name)) {
-					errormsg.add("Error: Cannot re-assign values to an array.");
-				}
+				
 				// no error if assign integer to real
 				else if (varMap.get(a.name).a instanceof RealArray && varMap.get(assignValueprinter.infixOutput).a instanceof IntType) {
 					

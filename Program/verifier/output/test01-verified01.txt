@@ -1,2 +1,23 @@
- ( a.lower > 0 ) 
-Is a tautology.
+change_at(i : INTEGER;nv : REAL)
+require
+   valid_index :  (  ( 1 <= i )  and  ( i <= a.count )  ) 
+do
+  a[i] := nv;
+ensure
+   changed :  ( a[i] = nv ) 
+   unchanged : forall j; (  (  (  ( 1 <= j )  and  ( j <= a.count )  )  and  ( not  ( i = j )  )  )  =>  ( old a[j] = a[j] )  ) 
+end
+
+Where: 
+Precondition(P) : 
+   valid_index :  (  ( 1 <= i )  and  ( i <= a.count )  ) 
+Implementation(S) : 
+  a[i] := nv;
+Postcondition(Q) : 
+   changed :  ( a[i] = nv ) 
+   unchanged : forall j; (  (  (  ( 1 <= j )  and  ( j <= a.count )  )  and  ( not  ( i = j )  )  )  =>  ( old a[j] = a[j] )  ) 
+wp(S, Q) : 
+   ( ( nv = nv )  and forall j; (  (  (  ( 1 <= j )  and  ( j <= a.count )  )  and  ( not  ( i = j )  )  )  =>  ( old a[j] = a[j] )  ) )
+Proof Obligation: P => wp(S, Q)
+
+Discharged.

@@ -1,3 +1,20 @@
 a:ARRAY[REAL]
-a := <<true, false>>;
-verify a.upper > 0
+a := <<1, 3, 7, 9.0, 10.3>>;
+change_at(i : INTEGER; nv: REAL)
+require
+	valid_index: 1 <= i and i <= a.count
+
+
+--local
+	--x: INTEGER
+	--y: BOOLEAN
+	
+	
+do
+	a[i] := nv;
+ensure
+	changed: a[i] = nv
+	unchanged: forall j:INTEGER; |(1 <= j and j <= a.count and not i = j) => old a[j] = a[j]
+end
+
+verify change_at

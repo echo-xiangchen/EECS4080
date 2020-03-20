@@ -248,7 +248,7 @@ public class TestLogicVer {
 			        
 			        
 			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
-			        
+			        //System.out.println("TypeChecker.arrayMap: " + TypeChecker.arrayMap + "\n");
 			        
 			        
 			        
@@ -287,12 +287,16 @@ public class TestLogicVer {
  			        	
 						for (int i = 0; i < verifier.size(); i++) {
 							verifier.get(i).accept(printer);
+							
+							//System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap);
+							//System.out.println("PrefixPrinter.arrayMap: " + PrefixPrinter.arrayMap);
+							//System.out.println("PrefixPrinter.oldVarMap: " + PrefixPrinter.oldVarMap);
 						}
 						
 						
 						
 						
-						System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap + "\n");
+						//System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap + "\n");
 						
 						
 						

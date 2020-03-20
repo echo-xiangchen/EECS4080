@@ -21,7 +21,7 @@ method
 	;
 
 mutator 
-	: ID '(' ('(' uninitialDecl (';' uninitialDecl)* ')')? ')'
+	: ID '(' ( uninitialDecl (';' uninitialDecl)* )? ')'
 		(precondition)?
 		(local)?
 		DO 
@@ -31,7 +31,7 @@ mutator
 	;
 
 accessor
-	: ID '(' ('(' uninitialDecl (';' uninitialDecl)* ')')? ')' ':' unnamedDecl
+	: ID '(' ( uninitialDecl (';' uninitialDecl)* )? ')' ':' unnamedDecl
 		(precondition)?
 		(local)?
 		DO 
@@ -63,7 +63,8 @@ local
 
 implementation
 	: assignment		# ImpAssignment
-	| alternations 		# ImpAlternation
+	| alternation 		# ImpAlternation
+	//| loop 				# ImpLoop
 	;
 
 
@@ -80,7 +81,7 @@ assignment
 	| RESULT ':=' ID '[' arithmetic ']' ';'					# ArrayValueResultAssign
 	;
 
-alternations
+alternation
 	: IF boolExpr THEN 
 		// differentiate the if body implementations and else body implementations
 		imp1+=implementation (imp1+=implementation)*
@@ -88,6 +89,11 @@ alternations
 	  	imp2+=implementation (imp2+=implementation)*)?
 	  END 													# AlternationBody
 	;
+
+
+//loop
+//	:
+
 
 declaration
 	: uninitialDecl  			# UninitialVarDecl
@@ -231,9 +237,17 @@ DO : 'do';
 END : 'end';
 OLD : 'old';
 RESULT : 'Result';
+
 IF : 'if';
 THEN : 'then';
 ELSE : 'else';
+
+FROM : 'from';
+UNTIL : 'until';
+LOOP : 'loop';
+
+INVARIANT : 'invariant';
+VARIANT : 'variant';
 
 // quantification keywords
 FORALL : 'forall';

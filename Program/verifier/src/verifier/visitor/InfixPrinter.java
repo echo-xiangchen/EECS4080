@@ -504,26 +504,48 @@ public class InfixPrinter implements Visitor{
 		
 		// print the postcondition
 		// postcondition in methodMap starts at index 1
-		InfixPrinter postPrinter = new InfixPrinter();
+		PrefixPrinter postPrinter = new PrefixPrinter();
 		PrefixPrinter.methodContractMap.get(m.name).get(1).accept(postPrinter);
+		
+		InfixPrinter infixPostPrinter = new InfixPrinter();
+		PrefixPrinter.methodContractMap.get(m.name).get(1).accept(infixPostPrinter);
 		infixOutput = infixOutput.concat("ensure\n");
-		infixOutput = infixOutput.concat(postPrinter.infixOutput);
+		infixOutput = infixOutput.concat(infixPostPrinter.infixOutput);
 		
 		infixOutput = infixOutput.concat("end\n");
 		
-		postconditions.put(m.name, postPrinter.infixOutput);
+		postconditions.put(m.name, infixPostPrinter.infixOutput);
+		
+		
+		// do the wp calculation
+		
+		// assign the initial value
+		String prefixWp = postPrinter.prefixOutput;
+		String infixWp = infixPostPrinter.wpStr;
+		
+		// for each implementation, do the calculation in reverse order
+		for (int i = PrefixPrinter.methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
+			WpCalculator calculator = new WpCalculator(prefixWp, infixWp);
+			PrefixPrinter.methodImpMap.get(m.name).get(i).accept(calculator);
+			
+			System.out.println(i + ": " + infixWp);
+			System.out.println(i + ": " + calculator.counteregSubstituteMap);
+			
+			prefixWp = calculator.prefixWp;
+			infixWp = calculator.infixWp;
+		}
 		
 		// print the wps
 		// do the substitution for postcondition
 		// for assignments, tranverse the substitution map in reverse order
-		ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
-			(WpCalculator.counteregSubstituteMap.entrySet()).listIterator(WpCalculator.counteregSubstituteMap.size());
-		
-		while(j.hasPrevious()) {
-			Map.Entry<String, String> entry= j.previous();
-			postPrinter.wpStr = postPrinter.wpStr.replaceAll(entry.getKey(), entry.getValue());
-		}
-		wps.put(m.name, "   " + postPrinter.wpStr + "\n");
+//		ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
+//			(WpCalculator.counteregSubstituteMap.entrySet()).listIterator(WpCalculator.counteregSubstituteMap.size());
+//		
+//		while(j.hasPrevious()) {
+//			Map.Entry<String, String> entry= j.previous();
+//			postPrinter.wpStr = postPrinter.wpStr.replaceAll(entry.getKey(), entry.getValue());
+//		}
+		wps.put(m.name, "   " + infixWp + "\n");
 	}
 	
 	

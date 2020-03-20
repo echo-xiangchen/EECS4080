@@ -195,7 +195,7 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	T visitArrayValueResultAssign(VerifierParser.ArrayValueResultAssignContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code AlternationBody}
-	 * labeled alternative in {@link VerifierParser#alternations}.
+	 * labeled alternative in {@link VerifierParser#alternation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
