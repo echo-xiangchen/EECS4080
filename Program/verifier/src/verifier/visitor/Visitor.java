@@ -77,6 +77,7 @@ public interface Visitor {
 	
 	void visitAssignment(Assignments a);
 	
+	void visitAlternations(Alternations a);
 	
 	
 
@@ -96,6 +97,8 @@ public interface Visitor {
 	void visitOlds(Olds o);
 
 	void visitResults(Results r);
+
+	
 
 	
 

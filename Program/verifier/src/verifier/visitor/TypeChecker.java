@@ -1084,6 +1084,13 @@ public class TypeChecker implements Visitor{
 				errormsg.addAll(returnChecker.errormsg);
 			}
 			
+			// type check the implementations
+			for (int i = 0; i < m.implementations.size(); i++) {
+				TypeChecker impChecker = new TypeChecker();
+				m.implementations.get(i).accept(impChecker);
+				errormsg.addAll(impChecker.errormsg);
+			}
+			
 			
 			// type check the precondition
 			if (m.precondition != null) {
@@ -1104,12 +1111,7 @@ public class TypeChecker implements Visitor{
 				errormsg.addAll(localChecker.errormsg);
 			}
 			
-			// type check the implementations
-			for (int i = 0; i < m.implementations.size(); i++) {
-				TypeChecker impChecker = new TypeChecker();
-				m.implementations.get(i).accept(impChecker);
-				errormsg.addAll(impChecker.errormsg);
-			}
+			
 			
 			// type check the postcondition
 			if (m.postcondition != null) {
@@ -1226,6 +1228,29 @@ public class TypeChecker implements Visitor{
 							+ assignValueprinter.infixOutput + ". Cannot perform this assignment.");		
 				}
 			}
+		}
+	}
+	
+	// if-else statement
+	@Override
+	public void visitAlternations(Alternations a) {
+		// typecheck the condition
+		TypeChecker conditionChecker = new TypeChecker();
+		a.condition.accept(conditionChecker);
+		errormsg.addAll(conditionChecker.errormsg);
+		
+		// type check the if statement implementation
+		for (int i = 0; i < a.ifImps.size(); i++) {
+			TypeChecker ifChecker = new TypeChecker();
+			a.ifImps.get(i).accept(ifChecker);
+			errormsg.addAll(ifChecker.errormsg);
+		}
+		
+		// typecheck the else statement implementation
+		for (int j = 0; j < a.elseImps.size(); j++) {
+			TypeChecker elseChecker = new TypeChecker();
+			a.elseImps.get(j).accept(elseChecker);
+			errormsg.addAll(elseChecker.errormsg);
 		}
 	}
 
@@ -1406,6 +1431,9 @@ public class TypeChecker implements Visitor{
 		}
 		
 	}
+
+
+	
 
 
 	

@@ -1,23 +1,35 @@
-change_at(i : INTEGER;nv : REAL)
+bigger_or_smaller()
 require
-   valid_index :  (  ( 1 <= i )  and  ( i <= a.count )  ) 
+    (  ( x > 0 )  and  ( y > 0 )  ) 
 do
-  a[i] := nv;
+if  ( x > y )  then
+  bigger := x;
+  smaller := y;
+else
+  bigger := y;
+  smaller := x;
+end
+
 ensure
-   changed :  ( a[i] = nv ) 
-   unchanged : forall j; (  (  (  ( 1 <= j )  and  ( j <= a.count )  )  and  ( not  ( i = j )  )  )  =>  ( old a[j] = a[j] )  ) 
+    ( bigger >= smaller ) 
 end
 
 Where: 
 Precondition(P) : 
-   valid_index :  (  ( 1 <= i )  and  ( i <= a.count )  ) 
+    (  ( x > 0 )  and  ( y > 0 )  ) 
 Implementation(S) : 
-  a[i] := nv;
+if  ( x > y )  then
+  bigger := x;
+  smaller := y;
+else
+  bigger := y;
+  smaller := x;
+end
+
 Postcondition(Q) : 
-   changed :  ( a[i] = nv ) 
-   unchanged : forall j; (  (  (  ( 1 <= j )  and  ( j <= a.count )  )  and  ( not  ( i = j )  )  )  =>  ( old a[j] = a[j] )  ) 
+    ( bigger >= smaller ) 
 wp(S, Q) : 
-   ( ( nv = nv )  and forall j; (  (  (  ( 1 <= j )  and  ( j <= a.count )  )  and  ( not  ( i = j )  )  )  =>  ( old a[j] = a[j] )  ) )
+    (  (  (  (  ( x > 0 )  and  ( y > 0 )  )  and  ( x > y )  )  =>  ( x >= y )  )  and  (  (  (  ( x > 0 )  and  ( y > 0 )  )  and (not  ( x > y )  ))  =>  ( y >= x )  )  ) 
 Proof Obligation: P => wp(S, Q)
 
 Discharged.

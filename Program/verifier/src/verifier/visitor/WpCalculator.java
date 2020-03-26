@@ -6,9 +6,17 @@ import verifier.composite.*;
 
 public class WpCalculator implements Visitor{
 	
-	public  Map<String, String> z3SubstituteMap = new LinkedHashMap<String, String>();
+	// prefix version substitution
+	public  Map<String, String> prefixSubstituteMap = new LinkedHashMap<String, String>();
 
-	public  Map<String, String> counteregSubstituteMap = new LinkedHashMap<String, String>();
+	// infix version substitution
+	public  Map<String, String> infixSubstituteMap = new LinkedHashMap<String, String>();
+	
+	// prefix version of precondition
+	public String prefixPrecondition;
+	
+	// infix version of precondition
+	public String infixPrecondition;
 	
 	// prefix version of postcondition
 	public String prefixPostcondition;
@@ -22,14 +30,17 @@ public class WpCalculator implements Visitor{
 	// infix version of wp
 	public String infixWp;
 	
-	public WpCalculator(String prefixPostcondition, String infixPostcondition) {
+	public WpCalculator(String prefixPrecondition, String infixPrecondition, 
+				String prefixPostcondition, String infixPostcondition) {
+		this.prefixPrecondition = prefixPrecondition;
+		this.infixPrecondition = infixPrecondition;
 		this.prefixPostcondition = prefixPostcondition;
 		this.infixPostcondition = infixPostcondition;
 		prefixWp = "";
 		infixWp = "";
 	}
 	
-	
+	// assignments
 	@Override
 	public void visitAssignment(Assignments a) {
 		
@@ -45,8 +56,8 @@ public class WpCalculator implements Visitor{
 			String arraystr = "\\(select " + a.name + " " + indexPrinter.prefixOutput + "\\)";
 			
 			String newArraystr = "\\(select new_" + a.name + " " + indexPrinter.prefixOutput + "\\)";
-			z3SubstituteMap.put(arraystr, newArraystr);
-			z3SubstituteMap.put("\\(select " + a.name, "\\(select new_" + a.name);
+			prefixSubstituteMap.put(arraystr, newArraystr);
+			prefixSubstituteMap.put("\\(select " + a.name, "\\(select new_" + a.name);
 			
 			// store the value for counterexample output
 			InfixPrinter infixAssignPrinter = new InfixPrinter();
@@ -58,14 +69,14 @@ public class WpCalculator implements Visitor{
 			// need to use escape symbol
 			String infixArraystr = a.name + "\\[" + infixIndexPrinter.infixOutput + "\\]";
 			
-			counteregSubstituteMap.put(" " + infixArraystr + " ", " " + infixAssignPrinter.infixOutput + " ");
+			infixSubstituteMap.put(" " + infixArraystr + " ", " " + infixAssignPrinter.infixOutput + " ");
 			
 			
 			// calculate the prefixWp
 			prefixWp = prefixPostcondition;
 			
 			ListIterator<Map.Entry<String,String>> i = new ArrayList<Map.Entry<String,String>>
-			(z3SubstituteMap.entrySet()).listIterator(z3SubstituteMap.size());
+			(prefixSubstituteMap.entrySet()).listIterator(prefixSubstituteMap.size());
 		
 			while(i.hasPrevious()) {
 				Map.Entry<String, String> entry= i.previous();
@@ -77,7 +88,7 @@ public class WpCalculator implements Visitor{
 			infixWp = infixPostcondition;
 			
 			ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
-			(counteregSubstituteMap.entrySet()).listIterator(counteregSubstituteMap.size());
+			(infixSubstituteMap.entrySet()).listIterator(infixSubstituteMap.size());
 		
 			while(j.hasPrevious()) {
 				Map.Entry<String, String> entry= j.previous();
@@ -88,18 +99,18 @@ public class WpCalculator implements Visitor{
 			// store the substitution value for z3 encoding
 			PrefixPrinter printer = new PrefixPrinter();
 			a.assignValue.accept(printer);
-			z3SubstituteMap.put(" " + a.name + " ", " " + printer.prefixOutput + " ");
+			prefixSubstituteMap.put(" " + a.name + " ", " " + printer.prefixOutput + " ");
 			
 			// store the value for counterexample output
 			InfixPrinter infixPrinter = new InfixPrinter();
 			a.assignValue.accept(infixPrinter);
-			counteregSubstituteMap.put(" " + a.name + " "," " + infixPrinter.infixOutput + " ");
+			infixSubstituteMap.put(" " + a.name + " "," " + infixPrinter.infixOutput + " ");
 			
 			// calculate the prefixWp
 			prefixWp = prefixPostcondition;
 			
 			ListIterator<Map.Entry<String,String>> i = new ArrayList<Map.Entry<String,String>>
-			(z3SubstituteMap.entrySet()).listIterator(z3SubstituteMap.size());
+			(prefixSubstituteMap.entrySet()).listIterator(prefixSubstituteMap.size());
 		
 			while(i.hasPrevious()) {
 				Map.Entry<String, String> entry= i.previous();
@@ -111,13 +122,85 @@ public class WpCalculator implements Visitor{
 			infixWp = infixPostcondition;
 			
 			ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
-			(counteregSubstituteMap.entrySet()).listIterator(counteregSubstituteMap.size());
+			(infixSubstituteMap.entrySet()).listIterator(infixSubstituteMap.size());
 		
 			while(j.hasPrevious()) {
 				Map.Entry<String, String> entry= j.previous();
 				infixWp = infixWp.replaceAll(entry.getKey(), entry.getValue());
 			}
 		}
+	}
+	
+	// if-else statement
+	// to prove {Q} if B then S1 else S2 end {R}
+	// need to prove ((Q and B) => wp(S1, R)) and ((Q and (not B) => wp(S2, R))
+	@Override
+	public void visitAlternations(Alternations a) {
+		// print the prefix version of condition (B)
+		PrefixPrinter prefixCondition = new PrefixPrinter();
+		a.condition.accept(prefixCondition);
+		// print the infix version of condition (B)
+		InfixPrinter infixCondition = new InfixPrinter();
+		a.condition.accept(infixCondition);
+		
+		String prefixIfWp = prefixPostcondition;
+		String infixIfWp = infixPostcondition;
+		
+		String prefixElseWp = prefixPostcondition;
+		String infixElseWp = infixPostcondition;
+		
+		// calculate the else statement wp: wp(S2, R)
+		if (!a.elseImps.isEmpty()) {
+			for (int i = a.elseImps.size() - 1; i >= 0 ; i--) {
+				WpCalculator calculator = new WpCalculator(prefixPrecondition, 
+						infixPrecondition, prefixElseWp, infixElseWp);
+				a.elseImps.get(i).accept(calculator);
+				
+				if (!calculator.prefixWp.isBlank()) {
+					prefixElseWp = calculator.prefixWp;
+					infixElseWp = calculator.infixWp;
+				}
+			}
+		}
+		
+		
+		// calculate the if statement wp: wp(S1, R)
+		for (int j = a.ifImps.size() - 1; j >= 0; j--) {
+			WpCalculator calculator = new WpCalculator(prefixPrecondition, 
+					infixPrecondition, prefixIfWp, infixIfWp);
+			a.ifImps.get(j).accept(calculator);
+			
+			if (!calculator.prefixWp.isBlank()) {
+				prefixIfWp = calculator.prefixWp;
+				infixIfWp = calculator.infixWp;
+			}
+		}
+		
+		// prefix (Q and B)
+		String prefixQAndB = " ( and " + prefixPrecondition + " " + prefixCondition.prefixOutput + " ) ";
+		// prefix (Q and (not B))
+		String prefixQAndNotB = " ( and " + prefixPrecondition + " " + " (not " + prefixCondition.prefixOutput + " )) ";
+		
+		// prefix (Q and B) => wp(S1, R)
+		String prefixLeftImplies = " (=> " + prefixQAndB + " " + prefixIfWp + " ) ";
+		// prefix (Q and (not B)) => wp(S2, R)
+		String prefixRightImplies = " (=> " + prefixQAndNotB + " " + prefixElseWp + " ) ";
+		
+		// set up prefix version of wp
+		prefixWp = "( and " + prefixLeftImplies + " " + prefixRightImplies + " ) ";
+				
+		// infix (Q and B)
+		String infixQAndB = " ( " + infixPrecondition + " and " + infixCondition.infixOutput + " ) ";
+		// infix (Q and (not B))
+		String infixQAndNotB = " ( " + infixPrecondition + " and " + "(not " + infixCondition.infixOutput + " )) ";
+		
+		// infix (Q and B) => wp(S1, R)
+		String infixLeftImplies = " ( " + infixQAndB + " => " + infixIfWp + " ) ";
+		// infix (Q and (not B)) => wp(S2, R)
+		String infixRightImplies = " ( " + infixQAndNotB + " => " + infixElseWp + " ) ";
+		
+		// set up infix version of wp
+		infixWp = " ( " + infixLeftImplies + " and " + infixRightImplies + " ) ";
 	}
 	
 	@Override
@@ -312,10 +395,4 @@ public class WpCalculator implements Visitor{
 		// TODO Auto-generated method stub
 		
 	}
-
-	
-
-
-
-
 }

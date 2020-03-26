@@ -470,6 +470,23 @@ public class VarPrinter implements Visitor {
 		a.assignValue.accept(assignValuePrinter);
 		
 	}
+	
+	@Override
+	public void visitAlternations(Alternations a) {
+		VarPrinter conditionPrinter = new VarPrinter();
+		a.condition.accept(conditionPrinter);
+		
+		for (int i = 0; i < a.ifImps.size(); i++) {
+			VarPrinter ifPrinter = new VarPrinter();
+			a.ifImps.get(i).accept(ifPrinter);
+		}
+		
+		for (int j = 0; j < a.elseImps.size(); j++) {
+			VarPrinter elsePrinter = new VarPrinter();
+			a.elseImps.get(j).accept(elsePrinter);
+		}
+		
+	}
 
 	@Override
 	public void visitMethods(Methods m) {
@@ -562,6 +579,8 @@ public class VarPrinter implements Visitor {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 	
 }

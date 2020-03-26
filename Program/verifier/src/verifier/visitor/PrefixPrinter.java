@@ -559,43 +559,6 @@ public class PrefixPrinter implements Visitor{
 	
 
 	@Override
-	public void visitAssignment(Assignments a) {
-		// add the used variable to the inclusiveVarMap
-		if (!inclusiveVarMap.containsKey(a.name)) {
-			inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
-		}
-		// test if it's array element assignment
-		if (a.index != null) {
-			PrefixPrinter indexPrinter = new PrefixPrinter();
-			a.index.accept(indexPrinter);
-			
-			PrefixPrinter valuePrinter = new PrefixPrinter();
-			a.assignValue.accept(valuePrinter);
-			
-			// for array assignments, need to create a new array in Z3
-			if (completeVarMap.get(a.name).b.equals("ValuedArray")) {
-				inclusiveVarMap.put("new_" + a.name, new Pair<String, String>
-				(completeVarMap.get(a.name).a, "Array"));
-			}
-			else {
-				inclusiveVarMap.put("new_" + a.name, new Pair<String, String>
-				(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
-			}
-			
-		
-			assignMap.put("new_" + a.name, "(store " + a.name + " " + indexPrinter.prefixOutput 
-						+ " " + valuePrinter.prefixOutput + " ) ");
-		}
-		else {
-			PrefixPrinter valuePrinter = new PrefixPrinter();
-			a.assignValue.accept(valuePrinter);
-			
-			assignMap.put(a.name, valuePrinter.prefixOutput);
-		}
-		
-	}
-
-	@Override
 	public void visitMethods(Methods m) {
 		// method declaration
 		if (m.mode instanceof modes.Declaration) {
@@ -656,8 +619,11 @@ public class PrefixPrinter implements Visitor{
 			
 			
 			// print the precondition
-			PrefixPrinter prePrinter = new PrefixPrinter();
-			methodContractMap.get(m.name).get(0).accept(prePrinter);
+			PrefixPrinter prefixPrePrinter = new PrefixPrinter();
+			methodContractMap.get(m.name).get(0).accept(prefixPrePrinter);
+			
+			InfixPrinter infixPrePrinter = new InfixPrinter();
+			methodContractMap.get(m.name).get(0).accept(infixPrePrinter);
 			
 			// print the implementation
 			for (int i = 0; i < methodImpMap.get(m.name).size(); i++) {
@@ -666,8 +632,8 @@ public class PrefixPrinter implements Visitor{
 			}
 			
 			// print the postcondition
-			PrefixPrinter postPrinter = new PrefixPrinter();
-			methodContractMap.get(m.name).get(1).accept(postPrinter);
+			PrefixPrinter prefixPostPrinter = new PrefixPrinter();
+			methodContractMap.get(m.name).get(1).accept(prefixPostPrinter);
 			
 			InfixPrinter infixPostPrinter = new InfixPrinter();
 			methodContractMap.get(m.name).get(1).accept(infixPostPrinter);
@@ -676,39 +642,34 @@ public class PrefixPrinter implements Visitor{
 			// do the wp calculation
 			
 			// assign the initial value
-			String prefixWp = postPrinter.prefixOutput;
-			String infixWp = infixPostPrinter.infixOutput;
+			String prefixPrecondition = prefixPrePrinter.prefixOutput;
+			String infixPrecondition = infixPrePrinter.preWithoutTag;
+			
+			String prefixWp = prefixPostPrinter.prefixOutput;
+			String infixWp = infixPostPrinter.postWithoutTag;
+			
+			//System.out.println("before: " + prefixWp);
 			
 			// for each implementation, do the calculation in reverse order
 			for (int i = methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
-				WpCalculator calculator = new WpCalculator(prefixWp, infixWp);
+				WpCalculator calculator = new WpCalculator(prefixPrecondition, 
+							infixPrecondition, prefixWp, infixWp);
 				methodImpMap.get(m.name).get(i).accept(calculator);
 				
-				System.out.println(i + ": " + prefixWp);
-				System.out.println(i + ": " + calculator.z3SubstituteMap);
+				//System.out.println(i + ": " + prefixWp);
+				//System.out.println(i + ": " + calculator.prefixSubstituteMap);
 				
-				
-				prefixWp = calculator.prefixWp;
-				infixWp = calculator.infixWp;
+				// if there is any array assignments in the middle, calculator.prefixWp will be blank
+				if (!calculator.prefixWp.isBlank()) {
+					prefixWp = calculator.prefixWp;
+					infixWp = calculator.infixWp;
+				}
 			}
+			//System.out.println("after: " + prefixWp);
 			
-			
-			
-			
-			
-//			// do the substitution for postcondition
-//			// for assignments, tranverse the substitution map in reverse order
-//			ListIterator<Map.Entry<String,String>> i = new ArrayList<Map.Entry<String,String>>
-//				(WpCalculator.z3SubstituteMap.entrySet()).listIterator(WpCalculator.z3SubstituteMap.size());
-//			
-//			while(i.hasPrevious()) {
-//				Map.Entry<String, String> entry= i.previous();
-//				postPrinter.prefixOutput = postPrinter.prefixOutput.replaceAll(entry.getKey(), entry.getValue());
-//			}
-			
+			// final formula is precondition => wp
 			prefixOutput = prefixOutput.concat("(=> " 
-					+ prePrinter.prefixOutput + " " + prefixWp + " ) ");	
-		
+					+ prefixPrePrinter.prefixOutput + " " + prefixWp + " ) ");	
 			isNestedQuantifier = false;
 		}
 	}
@@ -776,7 +737,64 @@ public class PrefixPrinter implements Visitor{
 		c.contract.b.accept(contractPrinter);
 		
 		prefixOutput = prefixOutput.concat(contractPrinter.prefixOutput);
+	}
+	
+	@Override
+	public void visitAssignment(Assignments a) {
+		// add the used variable to the inclusiveVarMap
+		if (!inclusiveVarMap.containsKey(a.name)) {
+			inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
+		}
+		// test if it's array element assignment
+		if (a.index != null) {
+			PrefixPrinter indexPrinter = new PrefixPrinter();
+			a.index.accept(indexPrinter);
+			
+			PrefixPrinter valuePrinter = new PrefixPrinter();
+			a.assignValue.accept(valuePrinter);
+			
+			// for array assignments, need to create a new array in Z3
+			if (completeVarMap.get(a.name).b.equals("ValuedArray")) {
+				inclusiveVarMap.put("new_" + a.name, new Pair<String, String>
+				(completeVarMap.get(a.name).a, "Array"));
+			}
+			else {
+				inclusiveVarMap.put("new_" + a.name, new Pair<String, String>
+				(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
+			}
+			
 		
+			assignMap.put("new_" + a.name, "(store " + a.name + " " + indexPrinter.prefixOutput 
+						+ " " + valuePrinter.prefixOutput + " ) ");
+		}
+		else {
+			PrefixPrinter valuePrinter = new PrefixPrinter();
+			a.assignValue.accept(valuePrinter);
+			
+			assignMap.put(a.name, valuePrinter.prefixOutput);
+		}
+		
+	}
+	
+	@Override
+	public void visitAlternations(Alternations a) {
+		// prefix print the condition
+		PrefixPrinter conditionPrinter = new PrefixPrinter();
+		a.condition.accept(conditionPrinter);
+		
+		// prefix print the if statement
+		for (int i = 0; i < a.ifImps.size(); i++) {
+			PrefixPrinter ifImpPrinter = new PrefixPrinter();
+			a.ifImps.get(i).accept(ifImpPrinter);
+		}
+		
+		// prefix print the else statement
+		if (!a.elseImps.isEmpty()) {
+			for (int j = 0; j < a.elseImps.size(); j++) {
+				PrefixPrinter elsePrinter = new PrefixPrinter();
+				a.elseImps.get(j).accept(elsePrinter);
+			}
+		}
 	}
 
 	@Override
@@ -833,9 +851,4 @@ public class PrefixPrinter implements Visitor{
 		// TODO Auto-generated method stub
 		
 	}
-
-	
-
-	
-	
 }

@@ -9,7 +9,15 @@ public class InfixPrinter implements Visitor{
 	
 	public String infixOutput;
 	public List<String> quantifyVar;
-	public String wpStr;
+	
+	// precondition without tag
+	public String preWithoutTag;
+	
+	// postcondition without tag
+	public String postWithoutTag;
+	
+	// contract string
+	public String contracStr;
 	
 	// map that stores the method preconditions
 	public static Map<String, String> preconditions = new LinkedHashMap<String, String>();
@@ -24,7 +32,9 @@ public class InfixPrinter implements Visitor{
 	public static Map<String, String> wps = new LinkedHashMap<String, String>();
 	
 	public InfixPrinter() {
-		wpStr = "";
+		preWithoutTag = "";
+		postWithoutTag = "";
+		contracStr = "";
 		infixOutput = "";
 		quantifyVar = new ArrayList<String>();
 	}
@@ -472,14 +482,17 @@ public class InfixPrinter implements Visitor{
 		
 		// print the precondition
 		// precondition in methodMap starts at index 0
-		InfixPrinter prePrinter = new InfixPrinter();
+		PrefixPrinter prefixPrePrinter = new PrefixPrinter();
+		PrefixPrinter.methodContractMap.get(m.name).get(0).accept(prefixPrePrinter);
+		
+		InfixPrinter infixPrePrinter = new InfixPrinter();
 		// use the methodMap in prefixprinter to print the precondition
-		PrefixPrinter.methodContractMap.get(m.name).get(0).accept(prePrinter);
+		PrefixPrinter.methodContractMap.get(m.name).get(0).accept(infixPrePrinter);
 		infixOutput = infixOutput.concat("require\n");
-		infixOutput = infixOutput.concat(prePrinter.infixOutput);
+		infixOutput = infixOutput.concat(infixPrePrinter.infixOutput);
 		
 		// add the output to the map for printing method output
-		preconditions.put(m.name, prePrinter.infixOutput);
+		preconditions.put(m.name, infixPrePrinter.infixOutput);
 		
 		
 		// print the local variables
@@ -504,8 +517,8 @@ public class InfixPrinter implements Visitor{
 		
 		// print the postcondition
 		// postcondition in methodMap starts at index 1
-		PrefixPrinter postPrinter = new PrefixPrinter();
-		PrefixPrinter.methodContractMap.get(m.name).get(1).accept(postPrinter);
+		PrefixPrinter prefixPostPrinter = new PrefixPrinter();
+		PrefixPrinter.methodContractMap.get(m.name).get(1).accept(prefixPostPrinter);
 		
 		InfixPrinter infixPostPrinter = new InfixPrinter();
 		PrefixPrinter.methodContractMap.get(m.name).get(1).accept(infixPostPrinter);
@@ -520,31 +533,29 @@ public class InfixPrinter implements Visitor{
 		// do the wp calculation
 		
 		// assign the initial value
-		String prefixWp = postPrinter.prefixOutput;
-		String infixWp = infixPostPrinter.wpStr;
+		String prefixPrecondition = prefixPrePrinter.prefixOutput;
+		String infixPrecondition = infixPrePrinter.preWithoutTag;
+		
+		String prefixWp = prefixPostPrinter.prefixOutput;
+		String infixWp = infixPostPrinter.postWithoutTag;
 		
 		// for each implementation, do the calculation in reverse order
 		for (int i = PrefixPrinter.methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
-			WpCalculator calculator = new WpCalculator(prefixWp, infixWp);
+			WpCalculator calculator = new WpCalculator(prefixPrecondition,
+					infixPrecondition, prefixWp, infixWp);
 			PrefixPrinter.methodImpMap.get(m.name).get(i).accept(calculator);
 			
-			System.out.println(i + ": " + infixWp);
-			System.out.println(i + ": " + calculator.counteregSubstituteMap);
+			//System.out.println(i + ": " + infixWp);
+			//System.out.println(i + ": " + calculator.infixSubstituteMap);
 			
-			prefixWp = calculator.prefixWp;
-			infixWp = calculator.infixWp;
+			// if there is any array assignments in the middle, calculator.prefixWp will be blank
+			if (!calculator.prefixWp.isBlank()) {
+				prefixWp = calculator.prefixWp;
+				infixWp = calculator.infixWp;
+			}
 		}
 		
-		// print the wps
-		// do the substitution for postcondition
-		// for assignments, tranverse the substitution map in reverse order
-//		ListIterator<Map.Entry<String,String>> j = new ArrayList<Map.Entry<String,String>>
-//			(WpCalculator.counteregSubstituteMap.entrySet()).listIterator(WpCalculator.counteregSubstituteMap.size());
-//		
-//		while(j.hasPrevious()) {
-//			Map.Entry<String, String> entry= j.previous();
-//			postPrinter.wpStr = postPrinter.wpStr.replaceAll(entry.getKey(), entry.getValue());
-//		}
+		// final infix version of wp
 		wps.put(m.name, "   " + infixWp + "\n");
 	}
 	
@@ -561,6 +572,31 @@ public class InfixPrinter implements Visitor{
 			infixOutput = infixOutput.concat("   " + prePrinter.infixOutput);
 		}
 		
+		// generate the precondition without tag output
+		// if there is only one contract
+		if (p.contracts.size() <= 1) {
+			InfixPrinter p1 = new InfixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			preWithoutTag = preWithoutTag.concat(p1.contracStr);
+		}
+		// if there are more than one contract
+		else {
+			InfixPrinter p1 = new InfixPrinter();
+			p.contracts.get(0).accept(p1);
+			
+			InfixPrinter p2 = new InfixPrinter();
+			p.contracts.get(1).accept(p2);
+			
+			preWithoutTag = preWithoutTag.concat("(" + p1.contracStr + " and " + p2.contracStr + ")");
+			
+			for (int i = 2; i < p.contracts.size(); i++) {
+				InfixPrinter printer = new InfixPrinter();
+				p.contracts.get(i).accept(printer);
+				
+				preWithoutTag = "(" + preWithoutTag + " and " + printer.contracStr;
+			}
+		}
 	}
 
 	@Override
@@ -573,13 +609,13 @@ public class InfixPrinter implements Visitor{
 			infixOutput = infixOutput.concat("   " + prePrinter.infixOutput);
 		}
 		
-		// generate the wp output
+		// generate the postcondition without tag output
 		// if there is only one contract
 		if (p.contracts.size() <= 1) {
 			InfixPrinter p1 = new InfixPrinter();
 			p.contracts.get(0).accept(p1);
 			
-			wpStr = wpStr.concat(p1.wpStr);
+			postWithoutTag = postWithoutTag.concat(p1.contracStr);
 		}
 		// if there are more than one contract
 		else {
@@ -589,13 +625,13 @@ public class InfixPrinter implements Visitor{
 			InfixPrinter p2 = new InfixPrinter();
 			p.contracts.get(1).accept(p2);
 			
-			wpStr = wpStr.concat("(" + p1.wpStr + " and " + p2.wpStr + ")");
+			postWithoutTag = postWithoutTag.concat("(" + p1.contracStr + " and " + p2.contracStr + ")");
 			
 			for (int i = 2; i < p.contracts.size(); i++) {
 				InfixPrinter printer = new InfixPrinter();
 				p.contracts.get(i).accept(printer);
 				
-				wpStr = "(" + wpStr + " and " + printer.wpStr;
+				postWithoutTag = "(" + postWithoutTag + " and " + printer.contracStr;
 			}
 		}
 	}
@@ -613,7 +649,7 @@ public class InfixPrinter implements Visitor{
 		}
 		
 		// set up the output for wp
-		wpStr = contractPrinter.infixOutput;
+		contracStr = contractPrinter.infixOutput;
 	}
 	
 	@Override
@@ -632,6 +668,41 @@ public class InfixPrinter implements Visitor{
 			InfixPrinter assignedPrinter = new InfixPrinter();
 			a.assignValue.accept(assignedPrinter);
 			infixOutput = infixOutput.concat("  " + a.name + " := " + assignedPrinter.infixOutput + ";");
+		}
+	}
+	
+	// if-else statement
+	@Override
+	public void visitAlternations(Alternations a) {
+		// print the if statement
+		InfixPrinter conditionPrinter = new InfixPrinter();
+		a.condition.accept(conditionPrinter);
+		infixOutput = infixOutput.concat("if " + conditionPrinter.infixOutput + " then\n");
+		
+		// print the if statement implementation
+		String ifImpStr = "";
+		for (int i = 0; i < a.ifImps.size(); i++) {
+			InfixPrinter ifImpPrinter = new InfixPrinter();
+			a.ifImps.get(i).accept(ifImpPrinter);
+			ifImpStr = ifImpStr + ifImpPrinter.infixOutput + "\n";
+		}
+		infixOutput = infixOutput.concat(ifImpStr);
+		
+		// print the else statement and its implementation
+		if (!a.elseImps.isEmpty()) {
+			infixOutput = infixOutput.concat("else\n");
+			
+			String elseImpStr = "";
+			for (int j = 0; j < a.elseImps.size(); j++) {
+				InfixPrinter elsePrinter = new InfixPrinter();
+				a.elseImps.get(j).accept(elsePrinter);
+				elseImpStr = elseImpStr + elsePrinter.infixOutput + "\n";
+			}
+			
+			infixOutput = infixOutput.concat(elseImpStr + "end\n");
+		}
+		else {
+			infixOutput = infixOutput.concat("end\n");
 		}
 	}
 	
@@ -665,9 +736,10 @@ public class InfixPrinter implements Visitor{
 
 	@Override
 	public void visitResults(Results r) {
-		// TODO Auto-generated method stub
 		infixOutput = infixOutput.concat("Result");
 		
 	}
+
+	
 
 }

@@ -748,11 +748,6 @@ public class PrettyPrinter implements Visitor {
 	 */
 	
 
-	@Override
-	public void visitAssignment(Assignments a) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void visitMethods(Methods m) {
@@ -861,6 +856,18 @@ public class PrettyPrinter implements Visitor {
 			isNestedQuantifier = false;
 		}
 	}
+	
+	@Override
+	public void visitAssignment(Assignments a) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void visitAlternations(Alternations a) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void visitPreconditions(Preconditions p) {
@@ -904,8 +911,4 @@ public class PrettyPrinter implements Visitor {
 	public void visitNIL(NIL n) {
 		// TODO Auto-generated method stub
 	}
-
-	
-
-	
 }
