@@ -12,9 +12,15 @@ public class TypeChecker implements Visitor{
 	// hashmap to store the array name and its value for type check
 	public static Map<String, List<Verifier>> arrayMap = new LinkedHashMap<String, List<Verifier>>();
 	
-	// pair that stores 
+	// hashmap that stores the parameters
+	public static Map<String, Pair<VarType, Verifier>> parameterMap = new LinkedHashMap<String, Pair<VarType, Verifier>>();
+	
+
 	// indicate whether is inside a method
 	public static boolean isMethod;
+	
+	// indicate whether it is parameters
+	public static boolean isParameter;
 	
 	// indicate if the method is accessor
 	public static boolean isAccessor;
@@ -29,6 +35,9 @@ public class TypeChecker implements Visitor{
 	// constructor
 	public TypeChecker() {
 		errormsg = new ArrayList<String>();
+		isMethod = false;
+		isAccessor = false;
+		isPostcondition = false;
 	}
 	
 	
@@ -351,6 +360,10 @@ public class TypeChecker implements Visitor{
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
 				varMap.put(v.name, new Pair<VarType, Verifier>(new BoolType(), null));
+				
+				if (isParameter) {
+					parameterMap.put(v.name, new Pair<VarType, Verifier>(new BoolType(), null));
+				}
 			}
 			// if this variable is not declared for the first time, change its type to unknown type
 			// and add the error message
@@ -434,6 +447,10 @@ public class TypeChecker implements Visitor{
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
 				varMap.put(v.name, new Pair<VarType, Verifier>(new IntType(), null));
+			
+				if (isParameter) {
+					parameterMap.put(v.name, new Pair<VarType, Verifier>(new IntType(), null));
+				}
 			}
 			// if this variable is not declared for the first time, change its type to unknown type
 			// and add the error message
@@ -517,6 +534,10 @@ public class TypeChecker implements Visitor{
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(v.name)) {
 				varMap.put(v.name, new Pair<VarType, Verifier>(new RealType(), null));
+			
+				if (isParameter) {
+					parameterMap.put(v.name, new Pair<VarType, Verifier>(new RealType(), null));
+				}
 			}
 			// if this variable is not declared for the first time, change its type to unknown type
 			// and add the error message
@@ -597,6 +618,10 @@ public class TypeChecker implements Visitor{
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(a.name)) {
 				varMap.put(a.name, new Pair<VarType, Verifier>(new BoolArray(), null));
+			
+				if (isParameter) {
+					parameterMap.put(a.name, new Pair<VarType, Verifier>(new BoolArray(), null));
+				}
 			}
 			// if this variable is not declared for the first time, change its type to unknown type
 			// and add the error message
@@ -738,6 +763,10 @@ public class TypeChecker implements Visitor{
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(a.name)) {
 				varMap.put(a.name, new Pair<VarType, Verifier>(new IntArray(), null));
+			
+				if (isParameter) {
+					parameterMap.put(a.name, new Pair<VarType, Verifier>(new IntArray(), null));
+				}
 			}
 			// if this variable is not declared for the first time, change its type to unknown type
 			// and add the error message
@@ -886,6 +915,10 @@ public class TypeChecker implements Visitor{
 			// if this variable is declared for the first time, simply add it to the map
 			if (!varMap.containsKey(a.name)) {
 				varMap.put(a.name, new Pair<VarType, Verifier>(new RealArray(), null));
+			
+				if (isParameter) {
+					parameterMap.put(a.name, new Pair<VarType, Verifier>(new RealArray(), null));
+				}
 			}
 			// if this variable is not declared for the first time, change its type to unknown type
 			// and add the error message
@@ -1087,11 +1120,16 @@ public class TypeChecker implements Visitor{
 		if (m.mode instanceof modes.Declaration) {
 			// type check the parameters first
 			if (m.parameters != null) {
+				// set isParameter to true
+				isParameter = true;
 				for (int i = 0; i < m.parameters.size(); i++) {
 					TypeChecker paraChecker = new TypeChecker();
 					m.parameters.get(i).accept(paraChecker);
 					errormsg.addAll(paraChecker.errormsg);
 				}
+				
+				// reset isParameter
+				isParameter = false;
 			}
 			
 			// if the return value is not null
@@ -1100,6 +1138,13 @@ public class TypeChecker implements Visitor{
 				TypeChecker returnChecker = new TypeChecker();
 				m.returnValue.accept(returnChecker);
 				errormsg.addAll(returnChecker.errormsg);
+			}
+			
+			//type check the local variables
+			if (m.locals != null) {
+				TypeChecker localChecker = new TypeChecker();
+				m.locals.accept(localChecker);
+				errormsg.addAll(localChecker.errormsg);
 			}
 			
 			// type check the implementations
@@ -1120,16 +1165,7 @@ public class TypeChecker implements Visitor{
 			else {
 				errormsg.add("Error: To verify any program, you need to specify the preconditions.");
 			}
-			
-			
-			//type check the local variables
-			if (m.locals != null) {
-				TypeChecker localChecker = new TypeChecker();
-				m.locals.accept(localChecker);
-				errormsg.addAll(localChecker.errormsg);
-			}
-			
-			
+	
 			
 			// type check the postcondition
 			if (m.postcondition != null) {
@@ -1222,10 +1258,13 @@ public class TypeChecker implements Visitor{
 							+ " Please change another name.");
 				}
 				else {
-					InfixPrinter printer = new InfixPrinter();
-					c.contract.b.accept(printer);
-					errormsg.add("Error: You need to specify the tag name for the contract: " + printer.infixOutput);
+					varMap.put(c.contract.a, new Pair<VarType, Verifier>(new TagType(), null));
 				}
+			}
+			else {
+				InfixPrinter printer = new InfixPrinter();
+				c.contract.b.accept(printer);
+				errormsg.add("Error: You need to specify the tag name for the contract: " + printer.infixOutput);
 			}
 		}
 	}
@@ -1266,7 +1305,10 @@ public class TypeChecker implements Visitor{
 		if (errormsg.isEmpty()) {
 			// check to see if it's normal variable assignment
 			if (a.index == null) {
-				if (!varMap.containsKey(a.name)) {
+				if (parameterMap.containsKey(a.name)) {
+					errormsg.add("Error: Cannot perform this assignment because variable " + a.name + " is parameter.");
+				}
+				else if (!varMap.containsKey(a.name)) {
 					errormsg.add("Error: variable " + a.name + " has not been declared.");
 				}
 				// check if left hand side is array type
@@ -1369,6 +1411,117 @@ public class TypeChecker implements Visitor{
 			s.elseImps.get(i).accept(ifimpChecker);
 			errormsg.addAll(ifimpChecker.errormsg);
 		}
+	}
+	
+	@Override
+	public void visitLoops(Loops l) {
+		// type check initial implementation
+		TypeChecker initChecker = new TypeChecker();
+		l.initImp.accept(initChecker);
+		errormsg.addAll(initChecker.errormsg);
+		
+		// type check invariant
+		TypeChecker invariantChecker = new TypeChecker();
+		l.invariant.accept(invariantChecker);
+		errormsg.addAll(invariantChecker.errormsg);
+		
+		// type check exitcondition
+		TypeChecker exitChecker = new TypeChecker();
+		l.exitCondition.accept(exitChecker);
+		errormsg.addAll(exitChecker.errormsg);
+		
+		//type check loopbody
+		TypeChecker loopbodyChecker = new TypeChecker();
+		l.loopBody.accept(loopbodyChecker);
+		errormsg.addAll(loopbodyChecker.errormsg);
+		
+		// type check variant
+		TypeChecker variantChecker = new TypeChecker();
+		l.variant.accept(variantChecker);
+		errormsg.addAll(variantChecker.errormsg);
+	}
+
+
+	@Override
+	public void visitInitImp(InitImp s) {
+		// type check the implementations
+		for (int i = 0; i < s.initImp.size(); i++) {
+			TypeChecker initImpChecker = new TypeChecker();
+			s.initImp.get(i).accept(initImpChecker);
+			errormsg.addAll(initImpChecker.errormsg);
+		}
+	}
+
+
+	@Override
+	public void visitInvariantStat(InvariantStat s) {
+		// typecheck the expr first
+		// Pair<String, Verifier> invariant
+		TypeChecker exprChecker = new TypeChecker();
+		s.invariant.b.accept(exprChecker);
+		errormsg.addAll(exprChecker.errormsg);
+		
+		if (errormsg.isEmpty()) {
+			if (s.invariant.a != null) {
+				if (varMap.containsKey(s.invariant.a)) {
+					errormsg.add("Error: The tag name " + s.invariant.a + " has already been used."
+							+ " Please change another name.");
+				}
+				else {
+					varMap.put(s.invariant.a, new Pair<VarType, Verifier>(new TagType(), null));
+				}
+			}
+			else {
+				
+			}
+		}
+	}
+	
+
+
+	@Override
+	public void visitExitCondition(ExitCondition s) {
+		// type check the expr
+		TypeChecker exitChecker = new TypeChecker();
+		s.condition.accept(exitChecker);
+		errormsg.addAll(exitChecker.errormsg);
+	}
+
+
+	@Override
+	public void visitLoopBody(LoopBody s) {
+		// type check the implementations
+		for (int i = 0; i < s.loopBodyImps.size(); i++) {
+			TypeChecker initImpChecker = new TypeChecker();
+			s.loopBodyImps.get(i).accept(initImpChecker);
+			errormsg.addAll(initImpChecker.errormsg);
+		}
+	}
+
+
+	@Override
+	public void visitVariantStat(VariantStat s) {
+		// typecheck the expr first
+		// Pair<String, Verifier> variant;
+		TypeChecker exprChecker = new TypeChecker();
+		s.variant.b.accept(exprChecker);
+		errormsg.addAll(exprChecker.errormsg);
+		
+		if (errormsg.isEmpty()) {
+			if (s.variant.a != null) {
+				if (varMap.containsKey(s.variant.a)) {
+					errormsg.add("Error: The tag name " + s.variant.a + " has already been used."
+							+ " Please change another name.");
+				}
+				else {
+					varMap.put(s.variant.a, new Pair<VarType, Verifier>(new TagType(), null));
+				}
+			}
+			else {
+				
+			}
+		}
+		
 	}
 
 	/* *****************************************************************************************
@@ -1502,4 +1655,7 @@ public class TypeChecker implements Visitor{
 		}
 		
 	}
+
+
+	
 }

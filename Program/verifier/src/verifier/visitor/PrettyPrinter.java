@@ -290,7 +290,7 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("( assert (not " + p.prefixOutput + "))\n"
+		z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"

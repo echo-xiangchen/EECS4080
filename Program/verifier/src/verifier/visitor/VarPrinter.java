@@ -642,6 +642,76 @@ public class VarPrinter implements Visitor {
 		}
 	}
 	
+	@Override
+	public void visitLoops(Loops l) {
+		// print initial implementation
+		VarPrinter initPrint = new VarPrinter();
+		l.initImp.accept(initPrint);
+		
+		
+		// print invariant
+		VarPrinter invariantPrint = new VarPrinter();
+		l.invariant.accept(invariantPrint);
+		
+		
+		// print exitcondition
+		VarPrinter exitPrint = new VarPrinter();
+		l.exitCondition.accept(exitPrint);
+		
+		
+		//print loopbody
+		VarPrinter loopbodyPrint = new VarPrinter();
+		l.loopBody.accept(loopbodyPrint);
+		
+		
+		// print variant
+		VarPrinter variantPrint = new VarPrinter();
+		l.variant.accept(variantPrint);
+		
+		
+	}
+
+	@Override
+	public void visitInitImp(InitImp s) {
+		// print the implementations
+		for (int i = 0; i < s.initImp.size(); i++) {
+			VarPrinter initImpPrinter = new VarPrinter();
+			s.initImp.get(i).accept(initImpPrinter);
+		}
+	}
+
+	@Override
+	public void visitInvariantStat(InvariantStat s) {
+		// print the expr first
+		// Pair<String, Verifier> invariant
+		VarPrinter exprPrinter = new VarPrinter();
+		s.invariant.b.accept(exprPrinter);
+	}
+
+	@Override
+	public void visitExitCondition(ExitCondition s) {
+		// print the expr
+		VarPrinter exitPrinter = new VarPrinter();
+		s.condition.accept(exitPrinter);
+	}
+
+	@Override
+	public void visitLoopBody(LoopBody s) {
+		// print the implementations
+		for (int i = 0; i < s.loopBodyImps.size(); i++) {
+			VarPrinter initImpPrinter = new VarPrinter();
+			s.loopBodyImps.get(i).accept(initImpPrinter);
+		}
+	}
+
+	@Override
+	public void visitVariantStat(VariantStat s) {
+		// typecheck the expr first
+		// Pair<String, Verifier> variant;
+		VarPrinter exprPrinter = new VarPrinter();
+		s.variant.b.accept(exprPrinter);
+	}
+	
 	/* *****************************************************************************************
 	 * TODO Keywords
 	 * *****************************************************************************************

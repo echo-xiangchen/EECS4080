@@ -6,8 +6,10 @@ import verifier.visitor.Visitor;
 
 public class IfStats extends AlternationStats {
 	
+	// if statement condition
 	public Verifier condition;
 	
+	// list of implementations inside if statement
 	public List<Verifier> ifImps;
 	
 	public IfStats(Verifier condition, List<Verifier> ifImps) {

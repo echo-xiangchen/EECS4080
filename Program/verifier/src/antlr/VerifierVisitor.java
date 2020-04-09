@@ -124,6 +124,13 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitImpAlternation(VerifierParser.ImpAlternationContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ImpLoop}
+	 * labeled alternative in {@link VerifierParser#implementation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImpLoop(VerifierParser.ImpLoopContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code SingleVarAssign}
 	 * labeled alternative in {@link VerifierParser#assignment}.
 	 * @param ctx the parse tree
@@ -221,6 +228,48 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitElseStatement(VerifierParser.ElseStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Loops}
+	 * labeled alternative in {@link VerifierParser#loop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoops(VerifierParser.LoopsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LoopInitialImps}
+	 * labeled alternative in {@link VerifierParser#initImp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoopInitialImps(VerifierParser.LoopInitialImpsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LoopInvariant}
+	 * labeled alternative in {@link VerifierParser#invariantStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoopInvariant(VerifierParser.LoopInvariantContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LoopExitCondition}
+	 * labeled alternative in {@link VerifierParser#exitCondition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoopExitCondition(VerifierParser.LoopExitConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LoopBodyImps}
+	 * labeled alternative in {@link VerifierParser#loopBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoopBodyImps(VerifierParser.LoopBodyImpsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LoopVariant}
+	 * labeled alternative in {@link VerifierParser#variantStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoopVariant(VerifierParser.LoopVariantContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code UninitialVarDecl}
 	 * labeled alternative in {@link VerifierParser#declaration}.
@@ -531,133 +580,133 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	T visitQuantifyVar(VerifierParser.QuantifyVarContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Equal}
-	 * labeled alternative in {@link VerifierParser#relation}.
+	 * labeled alternative in {@link VerifierParser#relationalExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitEqual(VerifierParser.EqualContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code GreaterThan}
-	 * labeled alternative in {@link VerifierParser#relation}.
+	 * labeled alternative in {@link VerifierParser#relationalExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitGreaterThan(VerifierParser.GreaterThanContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code LessThan}
-	 * labeled alternative in {@link VerifierParser#relation}.
+	 * labeled alternative in {@link VerifierParser#relationalExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLessThan(VerifierParser.LessThanContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code GreaterOrEqual}
-	 * labeled alternative in {@link VerifierParser#relation}.
+	 * labeled alternative in {@link VerifierParser#relationalExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitGreaterOrEqual(VerifierParser.GreaterOrEqualContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code LessOrEqual}
-	 * labeled alternative in {@link VerifierParser#relation}.
+	 * labeled alternative in {@link VerifierParser#relationalExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLessOrEqual(VerifierParser.LessOrEqualContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ArithmeticVar}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitArithmeticVar(VerifierParser.ArithmeticVarContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code IntNum}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIntNum(VerifierParser.IntNumContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ArithParen}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitArithParen(VerifierParser.ArithParenContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code MulDiv}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitMulDiv(VerifierParser.MulDivContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code AddSub}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAddSub(VerifierParser.AddSubContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code UpperArray}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitUpperArray(VerifierParser.UpperArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code RealNum}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitRealNum(VerifierParser.RealNumContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code IndexArithmeticArray}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIndexArithmeticArray(VerifierParser.IndexArithmeticArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code OldArithArray}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitOldArithArray(VerifierParser.OldArithArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ArithResult}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitArithResult(VerifierParser.ArithResultContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code LowerArray}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLowerArray(VerifierParser.LowerArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ArithArrayResult}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitArithArrayResult(VerifierParser.ArithArrayResultContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code CountArray}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitCountArray(VerifierParser.CountArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code OldArithVar}
-	 * labeled alternative in {@link VerifierParser#arithmetic}.
+	 * labeled alternative in {@link VerifierParser#arithmeticExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

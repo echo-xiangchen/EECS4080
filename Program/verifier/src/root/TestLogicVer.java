@@ -229,7 +229,7 @@ public class TestLogicVer {
 			        	verifier.add(AntlrToVerifier.visit(tree.getChild(i)));
 					}
 			        
-			        //System.out.println("AntlrToVerifier.varTypes: " + AntlrToVerifier.varTypes + "\n");
+			        System.out.println("AntlrToVerifier.varTypes: " + AntlrToVerifier.varTypes + "\n");
 			       
 			        
 			        
@@ -253,7 +253,7 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
 			        //System.out.println("TypeChecker.arrayMap: " + TypeChecker.arrayMap + "\n");
 			        
 			        

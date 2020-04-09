@@ -5,8 +5,10 @@ import verifier.visitor.*;
 
 public class ElseifStats extends AlternationStats {
 	
-public Verifier condition;
+	// condition of else-if statement
+	public Verifier condition;
 	
+	// list of implementations of each else-if statement
 	public List<Verifier> elseifImps;
 	
 	public ElseifStats(Verifier condition, List<Verifier> elseifImps) {

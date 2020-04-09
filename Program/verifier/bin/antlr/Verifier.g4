@@ -21,7 +21,7 @@ method
 	;
 
 mutator 
-	: ID '(' ( uninitialDecl (';' uninitialDecl)* )? ')'
+	: ID ('(' ( uninitialDecl (';' uninitialDecl)* )? ')')?
 		(precondition)?
 		(local)?
 		DO 
@@ -31,7 +31,7 @@ mutator
 	;
 
 accessor
-	: ID '(' ( uninitialDecl (';' uninitialDecl)* )? ')' ':' unnamedDecl
+	: ID ('(' ( uninitialDecl (';' uninitialDecl)* )? ')')? ':' unnamedDecl
 		(precondition)?
 		(local)?
 		DO 

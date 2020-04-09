@@ -500,6 +500,12 @@ public class InfixPrinter implements Visitor{
 			}
 		}
 		
+		// print the local variables
+		if (PrefixPrinter.methodLocalMap.containsKey(m.name)) {
+			InfixPrinter localPrinter = new InfixPrinter();
+			PrefixPrinter.methodLocalMap.get(m.name).accept(localPrinter);
+			infixOutput = infixOutput.concat(localPrinter.infixOutput);
+		}
 		
 		// print the precondition
 		// precondition in methodMap starts at index 0
@@ -511,14 +517,6 @@ public class InfixPrinter implements Visitor{
 		
 		// add the output to the map for printing method output
 		preconditions.put(m.name, infixPrePrinter.infixOutput);
-		
-		
-		// print the local variables
-		if (PrefixPrinter.methodLocalMap.containsKey(m.name)) {
-			InfixPrinter localPrinter = new InfixPrinter();
-			PrefixPrinter.methodLocalMap.get(m.name).accept(localPrinter);
-			infixOutput = infixOutput.concat(localPrinter.infixOutput);
-		}
 		
 		
 		// print the implementations

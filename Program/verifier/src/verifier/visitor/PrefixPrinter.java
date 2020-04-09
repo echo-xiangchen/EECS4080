@@ -29,6 +29,11 @@ public class PrefixPrinter implements Visitor{
 	// map that stores the array name and its values
 	public static Map<String, List<String>> arrayMap = new LinkedHashMap<String, List<String>>();
 	
+	// integer that counts how many spaces are needed for the indentation
+	public static int indentationInt = 0;
+	
+	// initial indentation
+	public String indentationStr;
 	
 	/* *****************************************************************************************
 	 * TODO methods attributes 
@@ -61,6 +66,7 @@ public class PrefixPrinter implements Visitor{
 		prefixOutput = "";
 		quantifyVar = "";
 		quantifyIndicator = "";
+		indentationStr = "  ";
 	}
 	
 	/* *****************************************************************************************
@@ -86,7 +92,14 @@ public class PrefixPrinter implements Visitor{
 		b.right().accept(rightPrinter);
 		isNestedQuantifier = false;
 		
-		prefixOutput = prefixOutput.concat("(" + op + " " 
+		
+		// add the indentation
+		indentationInt++;
+		
+		for (int i = 0; i < indentationInt; i++) {
+			indentationStr = indentationStr + " ";
+		}
+		prefixOutput = prefixOutput.concat("(" + op + " "
 				+ leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + ")");
 	}
 	
@@ -101,6 +114,12 @@ public class PrefixPrinter implements Visitor{
 		u.child.accept(p);
 		isNestedQuantifier = false;
 		
+		// add the indentation
+		indentationInt++;
+		
+		for (int i = 0; i < indentationInt; i++) {
+			indentationStr = indentationStr + " ";
+		}
 		prefixOutput = prefixOutput.concat("(" + op + " " + p.prefixOutput + ")");
 	}
 	
@@ -117,6 +136,12 @@ public class PrefixPrinter implements Visitor{
 		PrefixPrinter p2 = new PrefixPrinter();
 		q.expr.accept(p2);
 		
+		// add the indentation
+		indentationInt++;
+		
+		for (int i = 0; i < indentationInt; i++) {
+			indentationStr = indentationStr + "  ";
+		}
 		prefixOutput = "(" + quantifyIndicator + "(" + quantifyVar + ")" + p2.prefixOutput + ")";
 		
 	}
@@ -559,7 +584,6 @@ public class PrefixPrinter implements Visitor{
 			else if (c.indicator.equals("lower")) {
 				prefixOutput = prefixOutput.concat(" 1 ");
 			}
-			
 		}
 		else {
 			prefixOutput = prefixOutput.concat(c.name);
@@ -596,13 +620,7 @@ public class PrefixPrinter implements Visitor{
 					parameterlist.add(m.parameters.get(i));
 				}
 				methodParameterMap.put(m.name, parameterlist);
-			}		
-						
-			// add the contracts to the map
-			List<Verifier> conatraclist = new ArrayList<Verifier>();
-			conatraclist.add(m.precondition);
-			conatraclist.add(m.postcondition);
-			methodContractMap.put(m.name, conatraclist);
+			}
 			
 			// add the return value
 			if (m.returnValue != null) {
@@ -613,7 +631,12 @@ public class PrefixPrinter implements Visitor{
 			if (m.locals != null) {
 				methodLocalMap.put(m.name, m.locals);
 			}
-			
+						
+			// add the contracts to the map
+			List<Verifier> conatraclist = new ArrayList<Verifier>();
+			conatraclist.add(m.precondition);
+			conatraclist.add(m.postcondition);
+			methodContractMap.put(m.name, conatraclist);
 			
 			
 			// add the implementations to the map
@@ -626,6 +649,7 @@ public class PrefixPrinter implements Visitor{
 		}
 		else if (m.mode instanceof modes.Verification) {
 			isNestedQuantifier = true;
+			
 			// call prefixprinter to print each parameters
 			if (methodParameterMap.containsKey(m.name)) {
 				for (int i = 0; i < methodParameterMap.get(m.name).size(); i++) {
@@ -638,6 +662,12 @@ public class PrefixPrinter implements Visitor{
 			if (methodReturnMap.containsKey(m.name)) {
 				PrefixPrinter returnvaluePrinter = new PrefixPrinter();
 				methodReturnMap.get(m.name).accept(returnvaluePrinter);
+			}
+			
+			// print the local variables
+			if (methodLocalMap.containsKey(m.name)) {
+				PrefixPrinter localPrinter = new PrefixPrinter();
+				methodLocalMap.get(m.name).accept(localPrinter);
 			}
 			
 			

@@ -23,7 +23,7 @@ public class VerifierLexer extends Lexer {
 		T__9=10, T__10=11, T__11=12, BOOL=13, INT=14, REAL=15, ARRAY=16, PAIR=17, 
 		VERIFY=18, COUNT=19, LOWER=20, UPPER=21, LOCAL=22, REQUIRE=23, ENSURE=24, 
 		DO=25, END=26, OLD=27, RESULT=28, IF=29, ELSEIF=30, THEN=31, ELSE=32, 
-		FROM=33, UNTIL=34, LOOP=35, INVARIANT=36, VARIANT=37, FORALL=38, EXISTS=39, 
+		FROM=33, INVARIANT=34, UNTIL=35, LOOP=36, VARIANT=37, FORALL=38, EXISTS=39, 
 		TRUE=40, FALSE=41, NOT=42, AND=43, OR=44, IMPLIES=45, IFF=46, EQUAL=47, 
 		GREATERTHAN=48, LESSTHAN=49, GREATEROREQUAL=50, LESSOREQUAL=51, MUL=52, 
 		DIV=53, ADD=54, SUB=55, COMMENT=56, WS=57, ID=58, INTNUM=59, REALNUM=60;
@@ -40,9 +40,9 @@ public class VerifierLexer extends Lexer {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
 			"T__9", "T__10", "T__11", "BOOL", "INT", "REAL", "ARRAY", "PAIR", "VERIFY", 
 			"COUNT", "LOWER", "UPPER", "LOCAL", "REQUIRE", "ENSURE", "DO", "END", 
-			"OLD", "RESULT", "IF", "ELSEIF", "THEN", "ELSE", "FROM", "UNTIL", "LOOP", 
-			"INVARIANT", "VARIANT", "FORALL", "EXISTS", "TRUE", "FALSE", "NOT", "AND", 
-			"OR", "IMPLIES", "IFF", "EQUAL", "GREATERTHAN", "LESSTHAN", "GREATEROREQUAL", 
+			"OLD", "RESULT", "IF", "ELSEIF", "THEN", "ELSE", "FROM", "INVARIANT", 
+			"UNTIL", "LOOP", "VARIANT", "FORALL", "EXISTS", "TRUE", "FALSE", "NOT", 
+			"AND", "OR", "IMPLIES", "IFF", "EQUAL", "GREATERTHAN", "LESSTHAN", "GREATEROREQUAL", 
 			"LESSOREQUAL", "MUL", "DIV", "ADD", "SUB", "COMMENT", "WS", "ID", "INTNUM", 
 			"REALNUM"
 		};
@@ -55,7 +55,7 @@ public class VerifierLexer extends Lexer {
 			"']'", "'|'", "'.'", "'BOOLEAN'", "'INTEGER'", "'REAL'", "'ARRAY'", "'PAIR'", 
 			"'verify'", "'count'", "'lower'", "'upper'", "'local'", "'require'", 
 			"'ensure'", "'do'", "'end'", "'old'", "'Result'", "'if'", "'elseif'", 
-			"'then'", "'else'", "'from'", "'until'", "'loop'", "'invariant'", "'variant'", 
+			"'then'", "'else'", "'from'", "'invariant'", "'until'", "'loop'", "'variant'", 
 			"'forall'", "'exists'", "'true'", "'false'", "'not'", "'and'", "'or'", 
 			"'=>'", "'<=>'", "'='", "'>'", "'<'", "'>='", "'<='", "'*'", "'/'", "'+'", 
 			"'-'"
@@ -67,7 +67,7 @@ public class VerifierLexer extends Lexer {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, "BOOL", "INT", "REAL", "ARRAY", "PAIR", "VERIFY", "COUNT", "LOWER", 
 			"UPPER", "LOCAL", "REQUIRE", "ENSURE", "DO", "END", "OLD", "RESULT", 
-			"IF", "ELSEIF", "THEN", "ELSE", "FROM", "UNTIL", "LOOP", "INVARIANT", 
+			"IF", "ELSEIF", "THEN", "ELSE", "FROM", "INVARIANT", "UNTIL", "LOOP", 
 			"VARIANT", "FORALL", "EXISTS", "TRUE", "FALSE", "NOT", "AND", "OR", "IMPLIES", 
 			"IFF", "EQUAL", "GREATERTHAN", "LESSTHAN", "GREATEROREQUAL", "LESSOREQUAL", 
 			"MUL", "DIV", "ADD", "SUB", "COMMENT", "WS", "ID", "INTNUM", "REALNUM"
@@ -150,7 +150,7 @@ public class VerifierLexer extends Lexer {
 		"\3\31\3\31\3\32\3\32\3\32\3\33\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\35"+
 		"\3\35\3\35\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\37\3\37\3\37\3\37\3\37"+
 		"\3\37\3\37\3 \3 \3 \3 \3 \3!\3!\3!\3!\3!\3\"\3\"\3\"\3\"\3\"\3#\3#\3#"+
-		"\3#\3#\3#\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3%\3%\3%\3%\3%\3&\3&\3&\3&\3&"+
+		"\3#\3#\3#\3#\3#\3#\3#\3$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3&\3&\3&\3&\3&"+
 		"\3&\3&\3&\3\'\3\'\3\'\3\'\3\'\3\'\3\'\3(\3(\3(\3(\3(\3(\3(\3)\3)\3)\3"+
 		")\3)\3*\3*\3*\3*\3*\3*\3+\3+\3+\3+\3,\3,\3,\3,\3-\3-\3-\3.\3.\3.\3/\3"+
 		"/\3/\3/\3\60\3\60\3\61\3\61\3\62\3\62\3\63\3\63\3\63\3\64\3\64\3\64\3"+
@@ -180,7 +180,7 @@ public class VerifierLexer extends Lexer {
 		"\3\2\2\2-\u00cf\3\2\2\2/\u00d5\3\2\2\2\61\u00dd\3\2\2\2\63\u00e4\3\2\2"+
 		"\2\65\u00e7\3\2\2\2\67\u00eb\3\2\2\29\u00ef\3\2\2\2;\u00f6\3\2\2\2=\u00f9"+
 		"\3\2\2\2?\u0100\3\2\2\2A\u0105\3\2\2\2C\u010a\3\2\2\2E\u010f\3\2\2\2G"+
-		"\u0115\3\2\2\2I\u011a\3\2\2\2K\u0124\3\2\2\2M\u012c\3\2\2\2O\u0133\3\2"+
+		"\u0119\3\2\2\2I\u011f\3\2\2\2K\u0124\3\2\2\2M\u012c\3\2\2\2O\u0133\3\2"+
 		"\2\2Q\u013a\3\2\2\2S\u013f\3\2\2\2U\u0145\3\2\2\2W\u0149\3\2\2\2Y\u014d"+
 		"\3\2\2\2[\u0150\3\2\2\2]\u0153\3\2\2\2_\u0157\3\2\2\2a\u0159\3\2\2\2c"+
 		"\u015b\3\2\2\2e\u015d\3\2\2\2g\u0160\3\2\2\2i\u0163\3\2\2\2k\u0165\3\2"+
@@ -223,12 +223,12 @@ public class VerifierLexer extends Lexer {
 		"\7g\2\2\u0103\u0104\7p\2\2\u0104@\3\2\2\2\u0105\u0106\7g\2\2\u0106\u0107"+
 		"\7n\2\2\u0107\u0108\7u\2\2\u0108\u0109\7g\2\2\u0109B\3\2\2\2\u010a\u010b"+
 		"\7h\2\2\u010b\u010c\7t\2\2\u010c\u010d\7q\2\2\u010d\u010e\7o\2\2\u010e"+
-		"D\3\2\2\2\u010f\u0110\7w\2\2\u0110\u0111\7p\2\2\u0111\u0112\7v\2\2\u0112"+
-		"\u0113\7k\2\2\u0113\u0114\7n\2\2\u0114F\3\2\2\2\u0115\u0116\7n\2\2\u0116"+
-		"\u0117\7q\2\2\u0117\u0118\7q\2\2\u0118\u0119\7r\2\2\u0119H\3\2\2\2\u011a"+
-		"\u011b\7k\2\2\u011b\u011c\7p\2\2\u011c\u011d\7x\2\2\u011d\u011e\7c\2\2"+
-		"\u011e\u011f\7t\2\2\u011f\u0120\7k\2\2\u0120\u0121\7c\2\2\u0121\u0122"+
-		"\7p\2\2\u0122\u0123\7v\2\2\u0123J\3\2\2\2\u0124\u0125\7x\2\2\u0125\u0126"+
+		"D\3\2\2\2\u010f\u0110\7k\2\2\u0110\u0111\7p\2\2\u0111\u0112\7x\2\2\u0112"+
+		"\u0113\7c\2\2\u0113\u0114\7t\2\2\u0114\u0115\7k\2\2\u0115\u0116\7c\2\2"+
+		"\u0116\u0117\7p\2\2\u0117\u0118\7v\2\2\u0118F\3\2\2\2\u0119\u011a\7w\2"+
+		"\2\u011a\u011b\7p\2\2\u011b\u011c\7v\2\2\u011c\u011d\7k\2\2\u011d\u011e"+
+		"\7n\2\2\u011eH\3\2\2\2\u011f\u0120\7n\2\2\u0120\u0121\7q\2\2\u0121\u0122"+
+		"\7q\2\2\u0122\u0123\7r\2\2\u0123J\3\2\2\2\u0124\u0125\7x\2\2\u0125\u0126"+
 		"\7c\2\2\u0126\u0127\7t\2\2\u0127\u0128\7k\2\2\u0128\u0129\7c\2\2\u0129"+
 		"\u012a\7p\2\2\u012a\u012b\7v\2\2\u012bL\3\2\2\2\u012c\u012d\7h\2\2\u012d"+
 		"\u012e\7q\2\2\u012e\u012f\7t\2\2\u012f\u0130\7c\2\2\u0130\u0131\7n\2\2"+
