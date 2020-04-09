@@ -132,3 +132,31 @@ To do: Mar 3
 To do: Mar 10            
 1. Modify the declaration of arrays to force the user specify the length of the array.                   
 2. Add the two type of errors about array.
+
+==============================================              
+To do: Mar 16                
+1. Report error msg for nested loop.               
+2. Add the binary search test cases:                    
+    - recursion version: if not supported, then report error msg.                  
+    - iterative version: try this first.           
+                      
+==============================================              
+To do: Mar 31                  
+1. Fully test assignment, if-else statement, and sequencials:                   
+    - Try the test case in the book, start from Chapter 3, page 75                     
+    - For each test cases, try the correct version, and type error version, and modify the contracts to test "not discharged" version.               
+                
+==============================================              
+To do: Apr 7                   
+1. Report error msg if user want to assign value to parameters.                   
+2. Try different version of the calculating tax example:               
+    - Move income, status into parameter                
+    - Try the Result keyword (replacing the tax variable)                
+    - For postconditions: try case 1: specific number; and case 2: general case               
+3. Don't need to write "()" if parameters are empty.                 
+4. Try the test case from email.                     
+5. Report error if user does not specify tag for the contracts.                     
+6. Try sequancial if-else statement.                         
+7. For the output, try to print the tree.                  
+8. Finish the draft of the presentation slides.
+
