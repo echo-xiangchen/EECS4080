@@ -201,6 +201,27 @@ public interface VerifierVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAlternationBody(VerifierParser.AlternationBodyContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code IfStatement}
+	 * labeled alternative in {@link VerifierParser#ifstat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfStatement(VerifierParser.IfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ElseIfStatement}
+	 * labeled alternative in {@link VerifierParser#elseifstat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseIfStatement(VerifierParser.ElseIfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ElseStatement}
+	 * labeled alternative in {@link VerifierParser#elsestat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseStatement(VerifierParser.ElseStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code UninitialVarDecl}
 	 * labeled alternative in {@link VerifierParser#declaration}.
 	 * @param ctx the parse tree

@@ -8,19 +8,17 @@ public abstract class Const extends Logic{
 	// indicates if it's for count, lower, or upper
 	public String indicator;
 	
-	//used for uninitialized declaration and verification
+	// used for normal constant declaration and verification
 	public Const(String name) {
 		this.name = name;
 	}
 	
-	// used for array count
+	// if "isArray" is true, means it's array count
+	// if "isArray" is false, means it's normal integer constant
 	public Const(String name, String indicator,boolean value) {
 		this.name = name;
 		this.indicator = indicator;
 		this.isArray = value;
 	}
-	
-	
-	
 }
 

@@ -51,6 +51,34 @@ Gries-Theorems
 308 - 319: Implication and nested quantifier
 320 - 331: Iff and nested quantifier
 
-332: Program assignments
-333: Old keyword
-334: Result keyword
+332 - 336: increment_by_9
+337 - 342: Old keyword (change_at)
+343 - 347: Result keyword (return_array_value)
+348 - 350: Old keyword(compare)
+351 - 357: Sequential (swap)
+358 - 361: Sequential (swap) and if-stat
+362 - 368: if-else(lottery)
+369 - 375: if-else(increment_x)
+376 - 385: if-else(x_and_y)
+386 - 395: if-else(weight_and_height)
+396 - 405: if-else(boolean_operator)
+406 - 415: if-else(age_and_weight)
+416 - 425: if-else(bigger_smaller)
+426 - 435: if-else(tax)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

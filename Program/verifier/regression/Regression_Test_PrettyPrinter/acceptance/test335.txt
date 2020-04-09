@@ -1,13 +1,11 @@
 -- test program verification
--- Result keyword
-a:ARRAY[INTEGER]
-return_value() : INTEGER
-require true
+-- single assignment (Not discharged)
+i:INTEGER
+increment_by_9()
+require i > 0
 do
-a := << 1, 2, 3, 6>>;
-Result := a[3];
+	positive: i := i + 9;
 ensure
-	changed : Result = a[3]
-	sured: Result > 0
+	incremented: i > 13
 end
-verify return_value
+verify increment_by_9

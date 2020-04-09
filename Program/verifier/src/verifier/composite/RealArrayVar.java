@@ -30,5 +30,9 @@ public class RealArrayVar extends ArrayVar{
 	public void accept(Visitor v) {
 		v.visitRealArrayVar(this);
 	}
-
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new RealArrayVar(this.name, this.mode, this.index.copy());
+	}
 }

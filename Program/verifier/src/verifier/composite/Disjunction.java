@@ -11,4 +11,10 @@ public class Disjunction extends LogicalExpr{
 	public void accept(Visitor v) {
 		v.visitOr(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Disjunction(this.left().copy(), this.right().copy());
+	}
+	
 }

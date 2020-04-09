@@ -19,6 +19,8 @@ public class VarPrinter implements Visitor {
 	// hashmap that store the array count
 	public static Map<String, String> arrayCount = new LinkedHashMap<String, String>();
 	
+	// hashmap that stores the name and the object
+	public static Map<String, Verifier> objMap = new LinkedHashMap<String, Verifier>();
 	
 	public void visitBinaryExpr (BinaryExpr b) {
 		VarPrinter leftPrinter = new VarPrinter();
@@ -134,9 +136,20 @@ public class VarPrinter implements Visitor {
 	
 	
 	/* *****************************************************************************************
-	 * Methods for normal Var
+	 * TODO normal Var
 	 * *****************************************************************************************
 	 */
+	
+	@Override
+	public void visitVarLists(VarLists v) {
+		if (v.mode instanceof modes.QuantificationList) {
+			for (int i = 0; i < v.varDeclList.size(); i++) {
+				VarPrinter printer = new VarPrinter();
+				v.varDeclList.get(i).accept(printer);
+			}
+		}
+		
+	}
 
 	@Override
 	public void visitBoolVar(BoolVar v) {
@@ -157,6 +170,9 @@ public class VarPrinter implements Visitor {
 			if (unusedVarMap.containsKey(v.name)) {
 				unusedVarMap.remove(v.name);
 			}
+			
+			// add the current object to the map
+			objMap.put(v.name, v);
 		}
 		// initialized declaration
 		// e.g. p : BOOLEAN = not q
@@ -170,6 +186,9 @@ public class VarPrinter implements Visitor {
 					
 			allVarMap.put(v.name, new Pair<String, String>("BOOLEAN", h.infixOutput));
 			unusedVarMap.put(v.name, new Pair<String, String>("BOOLEAN", h.infixOutput));
+		}
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			objMap.put(v.name, v);
 		}
 	}
 
@@ -193,6 +212,9 @@ public class VarPrinter implements Visitor {
 			if (unusedVarMap.containsKey(v.name)) {
 				unusedVarMap.remove(v.name);
 			}
+			
+			// add the current object to the map
+			objMap.put(v.name, v);
 		}
 		// initialized declaration
 		// e.g. i: INTEGER = 2
@@ -205,6 +227,9 @@ public class VarPrinter implements Visitor {
 					
 			allVarMap.put(v.name, new Pair<String, String>("INTEGER", h.infixOutput));
 			unusedVarMap.put(v.name, new Pair<String, String>("INTEGER", h.infixOutput));
+		}
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			objMap.put(v.name, v);
 		}
 	}
 	
@@ -227,6 +252,9 @@ public class VarPrinter implements Visitor {
 			if (unusedVarMap.containsKey(v.name)) {
 				unusedVarMap.remove(v.name);
 			}
+			
+			// add the current object to the map
+			objMap.put(v.name, v);
 		}
 		// initialized declaration
 		// e.g. i : REAL = 2.1
@@ -240,10 +268,13 @@ public class VarPrinter implements Visitor {
 			allVarMap.put(v.name, new Pair<String, String>("REAL", h.infixOutput));
 			unusedVarMap.put(v.name, new Pair<String, String>("REAL", h.infixOutput));
 		}
+		else if (v.mode instanceof modes.AnonymousDecl) {
+			objMap.put(v.name, v);
+		}
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for Array Var
+	 * TODO Array Var
 	 * *****************************************************************************************
 	 */
 	
@@ -263,6 +294,9 @@ public class VarPrinter implements Visitor {
 			if (unusedVarMap.containsKey(a.name)) {
 				unusedVarMap.remove(a.name);
 			}
+			
+			// add the current object to the map
+			objMap.put(a.name, a);
 		}
 		// initialized declaration
 		// e.g. a : ARRAY[BOOLEAN] = << p, q, p and q >>
@@ -301,6 +335,9 @@ public class VarPrinter implements Visitor {
 			allVarMap.replace(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
 			unusedVarMap.replace(a.name, new Pair<String, String>("ARRAY[BOOLEAN]", value));
 		}
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			objMap.put(a.name, a);
+		}
 	}
 	
 	// Integer array
@@ -320,6 +357,9 @@ public class VarPrinter implements Visitor {
 			if (unusedVarMap.containsKey(a.name)) {
 				unusedVarMap.remove(a.name);
 			}
+			
+			// add the current object to the map
+			objMap.put(a.name, a);
 		}
 		// initialized declaration
 		// e.g. a : ARRAY[INTEGER] = << 1, 2, 6, 0 >>
@@ -359,6 +399,9 @@ public class VarPrinter implements Visitor {
 			allVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
 			unusedVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
 		}
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			objMap.put(a.name, a);
+		}
 	}
 
 	@Override
@@ -377,6 +420,9 @@ public class VarPrinter implements Visitor {
 			if (unusedVarMap.containsKey(a.name)) {
 				unusedVarMap.remove(a.name);
 			}
+			
+			// add the current object to the map
+			objMap.put(a.name, a);
 		}
 		// initialized declaration
 		// e.g. a : ARRAY[REAL] = << 1.5, 2, 6.0, 0 >>
@@ -416,7 +462,9 @@ public class VarPrinter implements Visitor {
 			allVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
 			unusedVarMap.replace(a.name, new Pair<String, String>("ARRAY[INTEGER]", value));
 		}
-		
+		else if (a.mode instanceof modes.AnonymousDecl) {
+			objMap.put(a.name, a);
+		}
 	}
 	
 	
@@ -449,44 +497,11 @@ public class VarPrinter implements Visitor {
 	
 	
 	
+	/* *****************************************************************************************
+	 * TODO Methods
+	 * *****************************************************************************************
+	 */
 	
-	
-	
-	
-
-
-	
-	
-	
-	@Override
-	public void visitAssignment(Assignments a) {
-		// delete the mode if it has been used
-		if (unusedVarMap.containsKey(a.name)) {
-			unusedVarMap.remove(a.name);
-		}
-		
-		// set the variables in the assigned value "used"
-		VarPrinter assignValuePrinter = new VarPrinter();
-		a.assignValue.accept(assignValuePrinter);
-		
-	}
-	
-	@Override
-	public void visitAlternations(Alternations a) {
-		VarPrinter conditionPrinter = new VarPrinter();
-		a.condition.accept(conditionPrinter);
-		
-		for (int i = 0; i < a.ifImps.size(); i++) {
-			VarPrinter ifPrinter = new VarPrinter();
-			a.ifImps.get(i).accept(ifPrinter);
-		}
-		
-		for (int j = 0; j < a.elseImps.size(); j++) {
-			VarPrinter elsePrinter = new VarPrinter();
-			a.elseImps.get(j).accept(elsePrinter);
-		}
-		
-	}
 
 	@Override
 	public void visitMethods(Methods m) {
@@ -497,6 +512,12 @@ public class VarPrinter implements Visitor {
 					VarPrinter p = new VarPrinter();
 					m.parameters.get(i).accept(p);
 				}
+			}
+			
+			// call the varprinter to print the return value
+			if (m.returnValue != null) {
+				VarPrinter p = new VarPrinter();
+				m.returnValue.accept(p);
 			}
 			
 			// call the varprinter to print the preconditions
@@ -519,7 +540,6 @@ public class VarPrinter implements Visitor {
 			VarPrinter postChecker = new VarPrinter();
 			m.postcondition.accept(postChecker);
 		}
-		
 	}
 
 	@Override
@@ -547,6 +567,85 @@ public class VarPrinter implements Visitor {
 		VarPrinter checker = new VarPrinter();
 		c.contract.b.accept(checker);
 	}
+	
+	/* *****************************************************************************************
+	 * TODO Implementations
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public void visitAssignment(Assignments a) {
+		// delete the variable if it has been used
+		if (unusedVarMap.containsKey(a.name)) {
+			unusedVarMap.remove(a.name);
+		}
+		
+		// set the variables in the assigned value "used"
+		VarPrinter assignValuePrinter = new VarPrinter();
+		a.assignValue.accept(assignValuePrinter);
+		
+	}
+	
+	@Override
+	public void visitAlternations(Alternations a) {
+		// print the if statement
+		VarPrinter ifPrinter = new VarPrinter();
+		a.ifStat.accept(ifPrinter);
+		
+		// print the elseif statement
+		for (int i = 0; i < a.elseifStat.size(); i++) {
+			VarPrinter elseifPrinter = new VarPrinter();
+			a.elseifStat.get(i).accept(elseifPrinter);
+		}
+		
+		// print the else statement if it's not null
+		if (a.elseStat != null) {
+			VarPrinter elsePrinter = new VarPrinter();
+			a.elseStat.accept(elsePrinter);
+		}
+		
+	}
+	
+	@Override
+	public void visitIfStats(IfStats s) {
+		// print the condition first
+		VarPrinter exprPrinter = new VarPrinter();
+		s.condition.accept(exprPrinter);
+		
+		// print the implementations
+		for (int i = 0; i < s.ifImps.size(); i++) {
+			VarPrinter ifimpPrinter = new VarPrinter();
+			s.ifImps.get(i).accept(ifimpPrinter);
+		}
+	}
+
+	@Override
+	public void visitElseifStats(ElseifStats s) {
+		// print the condition first
+		VarPrinter exprPrinter = new VarPrinter();
+		s.condition.accept(exprPrinter);
+		
+		// print the implementations
+		for (int i = 0; i < s.elseifImps.size(); i++) {
+			VarPrinter elseifimpPrinter = new VarPrinter();
+			s.elseifImps.get(i).accept(elseifimpPrinter);
+		}
+		
+	}
+
+	@Override
+	public void visitElseStats(ElseStats s) {
+		// print the implementations
+		for (int i = 0; i < s.elseImps.size(); i++) {
+			VarPrinter elsePrinter = new VarPrinter();
+			s.elseImps.get(i).accept(elsePrinter);
+		}
+	}
+	
+	/* *****************************************************************************************
+	 * TODO Keywords
+	 * *****************************************************************************************
+	 */
 
 	@Override
 	public void visitLocals(Locals l) {
@@ -576,11 +675,7 @@ public class VarPrinter implements Visitor {
 
 	@Override
 	public void visitResults(Results r) {
-		// TODO Auto-generated method stub
+		// add the current object to the map
 		
 	}
-
-	
-
-	
 }

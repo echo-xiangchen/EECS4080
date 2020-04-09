@@ -13,4 +13,13 @@ public class Forall extends Quantification {
 	public void accept(Visitor v) {
 		v.visitForall(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		List<Verifier> list = new ArrayList<Verifier>();
+		for (int i = 0; i < this.quantifyList.size(); i++) {
+			list.add(this.quantifyList.get(i).copy());
+		}
+		return new Forall(list, this.expr.copy());
+	}
 }

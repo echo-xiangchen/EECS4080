@@ -16,8 +16,6 @@ public abstract class Var extends Logic {
 	// array variable value
 	public List<Verifier> arrayValue;
 	
-	// array variable index
-	public Verifier index;
 	
 	// anonymous variable declaration
 	public Var(mode mode) {
@@ -52,9 +50,15 @@ public abstract class Var extends Logic {
 	}
 	
 	// quantification declaration
-	public Var(List<String> list, mode mode) {
+	public Var(List<Verifier> list, mode mode) {
 		varDeclList = new ArrayList<Verifier>();
 		arrayValue = new ArrayList<Verifier>();
+		
+		for (int i = 0; i < list.size(); i++) {
+			varDeclList.add(list.get(i));
+		}
+		
+		this.mode = mode;
 	}
 	
 	// initialized array declaration

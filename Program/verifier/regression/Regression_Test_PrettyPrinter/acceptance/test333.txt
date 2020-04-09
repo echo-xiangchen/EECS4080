@@ -1,15 +1,12 @@
 -- test program verification
--- sequencial assignments
-tmp: INTEGER
-x: INTEGER
-y: INTEGER
-swap()
-require x > y
+-- single assignment (with error)
+
+increment_by_9()
+require 
+	positive: i > 3
 do
-	tmp := x;
-	x := y;
-	y := tmp;
+	i := i + 9;
 ensure
-	y > x
+	incremented: i > 13
 end
-verify swap
+verify increment_by_9

@@ -11,5 +11,10 @@ public class BoolTrue extends BoolConst {
 	public void accept(Visitor v) {
 		v.visitBoolTrue(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new BoolTrue(this.name);
+	}
 
 }

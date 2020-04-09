@@ -1,7 +1,5 @@
 package verifier.composite;
 
-import java.util.List;
-
 import modes.mode;
 import verifier.visitor.Visitor;
 
@@ -23,15 +21,11 @@ public class RealVar extends NumVar {
 		super(mode);
 	}
 	
-	// quantification declaration
-	public RealVar(List<String> list, mode mode) {
-		super(list, mode);
-		for (int i = 0; i < list.size(); i++) {
-			varDeclList.add(new RealVar(list.get(i), mode));
-		}
-	}
-	
 	public void accept(Visitor v) {
 		v.visitRealVar(this);
+	}
+	
+	public Verifier copy() {
+		return new RealVar(this.name, this.mode);
 	}
 }

@@ -37,6 +37,8 @@ public interface Visitor {
 	
 	
 
+	void visitVarLists(VarLists v);
+	
 	void visitBoolVar(BoolVar v);
 	
 	void visitIntVar(IntVar v);
@@ -79,6 +81,12 @@ public interface Visitor {
 	
 	void visitAlternations(Alternations a);
 	
+	void visitIfStats(IfStats s);
+	
+	void visitElseifStats(ElseifStats s);
+	
+	void visitElseStats(ElseStats s);
+	
 	
 
 	void visitPreconditions(Preconditions p);
@@ -97,6 +105,14 @@ public interface Visitor {
 	void visitOlds(Olds o);
 
 	void visitResults(Results r);
+
+	
+
+	
+
+	
+
+	
 
 	
 

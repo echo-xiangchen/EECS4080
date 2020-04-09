@@ -11,5 +11,10 @@ public class Implication extends LogicalExpr{
 	public void accept(Visitor v) {
 		v.visitImplies(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Implication(this.left().copy(), this.right().copy());
+	}
 
 }

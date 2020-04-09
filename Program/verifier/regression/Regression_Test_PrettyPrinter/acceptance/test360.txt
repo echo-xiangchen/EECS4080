@@ -1,0 +1,20 @@
+-- test program verification
+-- Sequential (swap) and if-stat (with error)
+x: INTEGER
+y: INTEGER
+
+
+swap()
+require
+	no_restriction: true
+do
+	if y > x then
+		tmp := x;
+		x := y;
+		y := tmp;
+	end
+ensure
+	swapped: x > y
+end
+
+verify swap

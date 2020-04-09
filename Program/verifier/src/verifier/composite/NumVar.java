@@ -4,7 +4,7 @@ import java.util.List;
 
 import modes.mode;
 
-public class NumVar extends Var {
+public abstract class NumVar extends Var {
 
 	public NumVar(String name, mode mode) {
 		super(name, mode);
@@ -19,7 +19,7 @@ public class NumVar extends Var {
 		super(mode);
 	}
 	
-	public NumVar(List<String> list, mode mode) {
+	public NumVar(List<Verifier> list, mode mode) {
 		super(list, mode);
 	}
 

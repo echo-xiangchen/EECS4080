@@ -3,11 +3,9 @@ package verifier.composite;
 import types.*;
 import verifier.visitor.*;
 
-public class Olds extends ProgramVerify {
+public class Olds extends Keywords {
 	
 	public VarType type;
-	
-	public Verifier index;
 	
 	// normal variables
 	public Olds(String name, VarType type) {
@@ -24,5 +22,14 @@ public class Olds extends ProgramVerify {
 	
 	public void accept(Visitor v) {
 		v.visitOlds(this);
+	}
+	
+	public Verifier copy() {
+		if (this.index != null) {
+			return new Olds(this.name, this.index.copy(), this.type);
+		}
+		else {
+			return new Olds(this.name, this.type);
+		}
 	}
 }

@@ -1,17 +1,11 @@
 -- test program verification
--- old keyword
-change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
-require
-	valid_index: 1 <= i and i <= a.count
-local
-	x: INTEGER
-	y: BOOLEAN
+-- single assignment (with error)
+i:BOOLEAN
+increment_by_9()
+require i > 3
 do
-	a := <<1, 4.6, 9.0, 4, 0, -1.2>>;
-	a[i] := nv;
+	positive: i := i + 9;
 ensure
-	changed: a[i] = nv
-	unchanged: forall j:INTEGER; |(1 <= j and j <= a.count and not i = j) => old a[j] = a[j]
+	incremented: i > 13
 end
-
-verify change_at
+verify increment_by_9

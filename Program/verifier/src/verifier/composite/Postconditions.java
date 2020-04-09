@@ -15,5 +15,10 @@ public class Postconditions extends Contracts {
 	public void accept(Visitor v) {
 		v.visitPostconditions(this);
 	}
+	
+	public Verifier copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -24,4 +24,9 @@ public class Assignments extends Implementations{
 	public void accept(Visitor v) {
 		v.visitAssignment(this);
 	}
+	
+	public Verifier copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

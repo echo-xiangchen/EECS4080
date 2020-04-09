@@ -11,5 +11,9 @@ public class Conjunction extends LogicalExpr{
 	public void accept(Visitor v) {
 		v.visitAnd(this);
 	}
-
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Conjunction(this.left().copy(), this.right().copy());
+	}
 }

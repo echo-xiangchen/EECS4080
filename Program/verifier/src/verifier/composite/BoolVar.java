@@ -1,7 +1,5 @@
 package verifier.composite;
 
-import java.util.*;
-
 import modes.*;
 import verifier.visitor.*;
 
@@ -24,16 +22,12 @@ public class BoolVar extends Var {
 		super(mode);
 	}
 	
-	// quantification declaration
-	public BoolVar(List<String> list, mode mode) {
-		super(list, mode);
-		for (int i = 0; i < list.size(); i++) {
-			varDeclList.add(new BoolVar(list.get(i), mode));
-		}
-	}
-	
 	public void accept(Visitor v) {
 		v.visitBoolVar(this);
 	}
-
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new BoolVar(this.name, this.mode);
+	}
 }

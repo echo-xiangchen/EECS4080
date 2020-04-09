@@ -2,7 +2,7 @@ package verifier.composite;
 
 import java.util.*;
 
-public class Quantification extends Logic {
+public abstract class Quantification extends Logic {
 	public List<Verifier> quantifyList;
 	
 	public Verifier expr;
@@ -11,7 +11,7 @@ public class Quantification extends Logic {
 		quantifyList = new ArrayList<Verifier>();
 		
 		for (int i = 0; i < list.size(); i++) {
-			quantifyList.addAll(list.get(i).varDeclList);
+			quantifyList.add(list.get(i));
 		}
 		
 		this.expr = verifier;

@@ -10,4 +10,9 @@ public class Division extends ArithmeticExpr {
 	public void accept(Visitor v) {
 		v.visitDivision(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Division(this.left().copy(), this.right().copy());
+	}
 }

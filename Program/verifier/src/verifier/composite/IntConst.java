@@ -17,4 +17,9 @@ public class IntConst extends NumConst {
 	public void accept(Visitor v) {
 		v.visitIntConst(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new IntConst(this.name, this.indicator, this.isArray);
+	}
 }

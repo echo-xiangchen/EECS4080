@@ -1,5 +1,5 @@
 package verifier.composite;
 
-public class Implementations extends ProgramVerify {
+public abstract class Implementations extends ProgramVerify {
 
 }

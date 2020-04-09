@@ -13,5 +13,10 @@ public class Exists extends Quantification {
 	public void accept(Visitor v) {
 		v.visitExists(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Exists(this.quantifyList, this.expr.copy());
+	}
 
 }

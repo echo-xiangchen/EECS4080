@@ -1,0 +1,14 @@
+-- test program verification
+-- Result keyword (Not discharged)
+a:ARRAY[INTEGER]
+j: INTEGER
+return_array_value() : INTEGER
+require 
+	no_restriction: true
+do
+a := << 1, 2, 3, 9>>;
+Result := a[3];
+ensure
+	no_allow: false
+end
+verify return_array_value

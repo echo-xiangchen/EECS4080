@@ -10,4 +10,9 @@ public class GreaterThan extends RelationalExpr {
 	public void accept(Visitor v) {
 		v.visitGreaterThan(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new GreaterThan(this.left().copy(), this.right().copy());
+	}
 }

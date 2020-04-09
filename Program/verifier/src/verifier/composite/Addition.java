@@ -10,4 +10,9 @@ public class Addition extends ArithmeticExpr {
 	public void accept(Visitor v) {
 		v.visitAddition(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Addition(this.left().copy(), this.right().copy());
+	}
 }

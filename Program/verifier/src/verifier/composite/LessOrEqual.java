@@ -10,4 +10,9 @@ public class LessOrEqual extends RelationalExpr {
 	public void accept(Visitor v) {
 		v.visitLessOrEqual(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new LessOrEqual(this.left().copy(), this.right().copy());
+	}
 }

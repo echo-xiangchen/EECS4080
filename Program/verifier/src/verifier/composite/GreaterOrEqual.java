@@ -10,4 +10,9 @@ public class GreaterOrEqual extends RelationalExpr {
 	public void accept(Visitor v) {
 		v.visitGreaterOrEqual(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new GreaterOrEqual(this.left().copy(), this.right().copy());
+	}
 }

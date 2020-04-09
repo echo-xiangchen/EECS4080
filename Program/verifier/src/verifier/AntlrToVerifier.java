@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.misc.Pair;
 import antlr.*;
 import antlr.VerifierParser.*;
 import modes.*;
+import modes.Quantification;
 import types.BoolType;
 import types.IntArray;
 import types.IntType;
@@ -21,7 +22,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	public static boolean isPair = false;
 	
 	/* *****************************************************************************************
-	 * Methods for line rule
+	 * TODO Methods for line rule
 	 * *****************************************************************************************
 	 */
 	
@@ -81,7 +82,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for method rule
+	 * TODO Methods for method rule
 	 * *****************************************************************************************
 	 */
 	
@@ -98,7 +99,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for mutator rule
+	 * TODO Methods for mutator rule
 	 * *****************************************************************************************
 	 */
 	
@@ -160,7 +161,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for accessor rule
+	 * TODO Methods for accessor rule
 	 * *****************************************************************************************
 	 */
 	
@@ -223,7 +224,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for precondition rule
+	 * TODO Methods for precondition rule
 	 * *****************************************************************************************
 	 */
 	
@@ -241,7 +242,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for postcondition rule
+	 * TODO Methods for postcondition rule
 	 * *****************************************************************************************
 	 */
 	
@@ -258,7 +259,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for contract rule
+	 * TODO Methods for contract rule
 	 * *****************************************************************************************
 	 */
 	
@@ -277,7 +278,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for local rule
+	 * TODO Methods for local rule
 	 * *****************************************************************************************
 	 */
 	
@@ -295,7 +296,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for implementation rule
+	 * TODO Methods for implementation rule
 	 * *****************************************************************************************
 	 */
 	
@@ -311,7 +312,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for assignment rule
+	 * TODO Methods for assignment rule
 	 * *****************************************************************************************
 	 */
 	
@@ -501,34 +502,90 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for alternation rule
+	 * TODO Methods for alternation rule
 	 * *****************************************************************************************
 	 */
 	
-//	IF boolExpr THEN 
-//		// differentiate the if body implementations and else body implementations
-//		imp1+=implementation (imp1+=implementation)*
-//    (ELSE
-//    		imp2+=implementation (imp2+=implementation)*)?
-//    END
+//	ifstat
+	  // zero or more elseif statement
+//	  (elseifstat)*
+	  // zero or one else statement
+//	  (elsestat)?
+//	  END
 	
 	@Override
 	public Verifier visitAlternationBody(AlternationBodyContext ctx) {
-		List<Verifier> ifimps = new ArrayList<Verifier>();
-		for (int i = 0; i < ctx.imp1.size(); i++) {
-			ifimps.add(visit(ctx.imp1.get(i)));
+		// store the if statement
+		Verifier ifstat = visit(ctx.ifstat());
+		
+		// store the elseif statement(might be more than one statement)
+		List<Verifier> elseifstats = new ArrayList<Verifier>();
+		if (ctx.elseifstat().size() > 0) {
+			for (int i = 0; i < ctx.elseifstat().size(); i++) {
+			elseifstats.add(visit(ctx.elseifstat(i)));
+			}
 		}
 		
-		List<Verifier> elseimps = new ArrayList<Verifier>();
-		for (int i = 0; i < ctx.imp2.size(); i++) {
-			elseimps.add(visit(ctx.imp2.get(i)));
+		// store the else statement
+		Verifier elsestat;
+		if (ctx.elsestat() != null) {
+			elsestat = visit(ctx.elsestat());
+		}
+		else {
+			elsestat = null;
 		}
 		
-		return new Alternations(visit(ctx.boolExpr()), ifimps, elseimps);
+		return new Alternations(ifstat, elseifstats, elsestat);
+	}
+	
+	
+	/* *****************************************************************************************
+	 * TODO Methods for ifstat rule
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public Verifier visitIfStatement(IfStatementContext ctx) {
+		List<Verifier> imps = new ArrayList<Verifier>();
+		for (int i = 0; i < ctx.implementation().size(); i++) {
+			imps.add(visit(ctx.implementation(i)));
+		}
+		
+		return new IfStats(visit(ctx.boolExpr()), imps);
 	}
 	
 	/* *****************************************************************************************
-	 * Methods for declaration rule
+	 * TODO Methods for elseifstat rule
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public Verifier visitElseIfStatement(ElseIfStatementContext ctx) {
+		List<Verifier> imps = new ArrayList<Verifier>();
+		for (int i = 0; i < ctx.implementation().size(); i++) {
+			imps.add(visit(ctx.implementation(i)));
+		}
+		
+		return new ElseifStats(visit(ctx.boolExpr()), imps);
+	}
+	
+	/* *****************************************************************************************
+	 * TODO Methods for elsestat rule
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public Verifier visitElseStatement(ElseStatementContext ctx) {
+		List<Verifier> imps = new ArrayList<Verifier>();
+		for (int i = 0; i < ctx.implementation().size(); i++) {
+			imps.add(visit(ctx.implementation(i)));
+		}
+		
+		return new ElseStats(imps);
+	}
+	
+	/* *****************************************************************************************
+	 * TODO Methods for declaration rule
 	 * *****************************************************************************************
 	 */
 	
@@ -545,7 +602,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for uninitialDecl rule
+	 * TODO Methods for uninitialDecl rule
 	 * *****************************************************************************************
 	 */
 	
@@ -587,7 +644,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for initialDecl rule
+	 * TODO Methods for initialDecl rule
 	 * *****************************************************************************************
 	 */
 	
@@ -655,7 +712,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for unnamedDecl rule
+	 * TODO Methods for unnamedDecl rule
 	 * *****************************************************************************************
 	 */
 	
@@ -721,7 +778,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for boolExpr rule
+	 * TODO Methods for boolExpr rule
 	 * *****************************************************************************************
 	 */
 	
@@ -852,52 +909,44 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for varDecl rule
+	 * TODO Methods for varDecl rule
 	 * *****************************************************************************************
 	 */
 	
 	// quantification variable declaration
 	@Override
 	public Verifier visitQuantifyVar(QuantifyVarContext ctx) {
+		List<Verifier> list = new ArrayList<Verifier>();
 		
 		if (ctx.type.getType() == VerifierParser.BOOL) {
 			// store each ID's string into list
-			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < ctx.ID().size(); i++) {
-				list.add(ctx.ID(i).getText());
+				list.add(new BoolVar(ctx.ID(i).getText(), new QuantifyBool()));
 				varTypes.put(ctx.ID(i).getText(), "Bool");
 			}
-			// create a new BoolVar object, accepting the list
-			// and transform the list of String into a list of BoolVar
-			return new BoolVar(list, new QuantifyBool());
 		}
 		else if (ctx.type.getType() == VerifierParser.INT) {
 			// store each ID's string into list
-			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < ctx.ID().size(); i++) {
-				list.add(ctx.ID(i).getText());
+				list.add(new IntVar(ctx.ID(i).getText(), new QuantifyInt()));
 				varTypes.put(ctx.ID(i).getText(), "Int");
 			}
-			// create a new IntVar object, accepting the list
-			// and transform the list of String into a list of IntVar
-			return new IntVar(list, new QuantifyInt());
 		}
 		else {
 			// store each ID's string into list
-			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < ctx.ID().size(); i++) {
-				list.add(ctx.ID(i).getText());
+				list.add(new RealVar(ctx.ID(i).getText(), new QuantifyReal()));
 				varTypes.put(ctx.ID(i).getText(), "Real");
 			}
-			// create a new RealVar object, accepting the list
-			// and transform the list of String into a list of RealVar
-			return new RealVar(list, new QuantifyReal());
 		}
+		
+		// transform the list of String into a list of IntVar
+		return new VarLists(list, new QuantificationList());
 	}
 	
 	
 	/* *****************************************************************************************
-	 * Methods for relation rule
+	 * TODO Methods for relation rule
 	 * *****************************************************************************************
 	 */
 	
@@ -933,7 +982,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	
 	/* *****************************************************************************************
-	 * Methods for arithmetic rule
+	 * TODO Methods for arithmetic rule
 	 * *****************************************************************************************
 	 */
 	
@@ -1060,7 +1109,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	// int number
 	@Override
 	public Verifier visitIntNum(IntNumContext ctx) {
-		return new IntConst(ctx.INTNUM().getText());
+		return new IntConst(ctx.INTNUM().getText(), "", false);
 	}
 	
 	// a.count

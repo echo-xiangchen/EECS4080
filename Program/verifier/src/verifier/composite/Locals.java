@@ -14,4 +14,9 @@ public class Locals extends ProgramVerify {
 	public void accept(Visitor v) {
 		v.visitLocals(this);
 	}
+	
+	public Verifier copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

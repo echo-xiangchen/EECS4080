@@ -32,4 +32,8 @@ public class IntArrayVar extends ArrayVar {
 		v.visitIntArrayVar(this);
 	}
 
+	// method for deep copy
+	public Verifier copy() {
+		return new IntArrayVar(this.name, this.mode, this.index.copy());
+	}
 }

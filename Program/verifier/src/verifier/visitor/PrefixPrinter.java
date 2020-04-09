@@ -31,7 +31,7 @@ public class PrefixPrinter implements Visitor{
 	
 	
 	/* *****************************************************************************************
-	 * methods
+	 * TODO methods attributes 
 	 * *****************************************************************************************
 	 */
 	
@@ -63,6 +63,11 @@ public class PrefixPrinter implements Visitor{
 		quantifyIndicator = "";
 	}
 	
+	/* *****************************************************************************************
+	 * TODO helper methods
+	 * *****************************************************************************************
+	 */
+	
 	public void visitBinaryExpr (BinaryExpr b, String op) {
 		PrefixPrinter leftPrinter = new PrefixPrinter();
 		PrefixPrinter rightPrinter = new PrefixPrinter();
@@ -81,8 +86,8 @@ public class PrefixPrinter implements Visitor{
 		b.right().accept(rightPrinter);
 		isNestedQuantifier = false;
 		
-		prefixOutput = prefixOutput.concat("( " + op + " " 
-				+ leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + " )");
+		prefixOutput = prefixOutput.concat("(" + op + " " 
+				+ leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + ")");
 	}
 	
 	public void visitUnaryExpr(UnaryExpr u, String op) {
@@ -96,21 +101,23 @@ public class PrefixPrinter implements Visitor{
 		u.child.accept(p);
 		isNestedQuantifier = false;
 		
-		prefixOutput = prefixOutput.concat("( " + op + " " + p.prefixOutput + " )");
+		prefixOutput = prefixOutput.concat("(" + op + " " + p.prefixOutput + ")");
 	}
 	
 	public void QuantifyPrinter (Quantification q) {
 		// recursively accept all the variables in the list first
-		PrefixPrinter p1 = new PrefixPrinter();
+		
 		for (int i = 0; i < q.quantifyList.size(); i++) {
+			PrefixPrinter p1 = new PrefixPrinter();
 			q.quantifyList.get(i).accept(p1);
+			quantifyVar = quantifyVar.concat(p1.quantifyVar);
 		}
-		quantifyVar = p1.quantifyVar;
+		//quantifyVar = p1.quantifyVar;
 		// then accept the boolexpr next
 		PrefixPrinter p2 = new PrefixPrinter();
 		q.expr.accept(p2);
 		
-		prefixOutput = "( " + quantifyIndicator + " ( " + quantifyVar + " ) " + p2.prefixOutput + " ) ";
+		prefixOutput = "(" + quantifyIndicator + "(" + quantifyVar + ")" + p2.prefixOutput + ")";
 		
 	}
 	
@@ -139,8 +146,8 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p1 = new PrefixPrinter();
 			for (int i = 0; i < q.quantifyList.size(); i++) {
 				q.quantifyList.get(i).accept(p1);
+				quantifyVar = quantifyVar.concat(p1.quantifyVar);
 			}
-			quantifyVar = p1.quantifyVar;
 			// then accept the boolexpr next
 			PrefixPrinter p2 = new PrefixPrinter();
 			q.expr.accept(p2);
@@ -235,9 +242,21 @@ public class PrefixPrinter implements Visitor{
 	}
 	
 	/* *****************************************************************************************
-	 * normal variable
+	 * TODO normal variable
 	 * *****************************************************************************************
 	 */
+	
+	@Override
+	public void visitVarLists(VarLists v) {
+		if (v.mode instanceof modes.QuantificationList) {
+			for (int i = 0; i < v.varDeclList.size(); i++) {
+				PrefixPrinter printer = new PrefixPrinter();
+				v.varDeclList.get(i).accept(printer);
+				quantifyVar = quantifyVar.concat(printer.quantifyVar);
+				prefixOutput = prefixOutput.concat(printer.prefixOutput);
+			}
+		}
+	}
 
 	// boolean variable declaration
 	@Override
@@ -371,7 +390,7 @@ public class PrefixPrinter implements Visitor{
 	
 	
 	/* *****************************************************************************************
-	 * array variable
+	 * TODO array variable
 	 * *****************************************************************************************
 	 */
 	
@@ -391,7 +410,7 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p = new PrefixPrinter();
 			a.index.accept(p);
 			// (select a 1)
-			prefixOutput = prefixOutput.concat("( select " + a.name + " " + p.prefixOutput + " ) ");
+			prefixOutput = prefixOutput.concat("( select " + a.name + " " + p.prefixOutput + ")");
 			
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
@@ -438,7 +457,7 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p = new PrefixPrinter();
 			a.index.accept(p);
 			// (select a 1)
-			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + " ) ");
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
 			
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
@@ -484,7 +503,7 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p = new PrefixPrinter();
 			a.index.accept(p);
 			// (select a 1)
-			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + " ) ");
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
 			
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
@@ -515,7 +534,11 @@ public class PrefixPrinter implements Visitor{
 		}
 		
 	}
-
+	
+	/* *****************************************************************************************
+	 * TODO Constants
+	 * *****************************************************************************************
+	 */
 
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
@@ -553,7 +576,7 @@ public class PrefixPrinter implements Visitor{
 	
 	
 	/* *****************************************************************************************
-	 * Methods
+	 * TODO Methods
 	 * *****************************************************************************************
 	 */
 	
@@ -622,8 +645,6 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter prefixPrePrinter = new PrefixPrinter();
 			methodContractMap.get(m.name).get(0).accept(prefixPrePrinter);
 			
-			InfixPrinter infixPrePrinter = new InfixPrinter();
-			methodContractMap.get(m.name).get(0).accept(infixPrePrinter);
 			
 			// print the implementation
 			for (int i = 0; i < methodImpMap.get(m.name).size(); i++) {
@@ -635,41 +656,78 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter prefixPostPrinter = new PrefixPrinter();
 			methodContractMap.get(m.name).get(1).accept(prefixPostPrinter);
 			
-			InfixPrinter infixPostPrinter = new InfixPrinter();
-			methodContractMap.get(m.name).get(1).accept(infixPostPrinter);
 			
-			
-			// do the wp calculation
+			/* *****************************************************************************************
+			 * TODO do the wp calculation
+			 * *****************************************************************************************
+			 */
 			
 			// assign the initial value
-			String prefixPrecondition = prefixPrePrinter.prefixOutput;
-			String infixPrecondition = infixPrePrinter.preWithoutTag;
+			Verifier precondition = null;
+			Verifier postcondition = null;
 			
-			String prefixWp = prefixPostPrinter.prefixOutput;
-			String infixWp = infixPostPrinter.postWithoutTag;
-			
-			//System.out.println("before: " + prefixWp);
-			
-			// for each implementation, do the calculation in reverse order
-			for (int i = methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
-				WpCalculator calculator = new WpCalculator(prefixPrecondition, 
-							infixPrecondition, prefixWp, infixWp);
-				methodImpMap.get(m.name).get(i).accept(calculator);
+			// if there is only one contract in the precondition
+			if (((Preconditions) methodContractMap.get(m.name).get(0)).contracts.size() <= 1) {
+				precondition = ((ContractExpr)((Preconditions) methodContractMap.get(m.name).get(0)).contracts.get(0)).contract.b.copy();
+			}
+			else {
+				Verifier precondition1 = ((ContractExpr)((Preconditions) methodContractMap.get(m.name).get(0)).contracts.get(0)).contract.b.copy();
+				Verifier precondition2 = ((ContractExpr)((Preconditions) methodContractMap.get(m.name).get(0)).contracts.get(1)).contract.b.copy();
 				
-				//System.out.println(i + ": " + prefixWp);
-				//System.out.println(i + ": " + calculator.prefixSubstituteMap);
+				precondition = new Conjunction(precondition1, precondition2);
 				
-				// if there is any array assignments in the middle, calculator.prefixWp will be blank
-				if (!calculator.prefixWp.isBlank()) {
-					prefixWp = calculator.prefixWp;
-					infixWp = calculator.infixWp;
+				for (int i = 2; i < ((Preconditions) methodContractMap.get(m.name).get(0)).contracts.size(); i++) {
+					precondition = new Conjunction(precondition, ((ContractExpr)((Preconditions) methodContractMap.get(m.name).get(0)).contracts.get(i)).contract.b.copy());
 				}
 			}
-			//System.out.println("after: " + prefixWp);
+			
+			// if there is only one contract in the postcondition
+			if (((Postconditions) methodContractMap.get(m.name).get(1)).contracts.size() <= 1) {
+				postcondition = ((ContractExpr)((Postconditions) methodContractMap.get(m.name).get(1)).contracts.get(0)).contract.b.copy();
+			}
+			// if there are more than one contracts in the postcondition
+			else {
+				Verifier postcondition1 = ((ContractExpr)((Postconditions) methodContractMap.get(m.name).get(1)).contracts.get(0)).contract.b.copy();
+				Verifier postcondition2 = ((ContractExpr)((Postconditions) methodContractMap.get(m.name).get(1)).contracts.get(1)).contract.b.copy();
+				
+				postcondition = new Conjunction(postcondition1, postcondition2);
+				
+				for (int i = 2; i < ((Postconditions) methodContractMap.get(m.name).get(1)).contracts.size(); i++) {
+					postcondition = new Conjunction(postcondition, ((ContractExpr)((Postconditions) methodContractMap.get(m.name).get(1)).contracts.get(i)).contract.b.copy());
+				}
+			}
+			
+			// print wp before
+//			PrefixPrinter beforewpPrinter = new PrefixPrinter();
+//			postcondition.accept(beforewpPrinter);
+//			
+//			System.out.println("before: " + beforewpPrinter.prefixOutput);
+//			
+			// for each implementation, do the calculation in reverse order
+			for (int i = methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
+				WpCalculator calculator = new WpCalculator(precondition, postcondition);
+				methodImpMap.get(m.name).get(i).accept(calculator);
+				
+				
+				//System.out.println(i + ": " + postcondition);
+				//System.out.println(i + ": " + calculator.substitutePair);
+				
+				postcondition = calculator.postcondition.copy();
+				
+			}
+			
+			// print wp after
+			PrefixPrinter afterwpPrinter = new PrefixPrinter();
+			postcondition.accept(afterwpPrinter);
+			
+			
+//			System.out.println("after: " + afterwpPrinter.prefixOutput);
 			
 			// final formula is precondition => wp
 			prefixOutput = prefixOutput.concat("(=> " 
-					+ prefixPrePrinter.prefixOutput + " " + prefixWp + " ) ");	
+					+ prefixPrePrinter.prefixOutput + " " + afterwpPrinter.prefixOutput + " ) ");	
+			
+			// reset isNestedQuantifier
 			isNestedQuantifier = false;
 		}
 	}
@@ -738,6 +796,12 @@ public class PrefixPrinter implements Visitor{
 		
 		prefixOutput = prefixOutput.concat(contractPrinter.prefixOutput);
 	}
+
+	
+	/* *****************************************************************************************
+	 * TODO Implementations
+	 * *****************************************************************************************
+	 */
 	
 	@Override
 	public void visitAssignment(Assignments a) {
@@ -771,32 +835,69 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter valuePrinter = new PrefixPrinter();
 			a.assignValue.accept(valuePrinter);
 			
-			assignMap.put(a.name, valuePrinter.prefixOutput);
+			//assignMap.put(a.name, valuePrinter.prefixOutput);
 		}
-		
 	}
 	
 	@Override
 	public void visitAlternations(Alternations a) {
-		// prefix print the condition
-		PrefixPrinter conditionPrinter = new PrefixPrinter();
-		a.condition.accept(conditionPrinter);
+		// print the if statement
+		PrefixPrinter ifPrinter = new PrefixPrinter();
+		a.ifStat.accept(ifPrinter);
 		
-		// prefix print the if statement
-		for (int i = 0; i < a.ifImps.size(); i++) {
-			PrefixPrinter ifImpPrinter = new PrefixPrinter();
-			a.ifImps.get(i).accept(ifImpPrinter);
+		// print the elseif statement
+		for (int i = 0; i < a.elseifStat.size(); i++) {
+			PrefixPrinter elseifPrinter = new PrefixPrinter();
+			a.elseifStat.get(i).accept(elseifPrinter);
 		}
 		
-		// prefix print the else statement
-		if (!a.elseImps.isEmpty()) {
-			for (int j = 0; j < a.elseImps.size(); j++) {
-				PrefixPrinter elsePrinter = new PrefixPrinter();
-				a.elseImps.get(j).accept(elsePrinter);
-			}
+		// print the else statement
+		if (a.elseStat != null) {
+			PrefixPrinter elsePrinter = new PrefixPrinter();
+			a.elseStat.accept(elsePrinter);
+		}
+	}
+	
+	@Override
+	public void visitIfStats(IfStats s) {
+		// print the condition
+		PrefixPrinter conditionPrinter = new PrefixPrinter();
+		s.condition.accept(conditionPrinter);
+		
+		// print the implementation in if statement
+		for (int i = 0; i < s.ifImps.size(); i++) {
+			PrefixPrinter ifimpPrinter = new PrefixPrinter();
+			s.ifImps.get(i).accept(ifimpPrinter);
 		}
 	}
 
+	@Override
+	public void visitElseifStats(ElseifStats s) {
+		// print the condition
+		PrefixPrinter conditionPrinter = new PrefixPrinter();
+		s.condition.accept(conditionPrinter);
+		
+		// print the implementation in elseif statement
+		for (int i = 0; i < s.elseifImps.size(); i++) {
+			PrefixPrinter elseifimpPrinter = new PrefixPrinter();
+			s.elseifImps.get(i).accept(elseifimpPrinter);
+		}
+	}
+
+	@Override
+	public void visitElseStats(ElseStats s) {
+		// print the implementations
+		for (int i = 0; i < s.elseImps.size(); i++) {
+			PrefixPrinter elseimpPrinter = new PrefixPrinter();
+			s.elseImps.get(i).accept(elseimpPrinter);
+		}
+	}
+
+	/* *****************************************************************************************
+	 * TODO Keywords
+	 * *****************************************************************************************
+	 */
+	
 	@Override
 	public void visitLocals(Locals l) {
 		// List<Verifier> localVars;
@@ -815,7 +916,7 @@ public class PrefixPrinter implements Visitor{
 		// if it's array using the old keyword
 		// if use "ValuedArray", then there will be error in PrettyPrinter because
 		// cannot find the old_a in arrayMap
-		if (completeVarMap.get(o.name).b.equals("ValuedArray")) {
+		if (!(completeVarMap.get(o.name).b == null) && completeVarMap.get(o.name).b.equals("ValuedArray")) {
 			inclusiveVarMap.put("old_" + o.name, new Pair<String, String>
 			(completeVarMap.get(o.name).a, "Array"));
 		}

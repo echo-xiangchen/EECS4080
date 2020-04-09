@@ -4,10 +4,10 @@ import java.util.*;
 
 import modes.mode;
 
-public class ArrayVar extends Var {
+public abstract class ArrayVar extends Var {
 	
 	// uninitialized declaration
-	public ArrayVar(String name, modes.mode mode) {
+	public ArrayVar(String name, mode mode) {
 		super(name, mode);
 	}
 	

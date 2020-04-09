@@ -28,7 +28,7 @@ public class PrettyPrinter implements Visitor {
 	}
 	
 	/* *****************************************************************************************
-	 * printer for binary expr
+	 * TODO printer for binary expr
 	 * *****************************************************************************************
 	 */
 	
@@ -108,8 +108,8 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("(assert ( not ( " + op + " " + left.prefixOutput 
-				+ " " + right.prefixOutput + " )))\n"
+		z3output = z3output.concat("(assert (not (" + op + " " + left.prefixOutput 
+				+ " " + right.prefixOutput + ")))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -133,7 +133,7 @@ public class PrettyPrinter implements Visitor {
 	}
 	
 	/* *****************************************************************************************
-	 * printer for unary expr
+	 * TODO printer for unary expr
 	 * *****************************************************************************************
 	 */
 	
@@ -203,7 +203,7 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("(assert ( not ( " + op + " " + printer.prefixOutput + " )))\n"
+		z3output = z3output.concat("(assert (not (" + op + " " + printer.prefixOutput + ")))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -227,7 +227,7 @@ public class PrettyPrinter implements Visitor {
 	}
 	
 	/* *****************************************************************************************
-	 * printer for other expressions (e.g., true, false, and other arithmetic expr)
+	 * TODO printer for other expressions (e.g., true, false, and other arithmetic expr)
 	 * *****************************************************************************************
 	 */
 	
@@ -290,7 +290,7 @@ public class PrettyPrinter implements Visitor {
 			}
 		}
 		// add the remaining string
-		z3output = z3output.concat("( assert ( not " + p.prefixOutput + " ))\n"
+		z3output = z3output.concat("( assert (not " + p.prefixOutput + "))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -314,7 +314,7 @@ public class PrettyPrinter implements Visitor {
 	}
 	
 	/* *****************************************************************************************
-	 * printer for quantification
+	 * TODO printer for quantification
 	 * *****************************************************************************************
 	 */
 	
@@ -378,7 +378,7 @@ public class PrettyPrinter implements Visitor {
 		}
 		
 		// add the remaining string
-		z3output = z3output.concat("(assert ( not " + p.prefixOutput + " ))\n"
+		z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
 				+ "(check-sat)\n"
 				+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 				+ ";(get-model)\n"
@@ -475,7 +475,7 @@ public class PrettyPrinter implements Visitor {
 				}
 			}
 			// add the remaining string
-			z3output = z3output.concat("(assert ( not " + p.prefixOutput + " ))\n"
+			z3output = z3output.concat("(assert (not " + p.prefixOutput + "))\n"
 					+ "(check-sat)\n"
 					+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 					+ ";(get-model)\n"
@@ -581,9 +581,15 @@ public class PrettyPrinter implements Visitor {
 	}
 
 	/* *****************************************************************************************
-	 * normal variable
+	 * TODO normal variable
 	 * *****************************************************************************************
 	 */
+	
+	@Override
+	public void visitVarLists(VarLists v) {
+		
+	}
+	
 	// boolean variable
 	@Override
 	public void visitBoolVar(BoolVar v) {
@@ -626,7 +632,7 @@ public class PrettyPrinter implements Visitor {
 	
 	
 	/* *****************************************************************************************
-	 * array variable
+	 * TODO array variable
 	 * *****************************************************************************************
 	 */
 	
@@ -716,6 +722,10 @@ public class PrettyPrinter implements Visitor {
 		}
 	}
 	
+	/* *****************************************************************************************
+	 * TODO Constants
+	 * *****************************************************************************************
+	 */
 
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
@@ -743,7 +753,7 @@ public class PrettyPrinter implements Visitor {
 	
 	
 	/* *****************************************************************************************
-	 * Methods
+	 * TODO Methods
 	 * *****************************************************************************************
 	 */
 	
@@ -829,7 +839,7 @@ public class PrettyPrinter implements Visitor {
 				}
 			}
 			// add the remaining string
-			z3output = z3output.concat("(assert ( not " + p.prefixOutput +  " ))\n"
+			z3output = z3output.concat("(assert (not " + p.prefixOutput +  "))\n"
 					+ "(check-sat)\n"
 					+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
 					+ ";(get-model)\n"
@@ -910,5 +920,23 @@ public class PrettyPrinter implements Visitor {
 	@Override
 	public void visitNIL(NIL n) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void visitIfStats(IfStats s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitElseifStats(ElseifStats s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitElseStats(ElseStats s) {
+		// TODO Auto-generated method stub
+		
 	}
 }

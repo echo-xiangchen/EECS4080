@@ -11,5 +11,9 @@ public class RealConst extends NumConst {
 	public void accept(Visitor v) {
 		v.visitRealConst(this);
 	}
-
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new RealConst(this.name);
+	}
 }

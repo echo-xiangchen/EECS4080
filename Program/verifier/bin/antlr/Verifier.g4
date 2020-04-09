@@ -64,35 +64,95 @@ local
 implementation
 	: assignment		# ImpAssignment
 	| alternation 		# ImpAlternation
-	//| loop 				# ImpLoop
+	| loop 				# ImpLoop
 	;
 
 
 assignment
-	: ID ':=' ID ';'										# SingleVarAssign
-	| ID ':=' boolExpr ';'									# BoolAssign
-	| ID ':=' arithmetic ';'								# ArithAssign
-	| ID ':=' '<<' (boolExpr (',' boolExpr)*)? '>>' ';' 	# BoolArrayInitialize
-	| ID ':=' '<<' (arithmetic (',' arithmetic)*)? '>>' ';'	# ArithArrayInitialize
-	| ID '[' arithmetic ']' ':=' ID ';'						# ArraySingleVarAssign 
-	| ID '[' arithmetic ']' ':=' boolExpr ';'				# BoolArrayAssign
-	| ID '[' arithmetic ']' ':=' arithmetic ';'				# ArithArrayAssign
-	| RESULT ':=' ID ';' 									# SingleVarResultAssign
-	| RESULT ':=' ID '[' arithmetic ']' ';'					# ArrayValueResultAssign
+	: ID ':=' ID ';'												# SingleVarAssign
+	| ID ':=' boolExpr ';'											# BoolAssign
+	| ID ':=' arithmeticExpr ';'									# ArithAssign
+	| ID ':=' '<<' (boolExpr (',' boolExpr)*)? '>>' ';' 			# BoolArrayInitialize
+	| ID ':=' '<<' (arithmeticExpr (',' arithmeticExpr)*)? '>>' ';'	# ArithArrayInitialize
+	| ID '[' arithmeticExpr ']' ':=' ID ';'							# ArraySingleVarAssign 
+	| ID '[' arithmeticExpr ']' ':=' boolExpr ';'					# BoolArrayAssign
+	| ID '[' arithmeticExpr ']' ':=' arithmeticExpr ';'				# ArithArrayAssign
+	| RESULT ':=' ID ';' 											# SingleVarResultAssign
+	| RESULT ':=' ID '[' arithmeticExpr ']' ';'						# ArrayValueResultAssign
 	;
 
 alternation
-	: IF boolExpr THEN 
-		// differentiate the if body implementations and else body implementations
-		imp1+=implementation (imp1+=implementation)*
-	  (ELSE
-	  	imp2+=implementation (imp2+=implementation)*)?
-	  END 													# AlternationBody
+	: ifstat
+	  // zero or more elseif statement
+	  (elseifstat)*
+	  // zero or one else statement
+	  (elsestat)?
+	  END 				# AlternationBody
 	;
 
 
-//loop
-//	:
+ifstat
+	: IF boolExpr THEN 
+		(implementation)+  		# IfStatement
+	;
+
+
+elseifstat
+	: ELSEIF boolExpr THEN
+		(implementation)+ 		# ElseIfStatement
+	;
+
+
+elsestat
+	: ELSE
+	  	(implementation)+ 		# ElseStatement												
+	;
+
+/* from
+	 Sinit
+   invariant
+   	 invariant_tag: I -- Boolean expression for partial correctness
+   until
+   	 B
+   loop
+   	 Sbody
+   variant
+   	 variant_tag: V  -- Integer expression for termination
+   end
+*/
+loop
+	: initImp
+	  invariantStat
+	  exitCondition
+	  loopBody
+	  variantStat
+	  END 				# Loops
+	;
+
+initImp
+	: FROM
+		(implementation)+ 	# LoopInitialImps
+	;
+
+invariantStat
+	: INVARIANT
+		(ID ':')? boolExpr 			# LoopInvariant
+	;
+
+exitCondition
+	: UNTIL
+		boolExpr 			# LoopExitCondition
+	;
+
+loopBody
+	: LOOP
+		(implementation)+ 	# LoopBodyImps
+	;
+
+variantStat
+	: VARIANT
+		(ID ':')? arithmeticExpr 		# LoopVariant
+	;
 
 
 declaration
@@ -114,11 +174,11 @@ uninitialDecl
 initialDecl
 	// normal variable
 	: ID ':' BOOL '=' boolExpr 															# BoolValueDecl
-	| ID ':' type=(INT|REAL) '=' arithmetic												# NumValueDecl
+	| ID ':' type=(INT|REAL) '=' arithmeticExpr											# NumValueDecl
 	// array variable
 	| ID ':' ARRAY '[' BOOL ']' '=' '<<' boolExpr (',' boolExpr)* '>>'					# BoolArrayValueDecl
-	| ID ':' ARRAY '[' INT ']' '=' '<<' arithmetic (',' arithmetic)* '>>'				# IntArrayValueDecl
-	| ID ':' ARRAY '[' REAL ']' '=' '<<' arithmetic (',' arithmetic)* '>>'				# RealArrayValueDecl
+	| ID ':' ARRAY '[' INT ']' '=' '<<' arithmeticExpr (',' arithmeticExpr)* '>>'		# IntArrayValueDecl
+	| ID ':' ARRAY '[' REAL ']' '=' '<<' arithmeticExpr (',' arithmeticExpr)* '>>'		# RealArrayValueDecl
 	// unnamed pair with value
 	// Bool
 	| ID ':' PAIR '[' BOOL ';' BOOL ']' 
@@ -172,15 +232,15 @@ boolExpr
 	| FORALL (varDecl)+ '|' boolExpr 				# Forall
 	| EXISTS (varDecl)+ '|' boolExpr 				# Exists
 	| ID 											# BoolVar
-	| ID '[' arithmetic ']'							# IndexBoolArray
+	| ID '[' arithmeticExpr ']'						# IndexBoolArray
 	| OLD ID 										# OldBoolVar
-	| OLD ID '[' arithmetic ']'						# OldBoolArray
+	| OLD ID '[' arithmeticExpr ']'					# OldBoolArray
 	| RESULT 										# BoolResult
-	| RESULT '[' arithmetic ']'						# BoolArrayResult
+	| RESULT '[' arithmeticExpr ']'					# BoolArrayResult
 	| TRUE 											# BoolTrue
 	| FALSE 										# BoolFalse
 	| '(' boolExpr ')'								# Paren
-	| relation										# Relate 
+	| relationalExpr								# Relate 
 	;
 
 
@@ -189,30 +249,30 @@ varDecl
 	;
 
 
-relation
-	: arithmetic EQUAL arithmetic			# Equal
-	| arithmetic GREATERTHAN arithmetic		# GreaterThan
-	| arithmetic LESSTHAN arithmetic		# LessThan
-	| arithmetic GREATEROREQUAL arithmetic	# GreaterOrEqual
-	| arithmetic LESSOREQUAL arithmetic		# LessOrEqual
+relationalExpr
+	: arithmeticExpr EQUAL arithmeticExpr			# Equal
+	| arithmeticExpr GREATERTHAN arithmeticExpr		# GreaterThan
+	| arithmeticExpr LESSTHAN arithmeticExpr		# LessThan
+	| arithmeticExpr GREATEROREQUAL arithmeticExpr	# GreaterOrEqual
+	| arithmeticExpr LESSOREQUAL arithmeticExpr		# LessOrEqual
 	;
 
 
-arithmetic
-	: arithmetic op=(MUL|DIV) arithmetic				# MulDiv
-	| arithmetic op=(ADD|SUB) arithmetic				# AddSub
+arithmeticExpr
+	: arithmeticExpr op=(MUL|DIV) arithmeticExpr		# MulDiv
+	| arithmeticExpr op=(ADD|SUB) arithmeticExpr		# AddSub
 	| ID 												# ArithmeticVar
-	| ID '[' arithmetic ']'								# IndexArithmeticArray
+	| ID '[' arithmeticExpr ']'							# IndexArithmeticArray
 	| OLD ID 											# OldArithVar
-	| OLD ID '[' arithmetic ']' 						# OldArithArray
+	| OLD ID '[' arithmeticExpr ']' 					# OldArithArray
 	| RESULT 											# ArithResult
-	| RESULT '[' arithmetic ']' 						# ArithArrayResult
+	| RESULT '[' arithmeticExpr ']' 					# ArithArrayResult
 	| INTNUM											# IntNum
 	| ID '.' COUNT 										# CountArray
 	| ID '.' LOWER 										# LowerArray
 	| ID '.' UPPER 										# UpperArray
 	| REALNUM											# RealNum
-	| '(' arithmetic ')' 								# ArithParen
+	| '(' arithmeticExpr ')' 							# ArithParen
 	;
 
 // type keywords
@@ -238,15 +298,17 @@ END : 'end';
 OLD : 'old';
 RESULT : 'Result';
 
+// alternation keywords
 IF : 'if';
+ELSEIF : 'elseif';
 THEN : 'then';
 ELSE : 'else';
 
+// loop keywords
 FROM : 'from';
+INVARIANT : 'invariant';
 UNTIL : 'until';
 LOOP : 'loop';
-
-INVARIANT : 'invariant';
 VARIANT : 'variant';
 
 // quantification keywords

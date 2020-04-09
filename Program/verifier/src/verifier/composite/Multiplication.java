@@ -10,4 +10,9 @@ public class Multiplication extends ArithmeticExpr {
 	public void accept(Visitor v) {
 		v.visitMultiplication(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Multiplication(this.left().copy(), this.right().copy());
+	}
 }

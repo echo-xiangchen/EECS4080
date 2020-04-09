@@ -1,10 +1,12 @@
 -- test program verification
--- single assignment
+-- single assignment (no error)
 i:REAL
 increment_by_9()
-require i > 3
+require 
+	positive: i > 3
 do
-	i := i + 9
+	i := i + 9;
 ensure
-	i > 13
+	incremented: i > 13
 end
+verify increment_by_9

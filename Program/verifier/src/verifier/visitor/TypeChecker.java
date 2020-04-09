@@ -11,6 +11,8 @@ public class TypeChecker implements Visitor{
 	
 	// hashmap to store the array name and its value for type check
 	public static Map<String, List<Verifier>> arrayMap = new LinkedHashMap<String, List<Verifier>>();
+	
+	// pair that stores 
 	// indicate whether is inside a method
 	public static boolean isMethod;
 	
@@ -322,9 +324,20 @@ public class TypeChecker implements Visitor{
 	}
 
 	/* *****************************************************************************************
-	 * normal variable
+	 * TODO normal variable
 	 * *****************************************************************************************
 	 */
+	
+	
+	@Override
+	public void visitVarLists(VarLists v) {
+		if (v.mode instanceof modes.QuantificationList) {
+			for (int i = 0; i < v.varDeclList.size(); i++) {
+				TypeChecker checker = new TypeChecker();
+				v.varDeclList.get(i).accept(checker);
+			}
+		}
+	}
 	
 	// boolean variable
 	@Override
@@ -568,7 +581,7 @@ public class TypeChecker implements Visitor{
 	
 	
 	/* *****************************************************************************************
-	 * array variable
+	 * TODO array variable
 	 * *****************************************************************************************
 	 */
 	
@@ -1003,6 +1016,11 @@ public class TypeChecker implements Visitor{
 		}
 	}
 	
+	/* *****************************************************************************************
+	 * TODO Constants
+	 * *****************************************************************************************
+	 */
+	
 	// boolean true
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
@@ -1055,7 +1073,7 @@ public class TypeChecker implements Visitor{
 	
 	
 	/* *****************************************************************************************
-	 * Methods
+	 * TODO Methods
 	 * *****************************************************************************************
 	 */
 
@@ -1160,6 +1178,63 @@ public class TypeChecker implements Visitor{
 		}
 	}
 	
+	// preconditions
+	@Override
+	public void visitPreconditions(Preconditions p) {
+		// loop the list to type check each contract
+		for (int i = 0; i < p.contracts.size(); i++) {
+			TypeChecker checker = new TypeChecker();
+			p.contracts.get(i).accept(checker);
+			errormsg.addAll(checker.errormsg);
+		}
+	}
+
+	// postconditions
+	@Override
+	public void visitPostconditions(Postconditions p) {
+		// set isPostcondition to true for old keyword type check
+		isPostcondition = true;
+		// loop the list to type check each contract
+		for (int i = 0; i < p.contracts.size(); i++) {
+			TypeChecker checker = new TypeChecker();
+			p.contracts.get(i).accept(checker);
+			errormsg.addAll(checker.errormsg);
+		}
+		// reset isPostcondition
+		isPostcondition = false;
+	}
+
+	
+	// each contract
+	@Override
+	public void visitContractExpr(ContractExpr c) {
+		// type check the expr
+		// Pair<String, Verifier> contract
+		TypeChecker checker = new TypeChecker();
+		c.contract.b.accept(checker);
+		errormsg.addAll(checker.errormsg);
+		
+		// add the expr to the map if there is no error
+		if (errormsg.isEmpty()) {
+			if (c.contract.a != null) {
+				if (varMap.containsKey(c.contract.a)) {
+					errormsg.add("Error: The tag name " + c.contract.a + " has already been used."
+							+ " Please change another name.");
+				}
+				else {
+					InfixPrinter printer = new InfixPrinter();
+					c.contract.b.accept(printer);
+					errormsg.add("Error: You need to specify the tag name for the contract: " + printer.infixOutput);
+				}
+			}
+		}
+	}
+	
+	/* *****************************************************************************************
+	 * TODO Implementations
+	 * *****************************************************************************************
+	 */
+	
 	// assignment
 	@Override
 	public void visitAssignment(Assignments a) {
@@ -1234,77 +1309,73 @@ public class TypeChecker implements Visitor{
 	// if-else statement
 	@Override
 	public void visitAlternations(Alternations a) {
-		// typecheck the condition
-		TypeChecker conditionChecker = new TypeChecker();
-		a.condition.accept(conditionChecker);
-		errormsg.addAll(conditionChecker.errormsg);
+		// type check the if statement
+		TypeChecker ifChecker = new TypeChecker();
+		a.ifStat.accept(ifChecker);
+		errormsg.addAll(ifChecker.errormsg);
 		
-		// type check the if statement implementation
-		for (int i = 0; i < a.ifImps.size(); i++) {
-			TypeChecker ifChecker = new TypeChecker();
-			a.ifImps.get(i).accept(ifChecker);
-			errormsg.addAll(ifChecker.errormsg);
+		// type check the elseif statement
+		for (int i = 0; i < a.elseifStat.size(); i++) {
+			TypeChecker elseifChecker = new TypeChecker();
+			a.elseifStat.get(i).accept(elseifChecker);
+			errormsg.addAll(elseifChecker.errormsg);
 		}
 		
-		// typecheck the else statement implementation
-		for (int j = 0; j < a.elseImps.size(); j++) {
+		// typecheck the else statement if it's not null
+		if (a.elseStat != null) {
 			TypeChecker elseChecker = new TypeChecker();
-			a.elseImps.get(j).accept(elseChecker);
+			a.elseStat.accept(elseChecker);
 			errormsg.addAll(elseChecker.errormsg);
 		}
 	}
-
-
-	// preconditions
-	@Override
-	public void visitPreconditions(Preconditions p) {
-		// loop the list to type check each contract
-		for (int i = 0; i < p.contracts.size(); i++) {
-			TypeChecker checker = new TypeChecker();
-			p.contracts.get(i).accept(checker);
-			errormsg.addAll(checker.errormsg);
-		}
-	}
-
-	// postconditions
-	@Override
-	public void visitPostconditions(Postconditions p) {
-		// set isPostcondition to true for old keyword type check
-		isPostcondition = true;
-		// loop the list to type check each contract
-		for (int i = 0; i < p.contracts.size(); i++) {
-			TypeChecker checker = new TypeChecker();
-			p.contracts.get(i).accept(checker);
-			errormsg.addAll(checker.errormsg);
-		}
-		// reset isPostcondition
-		isPostcondition = false;
-	}
-
 	
-	// each contract
 	@Override
-	public void visitContractExpr(ContractExpr c) {
-		// type check the expr
-		// Pair<String, Verifier> contract
-		TypeChecker checker = new TypeChecker();
-		c.contract.b.accept(checker);
-		errormsg.addAll(checker.errormsg);
+	public void visitIfStats(IfStats s) {
+		// type check the condition first
+		TypeChecker exprChecker = new TypeChecker();
+		s.condition.accept(exprChecker);
+		errormsg.addAll(exprChecker.errormsg);
 		
-		// add the expr to the map if there is no error
-		if (errormsg.isEmpty()) {
-			if (c.contract.a != null) {
-				if (varMap.containsKey(c.contract.a)) {
-					errormsg.add("Error: The tag name " + c.contract.a + " has already been used."
-							+ " Please change another name.");
-				}
-				else {
-					varMap.put(c.contract.a, new Pair<VarType, Verifier>
-						(new TagType(), c.contract.b));
-				}
-			}
+		// type check the implementations
+		for (int i = 0; i < s.ifImps.size(); i++) {
+			TypeChecker ifimpChecker = new TypeChecker();
+			s.ifImps.get(i).accept(ifimpChecker);
+			errormsg.addAll(ifimpChecker.errormsg);
 		}
 	}
+
+
+	@Override
+	public void visitElseifStats(ElseifStats s) {
+		// type check the condition first
+		TypeChecker exprChecker = new TypeChecker();
+		s.condition.accept(exprChecker);
+		errormsg.addAll(exprChecker.errormsg);
+		
+		// type check the implementations
+		for (int i = 0; i < s.elseifImps.size(); i++) {
+			TypeChecker ifimpChecker = new TypeChecker();
+			s.elseifImps.get(i).accept(ifimpChecker);
+			errormsg.addAll(ifimpChecker.errormsg);
+		}
+	}
+
+
+	@Override
+	public void visitElseStats(ElseStats s) {
+		// type check the implementations
+		for (int i = 0; i < s.elseImps.size(); i++) {
+			TypeChecker ifimpChecker = new TypeChecker();
+			s.elseImps.get(i).accept(ifimpChecker);
+			errormsg.addAll(ifimpChecker.errormsg);
+		}
+	}
+
+	/* *****************************************************************************************
+	 * TODO Keywords
+	 * *****************************************************************************************
+	 */
+	
 
 	// local variables
 	@Override
@@ -1431,10 +1502,4 @@ public class TypeChecker implements Visitor{
 		}
 		
 	}
-
-
-	
-
-
-	
 }

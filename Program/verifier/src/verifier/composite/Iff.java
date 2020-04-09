@@ -11,6 +11,10 @@ public class Iff extends LogicalExpr{
 	public void accept(Visitor v) {
 		v.visitIff(this);
 	}
-
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Iff(this.left().copy(), this.right().copy());
+	}
 }
 

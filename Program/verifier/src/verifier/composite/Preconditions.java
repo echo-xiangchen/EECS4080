@@ -15,5 +15,10 @@ public class Preconditions extends Contracts {
 	public void accept(Visitor v) {
 		v.visitPreconditions(this);
 	}
+	
+	public Verifier copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -1,0 +1,15 @@
+-- test program verification
+-- Result keyword (no error)
+a:ARRAY[INTEGER]
+return_array_value() : INTEGER
+require 
+	no_restriction: true
+do
+a := << 1, 2, 3, 6>>;
+Result := a[3];
+ensure
+	changed : Result = a[3]
+	sured: Result = 3
+	unchanged: forall i: INTEGER;| a[i] = old a[i]
+end
+verify return_array_value

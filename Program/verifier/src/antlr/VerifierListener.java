@@ -332,6 +332,42 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitAlternationBody(VerifierParser.AlternationBodyContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code IfStatement}
+	 * labeled alternative in {@link VerifierParser#ifstat}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfStatement(VerifierParser.IfStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IfStatement}
+	 * labeled alternative in {@link VerifierParser#ifstat}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfStatement(VerifierParser.IfStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ElseIfStatement}
+	 * labeled alternative in {@link VerifierParser#elseifstat}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseIfStatement(VerifierParser.ElseIfStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ElseIfStatement}
+	 * labeled alternative in {@link VerifierParser#elseifstat}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseIfStatement(VerifierParser.ElseIfStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ElseStatement}
+	 * labeled alternative in {@link VerifierParser#elsestat}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseStatement(VerifierParser.ElseStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ElseStatement}
+	 * labeled alternative in {@link VerifierParser#elsestat}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseStatement(VerifierParser.ElseStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code UninitialVarDecl}
 	 * labeled alternative in {@link VerifierParser#declaration}.
 	 * @param ctx the parse tree

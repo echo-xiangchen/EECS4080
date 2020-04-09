@@ -52,4 +52,10 @@ public class Methods extends Verifier {
 	public void accept(Visitor v) {
 		v.visitMethods(this);
 	}
+	
+	@Override
+	public Verifier copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

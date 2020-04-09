@@ -30,4 +30,9 @@ public class BoolArrayVar extends ArrayVar {
 	public void accept(Visitor v) {
 		v.visitBoolArrayVar(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new BoolArrayVar(this.name, this.mode, this.index.copy());
+	}
 }

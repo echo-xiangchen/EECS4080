@@ -10,4 +10,9 @@ public class Equal extends RelationalExpr {
 	public void accept(Visitor v) {
 		v.visitEqual(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Equal(this.left().copy(), this.right().copy());
+	}
 }

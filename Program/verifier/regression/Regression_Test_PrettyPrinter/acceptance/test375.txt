@@ -1,0 +1,24 @@
+-- test program verification
+-- increment x (Not discharged)
+
+x: INTEGER
+a: REAL
+
+increment_x()
+require
+	specify_value: x = 1 and a = 4
+do
+	if a = 1 then
+		x := x + 5;
+	elseif a = 2 then
+		x := x + 10;
+	elseif a = 3 then
+		x := x + 16;
+	elseif a = 4 then
+		x := x + 34;
+	end
+ensure
+	incremented: x = old x + 15
+end
+
+verify increment_x

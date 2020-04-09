@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.tree.*;
 import java.io.*;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.Map.*;
 
 import com.microsoft.z3.*;
 import antlr.*;
@@ -31,7 +31,7 @@ public class TestLogicVer {
 			else {
 				
 				/* *****************************************************************************************
-				 * if the first argument is "-p"
+				 * TODO if the first argument is "-p"
 				 * *****************************************************************************************
 				 */
 				
@@ -101,8 +101,11 @@ public class TestLogicVer {
 							}
 							splitedPrinterOutput[a - 1] = updatedStr;
 						}
+						/* *****************************************************************************************
+						 * TODO if there is an input file
+						 * *****************************************************************************************
+						 */
 					
-						// if there is an input file
 						if (inputFile != null) {
 							// split the input file path, only store the file name
 							String[] splitedpath = args[1].split("/");
@@ -145,7 +148,10 @@ public class TestLogicVer {
 							}
 							
 						}
-						// if there is no input file
+						/* *****************************************************************************************
+						 * TODO if there is no input file
+						 * *****************************************************************************************
+						 */
 						else {
 							// write the output to the file
 							for (int i = 1; i <= splitedPrinterOutput.length; i++) {
@@ -191,7 +197,7 @@ public class TestLogicVer {
 				}
 				
 				/* *****************************************************************************************
-				 * if the first argument is "-v"
+				 * TODO if the first argument is "-v"
 				 * *****************************************************************************************
 				 */
 				
@@ -274,6 +280,7 @@ public class TestLogicVer {
  			       //System.out.println("varPrinter.allVarMap: " + varPrinter.allVarMap + "\n");
  			       //System.out.println("varPrinter.arrayCount: " + varPrinter.arrayCount + "\n");
  			       //System.out.println("varPrinter.unusedVarMap: " + varPrinter.unusedVarMap + "\n");
+ 			       //System.out.println("varPrinter.objMap: " + varPrinter.objMap + "\n");
  			      
  			        	
  			        	
@@ -327,9 +334,10 @@ public class TestLogicVer {
 						}
 						
 						
-						
-						
-						// if there is an input file
+						/* *****************************************************************************************
+						 * TODO if there is an input file
+						 * *****************************************************************************************
+						 */
 						if (inputFile != null) {
 							// split the input file path
 							String[] splitedpath = args[1].split("/");
@@ -421,6 +429,15 @@ public class TestLogicVer {
 												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
 														+ varValue[6].replaceAll("\\)", "");
 											}
+											else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+												if (varValue.length <= 6) {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												else {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+															+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+												}
+											}
 											else if (varValue[4].charAt(0) == '(') {
 												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
 											}
@@ -430,22 +447,6 @@ public class TestLogicVer {
 											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
 											varOutput.add(str);
 										}
-						            	
-//						            	// also include the initialized variable value
-//						            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
-//						            		
-//											if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
-//												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-//														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
-//														+ "\n");     
-//											}
-//											else {
-//												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-//														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
-//														+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
-//														+ "\n");
-//											}
-//										}
 						            	
 					            	
 						            	// test to see if the counterexample is available
@@ -494,6 +495,15 @@ public class TestLogicVer {
 											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
 												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
 														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+												if (varValue.length <= 6) {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												else {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+															+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+												}
 											}
 											else if (varValue[4].charAt(0) == '(') {
 												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
@@ -576,7 +586,10 @@ public class TestLogicVer {
 								System.out.println(writeToFile);
 							}
 						}
-						// if there is no input file
+						/* *****************************************************************************************
+						 * TODO if there is no input file
+						 * *****************************************************************************************
+						 */
 						else {
 							// create string
 							String writeToFile = "";
@@ -656,6 +669,15 @@ public class TestLogicVer {
 												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
 														+ varValue[6].replaceAll("\\)", "");
 											}
+											else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+												if (varValue.length <= 6) {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												else {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+															+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+												}
+											}
 											else if (varValue[4].charAt(0) == '(') {
 												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
 											}
@@ -729,6 +751,15 @@ public class TestLogicVer {
 											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
 												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
 														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+												if (varValue.length <= 6) {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												else {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+															+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+												}
 											}
 											else if (varValue[4].charAt(0) == '(') {
 												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");

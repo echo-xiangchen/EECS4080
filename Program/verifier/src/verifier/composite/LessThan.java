@@ -10,4 +10,9 @@ public class LessThan extends RelationalExpr {
 	public void accept(Visitor v) {
 		v.visitLessThan(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new LessThan(this.left().copy(), this.right().copy());
+	}
 }

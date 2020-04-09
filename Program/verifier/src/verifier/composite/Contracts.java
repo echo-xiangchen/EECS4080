@@ -3,7 +3,7 @@ package verifier.composite;
 import java.util.*;
 import org.antlr.v4.runtime.misc.Pair;
 
-public class Contracts extends ProgramVerify{
+public abstract class Contracts extends ProgramVerify{
 	
 	// single contract
 	public Pair<String, Verifier> contract;

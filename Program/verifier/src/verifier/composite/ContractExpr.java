@@ -13,4 +13,9 @@ public class ContractExpr extends Contracts {
 	public void accept(Visitor v) {
 		v.visitContractExpr(this);
 	}
+	
+	public Verifier copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

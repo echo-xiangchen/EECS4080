@@ -10,4 +10,9 @@ public class Subtraction extends ArithmeticExpr {
 	public void accept(Visitor v) {
 		v.visitSubtraction(this);
 	}
+	
+	// method for deep copy
+	public Verifier copy() {
+		return new Subtraction(this.left().copy(), this.right().copy());
+	}
 }
