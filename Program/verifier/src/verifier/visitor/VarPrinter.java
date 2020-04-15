@@ -2,6 +2,7 @@ package verifier.visitor;
 
 import org.antlr.v4.runtime.misc.Pair;
 
+import modes.UninitializedDecl;
 import verifier.composite.*;
 
 import java.util.*;
@@ -645,30 +646,28 @@ public class VarPrinter implements Visitor {
 	@Override
 	public void visitLoops(Loops l) {
 		// print initial implementation
-		VarPrinter initPrint = new VarPrinter();
-		l.initImp.accept(initPrint);
+		VarPrinter initPrinter = new VarPrinter();
+		l.initImp.accept(initPrinter);
 		
 		
 		// print invariant
-		VarPrinter invariantPrint = new VarPrinter();
-		l.invariant.accept(invariantPrint);
+		VarPrinter invariantPrinter = new VarPrinter();
+		l.invariant.accept(invariantPrinter);
 		
 		
 		// print exitcondition
-		VarPrinter exitPrint = new VarPrinter();
-		l.exitCondition.accept(exitPrint);
+		VarPrinter exitPrinter = new VarPrinter();
+		l.exitCondition.accept(exitPrinter);
 		
 		
 		//print loopbody
-		VarPrinter loopbodyPrint = new VarPrinter();
-		l.loopBody.accept(loopbodyPrint);
+		VarPrinter loopbodyPrinter = new VarPrinter();
+		l.loopBody.accept(loopbodyPrinter);
 		
 		
 		// print variant
-		VarPrinter variantPrint = new VarPrinter();
-		l.variant.accept(variantPrint);
-		
-		
+		VarPrinter variantPrinter = new VarPrinter();
+		l.variant.accept(variantPrinter);
 	}
 
 	@Override
@@ -684,8 +683,8 @@ public class VarPrinter implements Visitor {
 	public void visitInvariantStat(InvariantStat s) {
 		// print the expr first
 		// Pair<String, Verifier> invariant
-		VarPrinter exprPrinter = new VarPrinter();
-		s.invariant.b.accept(exprPrinter);
+		VarPrinter invariantPrinter = new VarPrinter();
+		s.invariant.b.accept(invariantPrinter);
 	}
 
 	@Override
@@ -708,8 +707,11 @@ public class VarPrinter implements Visitor {
 	public void visitVariantStat(VariantStat s) {
 		// typecheck the expr first
 		// Pair<String, Verifier> variant;
-		VarPrinter exprPrinter = new VarPrinter();
-		s.variant.b.accept(exprPrinter);
+		VarPrinter variantPrinter = new VarPrinter();
+		s.variant.b.accept(variantPrinter);
+		
+		// create the obj to the map
+		objMap.put("variant", new IntVar("variant", new UninitializedDecl()));
 	}
 	
 	/* *****************************************************************************************
@@ -732,7 +734,10 @@ public class VarPrinter implements Visitor {
 		allVarMap.put("old_" + o.name, allVarMap.get(o.name));
 	}
 	
-	
+	@Override
+	public void visitResults(Results r) {
+		objMap.put("Result", new Results());
+	}
 	
 	
 	
@@ -743,9 +748,5 @@ public class VarPrinter implements Visitor {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void visitResults(Results r) {
-		// add the current object to the map
-		
-	}
+	
 }

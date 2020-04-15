@@ -492,11 +492,11 @@ public class InfixPrinter implements Visitor{
 				InfixPrinter returnPrinter = new InfixPrinter();
 				PrefixPrinter.methodReturnMap.get(m.name).accept(returnPrinter);
 				
-				infixOutput = infixOutput.concat(m.name + "()" +  " : " 
+				infixOutput = infixOutput.concat(m.name + " : " 
 						+ returnPrinter.infixOutput + "\n");
 			}
 			else {
-				infixOutput = infixOutput.concat(m.name + "()"+ "\n");
+				infixOutput = infixOutput.concat(m.name + "\n");
 			}
 		}
 		
@@ -542,69 +542,95 @@ public class InfixPrinter implements Visitor{
 		
 		postconditions.put(m.name, infixPostPrinter.infixOutput);
 		
-		
-		/* *****************************************************************************************
-		 * TODO do the wp calculation
-		 * *****************************************************************************************
-		 */
-		
-		// assign the initial value
-		Verifier precondition = null;
-		Verifier postcondition = null;
-		
-		// if there is only one contract in the precondition
-		if (((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.size() <= 1) {
-			precondition = ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(0)).contract.b.copy();
-		}
-		else {
-			Verifier precondition1 = ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(0)).contract.b.copy();
-			Verifier precondition2 = ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(1)).contract.b.copy();
+		// check if there is any loop inside the method
+		if (PrefixPrinter.methodLoopWpMap.containsKey(m.name)) {
+			// wpoutput will output the five steps
+			List<String> titleList = new ArrayList<String>();
 			
-			precondition = new Conjunction(precondition1, precondition2);
+			titleList.add("1. Given precondition Q, the initialization step Sinit establishes LI I : {Q} Sinit {I}\n");
+			titleList.add("2. At the end of Sbody, if not yet to exit, LI I is maintained : {I and (not B)} Sbody {I}\n");
+			titleList.add("3. If ready to exit and LI I maintained, postcondition R is established : I and B => R\n");
+			titleList.add("4. Given LI I, and not yet to exit, Sbody maintains LV V as non-negative : {I and (not B)} Sbody {V >= 0}\n");
+			titleList.add("5. Given LI I, and not yet to exit, Sbody decrements LV V : {I and (not B)} Sbody {V < V0}\n");
 			
-			for (int i = 2; i < ((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.size(); i++) {
-				precondition = new Conjunction(precondition, ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(i)).contract.b.copy());
+			String wpOutput = "";
+			for (int i = 0; i < PrefixPrinter.methodLoopWpMap.get(m.name).size(); i++) {
+				InfixPrinter loopinfixPrinter = new InfixPrinter();
+				PrefixPrinter.methodLoopWpMap.get(m.name).get(i).accept(loopinfixPrinter);
+				wpOutput = wpOutput + titleList.get(i) + "  " + loopinfixPrinter.infixOutput + "\n\n";
 			}
+			wps.put(m.name, wpOutput);
 		}
-		
-		// if there is only one contract in the postcondition
-		if (((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.size() <= 1) {
-			postcondition = ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(0)).contract.b.copy();
-		}
-		// if there are more than one contracts in the postcondition
+		// if there is no loop inside the method
 		else {
-			Verifier postcondition1 = ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(0)).contract.b.copy();
-			Verifier postcondition2 = ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(1)).contract.b.copy();
-			
-			postcondition = new Conjunction(postcondition1, postcondition2);
-			
-			for (int i = 2; i < ((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.size(); i++) {
-				postcondition = new Conjunction(postcondition, ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(i)).contract.b.copy());
-			}
+			InfixPrinter wpPrinter = new InfixPrinter();
+			PrefixPrinter.methodWpMap.get(m.name).accept(wpPrinter);
+			wps.put(m.name, "  " + wpPrinter.infixOutput + "\n");
 		}
 		
-		// for each implementation, do the calculation in reverse order
-		for (int i = PrefixPrinter.methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
-			WpCalculator calculator = new WpCalculator(precondition, postcondition);
-			PrefixPrinter.methodImpMap.get(m.name).get(i).accept(calculator);
-			
-			
-			
-			// if there is any array assignments in the middle, calculator.prefixWp will be blank
-//			if (!calculator.prefixWp.isBlank()) {
-//				prefixWp = calculator.prefixWp;
-//				infixWp = calculator.infixWp;
+		
+//		/* *****************************************************************************************
+//		 * TODO do the wp calculation
+//		 * *****************************************************************************************
+//		 */
+//		
+//		// assign the initial value
+//		Verifier precondition = null;
+//		Verifier postcondition = null;
+//		
+//		// if there is only one contract in the precondition
+//		if (((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.size() <= 1) {
+//			precondition = ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(0)).contract.b.copy();
+//		}
+//		else {
+//			Verifier precondition1 = ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(0)).contract.b.copy();
+//			Verifier precondition2 = ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(1)).contract.b.copy();
+//			
+//			precondition = new Conjunction(precondition1, precondition2);
+//			
+//			for (int i = 2; i < ((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.size(); i++) {
+//				precondition = new Conjunction(precondition, ((ContractExpr)((Preconditions) PrefixPrinter.methodContractMap.get(m.name).get(0)).contracts.get(i)).contract.b.copy());
 //			}
-			postcondition = calculator.postcondition;
-		}
-		
-		// print wp after
-		InfixPrinter afterwpPrinter = new InfixPrinter();
-		postcondition.accept(afterwpPrinter);
-		//System.out.println("after: " + afterwpPrinter.infixOutput);
-		
-		// final infix version of wp
-		wps.put(m.name, "   " + infixPrePrinter.preWithoutTag.replaceAll("\n", "") + " => " + afterwpPrinter.infixOutput + "\n");
+//		}
+//		
+//		// if there is only one contract in the postcondition
+//		if (((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.size() <= 1) {
+//			postcondition = ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(0)).contract.b.copy();
+//		}
+//		// if there are more than one contracts in the postcondition
+//		else {
+//			Verifier postcondition1 = ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(0)).contract.b.copy();
+//			Verifier postcondition2 = ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(1)).contract.b.copy();
+//			
+//			postcondition = new Conjunction(postcondition1, postcondition2);
+//			
+//			for (int i = 2; i < ((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.size(); i++) {
+//				postcondition = new Conjunction(postcondition, ((ContractExpr)((Postconditions) PrefixPrinter.methodContractMap.get(m.name).get(1)).contracts.get(i)).contract.b.copy());
+//			}
+//		}
+//		
+//		// for each implementation, do the calculation in reverse order
+//		for (int i = PrefixPrinter.methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
+//			WpCalculator calculator = new WpCalculator(precondition, postcondition);
+//			PrefixPrinter.methodImpMap.get(m.name).get(i).accept(calculator);
+//			
+//			
+//			
+//			// if there is any array assignments in the middle, calculator.prefixWp will be blank
+////			if (!calculator.prefixWp.isBlank()) {
+////				prefixWp = calculator.prefixWp;
+////				infixWp = calculator.infixWp;
+////			}
+//			postcondition = calculator.postcondition;
+//		}
+//		
+//		// print wp after
+//		InfixPrinter afterwpPrinter = new InfixPrinter();
+//		postcondition.accept(afterwpPrinter);
+//		//System.out.println("after: " + afterwpPrinter.infixOutput);
+//		
+//		// final infix version of wp
+//		wps.put(m.name, afterwpPrinter.infixOutput + "\n");
 	}
 	
 	
@@ -803,6 +829,92 @@ public class InfixPrinter implements Visitor{
 			elseImpStr = elseImpStr + elseimpPrinter.infixOutput + "\n";
 		}
 		infixOutput = infixOutput.concat(elseImpStr);
+	}
+	
+	@Override
+	public void visitLoops(Loops l) {
+		// print the if statement
+		InfixPrinter initPrinter = new InfixPrinter();
+		l.initImp.accept(initPrinter);
+		infixOutput = infixOutput.concat(initPrinter.infixOutput);
+		
+		// print invariant
+		InfixPrinter invariantPrinter = new InfixPrinter();
+		l.invariant.accept(invariantPrinter);
+		infixOutput = infixOutput.concat(invariantPrinter.infixOutput);
+		
+		// print exitcondition
+		InfixPrinter exitPrinter = new InfixPrinter();
+		l.exitCondition.accept(exitPrinter);
+		infixOutput = infixOutput.concat(exitPrinter.infixOutput);
+		
+		//print loopbody
+		InfixPrinter loopbodyPrinter = new InfixPrinter();
+		l.loopBody.accept(loopbodyPrinter);
+		infixOutput = infixOutput.concat(loopbodyPrinter.infixOutput);
+		
+		// print variant
+		InfixPrinter variantPrinter = new InfixPrinter();
+		l.variant.accept(variantPrinter);
+		infixOutput = infixOutput.concat(variantPrinter.infixOutput + "end");
+	}
+
+	@Override
+	public void visitInitImp(InitImp s) {
+		// print the implementations
+		String initImpStr = "";
+		for (int i = 0; i < s.initImp.size(); i++) {
+			InfixPrinter initimpPrinter = new InfixPrinter();
+			s.initImp.get(i).accept(initimpPrinter);
+			initImpStr = initImpStr + initimpPrinter.infixOutput + "\n";
+		}
+		infixOutput = infixOutput.concat("from\n" + initImpStr);
+	}
+
+	@Override
+	public void visitInvariantStat(InvariantStat s) {
+		InfixPrinter invariantPrint = new InfixPrinter();
+		s.invariant.b.accept(invariantPrint);
+		// check if tag is empty
+		if (s.invariant.a != null) {
+			infixOutput = infixOutput.concat("invariant\n  " + s.invariant.a + " : " + invariantPrint.infixOutput + "\n");
+		}
+		else {
+			infixOutput = infixOutput.concat("invariant\n  " + invariantPrint.infixOutput + "\n");
+		}
+	}
+
+	@Override
+	public void visitExitCondition(ExitCondition s) {
+		InfixPrinter exitPrinter = new InfixPrinter();
+		s.condition.accept(exitPrinter);
+		infixOutput = infixOutput.concat("until\n  " + exitPrinter.infixOutput + "\n");
+		
+	}
+
+	@Override
+	public void visitLoopBody(LoopBody s) {
+		// print the implementations
+		String loopbodyStr = "";
+		for (int i = 0; i < s.loopBodyImps.size(); i++) {
+			InfixPrinter loopbodyPrinter = new InfixPrinter();
+			s.loopBodyImps.get(i).accept(loopbodyPrinter);
+			loopbodyStr = loopbodyStr + loopbodyPrinter.infixOutput + "\n";
+		}
+		infixOutput = infixOutput.concat("loop\n" + loopbodyStr);
+	}
+
+	@Override
+	public void visitVariantStat(VariantStat s) {
+		InfixPrinter variantPrint = new InfixPrinter();
+		s.variant.b.accept(variantPrint);
+		// check if tag is empty
+		if (s.variant.a != null) {
+			infixOutput = infixOutput.concat("variant\n  " + s.variant.a + " : " + variantPrint.infixOutput + "\n");
+		}
+		else {
+			infixOutput = infixOutput.concat("variant\n  " + variantPrint.infixOutput + "\n");
+		}
 	}
 	
 	/* *****************************************************************************************

@@ -40,6 +40,9 @@ public class PrefixPrinter implements Visitor{
 	 * *****************************************************************************************
 	 */
 	
+	// indicates if there is any loop inside the implementation
+	public static boolean containsLoop;
+	
 	// hashmap that stores the old variable caches
 	public static Map<String, String> oldVarMap = new LinkedHashMap<String, String>();
 	
@@ -61,6 +64,12 @@ public class PrefixPrinter implements Visitor{
 	
 	// map that stores the method name and its implementations
 	public static Map<String, List<Verifier>> methodImpMap = new LinkedHashMap<String, List<Verifier>>();
+	
+	// map that stores the five small parts if the method contains any loop
+	public static Map<String, List<Verifier>> methodLoopWpMap = new LinkedHashMap<String, List<Verifier>>();
+	
+	// List that stores the method and its wp
+	public static Map<String, Verifier> methodWpMap = new LinkedHashMap<String, Verifier>();
 	
 	public PrefixPrinter() {
 		prefixOutput = "";
@@ -435,7 +444,7 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter p = new PrefixPrinter();
 			a.index.accept(p);
 			// (select a 1)
-			prefixOutput = prefixOutput.concat("( select " + a.name + " " + p.prefixOutput + ")");
+			prefixOutput = prefixOutput.concat("(select " + a.name + " " + p.prefixOutput + ")");
 			
 			if (!inclusiveVarMap.containsKey(a.name)) {
 				inclusiveVarMap.put(a.name, new Pair<String, String>(completeVarMap.get(a.name).a, completeVarMap.get(a.name).b));
@@ -579,7 +588,13 @@ public class PrefixPrinter implements Visitor{
 	public void visitIntConst(IntConst c) {
 		if (c.isArray) {
 			if (c.indicator.equals("count") || c.indicator.equals("upper")) {
-				prefixOutput = prefixOutput.concat(VarPrinter.arrayCount.get(c.name));
+				if (VarPrinter.arrayCount.containsKey(c.name)) {
+					prefixOutput = prefixOutput.concat(VarPrinter.arrayCount.get(c.name));
+				}
+				else {
+					prefixOutput = prefixOutput.concat(Integer.toString(Integer.MAX_VALUE));
+				}
+				
 			}
 			else if (c.indicator.equals("lower")) {
 				prefixOutput = prefixOutput.concat(" 1 ");
@@ -733,29 +748,98 @@ public class PrefixPrinter implements Visitor{
 //			
 //			System.out.println("before: " + beforewpPrinter.prefixOutput);
 //			
-			// for each implementation, do the calculation in reverse order
-			for (int i = methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
-				WpCalculator calculator = new WpCalculator(precondition, postcondition);
-				methodImpMap.get(m.name).get(i).accept(calculator);
-				
-				
-				//System.out.println(i + ": " + postcondition);
-				//System.out.println(i + ": " + calculator.substitutePair);
-				
-				postcondition = calculator.postcondition.copy();
-				
+			int index = -1;
+			// try to test if there is any loop in the implementation
+			for (int i = 0; i < methodImpMap.get(m.name).size(); i++) {
+				if (methodImpMap.get(m.name).get(i) instanceof Loops) {
+					index = i;
+				}
 			}
 			
-			// print wp after
-			PrefixPrinter afterwpPrinter = new PrefixPrinter();
-			postcondition.accept(afterwpPrinter);
+			//System.out.println("index: " + index);
+			
+			// index = -1 means there is no loop inside the implementations
+			if (index == -1) {
+				containsLoop = false;
+				// for each implementation, do the calculation in reverse order
+				for (int i = methodImpMap.get(m.name).size() - 1; i >= 0; i--) {
+					WpCalculator calculator = new WpCalculator(precondition, postcondition);
+					methodImpMap.get(m.name).get(i).accept(calculator);
+					
+					
+					//System.out.println(i + ": " + postcondition);
+					//System.out.println(i + ": " + calculator.substitutePair);
+					
+					postcondition = calculator.postcondition.copy();
+				}
+				
+				// add the postcondition to the map
+				methodWpMap.put(m.name, postcondition.copy());
+				
+				// print wp after
+				PrefixPrinter afterwpPrinter = new PrefixPrinter();
+				postcondition.accept(afterwpPrinter);
+				
+				// final formula is precondition => wp
+				prefixOutput = prefixOutput.concat("(=> " 
+						+ prefixPrePrinter.prefixOutput + " " + afterwpPrinter.prefixOutput + ")");	
+			}
+			// if there is any loop inside the implementation
+			else {
+				containsLoop = true;
+				
+				// first calculate the wp after the loop, and let it be the postcondition for the loop
+				// if there is nothing after the loop, the postcondition won't change
+				for (int i = methodImpMap.get(m.name).size() - 1; i > index; i--) {
+					System.out.println("check check");
+					WpCalculator calculator = new WpCalculator(precondition, postcondition);
+					methodImpMap.get(m.name).get(i).accept(calculator);
+					
+					postcondition = calculator.postcondition.copy();
+				}
+				
+				// then add all the implementations before the loop to Sinit
+				List<Verifier> beforeLoop = new ArrayList<Verifier>();
+				for (int i = 0; i < index; i++) {
+					beforeLoop.add(methodImpMap.get(m.name).get(i));
+				}
+				
+				// then create new Sinit and then create the new Loop object
+				for (int i = 0; i < ((InitImp) ((Loops) methodImpMap.get(m.name).get(index)).initImp).initImp.size(); i++) {
+					beforeLoop.add(((InitImp) ((Loops) methodImpMap.get(m.name).get(index)).initImp).initImp.get(i));
+				}
+				
+				// create the new Loop object
+				InitImp newInitImp = new InitImp(beforeLoop);
+				
+				Loops newLoop = new Loops(newInitImp, ((Loops) methodImpMap.get(m.name).get(index)).invariant, 
+						((Loops) methodImpMap.get(m.name).get(index)).exitCondition, ((Loops) methodImpMap.get(m.name).get(index)).loopBody, 
+						((Loops) methodImpMap.get(m.name).get(index)).variant);
+				
+				// call the wpcalculator and then store the five predicates into the newLoopList
+				WpCalculator newCalculator = new WpCalculator(precondition, postcondition);
+				newLoop.accept(newCalculator);
+				
+				List<Verifier> newLoopList = new ArrayList<Verifier>(newCalculator.loopWpList);
+				
+				// then add it to the methodLoopMap
+				methodLoopWpMap.put(m.name, newLoopList);
+				
+				for (int i = 0; i < newLoopList.size(); i++) {
+					PrefixPrinter loopWpPrinter = new PrefixPrinter();
+					newLoopList.get(i).accept(loopWpPrinter);
+					
+					// add the prefixoutput
+					prefixOutput = prefixOutput.concat("(assert (not " + loopWpPrinter.prefixOutput + "))\n");
+				}
+			}
+			
+			
 			
 			
 //			System.out.println("after: " + afterwpPrinter.prefixOutput);
 			
-			// final formula is precondition => wp
-			prefixOutput = prefixOutput.concat("(=> " 
-					+ prefixPrePrinter.prefixOutput + " " + afterwpPrinter.prefixOutput + " ) ");	
+			
 			
 			// reset isNestedQuantifier
 			isNestedQuantifier = false;
@@ -921,6 +1005,72 @@ public class PrefixPrinter implements Visitor{
 			PrefixPrinter elseimpPrinter = new PrefixPrinter();
 			s.elseImps.get(i).accept(elseimpPrinter);
 		}
+	}
+	
+	@Override
+	public void visitLoops(Loops l) {
+		// print initial implementation
+		PrefixPrinter initPrint = new PrefixPrinter();
+		l.initImp.accept(initPrint);
+		
+		
+		// print invariant
+		PrefixPrinter invariantPrint = new PrefixPrinter();
+		l.invariant.accept(invariantPrint);
+		
+		
+		// print exitcondition
+		PrefixPrinter exitPrint = new PrefixPrinter();
+		l.exitCondition.accept(exitPrint);
+		
+		
+		//print loopbody
+		PrefixPrinter loopbodyPrint = new PrefixPrinter();
+		l.loopBody.accept(loopbodyPrint);
+		
+		
+		// print variant
+		PrefixPrinter variantPrint = new PrefixPrinter();
+		l.variant.accept(variantPrint);
+	}
+
+	@Override
+	public void visitInitImp(InitImp s) {
+		// print the implementations
+		for (int i = 0; i < s.initImp.size(); i++) {
+			PrefixPrinter initImpPrinter = new PrefixPrinter();
+			s.initImp.get(i).accept(initImpPrinter);
+		}
+	}
+
+	@Override
+	public void visitInvariantStat(InvariantStat s) {
+		// print the expr first
+		// Pair<String, Verifier> invariant
+		PrefixPrinter exprPrinter = new PrefixPrinter();
+		s.invariant.b.accept(exprPrinter);
+	}
+
+	@Override
+	public void visitExitCondition(ExitCondition s) {
+		// print the expr
+		PrefixPrinter exitPrinter = new PrefixPrinter();
+		s.condition.accept(exitPrinter);
+	}
+
+	@Override
+	public void visitLoopBody(LoopBody s) {
+		// print the implementations
+		for (int i = 0; i < s.loopBodyImps.size(); i++) {
+			PrefixPrinter initImpPrinter = new PrefixPrinter();
+			s.loopBodyImps.get(i).accept(initImpPrinter);
+		}
+	}
+
+	@Override
+	public void visitVariantStat(VariantStat s) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/* *****************************************************************************************

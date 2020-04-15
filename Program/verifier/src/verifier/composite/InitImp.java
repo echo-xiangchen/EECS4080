@@ -20,7 +20,12 @@ public class InitImp extends LoopStats {
 	
 	@Override
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Verifier> initImpCopy = new ArrayList<Verifier>();
+		
+		for (int i = 0; i < this.initImp.size(); i++) {
+			initImpCopy.add(this.initImp.get(i).copy());
+		}
+		
+		return new InitImp(initImpCopy);
 	}
 }

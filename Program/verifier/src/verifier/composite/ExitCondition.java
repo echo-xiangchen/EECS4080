@@ -16,8 +16,9 @@ public class ExitCondition extends LoopStats {
 	
 	@Override
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Verifier conditionCopy = this.condition.copy();
+		
+		return new ExitCondition(conditionCopy);
 	}
 
 }

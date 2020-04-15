@@ -1,0 +1,19 @@
+-- test program verification
+-- find_max (no error)
+
+find_max (a: ARRAY[INTEGER]) : INTEGER
+require
+	pre1: forall j: INTEGER; | (a.lower <= j and j < i) => (Result >= a[j])
+	pre2: not (i > a.upper)
+local
+	i: INTEGER
+do
+	if a[i] > Result then
+		Result := a[i];
+	end
+	i := i + 1;
+ensure
+	correct_result: a.upper - i + 1 >= 0
+end
+
+verify find_max

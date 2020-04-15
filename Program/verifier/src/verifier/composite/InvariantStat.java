@@ -20,8 +20,10 @@ public class InvariantStat extends LoopStats {
 	
 	@Override
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Pair<String, Verifier> invariantCopy = new Pair<String, Verifier>
+			(this.invariant.a, this.invariant.b.copy());
+		
+		return new InvariantStat(invariantCopy);
 	}
 
 }

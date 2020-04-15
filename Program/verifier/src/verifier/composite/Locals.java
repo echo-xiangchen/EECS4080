@@ -3,7 +3,7 @@ package verifier.composite;
 import java.util.*;
 import verifier.visitor.*;
 
-public class Locals extends ProgramVerify {
+public class Locals extends Keywords {
 	
 	public List<Verifier> localVars;
 	
@@ -16,7 +16,12 @@ public class Locals extends ProgramVerify {
 	}
 	
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Verifier> localVarsCopy = new ArrayList<Verifier>();
+		
+		for (int i = 0; i < this.localVars.size(); i++) {
+			localVarsCopy.add(this.localVars.get(i).copy());
+		}
+		
+		return new Locals(localVarsCopy);
 	}
 }

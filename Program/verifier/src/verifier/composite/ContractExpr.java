@@ -15,7 +15,8 @@ public class ContractExpr extends Contracts {
 	}
 	
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Pair<String, Verifier> contractCopy = 
+				new Pair<String, Verifier>(this.contract.a, this.contract.b.copy());
+		return new ContractExpr(contractCopy);
 	}
 }

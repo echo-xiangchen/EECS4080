@@ -25,7 +25,22 @@ public class Alternations extends Implementations {
 	}
 	
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Verifier ifStatCopy = this.ifStat.copy();
+		
+		List<Verifier> elseifStatCopy = new ArrayList<Verifier>();
+		for (int i = 0; i < this.elseifStat.size(); i++) {
+			elseifStatCopy.add(this.elseifStat.get(i).copy());
+		}
+		
+		Verifier elseStatCopy;
+		if (this.elseStat != null) {
+			elseStatCopy = this.elseStat.copy();
+		}
+		else {
+			elseStatCopy = null;
+		}
+		 
+		
+		return new Alternations(ifStatCopy, elseifStatCopy, elseStatCopy);
 	}
 }

@@ -1,0 +1,7 @@
+(declare-const i Int)
+(declare-const Result Int)
+(declare-const a (Array Int Int))
+(assert (not (=> (and (forall((j Int))(=> (and (<=  1  j) (< j i)) (>= Result (select a j)))) (> i 2147483647)) (forall((k Int))(=> (and (<=  1  k) (<= k 2147483647)) (>= Result (select a k)))))))
+(check-sat)
+;Uncomment the following line if the result of z3 online tool returns "sat"
+;(get-model)

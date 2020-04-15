@@ -16,7 +16,12 @@ public class ElseStats extends AlternationStats {
 	}
 	
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Verifier> elseImpsCopy = new ArrayList<Verifier>();
+		
+		for (int i = 0; i < this.elseImps.size(); i++) {
+			elseImpsCopy.add(this.elseImps.get(i).copy());
+		}
+		
+		return new ElseStats(elseImpsCopy);
 	}
 }

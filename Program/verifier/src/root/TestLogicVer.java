@@ -116,26 +116,132 @@ public class TestLogicVer {
 							
 							// write the output to the file
 							for (int i = 1; i <= splitedPrinterOutput.length; i++) {
-								String path1 = "./output/" + testNum + "-formula0" + i + ".txt";
-								
-								
-								File file = new File(path1);
-								
-								if (!file.exists()) {
-									File dir = new File(file.getParent());
-									dir.mkdirs();
-									file.createNewFile();
+								// test to see if it's the method that contains the loop
+								if (splitedPrinterOutput[i - 1].contains("splitLoopStep")) {
+									// split the five steps of the loop
+									String[] splitLoop = splitedPrinterOutput[i - 1].split("splitLoopStep\\n");
+									
+									
+									// save these five steps into seperate files
+									// for the 1st file
+									String path1 = "./output/" + testNum + "-formula0" + i + "-step01.txt";
+									
+									File file1 = new File(path1);
+									
+									if (!file1.exists()) {
+										File dir = new File(file1.getParent());
+										dir.mkdirs();
+										file1.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream1 = new FileOutputStream(file1);
+									outStream1.write(splitLoop[0].getBytes());
+									outStream1.close();
+									
+									// print the result to the console
+									System.out.println(PrettyPrinter.infixFormula.get(i - 1) + "\nThis program contains loop.\n");
+									System.out.println("Output of step1 of this program has been stored in " + path1 + "\n");
+									
+									// for the 2nd file
+									String path2 = "./output/" + testNum + "-formula0" + i + "-step02.txt";
+									
+									File file2 = new File(path2);
+									
+									if (!file2.exists()) {
+										File dir = new File(file2.getParent());
+										dir.mkdirs();
+										file2.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream2 = new FileOutputStream(file2);
+									outStream2.write(splitLoop[1].getBytes());
+									outStream2.close();
+									
+									// print the result to the console
+									System.out.println("Output of step2 of this program has been stored in " + path2 + "\n");
+									
+									// for the 3rd file
+									String path3 = "./output/" + testNum + "-formula0" + i + "-step03.txt";
+									
+									File file3 = new File(path3);
+									
+									if (!file3.exists()) {
+										File dir = new File(file3.getParent());
+										dir.mkdirs();
+										file3.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream3 = new FileOutputStream(file3);
+									outStream3.write(splitLoop[2].getBytes());
+									outStream3.close();
+									
+									// print the result to the console
+									System.out.println("Output of step3 of this program has been stored in " + path3 + "\n");
+									
+									// for the 4th file
+									String path4 = "./output/" + testNum + "-formula0" + i + "-step04.txt";
+									
+									File file4 = new File(path4);
+									
+									if (!file4.exists()) {
+										File dir = new File(file4.getParent());
+										dir.mkdirs();
+										file4.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream4 = new FileOutputStream(file4);
+									outStream4.write(splitLoop[3].getBytes());
+									outStream4.close();
+									
+									// print the result to the console
+									System.out.println("Output of step4 of this program has been stored in " + path4 + "\n");
+									
+									// for the 5th file
+									String path5 = "./output/" + testNum + "-formula0" + i + "-step05.txt";
+									
+									File file5 = new File(path5);
+									
+									if (!file5.exists()) {
+										File dir = new File(file5.getParent());
+										dir.mkdirs();
+										file5.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream5 = new FileOutputStream(file5);
+									outStream5.write(splitLoop[4].getBytes());
+									outStream5.close();
+									
+									// print the result to the console
+									System.out.println("Output of step5 of this program has been stored in " + path5 + "\n");
+									
 								}
-								
-								// write to file
-								FileOutputStream outStream = new FileOutputStream(file);
-								outStream.write(splitedPrinterOutput[i - 1].getBytes());
-								outStream.close();
-								
-								// print the result to the console
-								System.out.println(PrettyPrinter.infixFormula.get(i - 1) 
-										+ "\nOutput of this formula has been stored in " + path1 + "\n");
-								
+								// if it's not, then use the normal procedual
+								else {
+									String path1 = "./output/" + testNum + "-formula0" + i + ".txt";
+									
+									
+									File file = new File(path1);
+									
+									if (!file.exists()) {
+										File dir = new File(file.getParent());
+										dir.mkdirs();
+										file.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream = new FileOutputStream(file);
+									outStream.write(splitedPrinterOutput[i - 1].getBytes());
+									outStream.close();
+									
+									// print the result to the console
+									System.out.println(PrettyPrinter.infixFormula.get(i - 1) 
+											+ "\nOutput of this formula has been stored in " + path1 + "\n");
+								}
 							}
 							// iterate through differenceMap, and get the variable name, store it in warning message
 							String varString = "";
@@ -155,26 +261,131 @@ public class TestLogicVer {
 						else {
 							// write the output to the file
 							for (int i = 1; i <= splitedPrinterOutput.length; i++) {
-								String path2 = "./output/" + "formula0" + i + ".txt";
-								
-								File file = new File(path2);
-								
-								if (!file.exists()) {
-									File dir = new File(file.getParent());
-									dir.mkdirs();
-									file.createNewFile();
+								// test to see if it's the method that contains the loop
+								if (splitedPrinterOutput[i - 1].contains("splitLoopStep")) {
+									// split the five steps of the loop
+									String[] splitLoop = splitedPrinterOutput[i - 1].split("splitLoopStep\\n");
+									
+									// save these five steps into seperate files
+									// for the 1st file
+									String path1 = "./output/"  + "formula0" + i + "-step01.txt";
+									
+									File file1 = new File(path1);
+									
+									if (!file1.exists()) {
+										File dir = new File(file1.getParent());
+										dir.mkdirs();
+										file1.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream1 = new FileOutputStream(file1);
+									outStream1.write(splitLoop[0].getBytes());
+									outStream1.close();
+									
+									// print the result to the console
+									System.out.println(PrettyPrinter.infixFormula.get(i - 1) + "\nThis program contains loop.\n");
+									System.out.println("Output of step1 of this program has been stored in " + path1 + "\n");
+									
+									// for the 2nd file
+									String path2 = "./output/"  + "formula0" + i + "-step02.txt";
+									
+									File file2 = new File(path2);
+									
+									if (!file2.exists()) {
+										File dir = new File(file2.getParent());
+										dir.mkdirs();
+										file2.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream2 = new FileOutputStream(file2);
+									outStream2.write(splitLoop[1].getBytes());
+									outStream2.close();
+									
+									// print the result to the console
+									System.out.println("Output of step2 of this program has been stored in " + path2 + "\n");
+									
+									// for the 3rd file
+									String path3 = "./output/"  + "formula0" + i + "-step03.txt";
+									
+									File file3 = new File(path3);
+									
+									if (!file3.exists()) {
+										File dir = new File(file3.getParent());
+										dir.mkdirs();
+										file3.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream3 = new FileOutputStream(file3);
+									outStream3.write(splitLoop[2].getBytes());
+									outStream3.close();
+									
+									// print the result to the console
+									System.out.println("Output of step3 of this program has been stored in " + path3 + "\n");
+									
+									// for the 4th file
+									String path4 = "./output/"  + "formula0" + i + "-step04.txt";
+									
+									File file4 = new File(path4);
+									
+									if (!file4.exists()) {
+										File dir = new File(file4.getParent());
+										dir.mkdirs();
+										file4.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream4 = new FileOutputStream(file4);
+									outStream4.write(splitLoop[3].getBytes());
+									outStream4.close();
+									
+									// print the result to the console
+									System.out.println("Output of step4 of this program has been stored in " + path4 + "\n");
+									
+									// for the 5th file
+									String path5 = "./output/"  + "formula0" + i + "-step05.txt";
+									
+									File file5 = new File(path5);
+									
+									if (!file5.exists()) {
+										File dir = new File(file5.getParent());
+										dir.mkdirs();
+										file5.createNewFile();
+									}
+									
+									// write to file
+									FileOutputStream outStream5 = new FileOutputStream(file5);
+									outStream5.write(splitLoop[4].getBytes());
+									outStream5.close();
+									
+									// print the result to the console
+									System.out.println("Output of step5 of this program has been stored in " + path5 + "\n");
+									
 								}
-								
-								FileOutputStream outStream = new FileOutputStream(file);
-								outStream.write(splitedPrinterOutput[i - 1].getBytes());
-								outStream.close();
-								
-								
-								// print the result to the console
-								System.out.println("Formula: " 
-										+ PrettyPrinter.infixFormula.get(i - 1) 
-										+ "\nOutput of this formula has been stored in " + path2 + "\n");
-								
+								// if it's not, then use the normal procedual
+								else {
+									String path2 = "./output/" + "formula0" + i + ".txt";
+									
+									File file = new File(path2);
+									
+									if (!file.exists()) {
+										File dir = new File(file.getParent());
+										dir.mkdirs();
+										file.createNewFile();
+									}
+									
+									FileOutputStream outStream = new FileOutputStream(file);
+									outStream.write(splitedPrinterOutput[i - 1].getBytes());
+									outStream.close();
+									
+									
+									// print the result to the console
+									System.out.println("Formula: " 
+											+ PrettyPrinter.infixFormula.get(i - 1) 
+											+ "\nOutput of this formula has been stored in " + path2 + "\n");
+								}
 							}
 							// iterate through differenceMap, and get the variable name, store it in warning message
 							String varString = "";
@@ -229,7 +440,7 @@ public class TestLogicVer {
 			        	verifier.add(AntlrToVerifier.visit(tree.getChild(i)));
 					}
 			        
-			        System.out.println("AntlrToVerifier.varTypes: " + AntlrToVerifier.varTypes + "\n");
+			        //System.out.println("AntlrToVerifier.varTypes: " + AntlrToVerifier.varTypes + "\n");
 			       
 			        
 			        
@@ -253,7 +464,7 @@ public class TestLogicVer {
 			        
 			        
 			        
-			        System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
+			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
 			        //System.out.println("TypeChecker.arrayMap: " + TypeChecker.arrayMap + "\n");
 			        
 			        
@@ -352,59 +563,67 @@ public class TestLogicVer {
 			            	
 							// write the output to the file
 							for (int i = 1; i <= splitedOutput.length; i++) {
-								// set up the path
-								String path1 = "./output/" + testNum + "-verified0" + i + ".txt";
+								// test to see if it's the method that contains the loop
+								if (splitedOutput[i - 1].contains("splitLoopStep")) {
+									
+									// split the five steps of the loop
+									String[] splitLoop = splitedOutput[i - 1].split("splitLoopStep\\n");
+									
+									// set up the path
+									String path1 = "./output/" + testNum + "-verified0" + i + ".txt";
+									
+									File file = new File(path1);
+									
+									// if file not exist, create the file
+									if (!file.exists()) {
+										File dir = new File(file.getParent());
+										dir.mkdirs();
+										file.createNewFile();
+									}
+									
+									// print the program first
+									writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+									
+									// print the precondition
+									writeToFile = writeToFile.concat("Precondition(Q) : \n");
+									writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
+									// print postcondition
+									writeToFile = writeToFile.concat("Postcondition(R) : \n");
+									writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
+									//print the implementations
+									writeToFile = writeToFile.concat("Implementation(S) : \n");
+									writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
+									// print wp
+									writeToFile = writeToFile.concat("wp(S, R) : \n");
+									writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
+									// add the rest output
+									writeToFile = writeToFile.concat("Proof Obligation: Q => wp(S, R)\n\n");
+									
+									// then test the five steps separately
 								
-								File file = new File(path1);
-								
-								// if file not exist, create the file
-								if (!file.exists()) {
-									File dir = new File(file.getParent());
-									dir.mkdirs();
-									file.createNewFile();
-								}
-								
-								// create z3 context
-								@SuppressWarnings("resource")
-								Context ctx = new Context();
-								
-								// convert the string and sent it to z3 context
-								BoolExpr[] inputExpr = ctx.parseSMTLIB2String(splitedOutput[i - 1].replaceAll("\n", ""), 
-										null, null, null, null);
-								
-								
-								
-								// create solver and add the input expression
-								Solver s = ctx.mkSolver();
-								s.add(inputExpr);
-								
-								// check if the formula is a tautology
-								Status result = s.check();
-								
-								
-								if (result == Status.SATISFIABLE){
-									// if it's method verification
-									if (isMethod) {
-										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
-										
-										// print the precondition
-										writeToFile = writeToFile.concat("Precondition(P) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
-										//print the implementations
-										writeToFile = writeToFile.concat("Implementation(S) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
-										// print postcondition
-										writeToFile = writeToFile.concat("Postcondition(Q) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
-										// print wp
-										writeToFile = writeToFile.concat("wp(S, Q) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
-										// add the rest output
-										writeToFile = writeToFile.concat("Proof Obligation: P => wp(S, Q)\n\n");
-										writeToFile = writeToFile.concat("Not discharged.\n");
+									// test the first step
+									// create z3 context
+									@SuppressWarnings("resource")
+									Context ctx1 = new Context();
+									
+									// convert the string and sent it to z3 context
+									BoolExpr[] input1 = ctx1.parseSMTLIB2String(splitLoop[0].replaceAll("\n", ""), 
+											null, null, null, null);
+									
+									
+									// create solver and add the input expression
+									Solver s1 = ctx1.mkSolver();
+									s1.add(input1);
+									
+									// check if the formula is a tautology
+									Status result1 = s1.check();
+									
+									// if step 1 is not correct
+									if (result1 == Status.SATISFIABLE) {
+										writeToFile = writeToFile.concat("Step1 is not discharged.\n");
 										
 										// get the model
-						            	Model m = s.getModel();
+						            	Model m = s1.getModel();
 						            	
 						            	//System.out.println(m.toString());
 						            	
@@ -455,7 +674,7 @@ public class TestLogicVer {
 						            	if (splitedOutput[i - 1].contains("forall") 
 						            			|| splitedOutput[i - 1].contains("exists")
 						            			|| splitedOutput[i - 1].contains("Array")) {
-						            		writeToFile = writeToFile.concat("Counterexample is not available.");
+						            		writeToFile = writeToFile.concat("Counterexample is not available.\n");
 										}
 						            	// if it does not contain all of them, then the counterexample is available
 						            	else {
@@ -466,12 +685,39 @@ public class TestLogicVer {
 											}
 										}
 									}
-									// if it's normal formula verification
+									// if step 1 is correct
+									else if (result1 == Status.UNSATISFIABLE) {
+										writeToFile = writeToFile.concat("Step1 is discharged.\n");
+									}
 									else {
-										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
-						        		
-						        		// get the model
-						            	Model m = s.getModel();
+										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
+									}
+									
+									
+									// then test step 2
+									// create z3 context
+									@SuppressWarnings("resource")
+									Context ctx2 = new Context();
+									
+									// convert the string and sent it to z3 context
+									BoolExpr[] input2 = ctx2.parseSMTLIB2String(splitLoop[1].replaceAll("\n", ""), 
+											null, null, null, null);
+									
+									
+									
+									// create solver and add the input expression
+									Solver s2 = ctx2.mkSolver();
+									s2.add(input2);
+									
+									// check if the formula is a tautology
+									Status result2 = s2.check();
+									
+									// if step 2 is not correct
+									if (result2 == Status.SATISFIABLE) {
+										writeToFile = writeToFile.concat("Step2 is not discharged.\n");
+										
+										// get the model
+						            	Model m = s2.getModel();
 						            	
 						            	//System.out.println(m.toString());
 						            	
@@ -515,20 +761,96 @@ public class TestLogicVer {
 											varOutput.add(str);
 										}
 						            	
-						            	// also include the initialized variable value
-						            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
-						            		
-											if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
-												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
-														+ "\n");     
+					            	
+						            	// test to see if the counterexample is available
+						            	// if it contains "forall" or "exists" or "Array"
+						            	// then counterexample is not available
+						            	if (splitedOutput[i - 1].contains("forall") 
+						            			|| splitedOutput[i - 1].contains("exists")
+						            			|| splitedOutput[i - 1].contains("Array")) {
+						            		writeToFile = writeToFile.concat("Counterexample is not available.\n");
+										}
+						            	// if it does not contain all of them, then the counterexample is available
+						            	else {
+						            		writeToFile = writeToFile.concat("Counterexample: \n");
+							            	for (int j = 0; j < varOutput.size(); j++) {
+							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+							            				+ " : " + varOutput.get(j)[2] + "\n");
 											}
-											else {
-												writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
-														+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
-														+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
-														+ "\n");
+										}
+									}
+									// if step 2 is correct
+									else if (result2 == Status.UNSATISFIABLE) {
+										writeToFile = writeToFile.concat("Step2 is discharged.\n");
+									}
+									else {
+										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
+									}
+									
+									// test the third step
+									// create z3 context
+									@SuppressWarnings("resource")
+									Context ctx3 = new Context();
+									
+									// convert the string and sent it to z3 context
+									BoolExpr[] input3 = ctx3.parseSMTLIB2String(splitLoop[2].replaceAll("\n", ""), 
+											null, null, null, null);
+									
+									
+									// create solver and add the input expression
+									Solver s3 = ctx3.mkSolver();
+									s3.add(input3);
+									
+									// check if the formula is a tautology
+									Status result3 = s3.check();
+									
+									// if step 3 is not correct
+									if (result3 == Status.SATISFIABLE) {
+										writeToFile = writeToFile.concat("Step3 is not discharged.\n");
+										
+										// get the model
+						            	Model m = s3.getModel();
+						            	
+						            	//System.out.println(m.toString());
+						            	
+						            	// create the list to store only the necessary output string
+						            	List<String[]> varOutput = new ArrayList<String[]>();
+						            	
+						            	// split the z3 outputed model string
+						            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+						            	 
+						            	
+						            	
+						            	for (int j = 1; j < splitModel.length; j++) {
+					
+											String[] varValue = splitModel[j].split(" ");
+											
+//											for (int k = 0; k < varValue.length; k++) {
+//												System.out.println(k + " " + varValue[k]);
+//											}
+											
+											// grab the necessary output
+											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+														+ varValue[6].replaceAll("\\)", "");
 											}
+											else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+												if (varValue.length <= 6) {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												else {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+															+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+												}
+											}
+											else if (varValue[4].charAt(0) == '(') {
+												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+											}
+											
+											
+											
+											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+											varOutput.add(str);
 										}
 						            	
 					            	
@@ -538,52 +860,473 @@ public class TestLogicVer {
 						            	if (splitedOutput[i - 1].contains("forall") 
 						            			|| splitedOutput[i - 1].contains("exists")
 						            			|| splitedOutput[i - 1].contains("Array")) {
-						            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
+						            		writeToFile = writeToFile.concat("Counterexample is not available.\n");
 										}
 						            	// if it does not contain all of them, then the counterexample is available
 						            	else {
-						            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
+						            		writeToFile = writeToFile.concat("Counterexample: \n");
 							            	for (int j = 0; j < varOutput.size(); j++) {
 							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
 							            				+ " : " + varOutput.get(j)[2] + "\n");
 											}
 										}
 									}
-					            } 
-					            else if(result == Status.UNSATISFIABLE) { 
-					            	// if it's method verification
-									if (isMethod) {
-										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
-										
-										// print the precondition
-										writeToFile = writeToFile.concat("Precondition(P) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
-										//print the implementations
-										writeToFile = writeToFile.concat("Implementation(S) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
-										// print postcondition
-										writeToFile = writeToFile.concat("Postcondition(Q) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
-										// print wp
-										writeToFile = writeToFile.concat("wp(S, Q) : \n");
-										writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
-										// add the rest output
-										writeToFile = writeToFile.concat("Proof Obligation: P => wp(S, Q)\n\n");
-										writeToFile = writeToFile.concat("Discharged.\n");
+									// if step 3 is correct
+									else if (result3 == Status.UNSATISFIABLE) {
+										writeToFile = writeToFile.concat("Step3 is discharged.\n");
 									}
 									else {
-										writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nIs a tautology.\n";
+										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
 									}
-					            }
-					            else  {
-					            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
-					            }
+									
+									
+									// test step 4
+									@SuppressWarnings("resource")
+									Context ctx4 = new Context();
+									
+									// convert the string and sent it to z3 context
+									BoolExpr[] input4 = ctx4.parseSMTLIB2String(splitLoop[3].replaceAll("\n", ""), 
+											null, null, null, null);
+									
+									// create solver and add the input expression
+									Solver s4 = ctx4.mkSolver();
+									s4.add(input4);
+									
+									// check if the formula is a tautology
+									Status result4 = s4.check();
+									
+									// if step 4 is not correct
+									if (result4 == Status.SATISFIABLE) {
+										writeToFile = writeToFile.concat("Step4 is not discharged.\n");
+										
+										// get the model
+						            	Model m = s4.getModel();
+						            	
+						            	// create the list to store only the necessary output string
+						            	List<String[]> varOutput = new ArrayList<String[]>();
+						            	
+						            	// split the z3 outputed model string
+						            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+						            	 
+						            	
+						            	
+						            	for (int j = 1; j < splitModel.length; j++) {
+
+											String[] varValue = splitModel[j].split(" ");
+											
+//																	for (int k = 0; k < varValue.length; k++) {
+//																		System.out.println(k + " " + varValue[k]);
+//																	}
+											
+											// grab the necessary output
+											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+												if (varValue.length <= 6) {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												else {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+															+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+												}
+											}
+											else if (varValue[4].charAt(0) == '(') {
+												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+											}
+											
+											
+											
+											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+											varOutput.add(str);
+										}
+						            	
+						        	
+						            	// test to see if the counterexample is available
+						            	// if it contains "forall" or "exists" or "Array"
+						            	// then counterexample is not available
+						            	if (splitedOutput[i - 1].contains("forall") 
+						            			|| splitedOutput[i - 1].contains("exists")
+						            			|| splitedOutput[i - 1].contains("Array")) {
+						            		writeToFile = writeToFile.concat("Counterexample is not available.\n");
+										}
+						            	// if it does not contain all of them, then the counterexample is available
+						            	else {
+						            		writeToFile = writeToFile.concat("Counterexample: \n");
+							            	for (int j = 0; j < varOutput.size(); j++) {
+							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+							            				+ " : " + varOutput.get(j)[2] + "\n");
+											}
+										}
+									}
+									// if step 4 is correct
+									else if (result4 == Status.UNSATISFIABLE) {
+										writeToFile = writeToFile.concat("Step4 is discharged.\n");
+									}
+									else {
+										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
+									}
+									
+									// test the 5th step
+									// create z3 context
+									@SuppressWarnings("resource")
+									Context ctx5 = new Context();
+									
+									// convert the string and sent it to z3 context
+									BoolExpr[] input5 = ctx5.parseSMTLIB2String(splitLoop[4].replaceAll("\n", ""), 
+											null, null, null, null);
+									
+									// create solver and add the input expression
+									Solver s5 = ctx5.mkSolver();
+									s5.add(input5);
+									
+									// check if the formula is a tautology
+									Status result5 = s5.check();
+									
+									// if step 5 is not correct
+									if (result5 == Status.SATISFIABLE) {
+										writeToFile = writeToFile.concat("Step5 is not discharged.\n");
+										
+										// get the model
+						            	Model m = s5.getModel();
+						            	
+						            	// create the list to store only the necessary output string
+						            	List<String[]> varOutput = new ArrayList<String[]>();
+						            	
+						            	// split the z3 outputed model string
+						            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+						            	 
+						            	
+						            	
+						            	for (int j = 1; j < splitModel.length; j++) {
+
+											String[] varValue = splitModel[j].split(" ");
+											
+//																	for (int k = 0; k < varValue.length; k++) {
+//																		System.out.println(k + " " + varValue[k]);
+//																	}
+											
+											// grab the necessary output
+											if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+												varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+														+ varValue[6].replaceAll("\\)", "");
+											}
+											else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+												if (varValue.length <= 6) {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												else {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+															+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+												}
+											}
+											else if (varValue[4].charAt(0) == '(') {
+												varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+											}
+											
+											
+											
+											String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+											varOutput.add(str);
+										}
+						            	
+						        	
+						            	// test to see if the counterexample is available
+						            	// if it contains "forall" or "exists" or "Array"
+						            	// then counterexample is not available
+						            	if (splitedOutput[i - 1].contains("forall") 
+						            			|| splitedOutput[i - 1].contains("exists")
+						            			|| splitedOutput[i - 1].contains("Array")) {
+						            		writeToFile = writeToFile.concat("Counterexample is not available.\n");
+										}
+						            	// if it does not contain all of them, then the counterexample is available
+						            	else {
+						            		writeToFile = writeToFile.concat("Counterexample: \n");
+							            	for (int j = 0; j < varOutput.size(); j++) {
+							            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+							            				+ " : " + varOutput.get(j)[2] + "\n");
+											}
+										}
+									}
+									// if step 5 is correct
+									else if (result5 == Status.UNSATISFIABLE) {
+										writeToFile = writeToFile.concat("Step5 is discharged.\n");
+									}
+									else {
+										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
+									}
+									
+									
+									
+									
+									
+									FileOutputStream outStream = new FileOutputStream(file);
+									outStream.write(writeToFile.getBytes());
+									outStream.close();
+									
+									System.out.println(writeToFile);
+									
+								}
+								// if it's not the method that contains the loop
+								else {
+									// set up the path
+									String path1 = "./output/" + testNum + "-verified0" + i + ".txt";
+									
+									File file = new File(path1);
+									
+									// if file not exist, create the file
+									if (!file.exists()) {
+										File dir = new File(file.getParent());
+										dir.mkdirs();
+										file.createNewFile();
+									}
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									// create z3 context
+									@SuppressWarnings("resource")
+									Context ctx = new Context();
+									
+									// convert the string and sent it to z3 context
+									BoolExpr[] inputExpr = ctx.parseSMTLIB2String(splitedOutput[i - 1].replaceAll("\n", ""), 
+											null, null, null, null);
+									
+									
+									
+									// create solver and add the input expression
+									Solver s = ctx.mkSolver();
+									s.add(inputExpr);
+									
+									// check if the formula is a tautology
+									Status result = s.check();
+									
+									
+									if (result == Status.SATISFIABLE){
+										// if it's method verification
+										if (isMethod) {
+											writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+											
+											// print the precondition
+											writeToFile = writeToFile.concat("Precondition(Q) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
+											// print postcondition
+											writeToFile = writeToFile.concat("Postcondition(R) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
+											//print the implementations
+											writeToFile = writeToFile.concat("Implementation(S) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
+											// print wp
+											writeToFile = writeToFile.concat("wp(S, R) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
+											// add the rest output
+											writeToFile = writeToFile.concat("Proof Obligation: Q => wp(S, R)\n\n");
+											writeToFile = writeToFile.concat("Not discharged.\n");
+											
+											// get the model
+							            	Model m = s.getModel();
+							            	
+							            	//System.out.println(m.toString());
+							            	
+							            	// create the list to store only the necessary output string
+							            	List<String[]> varOutput = new ArrayList<String[]>();
+							            	
+							            	// split the z3 outputed model string
+							            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+							            	 
+							            	
+							            	
+							            	for (int j = 1; j < splitModel.length; j++) {
+						
+												String[] varValue = splitModel[j].split(" ");
+												
+//												for (int k = 0; k < varValue.length; k++) {
+//													System.out.println(k + " " + varValue[k]);
+//												}
+												
+												// grab the necessary output
+												if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+													varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+															+ varValue[6].replaceAll("\\)", "");
+												}
+												else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+													if (varValue.length <= 6) {
+														varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+													}
+													else {
+														varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+																+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+													}
+												}
+												else if (varValue[4].charAt(0) == '(') {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												
+												
+												
+												String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+												varOutput.add(str);
+											}
+							            	
+						            	
+							            	// test to see if the counterexample is available
+							            	// if it contains "forall" or "exists" or "Array"
+							            	// then counterexample is not available
+							            	if (splitedOutput[i - 1].contains("forall") 
+							            			|| splitedOutput[i - 1].contains("exists")
+							            			|| splitedOutput[i - 1].contains("Array")) {
+							            		writeToFile = writeToFile.concat("Counterexample is not available.");
+											}
+							            	// if it does not contain all of them, then the counterexample is available
+							            	else {
+							            		writeToFile = writeToFile.concat("Counterexample: \n");
+								            	for (int j = 0; j < varOutput.size(); j++) {
+								            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+								            				+ " : " + varOutput.get(j)[2] + "\n");
+												}
+											}
+										}
+										// if it's normal formula verification
+										else {
+											writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+							        		
+							        		// get the model
+							            	Model m = s.getModel();
+							            	
+							            	//System.out.println(m.toString());
+							            	
+							            	// create the list to store only the necessary output string
+							            	List<String[]> varOutput = new ArrayList<String[]>();
+							            	
+							            	// split the z3 outputed model string
+							            	String[] splitModel = m.toString().replaceAll("\n", "").split("\\(define-fun ");
+							            	 
+							            	
+							            	
+							            	for (int j = 1; j < splitModel.length; j++) {
+						
+												String[] varValue = splitModel[j].split(" ");
+												
+//												for (int k = 0; k < varValue.length; k++) {
+//													System.out.println(k + " " + varValue[k]);
+//												}
+												
+												// grab the necessary output
+												if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '/') {
+													varValue[4] = varValue[5] + varValue[4].replaceAll("\\(", "") 
+															+ varValue[6].replaceAll("\\)", "");
+												}
+												else if (varValue[4].charAt(0) == '(' && varValue[4].charAt(1) == '-') {
+													if (varValue.length <= 6) {
+														varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+													}
+													else {
+														varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[6]
+																+ varValue[5].replaceAll("\\(", "") + varValue[7].replaceAll("\\)", "");
+													}
+												}
+												else if (varValue[4].charAt(0) == '(') {
+													varValue[4] = varValue[4].replaceAll("\\(", "") + varValue[5].replaceAll("\\)", "");
+												}
+												
+												
+												
+												String[] str = {varValue[0], varValue[2], varValue[4].replaceAll("\\)", "")};
+												varOutput.add(str);
+											}
+							            	
+							            	// also include the initialized variable value
+							            	for (int j = 0; j < PrettyPrinter.usedVarList.get(i - 1).size(); j++) {
+							            		
+												if (VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b == null) {
+													writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+															+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a
+															+ "\n");     
+												}
+												else {
+													writeToFile = writeToFile.concat("    " + PrettyPrinter.usedVarList.get(i - 1).get(j)
+															+ " : " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).a   
+															+ " = " + VarPrinter.allVarMap.get(PrettyPrinter.usedVarList.get(i - 1).get(j)).b   
+															+ "\n");
+												}
+											}
+							            	
+						            	
+							            	// test to see if the counterexample is available
+							            	// if it contains "forall" or "exists" or "Array"
+							            	// then counterexample is not available
+							            	if (splitedOutput[i - 1].contains("forall") 
+							            			|| splitedOutput[i - 1].contains("exists")
+							            			|| splitedOutput[i - 1].contains("Array")) {
+							            		writeToFile = writeToFile.concat("\nIs not a tautology.\nCounterexample is not available.");
+											}
+							            	// if it does not contain all of them, then the counterexample is available
+							            	else {
+							            		writeToFile = writeToFile.concat("\nIs not a tautology. Here is a counter example: \n");
+								            	for (int j = 0; j < varOutput.size(); j++) {
+								            		writeToFile = writeToFile.concat("    " + varOutput.get(j)[0] 
+								            				+ " : " + varOutput.get(j)[2] + "\n");
+												}
+											}
+										}
+						            } 
+						            else if(result == Status.UNSATISFIABLE) { 
+						            	// if it's method verification
+										if (isMethod) {
+											writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nWhere: \n";
+											
+											// print the precondition
+											writeToFile = writeToFile.concat("Precondition(Q) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.preconditions.get(methondName));
+											// print postcondition
+											writeToFile = writeToFile.concat("Postcondition(R) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.postconditions.get(methondName));
+											//print the implementations
+											writeToFile = writeToFile.concat("Implementation(S) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
+											// print wp
+											writeToFile = writeToFile.concat("wp(S, R) : \n");
+											writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
+											// add the rest output
+											writeToFile = writeToFile.concat("Proof Obligation: Q => wp(S, R)\n\n");
+											writeToFile = writeToFile.concat("Discharged.\n");
+										}
+										else {
+											writeToFile = PrettyPrinter.infixFormula.get(i - 1) + "\nIs a tautology.\n";
+										}
+						            }
+						            else  {
+						            	writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
+						            }
+									
+									FileOutputStream outStream = new FileOutputStream(file);
+									outStream.write(writeToFile.getBytes());
+									outStream.close();
+									
+									System.out.println(writeToFile);
+								}
 								
-								FileOutputStream outStream = new FileOutputStream(file);
-								outStream.write(writeToFile.getBytes());
-								outStream.close();
 								
-								System.out.println(writeToFile);
 							}
 						}
 						/* *****************************************************************************************

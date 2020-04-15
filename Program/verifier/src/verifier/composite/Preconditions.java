@@ -17,8 +17,13 @@ public class Preconditions extends Contracts {
 	}
 	
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Verifier> contractsCopy = new ArrayList<Verifier>();
+		
+		for (int i = 0; i < this.contracts.size(); i++) {
+			contractsCopy.add(this.contracts.get(i).copy());
+		}
+		
+		return new Preconditions(contractsCopy);
 	}
 
 }

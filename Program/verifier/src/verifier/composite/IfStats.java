@@ -22,7 +22,13 @@ public class IfStats extends AlternationStats {
 	}
 	
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Verifier conditionCopy = this.condition.copy();
+		
+		List<Verifier> ifImpsCopy = new ArrayList<Verifier>();
+		for (int i = 0; i < this.ifImps.size(); i++) {
+			ifImpsCopy.add(this.ifImps.get(i).copy());
+		}
+		
+		return new IfStats(conditionCopy, ifImpsCopy);
 	}
 }

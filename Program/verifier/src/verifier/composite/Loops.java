@@ -32,8 +32,18 @@ public class Loops extends Implementations {
 	
 	@Override
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Verifier initImpCopy = this.initImp.copy();
+		
+		Verifier invariantCopy = this.invariant.copy();
+		
+		Verifier exitConditionCopy = this.exitCondition.copy();
+		
+		Verifier loopBodyCopy = this.loopBody.copy();
+		
+		Verifier variantCopy = this.variant.copy();
+		
+		return new Loops(initImpCopy, invariantCopy, exitConditionCopy, 
+				loopBodyCopy, variantCopy);
 	}
 
 }

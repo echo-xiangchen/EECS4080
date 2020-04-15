@@ -79,7 +79,7 @@ public interface Visitor {
 	
 	
 	// method
-	void visitMethods(Methods methods);
+	void visitMethods(Methods m);
 	
 	
 	// assignment
@@ -97,7 +97,7 @@ public interface Visitor {
 	
 	
 	// loops
-	void visitLoops(Loops loops);
+	void visitLoops(Loops l);
 	
 	void visitInitImp(InitImp s);
 	

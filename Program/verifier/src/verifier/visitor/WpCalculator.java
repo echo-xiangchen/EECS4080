@@ -1,15 +1,10 @@
 package verifier.visitor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
+import java.util.*;
 import org.antlr.v4.runtime.misc.Pair;
 
 import modes.Verification;
-import types.BoolArray;
-import types.IntArray;
-import types.RealArray;
+import types.*;
 import verifier.composite.*;
 
 public class WpCalculator implements Visitor{
@@ -24,6 +19,9 @@ public class WpCalculator implements Visitor{
 	
 	// postcondition
 	public Verifier postcondition;
+	
+	// wp list for loops
+	public List<Verifier> loopWpList;
 	
 	// TODO Constructors
 	// the wpcalculator constructor
@@ -59,9 +57,9 @@ public class WpCalculator implements Visitor{
 		}
 		
 		// if it's result assignment
-		if ((v1.name != null) && v1.name.equals("Result")) {
-			return true;
-		}
+//		if ((v1.name != null) && v1.name.equals("Result")) {
+//			return true;
+//		}
 		
 		// if they have the same class
 		if (v1.getClass().equals(v2.getClass())) {
@@ -83,6 +81,9 @@ public class WpCalculator implements Visitor{
 					return v1.name.equals(v2.name);
 				}
 			}
+			else if (v1 instanceof Results) {
+				return v1.name.equals(v2.name);
+			}
 		}
 		return false;
 	}
@@ -92,6 +93,7 @@ public class WpCalculator implements Visitor{
 	public void BinaryExprSubstitute(BinaryExpr b, Pair<Verifier, Verifier> p) {
 		// substitute left child
 		if (isEqual(b.left(), p.a) || isEqual(b.right(), p.a)) {
+			// for normal variable
 			if (isEqual(b.left(), p.a)) {
 				b.children.set(0, p.b);
 			}
@@ -101,6 +103,21 @@ public class WpCalculator implements Visitor{
 				b.children.set(1, p.b);
 			}
 		}
+		// do the substitution for array index as well
+		else if (b.left() instanceof ArrayVar || b.right() instanceof ArrayVar) {
+			if (b.left().index != null) {
+				if (isEqual(b.left().index, p.a)) {
+					b.left().index = p.b.copy();
+				}
+			}
+			
+			if (b.right().index != null) {
+				if (isEqual(b.right().index, p.a)) {
+					b.right().index = p.b.copy();
+				}
+			}
+		}
+		// then recuisively call this method
 		else {
 			WpCalculator leftCalculator = new WpCalculator(precondition, postcondition, substitutePair);
 			b.left().accept(leftCalculator);
@@ -115,6 +132,14 @@ public class WpCalculator implements Visitor{
 		// substitute child
 		if (isEqual(u.child, p.a)) {
 			u.child = p.b;
+		}
+		// do the substitution for array index as well
+		else if (u.child instanceof ArrayVar) {
+			if (u.child.index != null) {
+				if (isEqual(u.child.index, p.a)) {
+					u.child.index = p.b.copy();
+				}
+			}
 		}
 		else {
 			WpCalculator calculator = new WpCalculator(precondition, postcondition, substitutePair);
@@ -135,110 +160,6 @@ public class WpCalculator implements Visitor{
 		}
 	}
 	
-//	/*
-//	 * helper method for copying the verifier obj (from v1 to v2)
-//	 */
-//	public Verifier copy(Verifier v1) {
-//		if (v1 instanceof Negation) {
-//			return new Negation(copy(v1.child));
-//		}
-//		else if (v1 instanceof Conjunction) {
-//			return new Conjunction(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Disjunction) {
-//			return new Disjunction(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Implication) {
-//			return new Implication(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Iff) {
-//			return new Iff(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Equal) {
-//			return new Equal(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof GreaterThan) {
-//			return new GreaterThan(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof LessThan) {
-//			return new LessThan(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof GreaterOrEqual) {
-//			return new GreaterOrEqual(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof LessOrEqual) {
-//			return new LessOrEqual(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Addition) {
-//			return new Addition(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Subtraction) {
-//			return new Subtraction(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Multiplication) {
-//			return new Multiplication(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Division) {
-//			return new Division(copy(v1.left()), copy(v1.right()));
-//		}
-//		else if (v1 instanceof Forall) {
-//			Forall v = (Forall) v1;
-//			List<Verifier> list = new ArrayList<Verifier>();
-//			for (int i = 0; i < v.quantifyList.size(); i++) {
-//				list.add(copy(v.quantifyList.get(i)));
-//			}
-//			return new Forall(list, copy(((Forall) v1).expr));
-//		}
-//		else if (v1 instanceof Exists) {
-//			Exists v = (Exists) v1;
-//			List<Verifier> list = new ArrayList<Verifier>();
-//			for (int i = 0; i < v.quantifyList.size(); i++) {
-//				list.add(copy(v.quantifyList.get(i)));
-//			}
-//			return new Exists(list, copy(((Forall) v1).expr));
-//		}
-//		else if (v1 instanceof BoolVar) {
-//			return new BoolVar(((BoolVar) v1).name, new Verification());
-//		}
-//		else if (v1 instanceof IntVar) {
-//			return new IntVar(((IntVar) v1).name, new Verification());
-//		}
-//		else if (v1 instanceof RealVar) {
-//			return new RealVar(((RealVar) v1).name, new Verification());
-//		}
-//		else if (v1 instanceof BoolArrayVar) {
-//			return new BoolArrayVar(v1.name, new Verification(), copy(v1.index));
-//		}
-//		else if (v1 instanceof IntArrayVar) {
-//			return new IntArrayVar(((IntArrayVar) v1).name, new Verification(), copy(v1.index));
-//		}
-//		else if (v1 instanceof RealArrayVar) {
-//			return new RealArrayVar(((RealArrayVar) v1).name, new Verification(), copy(v1.index));
-//		}
-//		else if (v1 instanceof BoolTrue) {
-//			return new BoolTrue(v1.name);
-//		}
-//		else if (v1 instanceof BoolFalse) {
-//			return new BoolFalse(v1.name);
-//		}
-//		else if (v1 instanceof Olds) {
-//			if (v1.index != null) {
-//				return new Olds(v1.name, copy(v1.index), ((Olds) v1).type);
-//			}
-//			else {
-//				return new Olds(v1.name, ((Olds) v1).type);
-//			}
-//		}
-//		else if (v1 instanceof Results) {
-//			if (v1.index != null) {
-//				return new Results(copy(v1.index));
-//			}
-//			else {
-//				return new Results();
-//			}
-//		}
-//		return null;
-//	}
 	
 	// assignments
 	@Override
@@ -291,21 +212,21 @@ public class WpCalculator implements Visitor{
 			postconditionList.add(postcondition.copy());
 		}
 		
-		postconditionList.add(postcondition.copy());
+		if (a.elseStat != null) {
+			postconditionList.add(postcondition.copy());
+		}
 		
-		
-		//Verifier R = copy(postcondition);
 		
 		
 		// condition list that stores all the conditions for if statement and elseif statement
 		List<Verifier> conditionList = new ArrayList<Verifier>();
 		
 		// add if statement condition
-		conditionList.add(((IfStats) a.ifStat).condition);
+		conditionList.add(((IfStats) a.ifStat).condition.copy());
 		
 		// add elseif statement condition
 		for (int i = 0; i < a.elseifStat.size(); i++) {
-			conditionList.add(((ElseifStats) a.elseifStat.get(i)).condition);
+			conditionList.add(((ElseifStats) a.elseifStat.get(i)).condition.copy());
 		}
 		
 		
@@ -317,21 +238,21 @@ public class WpCalculator implements Visitor{
 		List<Verifier> preconditionList = new ArrayList<Verifier>();
 		
 		// add the if statement precondition
-		preconditionList.add(new Conjunction(precondition, ((IfStats) a.ifStat).condition));
+		preconditionList.add(((IfStats) a.ifStat).condition.copy());
+		
 		
 		/* smallPres will be the small preconditions for each elseif statement
 		 * e.g. for the first elseif statement, the precondition will be (Q and not B1 and B2)
 		 * then smallPres will be (Q and not B1)
 		 */
-		Verifier smallPres = new Conjunction(precondition, new Negation(conditionList.get(0)));
+		Verifier smallPres = new Negation(conditionList.get(0).copy());
 		
 		for (int i = 0; i < a.elseifStat.size(); i++) {
-			preconditionList.add(new Conjunction(smallPres, conditionList.get(i + 1)));
-			smallPres = new Conjunction(smallPres, new Negation(conditionList.get(i + 1)));
+			preconditionList.add(new Conjunction(smallPres.copy(), conditionList.get(i + 1).copy()));
+			smallPres = new Conjunction(smallPres.copy(), new Negation(conditionList.get(i + 1).copy()));
 		}
 		
-		preconditionList.add(smallPres);
-		
+		preconditionList.add(smallPres.copy());
 		
 		/*
 		 * create a list to store the wp for each small part
@@ -342,88 +263,414 @@ public class WpCalculator implements Visitor{
 		List<Verifier> wpList = new ArrayList<Verifier>();
 		
 		// calculate the wp for if statement
-		WpCalculator ifCalculator = new WpCalculator(preconditionList.get(0), postconditionList.get(0));
+		WpCalculator ifCalculator = new WpCalculator(preconditionList.get(0).copy(), 
+				postconditionList.get(0).copy());
 		a.ifStat.accept(ifCalculator);
 		
-		// add the wp of if statement to the list
-		wpList.add(ifCalculator.postcondition);
+		// the ifCalculator will return wp(S1, R)
+		// create (B => wp(S1, R) and add it to wpList
+		wpList.add(new Implication(preconditionList.get(0), ifCalculator.postcondition.copy()));
+		
 		
 		// calculate the elseif statement wp and store it to the list
 		for (int i = 0; i < a.elseifStat.size(); i++) {
-			WpCalculator elseifCalculator = new WpCalculator(preconditionList.get(i + 1), postconditionList.get(i + 1));
+			
+			// elseifcalculator will return wp(S2, R), wp(S3, R), ... based on the number of elseif statement
+			WpCalculator elseifCalculator = new WpCalculator(preconditionList.get(i + 1), 
+					postconditionList.get(i + 1));
 			a.elseifStat.get(i).accept(elseifCalculator);
 			
-			wpList.add(elseifCalculator.postcondition);
+			// create (not B1 and B2) => wp(S2, R)
+			wpList.add(new Implication(preconditionList.get(i + 1), elseifCalculator.postcondition.copy()));
 		}
 		
+		
+		// the elsecalculator will return wp(S3, R) - the last part of the alternation
 		// calculate the else statement wp and store it to the list
 		if (a.elseStat != null) {
-			WpCalculator elseCalculator = new WpCalculator(preconditionList.get(preconditionList.size() - 1), postconditionList.get(postconditionList.size() - 1));
+			WpCalculator elseCalculator = new WpCalculator(preconditionList.get(preconditionList.size() - 1), 
+					postconditionList.get(postconditionList.size() - 1));
 			a.elseStat.accept(elseCalculator);
 			
-			wpList.add(elseCalculator.postcondition);
+			wpList.add(new Implication(preconditionList.get(preconditionList.size() - 1), elseCalculator.postcondition.copy()));
 		}
-		
+		// if there is no else statement, still need to add the wp
+		else {
+			wpList.add(new Implication(preconditionList.get(preconditionList.size() - 1), 
+					postconditionList.get(postconditionList.size()-1)));
+		}
 	
 		// calculate the final wp
-		postcondition = wpList.get(0);
+		postcondition = wpList.get(0).copy();
 		
 		for (int i = 1; i < wpList.size(); i++) {
-			postcondition = new Conjunction(postcondition, wpList.get(i));
+			postcondition = new Conjunction(postcondition.copy(), wpList.get(i));
 		}
 	}
 	
 	
 	@Override
 	public void visitIfStats(IfStats s) {
-		// create the small method
-		Methods ifMethod = new Methods("ifMethod", null, null, precondition, null, s.ifImps, postcondition, null);
+		// for if statement the small wp should be B => wp(S1, R)
+		Verifier wp = postcondition.copy();
 		
-		// do the calculation
-		WpCalculator ifCalculator = new WpCalculator(precondition, postcondition);
-		ifMethod.accept(ifCalculator);
+		// calculate wp(S1, R)
+		for (int i = s.ifImps.size() - 1; i >= 0; i--) {
+			WpCalculator calculator = new WpCalculator(precondition, wp);
+			s.ifImps.get(i).accept(calculator);
+			
+			wp = calculator.postcondition.copy();
+		}
 		
-		// store the value
-		postcondition = ifCalculator.postcondition;
+		// return the wp(S1, R)
+		postcondition = wp.copy();
 	}
 
 	@Override
 	public void visitElseifStats(ElseifStats s) {
-		// create the small method
-		Methods elseifMethod = new Methods("elseifMethod", null, null, precondition, null, s.elseifImps, postcondition, null);
+		// for elseif statement the small wp should be wp(S2, R)
+		Verifier wp = postcondition.copy();
 		
-		// do the calculation
-		WpCalculator elseifCalculator = new WpCalculator(precondition, postcondition);
-		elseifMethod.accept(elseifCalculator);
+		// calculate wp(S2, R)
+		for (int i = s.elseifImps.size() - 1; i >= 0; i--) {
+			WpCalculator calculator = new WpCalculator(precondition, wp);
+			s.elseifImps.get(i).accept(calculator);
+			
+			wp = calculator.postcondition.copy();
+		}
 		
-		// store the value
-		postcondition = elseifCalculator.postcondition;
-		
+		// return wp(S2, R)
+		postcondition = wp.copy();
 	}
 
 	@Override
 	public void visitElseStats(ElseStats s) {
+		// for else statement, the small wp should be wp(S3, R)
+		Verifier wp = postcondition.copy();
+		
+		// calculate wp(S3, R)
+		for (int i = s.elseImps.size() - 1; i >= 0; i--) {
+			WpCalculator calculator = new WpCalculator(precondition, wp);
+			s.elseImps.get(i).accept(calculator);
+			
+			wp = calculator.postcondition.copy();
+		}
+		
+		// return wp(S3, R)
+		postcondition = wp.copy();
+	}
+	
+	@Override
+	public void visitLoops(Loops l) {
+		// create the list to store the wp for each step
+		List<Verifier> wpList = new ArrayList<Verifier>();
+		
+		// calculate the five steps seperately
+		
+		/*
+		 * first step: Given precondition Q, the initialization step Sinit establishes LI
+		 * {Q} Sinit {I}
+		 */
+		
+		Verifier step1pre = precondition.copy();
+		List<Verifier> step1imps = ((InitImp) l.initImp).initImp;		
+		
+		Verifier step1post = ((InvariantStat) l.invariant).invariant.b.copy();
+		
+		
 		// create the small method
-		Methods elseMethod = new Methods("elseMethod", null, null, precondition, null, s.elseImps, postcondition, null);
+		Methods step1 = new Methods("step1", null, null, step1pre, null, step1imps, step1post, null);
+		
+		//do the calculation
+		WpCalculator first = new WpCalculator(step1pre, step1post);
+		step1.accept(first);
+		
+		wpList.add(first.postcondition.copy());
+		
+//		// print first step
+//		InfixPrinter step1prePrinter = new InfixPrinter();
+//		step1pre.accept(step1prePrinter);
+//		
+//		String step1impsStr = "";
+//		for (int i = 0; i < step1imps.size(); i++) {
+//			InfixPrinter step1impsPrinter = new InfixPrinter();
+//			step1imps.get(i).accept(step1impsPrinter);
+//			step1impsStr = step1impsStr + step1impsPrinter.infixOutput;
+//		}
+//		
+//		InfixPrinter step1postPrinter = new InfixPrinter();
+//		step1post.accept(step1postPrinter);
+//		
+//		InfixPrinter wpPrinter1 = new InfixPrinter();
+//		wpList.get(0).accept(wpPrinter1);
+//		
+//		System.out.println("Step 1: \n");
+//		System.out.println("{" + step1prePrinter.infixOutput + "}");
+//		System.out.println(step1impsStr);
+//		System.out.println("{" + step1postPrinter.infixOutput + "}");
+//		System.out.println("wp: " + wpPrinter1.infixOutput);
+//		System.out.println();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
+		 * second step: at the end of Sbody, if not yet to exit, LI is maintained
+		 * {I and (not B)} Sbody {I}
+		 */
+		Verifier step2pre = new Conjunction(((InvariantStat) l.invariant).invariant.b.copy(), new Negation(((ExitCondition) l.exitCondition).condition.copy()));
+		List<Verifier> step2imps = ((LoopBody) l.loopBody).loopBodyImps;
+		
+		
+//		List<Verifier> step2imps = new ArrayList<Verifier>();
+//		for (int i = 0; i < ((LoopBody) l.loopBody).loopBodyImps.size(); i++) {
+//			step2imps.add(((LoopBody) l.loopBody).loopBodyImps.get(i).copy());
+//		}
+		
+		
+		
+		Verifier step2post = ((InvariantStat) l.invariant).invariant.b.copy();
+	
+		// create the small method
+		Methods step2 = new Methods("step2", null, null, step2pre, null, step2imps, step2post, null);
 		
 		// do the calculation
-		WpCalculator elseCalculator = new WpCalculator(precondition, postcondition);
-		elseMethod.accept(elseCalculator);
+		WpCalculator second = new WpCalculator(step2pre, step2post);
+		step2.accept(second);
 		
-		postcondition = elseCalculator.postcondition;
+		wpList.add(second.postcondition.copy());
+		
+//		// print second step
+//		InfixPrinter step2prePrinter = new InfixPrinter();
+//		step2pre.accept(step2prePrinter);
+//		
+//		String step2impsStr = "";
+//		for (int i = 0; i < step2imps.size(); i++) {
+//			InfixPrinter step2impsPrinter = new InfixPrinter();
+//			step2imps.get(i).accept(step2impsPrinter);
+//			step2impsStr = step2impsStr + step2impsPrinter.infixOutput;
+//		}
+//		
+//		InfixPrinter step2postPrinter = new InfixPrinter();
+//		step2post.accept(step2postPrinter);
+//		
+//		InfixPrinter wpPrinter2 = new InfixPrinter();
+//		wpList.get(1).accept(wpPrinter2);
+//		
+//		System.out.println("Step 2: \n");
+//		System.out.println("{" + step2prePrinter.infixOutput + "}");
+//		System.out.println(step2impsStr);
+//		System.out.println("{" + step2postPrinter.infixOutput + "}");
+//		System.out.println("wp: " + wpPrinter2.infixOutput);
+//		System.out.println();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		/*
+//		 * third step: if ready to exit and LI maintained, postcondition R is established
+//		 * (I and B) => R
+//		 */
+		Verifier step3formula = new Implication(new Conjunction(((InvariantStat) l.invariant).invariant.b.copy(), 
+				((ExitCondition) l.exitCondition).condition.copy()), postcondition.copy());
+		
+		wpList.add(step3formula);
+		
+		
+//		InfixPrinter wpPrinter3 = new InfixPrinter();
+//		wpList.get(2).accept(wpPrinter3);	
+//		
+//		System.out.println("Step 3: \n");
+//		System.out.println("wp: " + wpPrinter3.infixOutput);
+//		System.out.println();
+		
+		
+		
+		
+		
+		
+//		/*
+//		 * fourth step: given LI, and not yet to exit, Sbody maintains LV as non-negative
+//		 * (I and (not B)) Sbody {V >= 0}
+//		 */
+//		
+		Verifier step4pre = new Conjunction(((InvariantStat) l.invariant).invariant.b.copy(), new Negation(((ExitCondition) l.exitCondition).condition.copy()));
+		List<Verifier> step4imps = ((LoopBody) l.loopBody).loopBodyImps;
+		
+//		List<Verifier> step4imps = new ArrayList<Verifier>();
+//		for (int i = 0; i < ((LoopBody) l.loopBody).loopBodyImps.size(); i++) {
+//			step4imps.add(((LoopBody) l.loopBody).loopBodyImps.get(i).copy());
+//		}
+		
+		
+		Verifier step4post = new GreaterOrEqual(((VariantStat) l.variant).variant.b.copy(), new IntConst("0"));
+		
+		// create the small method
+		Methods step4 = new Methods("step4", null, null, step4pre, null, step4imps, step4post, null);
+		
+		// do the calculation
+		WpCalculator fourth = new WpCalculator(step4pre, step4post);
+		step4.accept(fourth);
+		
+		wpList.add(fourth.postcondition.copy());
+		
+//		// print fourth step
+//		InfixPrinter step4prePrinter = new InfixPrinter();
+//		step4pre.accept(step4prePrinter);
+//		
+//		String step4impsStr = "";
+//		for (int i = 0; i < step4imps.size(); i++) {
+//			InfixPrinter step4impsPrinter = new InfixPrinter();
+//			step4imps.get(i).accept(step4impsPrinter);
+//			step4impsStr = step4impsStr + step4impsPrinter.infixOutput;
+//		}
+//		
+//		InfixPrinter step4postPrinter = new InfixPrinter();
+//		step4post.accept(step4postPrinter);
+//		
+//		InfixPrinter wpPrinter4 = new InfixPrinter();
+//		wpList.get(3).accept(wpPrinter4);
+//		
+//		System.out.println("Step 4: \n");
+//		System.out.println("{" + step4prePrinter.infixOutput + "}");
+//		System.out.println(step4impsStr);
+//		System.out.println("{" + step4postPrinter.infixOutput + "}");
+//		System.out.println("wp: " + wpPrinter4.infixOutput);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
+		 * fifth step: given LI, and not yet to exit, Sbody decrements LV
+		 * (I and (not B)) Sbody {V <= V0}
+		 */
+		
+		Verifier step5pre = new Conjunction(((InvariantStat) l.invariant).invariant.b.copy(), new Negation(((ExitCondition) l.exitCondition).condition.copy()));
+		// to calculate V0, need to modify Sbody
+		List<Verifier> step5imps = new ArrayList<Verifier>();
+		step5imps.add(new Assignments("variant", ((VariantStat) l.variant).variant.b.copy()));
+		
+		for (int i = 0; i < ((LoopBody) l.loopBody).loopBodyImps.size(); i++) {
+			step5imps.add(((LoopBody) l.loopBody).loopBodyImps.get(i).copy());
+		}
+		
+		Verifier step5post = new LessThan(((VariantStat) l.variant).variant.b.copy(), new IntVar("variant", new Verification()));
+		
+		// create the small method
+		Methods step5 = new Methods("step5", null, null, step5pre, null, step5imps, step5post, null);
+		
+		// do the calculation
+		WpCalculator fifth = new WpCalculator(step5pre, step5post);
+		step5.accept(fifth);
+		
+		wpList.add(fifth.postcondition.copy());
+	
+
+		
+		
+		loopWpList = new ArrayList<Verifier>(wpList);
+		
+		
+//		// print fifth step
+//		InfixPrinter step5prePrinter = new InfixPrinter();
+//		step5pre.accept(step5prePrinter);
+//		
+//		String step5impsStr = "";
+//		for (int i = 0; i < step5imps.size(); i++) {
+//			InfixPrinter step5impsPrinter = new InfixPrinter();
+//			step5imps.get(i).accept(step5impsPrinter);
+//			step5impsStr = step5impsStr + step5impsPrinter.infixOutput + "\n";
+//		}
+//		
+//		InfixPrinter step5postPrinter = new InfixPrinter();
+//		step5post.accept(step5postPrinter);
+//		
+//		InfixPrinter wpPrinter5 = new InfixPrinter();
+//		wpList.get(4).accept(wpPrinter5);
+//		
+//		System.out.println("Step 5: \n");
+//		System.out.println("{" + step5prePrinter.infixOutput + "}");
+//		System.out.println(step5impsStr);
+//		System.out.println("{" + step5postPrinter.infixOutput + "}");
+//		System.out.println("wp: " + wpPrinter5.infixOutput);
+		
+//		// calculate the final wp
+//		postcondition = wpList.get(0).copy();
+//		
+//		for (int i = 1; i < wpList.size(); i++) {
+//			postcondition = new Conjunction(postcondition, wpList.get(i));
+//		}
+	}
+
+	@Override
+	public void visitInitImp(InitImp s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitInvariantStat(InvariantStat s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitExitCondition(ExitCondition s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitLoopBody(LoopBody s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitVariantStat(VariantStat s) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
 	@Override
 	public void visitMethods(Methods m) {
-		Verifier wp = postcondition;
+		Verifier wp = postcondition.copy();
 		
 		// do the calculation
 		for (int i = m.implementations.size() - 1; i >= 0; i--) {
-			WpCalculator calculator = new WpCalculator(precondition, wp);
+			WpCalculator calculator = new WpCalculator(precondition.copy(), wp);
 			m.implementations.get(i).accept(calculator);
 			
-			wp = calculator.postcondition;
+			wp = calculator.postcondition.copy();
 		}
 		
 		// generate the final wp

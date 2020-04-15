@@ -26,7 +26,11 @@ public class Assignments extends Implementations{
 	}
 	
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		if (this.index != null) {
+			return new Assignments(this.name, this.index.copy(), this.assignValue.copy());
+		}
+		else {
+			return new Assignments(this.name, this.assignValue.copy());
+		}
 	}
 }

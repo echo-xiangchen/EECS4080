@@ -1,22 +1,29 @@
 -- test program verification
--- simple loop
-test
+-- find_max (no error)
+
+find_max (a: ARRAY[INTEGER]) : INTEGER
 require
-	positive: i >= 0
+	no_restriction: true
 local
 	i: INTEGER
 do
 	from
-		i := 1;
+		i := a.lower;
+		Result := a[i];
 	invariant
-		1 <= i  and i <= 6
+		loop_invariant: forall j: INTEGER; | (a.lower <= j and j < i) => (Result >= a[j])
 	until
-		i > 5
+		i > a.upper
 	loop
+		if a[i] > Result then
+			Result := a[i];
+		end
 		i := i + 1;
 	variant
-		6 - i
+		loop_variant: a.upper - i
 	end
 ensure
-	no_restriction: i <= 6
+	correct_result: forall k: INTEGER; | (a.lower <= k and k <= a.upper) => (Result >= a[k])
 end
+
+verify find_max

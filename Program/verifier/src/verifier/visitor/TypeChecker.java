@@ -35,9 +35,6 @@ public class TypeChecker implements Visitor{
 	// constructor
 	public TypeChecker() {
 		errormsg = new ArrayList<String>();
-		isMethod = false;
-		isAccessor = false;
-		isPostcondition = false;
 	}
 	
 	
@@ -516,7 +513,7 @@ public class TypeChecker implements Visitor{
 		else if (v.mode instanceof modes.AnonymousDecl) {
 			if (v.name != null) {
 				if (!varMap.containsKey(v.name)) {
-					varMap.put(v.name, new Pair<VarType, Verifier>(new IntType(), null));
+					varMap.put(v.name, new Pair<VarType, Verifier>(new IntType(), v));
 				}
 			}
 		}
@@ -658,10 +655,10 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(a.name)) {
 				errormsg.add("Error: variable " + a.name + " has not been declared.");
 			}
-			// if array is declared but not initialized
-			else if (!arrayMap.containsKey(a.name)) {
-				errormsg.add("Error: variable " + a.name + " has not been initialized.");
-			}
+//			// if array is declared but not initialized
+//			else if (!arrayMap.containsKey(a.name)) {
+//				errormsg.add("Error: variable " + a.name + " has not been initialized.");
+//			}
 			// if it has unknown type
 			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
 				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
@@ -802,10 +799,10 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(a.name)) {
 				errormsg.add("Error: variable " + a.name + " has not been declared.");
 			}
-			// if array is declared but not initialized
-			else if (!arrayMap.containsKey(a.name)) {
-				errormsg.add("Error: variable " + a.name + " has not been initialized.");
-			}
+//			// if array is declared but not initialized
+//			else if (!arrayMap.containsKey(a.name)) {
+//				errormsg.add("Error: variable " + a.name + " has not been initialized.");
+//			}
 			// if it has unknown type
 			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
 				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
@@ -954,10 +951,10 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(a.name)) {
 				errormsg.add("Error: variable " + a.name + " has not been declared.");
 			}
-			// if array is declared but not initialized
-			else if (!arrayMap.containsKey(a.name)) {
-				errormsg.add("Error: variable " + a.name + " has not been initialized.");
-			}
+//			// if array is declared but not initialized
+//			else if (!arrayMap.containsKey(a.name)) {
+//				errormsg.add("Error: variable " + a.name + " has not been initialized.");
+//			}
 			// if it has unknown type
 			else if (varMap.containsKey(a.name) && (varMap.get(a.name).a instanceof types.UnknowType)) {
 				errormsg.add("Error: Type of variable " + a.name + " in this expression is ambigous. " 
@@ -1077,9 +1074,9 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(c.name)) {
 				errormsg.add("Error: Array " + c.name + " has not been declared.");
 			}
-			else if (!arrayMap.containsKey(c.name)) {
-				errormsg.add("Error: variable " + c.name + " has not been initialized.");
-			}
+//			else if (!arrayMap.containsKey(c.name)) {
+//				errormsg.add("Error: variable " + c.name + " has not been initialized.");
+//			}
 			else {
 				InfixPrinter arrayCountPrinter = new InfixPrinter();
 				c.accept(arrayCountPrinter);
@@ -1119,7 +1116,7 @@ public class TypeChecker implements Visitor{
 		// for declaration mode
 		if (m.mode instanceof modes.Declaration) {
 			// type check the parameters first
-			if (m.parameters != null) {
+			if (!m.parameters.isEmpty()) {
 				// set isParameter to true
 				isParameter = true;
 				for (int i = 0; i < m.parameters.size(); i++) {

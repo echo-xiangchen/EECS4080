@@ -22,7 +22,13 @@ public class ElseifStats extends AlternationStats {
 	
 	@Override
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Verifier conditionCopy = this.condition.copy();
+		
+		List<Verifier> elseifImpsCopy = new ArrayList<Verifier>();
+		for (int i = 0; i < this.elseifImps.size(); i++) {
+			elseifImpsCopy.add(this.elseifImps.get(i).copy());
+		}
+		
+		return new ElseifStats(conditionCopy, elseifImpsCopy);
 	}
 }

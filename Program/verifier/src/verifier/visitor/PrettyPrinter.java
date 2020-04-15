@@ -22,6 +22,9 @@ public class PrettyPrinter implements Visitor {
 	// used variable list
 	public static List<ArrayList<String>> usedVarList = new ArrayList<ArrayList<String>>();
 	
+	// map that stores the output splited string if the method contains loop
+	public static Map<String, List<String>> methodLoopSeperateStr = new LinkedHashMap<String, List<String>>();
+	
 	
 	public PrettyPrinter() {
 		z3output = "";
@@ -838,12 +841,51 @@ public class PrettyPrinter implements Visitor {
 					z3output = z3output.concat("(assert (= " + entry.getKey() + " " + entry.getValue() + "))\n");
 				}
 			}
-			// add the remaining string
-			z3output = z3output.concat("(assert (not " + p.prefixOutput +  "))\n"
-					+ "(check-sat)\n"
-					+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
-					+ ";(get-model)\n"
-					+ "split\n");
+			
+			
+			// if there is no loop
+			if (!PrefixPrinter.containsLoop) {
+				
+				// add the remaining string
+				z3output = z3output.concat("(assert (not " + p.prefixOutput +  "))\n"
+						+ "(check-sat)\n"
+						+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
+						+ ";(get-model)\n"
+						+ "split\n");
+				
+			}
+			// if there is any loop inside the implementations
+			else {
+				
+				// remove the first line of z3output and store it
+				String noFirstLine = "";
+				
+				String[] splitZ3output = z3output.split("\\n");
+				
+				for (int i = 1; i < splitZ3output.length; i++) {
+					noFirstLine = noFirstLine + splitZ3output[i] + "\n";
+				}
+				
+				z3output = noFirstLine;
+				
+				
+				String loopStr = "";
+				
+				for (int i = 0; i < PrefixPrinter.methodLoopWpMap.get(m.name).size(); i++) {
+					PrefixPrinter loopPrinter = new PrefixPrinter();
+					PrefixPrinter.methodLoopWpMap.get(m.name).get(i).accept(loopPrinter);
+					
+					// add the output to the loopstr
+					loopStr = loopStr + z3output + "(assert (not " + loopPrinter.prefixOutput + "))\n"
+							+ "(check-sat)\n"
+							+ ";Uncomment the following line if the result of z3 online tool returns \"sat\"\n"
+							+ ";(get-model)\n"
+							+ "splitLoopStep\n";
+				}
+			
+				z3output = ";" + m.name + "\n" + loopStr + "split\n" ;
+				
+			}
 			
 			// add the infix version to formulaList
 			InfixPrinter methodPrinter = new InfixPrinter();
@@ -936,6 +978,42 @@ public class PrettyPrinter implements Visitor {
 
 	@Override
 	public void visitElseStats(ElseStats s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitLoops(Loops loops) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitInitImp(InitImp s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitInvariantStat(InvariantStat s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitExitCondition(ExitCondition s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitLoopBody(LoopBody s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitVariantStat(VariantStat s) {
 		// TODO Auto-generated method stub
 		
 	}

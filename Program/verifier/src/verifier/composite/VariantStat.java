@@ -18,8 +18,10 @@ public class VariantStat extends LoopStats {
 	
 	@Override
 	public Verifier copy() {
-		// TODO Auto-generated method stub
-		return null;
+		Pair<String, Verifier> variantCopy = new Pair<String, Verifier>
+		(this.variant.a, this.variant.b.copy());
+	
+	return new VariantStat(variantCopy);
 	}
 
 }
