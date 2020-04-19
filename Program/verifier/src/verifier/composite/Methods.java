@@ -58,4 +58,10 @@ public class Methods extends Verifier {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

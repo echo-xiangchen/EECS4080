@@ -15,4 +15,20 @@ public class GreaterOrEqual extends RelationalExpr {
 	public Verifier copy() {
 		return new GreaterOrEqual(this.left().copy(), this.right().copy());
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		if (this == null || v == null) {
+			return false;
+		}
+		
+		if (this == v) {
+			return true;
+		}
+		
+		if (this.getClass().equals(v.getClass())) {
+			return this.left().equals(v.left()) && this.right().equals(v.right());
+		}
+		return false;
+	}
 }

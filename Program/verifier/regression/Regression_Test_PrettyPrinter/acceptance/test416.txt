@@ -5,7 +5,7 @@ y: INTEGER
 bigger: INTEGER
 smaller: INTEGER
 
-bigger_or_smaller()
+bigger_or_smaller
 require 
 	positive: x > 0 and y > 0
 do

@@ -29,6 +29,12 @@ public class PrefixPrinter implements Visitor{
 	// map that stores the array name and its values
 	public static Map<String, List<String>> arrayMap = new LinkedHashMap<String, List<String>>();
 	
+	// map that stores the type of the pair
+	public static Map<String, Pair<String, String>> pairTypeMap = new LinkedHashMap<String, Pair<String,String>>();
+	
+	// map that stores the value of the pair if it's initialized
+	public static Map<String, Pair<Verifier, Verifier>> pairValueMap = new LinkedHashMap<String, Pair<Verifier,Verifier>>();
+	
 	// integer that counts how many spaces are needed for the indentation
 	public static int indentationInt = 0;
 	
@@ -101,13 +107,6 @@ public class PrefixPrinter implements Visitor{
 		b.right().accept(rightPrinter);
 		isNestedQuantifier = false;
 		
-		
-		// add the indentation
-		indentationInt++;
-		
-		for (int i = 0; i < indentationInt; i++) {
-			indentationStr = indentationStr + " ";
-		}
 		prefixOutput = prefixOutput.concat("(" + op + " "
 				+ leftPrinter.prefixOutput + " " + rightPrinter.prefixOutput + ")");
 	}
@@ -123,12 +122,7 @@ public class PrefixPrinter implements Visitor{
 		u.child.accept(p);
 		isNestedQuantifier = false;
 		
-		// add the indentation
-		indentationInt++;
 		
-		for (int i = 0; i < indentationInt; i++) {
-			indentationStr = indentationStr + " ";
-		}
 		prefixOutput = prefixOutput.concat("(" + op + " " + p.prefixOutput + ")");
 	}
 	
@@ -145,12 +139,7 @@ public class PrefixPrinter implements Visitor{
 		PrefixPrinter p2 = new PrefixPrinter();
 		q.expr.accept(p2);
 		
-		// add the indentation
-		indentationInt++;
 		
-		for (int i = 0; i < indentationInt; i++) {
-			indentationStr = indentationStr + "  ";
-		}
 		prefixOutput = "(" + quantifyIndicator + "(" + quantifyVar + ")" + p2.prefixOutput + ")";
 		
 	}
@@ -567,6 +556,30 @@ public class PrefixPrinter implements Visitor{
 			arrayMap.put(a.name, value);
 		}
 		
+	}
+	
+	/* *****************************************************************************************
+	 * TODO Pair
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public void visitPair(PairVar p) {
+		if(p.mode instanceof modes.UninitializedDecl) {
+			completeVarMap.put(p.name, new Pair<String, String>(null, "Pair"));
+			pairTypeMap.put(p.name, new Pair<String, String>(p.left().typeIndicator, p.right().typeIndicator));
+			pairValueMap.put(p.name, new Pair<Verifier, Verifier>(p.left(), p.right()));
+		}
+		else if (p.mode instanceof modes.Verification) {
+			inclusiveVarMap.put(p.name, new Pair<String, String>(null, "Pair"));
+			
+			if (p.element.equals("first") || p.element.equals(TypeChecker.pairMap.get(p.name).a.name)) {
+				prefixOutput = prefixOutput.concat("(first " + p.name + ")");
+			}
+			else if (p.element.equals("second") || p.element.equals(TypeChecker.pairMap.get(p.name).b.name)) {
+				prefixOutput = prefixOutput.concat("(second " + p.name + ")");
+			}
+		}
 	}
 	
 	/* *****************************************************************************************
@@ -1128,7 +1141,7 @@ public class PrefixPrinter implements Visitor{
 	
 	
 	@Override
-	public void visitNIL(NIL n) {
+	public void visitUnknownVar(UnknownVar n) {
 		// TODO Auto-generated method stub
 		
 	}

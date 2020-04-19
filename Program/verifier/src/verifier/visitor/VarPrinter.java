@@ -417,7 +417,7 @@ public class VarPrinter implements Visitor {
 		// verification
 		// e.g. verify a[1]
 		else if (a.mode instanceof modes.Verification) {
-			// delete the mode if it has been used
+			// delete the variable if it has been used
 			if (unusedVarMap.containsKey(a.name)) {
 				unusedVarMap.remove(a.name);
 			}
@@ -469,6 +469,47 @@ public class VarPrinter implements Visitor {
 	}
 	
 	
+	/* *****************************************************************************************
+	 * TODO Pair Var
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public void visitPair(PairVar p) {
+		if (p.mode instanceof modes.UninitializedDecl) {
+			VarPrinter leftPrinter = new VarPrinter();
+			VarPrinter rightPrinter = new VarPrinter();
+			
+			p.left().accept(leftPrinter);
+			p.right().accept(rightPrinter);
+			allVarMap.put(p.name, new Pair<String, String>("PAIR[" + p.left().name + " : " + allVarMap.get(p.left().name).a
+					+ " ; " + p.right().name + " : " + allVarMap.get(p.right().name).a + "]", null)); 
+			unusedVarMap.put(p.name, new Pair<String, String>("PAIR[" + p.left().name + " : " + allVarMap.get(p.left().name).a
+					+ " ; " + p.right().name + " : " + allVarMap.get(p.right().name).a + "]", null));
+		}
+		else if (p.mode instanceof modes.Verification) {
+			// delete the variable if it has been used
+			if (unusedVarMap.containsKey(p.name)) {
+				unusedVarMap.remove(p.name);
+			}
+			// remove the pair element as well
+			if (p.element.equals("first")) {
+				if (unusedVarMap.containsKey(TypeChecker.pairMap.get(p.name).a.name)) {
+					unusedVarMap.remove(TypeChecker.pairMap.get(p.name).a.name);
+				}
+			}
+			else if (p.element.equals("second")) {
+				if (unusedVarMap.containsKey(TypeChecker.pairMap.get(p.name).b.name)) {
+					unusedVarMap.remove(TypeChecker.pairMap.get(p.name).b.name);
+				}
+			}
+			else {
+				if (unusedVarMap.containsKey(p.element)) {
+					unusedVarMap.remove(p.element);
+				}
+			}
+		}
+	}
 	
 	@Override
 	public void visitBoolTrue(BoolTrue c) {
@@ -744,9 +785,8 @@ public class VarPrinter implements Visitor {
 	
 	
 	@Override
-	public void visitNIL(NIL n) {
+	public void visitUnknownVar(UnknownVar n) {
 		// TODO Auto-generated method stub
 	}
-
 	
 }

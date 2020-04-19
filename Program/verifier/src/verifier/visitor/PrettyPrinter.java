@@ -2,6 +2,7 @@ package verifier.visitor;
 
 import org.antlr.v4.runtime.misc.Pair;
 
+import types.BoolType;
 import verifier.composite.*;
 
 import java.util.*;
@@ -75,7 +76,7 @@ public class PrettyPrinter implements Visitor {
 		z3output = z3output.concat(";formula\n");
 		
 		// check if any variable has been added to the list
-		if (PrefixPrinter.inclusiveVarMap != null) {
+		if (!PrefixPrinter.inclusiveVarMap.isEmpty()) {
 			
 			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
 				if (entry.getValue().b == null) {
@@ -83,6 +84,9 @@ public class PrettyPrinter implements Visitor {
 							+  " " + entry.getValue().a +")\n");
 				}
 				else if (entry.getValue().b.equals("Quantification")) {
+					
+				}
+				else if (entry.getValue().b.equals("Pair")) {
 					
 				}
 				// uninitialized array declaration
@@ -110,6 +114,19 @@ public class PrettyPrinter implements Visitor {
 				}
 			}
 		}
+		
+		// check if there is any pair
+		if (!PrefixPrinter.pairTypeMap.isEmpty()) {
+			z3output = z3output.concat("(declare-datatypes (T1 T2) ((Pair (mk-pair (first T1) (second T2)))))\n");
+			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.pairTypeMap.entrySet()) {
+				// only when the pair is used, print the pair
+				if (PrefixPrinter.inclusiveVarMap.containsKey(entry.getKey())) {
+					z3output = z3output.concat("(declare-const " + entry.getKey() + " (Pair " + entry.getValue().a + " " + entry.getValue().b + "))\n");
+				}
+				
+			}
+		}
+		
 		// add the remaining string
 		z3output = z3output.concat("(assert (not (" + op + " " + left.prefixOutput 
 				+ " " + right.prefixOutput + ")))\n"
@@ -170,7 +187,7 @@ public class PrettyPrinter implements Visitor {
 		z3output = z3output.concat(";formula\n");
 				
 		// check if any variable has been added to the list
-		if (PrefixPrinter.inclusiveVarMap != null) {
+		if (!PrefixPrinter.inclusiveVarMap.isEmpty()) {
 			
 			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
 				if (entry.getValue().b == null) {
@@ -178,6 +195,9 @@ public class PrettyPrinter implements Visitor {
 							+  " " + entry.getValue().a +")\n");
 				}
 				else if (entry.getValue().b.equals("Quantification")) {
+					
+				}
+				else if (entry.getValue().b.equals("Pair")) {
 					
 				}
 				// uninitialized array declaration
@@ -205,6 +225,19 @@ public class PrettyPrinter implements Visitor {
 				}
 			}
 		}
+		
+		// check if there is any pair
+		if (!PrefixPrinter.pairTypeMap.isEmpty()) {
+			z3output = z3output.concat("(declare-datatypes (T1 T2) ((Pair (mk-pair (first T1) (second T2)))))\n");
+			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.pairTypeMap.entrySet()) {
+				// only when the pair is used, print the pair
+				if (PrefixPrinter.inclusiveVarMap.containsKey(entry.getKey())) {
+					z3output = z3output.concat("(declare-const " + entry.getKey() + " (Pair " + entry.getValue().a + " " + entry.getValue().b + "))\n");
+				}
+			}
+		}
+				
+				
 		// add the remaining string
 		z3output = z3output.concat("(assert (not (" + op + " " + printer.prefixOutput + ")))\n"
 				+ "(check-sat)\n"
@@ -257,7 +290,7 @@ public class PrettyPrinter implements Visitor {
 		z3output = z3output.concat(";formula\n");
 				
 		// check if any variable has been added to the list
-		if (PrefixPrinter.inclusiveVarMap != null) {
+		if (!PrefixPrinter.inclusiveVarMap.isEmpty()) {
 			
 			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
 				if (entry.getValue().b == null) {
@@ -265,6 +298,9 @@ public class PrettyPrinter implements Visitor {
 							+  " " + entry.getValue().a +")\n");
 				}
 				else if (entry.getValue().b.equals("Quantification")) {
+					
+				}
+				else if (entry.getValue().b.equals("Pair")) {
 					
 				}
 				// uninitialized array declaration
@@ -289,6 +325,17 @@ public class PrettyPrinter implements Visitor {
 							+ entry.getValue().a + ")\n"
 							+ "(assert (= " + entry.getKey() 
 							+ " " + entry.getValue().b + "))\n");
+				}
+			}
+		}
+		
+		// check if there is any pair
+		if (!PrefixPrinter.pairTypeMap.isEmpty()) {
+			z3output = z3output.concat("(declare-datatypes (T1 T2) ((Pair (mk-pair (first T1) (second T2)))))\n");
+			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.pairTypeMap.entrySet()) {
+				// only when the pair is used, print the pair
+				if (PrefixPrinter.inclusiveVarMap.containsKey(entry.getKey())) {
+					z3output = z3output.concat("(declare-const " + entry.getKey() + " (Pair " + entry.getValue().a + " " + entry.getValue().b + "))\n");
 				}
 			}
 		}
@@ -344,7 +391,7 @@ public class PrettyPrinter implements Visitor {
 		z3output = z3output.concat(";formula\n");
 		
 		// check if any variable has been added to the list
-		if (PrefixPrinter.inclusiveVarMap != null) {
+		if (!PrefixPrinter.inclusiveVarMap.isEmpty()) {
 					
 			for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
 				if (entry.getValue().b == null) {
@@ -353,6 +400,9 @@ public class PrettyPrinter implements Visitor {
 				}
 				else if (entry.getValue().b.equals("Quantification")) {
 							
+				}
+				else if (entry.getValue().b.equals("Pair")) {
+					
 				}
 				// uninitialized array declaration
 				// (declare-const a (Array Int Int))
@@ -445,12 +495,15 @@ public class PrettyPrinter implements Visitor {
 			z3output = z3output.concat(";formula\n");
 			
 			// check if any variable has been added to the list
-			if (PrefixPrinter.inclusiveVarMap != null) {
+			if (!PrefixPrinter.inclusiveVarMap.isEmpty()) {
 				
 				for (Entry<String, Pair<String, String>> entry : PrefixPrinter.inclusiveVarMap.entrySet()) {
 					if (entry.getValue().b == null || entry.getValue().b.equals("Quantification")) {
 						z3output = z3output.concat("(declare-const " + entry.getKey() 
 								+  " " + entry.getValue().a +")\n");
+					}
+					else if (entry.getValue().b.equals("Pair")) {
+						
 					}
 					// uninitialized array declaration
 					// (declare-const a (Array Int Int))
@@ -474,6 +527,17 @@ public class PrettyPrinter implements Visitor {
 								+ entry.getValue().a + ")\n"
 								+ "(assert (= " + entry.getKey() 
 								+ " " + entry.getValue().b + "))\n");
+					}
+				}
+			}
+			
+			// check if there is any pair
+			if (!PrefixPrinter.pairTypeMap.isEmpty()) {
+				z3output = z3output.concat("(declare-datatypes (T1 T2) ((Pair (mk-pair (first T1) (second T2)))))\n");
+				for (Entry<String, Pair<String, String>> entry : PrefixPrinter.pairTypeMap.entrySet()) {
+					// only when the pair is used, print the pair
+					if (PrefixPrinter.inclusiveVarMap.containsKey(entry.getKey())) {
+						z3output = z3output.concat("(declare-const " + entry.getKey() + " (Pair " + entry.getValue().a + " " + entry.getValue().b + "))\n");
 					}
 				}
 			}
@@ -726,6 +790,28 @@ public class PrettyPrinter implements Visitor {
 	}
 	
 	/* *****************************************************************************************
+	 * TODO Pair 
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public void visitPair(PairVar p) {
+		if (p.mode instanceof modes.UninitializedDecl) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter printer = new PrefixPrinter();
+			p.accept(printer);
+		}
+		else if (p.mode instanceof modes.BoolVerification) {
+			printOtherExpr(p);
+		}
+		else if (p.mode instanceof modes.ArithVerification) {
+			// use the PrefixPrinter to return the output
+			PrefixPrinter printer = new PrefixPrinter();
+			p.accept(printer);
+		}
+	}
+	
+	/* *****************************************************************************************
 	 * TODO Constants
 	 * *****************************************************************************************
 	 */
@@ -800,6 +886,9 @@ public class PrettyPrinter implements Visitor {
 					else if (entry.getValue().b.equals("Quantification")) {
 						
 					}
+					else if (entry.getValue().b.equals("Pair")) {
+						
+					}
 					// uninitialized array declaration
 					// (declare-const a (Array Int Int))
 					else if (entry.getValue().b.equals("Array")) {
@@ -822,6 +911,17 @@ public class PrettyPrinter implements Visitor {
 								+ entry.getValue().a + ")\n"
 								+ "(assert (= " + entry.getKey() 
 								+ " " + entry.getValue().b + "))\n");
+					}
+				}
+			}
+			
+			// check if there is any pair
+			if (!PrefixPrinter.pairTypeMap.isEmpty()) {
+				z3output = z3output.concat("(declare-datatypes (T1 T2) ((Pair (mk-pair (first T1) (second T2)))))\n");
+				for (Entry<String, Pair<String, String>> entry : PrefixPrinter.pairTypeMap.entrySet()) {
+					// only when the pair is used, print the pair
+					if (PrefixPrinter.inclusiveVarMap.containsKey(entry.getKey())) {
+						z3output = z3output.concat("(declare-const " + entry.getKey() + " (Pair " + entry.getValue().a + " " + entry.getValue().b + "))\n");
 					}
 				}
 			}
@@ -960,7 +1060,7 @@ public class PrettyPrinter implements Visitor {
 	
 	
 	@Override
-	public void visitNIL(NIL n) {
+	public void visitUnknownVar(UnknownVar n) {
 		// TODO Auto-generated method stub
 	}
 
@@ -1017,4 +1117,6 @@ public class PrettyPrinter implements Visitor {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 }

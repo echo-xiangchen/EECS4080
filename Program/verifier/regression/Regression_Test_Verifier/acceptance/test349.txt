@@ -1,0 +1,14 @@
+-- test program verification
+-- old value (Not discharged)
+x:INTEGER
+
+compare()
+require
+	no_restriction: true
+do
+	x := x + 1;
+ensure
+	incremented: x = old x
+end
+
+verify compare

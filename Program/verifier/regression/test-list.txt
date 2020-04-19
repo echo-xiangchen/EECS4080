@@ -65,8 +65,10 @@ Gries-Theorems
 406 - 415: if-else(age_and_weight)
 416 - 425: if-else(bigger_smaller)
 426 - 435: if-else(tax)
-436 - : loop(increment_i)
+436 - 443: loop(increment_i)
+444 - 451: loop(find_max)
 
+332 - : uninitialized pair
 
 
 

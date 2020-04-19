@@ -27,4 +27,10 @@ public class LoopBody extends LoopStats {
 		return new LoopBody(loopBodyImpsCopy);
 	}
 
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

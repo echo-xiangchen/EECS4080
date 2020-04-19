@@ -33,4 +33,10 @@ public class Assignments extends Implementations{
 			return new Assignments(this.name, this.assignValue.copy());
 		}
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

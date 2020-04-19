@@ -28,4 +28,10 @@ public class InitImp extends LoopStats {
 		
 		return new InitImp(initImpCopy);
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

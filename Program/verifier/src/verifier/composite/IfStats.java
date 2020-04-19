@@ -31,4 +31,10 @@ public class IfStats extends AlternationStats {
 		
 		return new IfStats(conditionCopy, ifImpsCopy);
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

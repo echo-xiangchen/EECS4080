@@ -17,102 +17,6 @@ import verifier.visitor.*;
 
 public class Test {
 	
-	public static boolean isEqual(Verifier v1,Verifier v2) {
-		if (v1 == null || v2 == null) {
-			return false;
-		}
-		
-		if (v1 == v2) {
-			return true;
-		}
-		
-		if (v1.getClass().equals(v2.getClass())) {
-			// check if they are expressions
-			if (v1 instanceof Expr) {
-				if (v1 instanceof BinaryExpr) {
-					return isEqual(v1.left(), v2.left()) && isEqual(v1.right(), v2.right());
-				}
-				else {
-					return isEqual(v1.child, v2.child);
-				}
-			}
-			// check if they are normal variable
-			else if (v1 instanceof Var) {
-				if (v1 instanceof ArrayVar) {
-					return v1.name.equals(v2.name) && isEqual(v1.index, v2.index);
-				}
-				else {
-					return v1.name.equals(v2.name);
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static Verifier copy(Verifier v1) {
-		if (v1 instanceof Negation) {
-			return new Negation(copy(v1.child));
-		}
-		else if (v1 instanceof Conjunction) {
-			return new Conjunction(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof Disjunction) {
-			return new Disjunction(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof Implication) {
-			return new Implication(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof Iff) {
-			return new Iff(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof Equal) {
-			return new Equal(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof GreaterThan) {
-			return new GreaterThan(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof LessThan) {
-			return new LessThan(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof GreaterOrEqual) {
-			return new GreaterOrEqual(v1.left(), v1.right());
-		}
-		else if (v1 instanceof LessOrEqual) {
-			return new LessOrEqual(copy(v1.left()), copy(v1.right()));
-		}
-		else if (v1 instanceof Forall) {
-			Forall v = (Forall) v1;
-			List<Verifier> list = new ArrayList<Verifier>();
-			for (int i = 0; i < v.quantifyList.size(); i++) {
-				list.add(copy(v.quantifyList.get(i)));
-			}
-			return new Forall(list, copy(((Forall) v1).expr));
-		}
-		else if (v1 instanceof Exists) {
-			Exists v = (Exists) v1;
-			List<Verifier> list = new ArrayList<Verifier>();
-			for (int i = 0; i < v.quantifyList.size(); i++) {
-				list.add(copy(v.quantifyList.get(i)));
-			}
-			return new Exists(list, copy(((Forall) v1).expr));
-		}
-		else if (v1 instanceof BoolVar) {
-			return new BoolVar(((BoolVar) v1).name, new Verification());
-		}
-		else if (v1 instanceof IntVar) {
-			return new IntVar(((IntVar) v1).name, new Verification());
-		}
-		else if (v1 instanceof RealVar) {
-			return new RealVar(((RealVar) v1).name, new Verification());
-		}
-		else if (v1 instanceof BoolArrayVar) {
-			return new BoolArrayVar(((BoolArrayVar) v1).name, new Verification(), copy(v1.index));
-		}
-		
-		return null;
-	}
-	
-	
 	public static void main(String[] args) {
 		
 		BoolVar x1 = new BoolVar("x", new Verification());
@@ -133,7 +37,7 @@ public class Test {
 //		
 		GreaterOrEqual g = new GreaterOrEqual(i1, add);
 		
-		Verifier test = copy(g);
+		Verifier test = g.copy();
 		
 		((Addition)g.right()).children.set(0, j);
 		

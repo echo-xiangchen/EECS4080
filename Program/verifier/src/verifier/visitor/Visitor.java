@@ -73,8 +73,12 @@ public interface Visitor {
 	void visitRealArrayVar(RealArrayVar a);
 
 	
+	// pair
+	void visitPair(PairVar p);
 	
-	void visitNIL(NIL n);
+	
+	// unknown variable
+	void visitUnknownVar(UnknownVar n);
 
 	
 	
@@ -124,6 +128,8 @@ public interface Visitor {
 	void visitOlds(Olds o);
 
 	void visitResults(Results r);
+
+	
 
 	
 

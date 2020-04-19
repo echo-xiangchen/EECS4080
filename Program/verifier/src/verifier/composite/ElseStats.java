@@ -24,4 +24,10 @@ public class ElseStats extends AlternationStats {
 		
 		return new ElseStats(elseImpsCopy);
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

@@ -1,0 +1,11 @@
+-- test program verification
+-- single assignment (with error)
+i:BOOLEAN
+increment_by_9()
+require i > 3
+do
+	positive: i := i + 9;
+ensure
+	incremented: i > 13
+end
+verify increment_by_9

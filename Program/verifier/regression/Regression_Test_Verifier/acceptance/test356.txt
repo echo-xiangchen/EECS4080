@@ -1,0 +1,18 @@
+-- test program verification
+-- Sequential (swap) (Not discharged)
+x: INTEGER
+y: INTEGER
+tmp: INTEGER
+
+swap()
+require
+	test: x > y
+do
+	tmp := x;
+	x := y;
+	y := tmp;
+ensure
+	not_allow: false
+end
+
+verify swap

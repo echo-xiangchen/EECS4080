@@ -750,18 +750,6 @@ public class VerifierBaseListener implements VerifierListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnnamedPairValueDecl(VerifierParser.UnnamedPairValueDeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnnamedPairValueDecl(VerifierParser.UnnamedPairValueDeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterUnnamedPairDecl(VerifierParser.UnnamedPairDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -769,6 +757,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnnamedPairDecl(VerifierParser.UnnamedPairDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnnamedPairValueDecl(VerifierParser.UnnamedPairValueDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnnamedPairValueDecl(VerifierParser.UnnamedPairValueDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -798,6 +798,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBoolPairElement(VerifierParser.BoolPairElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolPairElement(VerifierParser.BoolPairElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterOldBoolArray(VerifierParser.OldBoolArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -805,6 +817,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOldBoolArray(VerifierParser.OldBoolArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolPairFirst(VerifierParser.BoolPairFirstContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolPairFirst(VerifierParser.BoolPairFirstContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -925,6 +949,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIndexBoolArray(VerifierParser.IndexBoolArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolPairSecond(VerifierParser.BoolPairSecondContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolPairSecond(VerifierParser.BoolPairSecondContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1110,6 +1146,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArithPairElement(VerifierParser.ArithPairElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithPairElement(VerifierParser.ArithPairElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUpperArray(VerifierParser.UpperArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1182,6 +1230,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArithPairSecond(VerifierParser.ArithPairSecondContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithPairSecond(VerifierParser.ArithPairSecondContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArithArrayResult(VerifierParser.ArithArrayResultContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1201,6 +1261,18 @@ public class VerifierBaseListener implements VerifierListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCountArray(VerifierParser.CountArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithPairFirst(VerifierParser.ArithPairFirstContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithPairFirst(VerifierParser.ArithPairFirstContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

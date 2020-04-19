@@ -1,0 +1,29 @@
+-- test program verification
+-- find_max (with error)
+
+find_max (a: ARRAY[REAL]) : INTEGER
+require
+	no_restriction: a.count > 0
+local
+	i: INTEGER
+do
+	from
+		i := a.lower;
+		Result := a[i];
+	invariant
+		loop_invariant: forall j: INTEGER; | (a.lower <= j and j < i) => (Result >= a[j])
+	until
+		i > a.upper
+	loop
+		if a[i] > Result then
+			Result := a[i];
+		end
+		i := i + 1;
+	variant
+		loop_variant: a.upper - i + 1
+	end
+ensure
+	correct_result: forall k: INTEGER; | (a.lower <= k and k <= a.upper) => (Result >= a[k])
+end
+
+verify find_max

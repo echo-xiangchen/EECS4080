@@ -9,17 +9,23 @@ public class IntVar extends NumVar {
 	// uninitialized declaration and verification
 	public IntVar(String name, mode mode) {
 		super(name, mode);
+		typeIndicator = "Int";
+		typeStr = "INTEGER";
 	}
 	
 	// initialized declaration
 	public IntVar(String name, Verifier verifier, mode mode) {
 		super(name, verifier, mode);
+		typeIndicator = "Int";
+		typeStr = "INTEGER";
 			
 	}
 	
 	// anonymous variable declaration
 	public IntVar(mode mode) {
 		super(mode);
+		typeIndicator = "Int";
+		typeStr = "INTEGER";
 	}
 
 	
@@ -28,14 +34,23 @@ public class IntVar extends NumVar {
 	}
 	
 	public Verifier copy() {
-//		if (this.mode instanceof QuantificationList) {
-//			List<Verifier> list = new ArrayList<Verifier>();
-//			for (int i = 0; i < this.varDeclList.size(); i++) {
-//				list.add(this.varDeclList.get(i).copy());
-//			}
-//			return new IntVar(list, this.mode);
-//		}
+
 		return new IntVar(this.name, this.mode);
+	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		if (this == null || v == null) {
+			return false;
+		}
+		
+		if (this == v) {
+			return true;
+		}
+		if (this.getClass().equals(v.getClass())) {
+			return this.name.equals(v.name);
+		}
+		return false;
 	}
 
 }

@@ -1,0 +1,15 @@
+-- test program verification
+-- old keyword (Not discharged)
+change_at(a:ARRAY[REAL]; i : INTEGER; nv: REAL)
+require
+	valid_index: 1 <= i and i <= a.count
+do
+	a := <<1, 4.6, 9.0, 4, 0, -1.2>>;
+	a[i] := nv;
+	nv := i;
+ensure
+	changed: a[i] = nv
+	unchanged: forall j:INTEGER; |(1 <= j and j <= a.count and not i = j) => old a[j] = a[j]
+end
+
+verify change_at

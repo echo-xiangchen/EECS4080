@@ -44,75 +44,31 @@ public class WpCalculator implements Visitor{
 	 * *****************************************************************************************
 	 */
 	
-	// compare to see if two Verifier obj is equal
-	public boolean isEqual(Verifier v1,Verifier v2) {
-		// if one of them are null, return false
-		if (v1 == null || v2 == null) {
-			return false;
-		}
-		
-		// if they are same obj, return true
-		if (v1 == v2) {
-			return true;
-		}
-		
-		// if it's result assignment
-//		if ((v1.name != null) && v1.name.equals("Result")) {
-//			return true;
-//		}
-		
-		// if they have the same class
-		if (v1.getClass().equals(v2.getClass())) {
-			// check if they are expressions
-			if (v1 instanceof Expr) {
-				if (v1 instanceof BinaryExpr) {
-					return isEqual(v1.left(), v2.left()) && isEqual(v1.right(), v2.right());
-				}
-				else {
-					return isEqual(v1.child, v2.child);
-				}
-			}
-			// check if they are normal variable
-			else if (v1 instanceof Var) {
-				if (v1 instanceof ArrayVar) {
-					return v1.name.equals(v2.name) && isEqual(v1.index, v2.index);
-				}
-				else {
-					return v1.name.equals(v2.name);
-				}
-			}
-			else if (v1 instanceof Results) {
-				return v1.name.equals(v2.name);
-			}
-		}
-		return false;
-	}
-	
 	
 	// substitution for binary expr
 	public void BinaryExprSubstitute(BinaryExpr b, Pair<Verifier, Verifier> p) {
 		// substitute left child
-		if (isEqual(b.left(), p.a) || isEqual(b.right(), p.a)) {
+		if (b.left().isEqual(p.a) || b.right().isEqual(p.a)) {
 			// for normal variable
-			if (isEqual(b.left(), p.a)) {
+			if (b.left().isEqual(p.a)) {
 				b.children.set(0, p.b);
 			}
 			
 			// substitute right child
-			if (isEqual(b.right(), p.a)) {
+			if (b.right().isEqual(p.a)) {
 				b.children.set(1, p.b);
 			}
 		}
 		// do the substitution for array index as well
 		else if (b.left() instanceof ArrayVar || b.right() instanceof ArrayVar) {
 			if (b.left().index != null) {
-				if (isEqual(b.left().index, p.a)) {
+				if (b.left().index.isEqual(p.a)) {
 					b.left().index = p.b.copy();
 				}
 			}
 			
 			if (b.right().index != null) {
-				if (isEqual(b.right().index, p.a)) {
+				if (b.right().index.isEqual(p.a)) {
 					b.right().index = p.b.copy();
 				}
 			}
@@ -130,13 +86,13 @@ public class WpCalculator implements Visitor{
 	// substitution for unary expr
 	public void UnaryExprSubstitute(UnaryExpr u, Pair<Verifier, Verifier> p) {
 		// substitute child
-		if (isEqual(u.child, p.a)) {
+		if (u.child.isEqual(p.a)) {
 			u.child = p.b;
 		}
 		// do the substitution for array index as well
 		else if (u.child instanceof ArrayVar) {
 			if (u.child.index != null) {
-				if (isEqual(u.child.index, p.a)) {
+				if (u.child.index.isEqual(p.a)) {
 					u.child.index = p.b.copy();
 				}
 			}
@@ -155,7 +111,7 @@ public class WpCalculator implements Visitor{
 	
 	// substitution for normal variables
 	public void VarSubstitute(Var v, Pair<Verifier, Verifier> p) {
-		if (isEqual(v, p.a)) {
+		if (v.isEqual(p.a)) {
 			v = (Var) p.b;
 		}
 	}
@@ -817,7 +773,7 @@ public class WpCalculator implements Visitor{
 	
 
 	@Override
-	public void visitNIL(NIL n) {
+	public void visitUnknownVar(UnknownVar n) {
 		
 	}
 

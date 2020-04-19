@@ -31,4 +31,10 @@ public class ElseifStats extends AlternationStats {
 		
 		return new ElseifStats(conditionCopy, elseifImpsCopy);
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

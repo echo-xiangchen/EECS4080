@@ -1,29 +1,6 @@
--- test program verification
--- find_max (no error)
+-- test Pair
+-- uninitialized pair(with error)
 
-find_max (a: ARRAY[INTEGER]) : INTEGER
-require
-	no_restriction: true
-local
-	i: INTEGER
-do
-	from
-		i := a.lower;
-		Result := a[i];
-	invariant
-		loop_invariant: forall j: INTEGER; | (a.lower <= j and j < i) => (Result >= a[j])
-	until
-		i > a.upper
-	loop
-		if a[i] > Result then
-			Result := a[i];
-		end
-		i := i + 1;
-	variant
-		loop_variant: a.upper - i
-	end
-ensure
-	correct_result: forall k: INTEGER; | (a.lower <= k and k <= a.upper) => (Result >= a[k])
-end
+p:PAIR[i:REAL;j:BOOLEAN]
 
-verify find_max
+verify p.i

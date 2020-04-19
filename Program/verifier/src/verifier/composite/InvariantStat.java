@@ -26,4 +26,10 @@ public class InvariantStat extends LoopStats {
 		return new InvariantStat(invariantCopy);
 	}
 
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

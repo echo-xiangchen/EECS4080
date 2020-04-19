@@ -24,4 +24,10 @@ public class VariantStat extends LoopStats {
 	return new VariantStat(variantCopy);
 	}
 
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

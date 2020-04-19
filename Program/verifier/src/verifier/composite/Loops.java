@@ -46,4 +46,10 @@ public class Loops extends Implementations {
 				loopBodyCopy, variantCopy);
 	}
 
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -1,0 +1,12 @@
+-- test program verification
+-- single assignment (with error)
+
+increment_by_9()
+require 
+	positive: i > 3
+do
+	i := i + 9;
+ensure
+	incremented: i > 13
+end
+verify increment_by_9

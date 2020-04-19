@@ -15,4 +15,20 @@ public class Multiplication extends ArithmeticExpr {
 	public Verifier copy() {
 		return new Multiplication(this.left().copy(), this.right().copy());
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		if (this == null || v == null) {
+			return false;
+		}
+		
+		if (this == v) {
+			return true;
+		}
+		
+		if (this.getClass().equals(v.getClass())) {
+			return this.left().equals(v.left()) && this.right().equals(v.right());
+		}
+		return false;
+	}
 }

@@ -1,0 +1,27 @@
+-- test program verification
+-- weight and height (Not discharged)
+
+weight: INTEGER
+height: INTEGER
+
+result: INTEGER
+
+weight_and_height()
+require
+	positive: weight > 0 and height > 0
+do
+	if weight > 50 or height > 60 then
+		result := 1;
+	elseif weight > 50 and height > 60 then
+		result := 2;
+	elseif weight > 50 or height > 60 and not (weight > 50 and height > 60) then
+		result := 3;
+	end
+ensure
+	case_1: (weight > 50 or height > 60) => (result = 3)
+	case_2: ((not (weight > 50 or height > 60)) and not weight > 50 and height > 60) => (result = 2)
+	case_3: (((weight > 50 or height > 60)) and (not (weight > 50 and height > 60)) 
+		and (weight > 50 or height > 60 and not (weight > 50 and height > 60))) => (result = 3)
+end
+
+verify weight_and_height

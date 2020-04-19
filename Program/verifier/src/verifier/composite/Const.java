@@ -15,10 +15,10 @@ public abstract class Const extends Logic{
 	
 	// if "isArray" is true, means it's array count
 	// if "isArray" is false, means it's normal integer constant
-	public Const(String name, String indicator,boolean value) {
+	public Const(String name, String indicator,boolean isArray) {
 		this.name = name;
 		this.indicator = indicator;
-		this.isArray = value;
+		this.isArray = isArray;
 	}
 }
 

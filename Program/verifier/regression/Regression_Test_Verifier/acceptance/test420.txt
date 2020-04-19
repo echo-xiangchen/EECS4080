@@ -1,0 +1,23 @@
+-- test program verification
+-- if-else statement (Not discharged)
+x: INTEGER
+y: INTEGER
+bigger: INTEGER
+smaller: INTEGER
+
+bigger_or_smaller()
+require 
+	positive: x > 0 and y > 0
+do
+if x > y then
+	bigger := x;
+	smaller := y;
+else
+	bigger := y;
+	smaller := x;
+end
+ensure
+	ensured: bigger > smaller
+end
+
+verify bigger_or_smaller

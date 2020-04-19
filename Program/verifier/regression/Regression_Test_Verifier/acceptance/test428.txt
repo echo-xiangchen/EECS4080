@@ -1,0 +1,95 @@
+-- test program verification
+-- calculating tax (with error)
+
+-- status 0: single filers
+-- status 1: married filing jpintly or qualifying widow(er)
+-- status 2: married filing separately
+-- status 3: head of household
+-- other status: wrong status
+
+
+
+compute_tax()
+require
+	positive: income >= 0
+do
+	if status = 0 then
+		if income <= 8350 then
+			tax := income * 0.10;
+		elseif income <= 33950 then
+			tax := 8350 * 0.10 + (income - 8350) * 0.15;
+		elseif income <= 82250 then
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (income - 33950) * 0.25;
+		elseif income <= 171550 then
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (82250 - 33950) * 0.25
+					+ (income - 82250) * 0.28;
+		elseif income <= 372950 then
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (82250 - 33950) * 0.25
+					+ (171550 - 82250) * 0.28 + (income - 171550) * 0.33;
+		else
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (82250 - 33950) * 0.25
+					+ (171550 - 82250) * 0.28 + (372950 - 171550) * 0.33
+					+ (income - 372950) * 0.35;
+		end
+	elseif status = 1 then
+		if income <= 16700 then
+			tax := income * 0.10;
+		elseif income <= 67900 then
+			tax := 16700 * 0.10 + (income - 16700) * 0.15;
+		elseif income <= 137050 then
+			tax := 16700 * 0.10 + (67900 - 16700) * 0.15 + (income - 67900) * 0.25;
+		elseif income <= 208850 then
+			tax := 16700 * 0.10 + (67900 - 16700) * 0.15 + (137050 - 67900) * 0.25
+					+ (income - 137050) * 0.28;
+		elseif income <= 372950 then
+			tax := 16700 * 0.10 + (67900 - 16700) * 0.15 + (137050 - 67900) * 0.25
+					+ (208850 - 137050) * 0.28 + (income - 208850) * 0.33;
+		else
+			tax := 16700 * 0.10 + (67900 - 16700) * 0.15 + (137050 - 67900) * 0.25
+					+ (208850 - 137050) * 0.28 + (372950 - 208850) * 0.33
+					+ (income - 372950) * 0.35;
+		end
+	elseif status = 2 then
+		if income <= 8350 then
+			tax := income * 0.10;
+		elseif income <= 33950 then
+			tax := 8350 * 0.10 + (income - 8350) * 0.15;
+		elseif income <= 68525 then
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (income - 33950) * 0.25;
+		elseif income <= 104425 then
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (68525 - 33950) * 0.25
+					+ (income - 68525) * 0.28;
+		elseif income <= 186475 then
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (68525 - 33950) * 0.25
+					+ (104425 - 68525) * 0.28 + (income - 104425) * 0.33;
+		else
+			tax := 8350 * 0.10 + (33950 - 8350) * 0.15 + (68525 - 33950) * 0.25
+					+ (104425 - 68525) * 0.28 + (186475 - 104425) * 0.33
+					+ (income - 186475) * 0.35;
+		end
+	elseif status = 3 then
+		if income <= 11950 then
+			tax := income * 0.10;
+		elseif income <= 45500 then
+			tax := 11950 * 0.10 + (income - 11950) * 0.15;
+		elseif income <= 117450 then
+			tax := 11950 * 0.10 + (45500 - 11950) * 0.15 + (income - 45500) * 0.25;
+		elseif income <= 190200 then
+			tax := 11950 * 0.10 + (45500 - 11950) * 0.15 + (117450 - 45500) * 0.25
+					+ (income - 117450) * 0.28;
+		elseif income <= 372950 then
+			tax := 11950 * 0.10 + (45500 - 11950) * 0.15 + (117450 - 45500) * 0.25
+					+ (190200 - 117450) * 0.28 + (income - 190200) * 0.33;
+		else
+			tax := 11950 * 0.10 + (45500 - 11950) * 0.15 + (117450 - 45500) * 0.25
+					+ (190200 - 117450) * 0.28 + (372950 - 190200) * 0.33
+					+ (income - 372950) * 0.35;
+		end
+	else
+		tax := -1;
+	end
+ensure
+	lowest_income: (status = 0 and income <= 8350) => (tax = income * 0.10)
+end
+
+verify compute_tax

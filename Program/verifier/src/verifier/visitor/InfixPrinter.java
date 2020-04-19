@@ -31,6 +31,9 @@ public class InfixPrinter implements Visitor{
 	// map that stores the wps
 	public static Map<String, String> wps = new LinkedHashMap<String, String>();
 	
+	// test if needs pretty print
+	public static boolean needPrettyPrint;
+	
 	public InfixPrinter() {
 		preWithoutTag = "";
 		postWithoutTag = "";
@@ -41,9 +44,9 @@ public class InfixPrinter implements Visitor{
 	
 	public void visitBinaryExpr (BinaryExpr b, String op) {
 		InfixPrinter leftPrinter = new InfixPrinter();
-		InfixPrinter rightPrinter = new InfixPrinter();
-		
 		b.left().accept(leftPrinter);
+		
+		InfixPrinter rightPrinter = new InfixPrinter();
 		b.right().accept(rightPrinter);
 		infixOutput = infixOutput.concat("(" + leftPrinter.infixOutput + " " + op + " " + rightPrinter.infixOutput + ")");
 	}
@@ -407,6 +410,36 @@ public class InfixPrinter implements Visitor{
 			value = value.substring(0, value.length() - 2) + " >>";
 			infixOutput = infixOutput.concat("  " + a.name + " := " + value);
 		}
+	}
+	
+	/* *****************************************************************************************
+	 * TODO Pair variable
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public void visitPair(PairVar p) {
+		if (p.mode instanceof modes.UninitializedDecl) {
+			InfixPrinter left = new InfixPrinter();
+			InfixPrinter right = new InfixPrinter();
+			
+			p.left().accept(left);
+			p.right().accept(right);
+			
+			infixOutput = infixOutput.concat(p.name + " : PAIR[" + left.infixOutput + " ; " + right.infixOutput + "]"); 
+		}
+		else if (p.mode instanceof modes.Verification) {
+			if (p.element.equals("first")) {
+				infixOutput = infixOutput.concat(p.name + ".first");
+			}
+			else if (p.element.equals("second")) {
+				infixOutput = infixOutput.concat(p.name + ".second");
+			}
+			else {
+				infixOutput = infixOutput.concat(p.name + "." + p.element);
+			}
+		}
+		
 	}
 	
 	/* *****************************************************************************************
@@ -959,7 +992,9 @@ public class InfixPrinter implements Visitor{
 	
 	
 	@Override
-	public void visitNIL(NIL n) {
+	public void visitUnknownVar(UnknownVar n) {
 		infixOutput = infixOutput.concat(n.name);
 	}
+
+	
 }

@@ -26,4 +26,11 @@ public class Preconditions extends Contracts {
 		return new Preconditions(contractsCopy);
 	}
 
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

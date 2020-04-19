@@ -26,4 +26,10 @@ public class Postconditions extends Contracts {
 		return new Postconditions(contractsCopy);
 	}
 
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

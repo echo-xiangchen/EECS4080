@@ -14,7 +14,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	
 	public static Map<String, String> varTypes = new HashMap<String, String>();
 	
-	public static boolean isPair = false;
+	public static boolean isPair;
 	
 	/* *****************************************************************************************
 	 * TODO Methods for line rule
@@ -333,12 +333,12 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			}
 			else {
 				// if it is array assignment, it's not allowed
-				return new NIL(ctx.ID(0).getText(), new ArrayAssign());
+				return new UnknownVar(ctx.ID(0).getText(), new ArrayAssign());
 			}
 		}
 		// if the variable is not declared, cannot do the assignment
 		else {
-			return new NIL(ctx.ID(1).getText(), new Undeclared());
+			return new UnknownVar(ctx.ID(1).getText(), new Undeclared());
 		}
 	}
 	
@@ -379,7 +379,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			
 		}
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 		
 	}
@@ -399,14 +399,14 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			else if (varTypes.get(ctx.ID().getText()).equals("RealArray")) {
 				return new RealArrayVar(ctx.ID().getText(), value, new Assignment());
 			}
-			// Declared for NIL means the variable has been declared but with the wrong type
+			// WrongBoolDecl for UnknownVar means the variable has been declared but with the wrong type
 			else {
-				return new NIL(ctx.ID().getText(), new Declared());
+				return new UnknownVar(ctx.ID().getText(), new WrongBoolDecl());
 			}
 		}
 		// Undeclared means the variable has not been declared
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
@@ -428,7 +428,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			}
 			else {
 				// if it is array assignment, it's not allowed
-				return new NIL(ctx.ID(0).getText(), new ArrayAssign());
+				return new UnknownVar(ctx.ID(0).getText(), new ArrayAssign());
 			}
 		}
 		
@@ -468,11 +468,11 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			}
 			else {
 				// if it is array assignment, it's not allowed
-				return new NIL(ctx.ID().getText(), new ArrayAssign());
+				return new UnknownVar(ctx.ID().getText(), new ArrayAssign());
 			}
 		}
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
@@ -496,7 +496,7 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 					new BoolArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmeticExpr())));
 		}
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
@@ -737,6 +737,137 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		}
 	}
 	
+	// uninitialzed pair variable declaration
+	@Override
+	public Verifier visitNamedPairDecl(NamedPairDeclContext ctx) {
+		isPair = true;
+		
+		// first check if left or right element has already been declared
+		if (varTypes.containsKey(ctx.ID(1).getText())) {
+			isPair = false;
+			return new UnknownVar(ctx.ID(1).getText(), new Declared());
+		}
+		else if (varTypes.containsKey(ctx.ID(2).getText())) {
+			isPair = false;
+			return new UnknownVar(ctx.ID(2).getText(), new Declared());
+		}
+		// if both left and right element have not been declared
+		else {
+			// if left element is boolean type
+			if (ctx.left.getType() == VerifierParser.BOOL) {
+				// add left element to the varTypes
+				varTypes.put(ctx.ID(1).getText(), "Bool");
+				
+				// create left element object
+				Verifier left = new BoolVar(ctx.ID(1).getText(), new UninitializedDecl());
+				
+				if (ctx.right.getType() == VerifierParser.BOOL) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Bool");
+					
+					Verifier right = new BoolVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+				else if (ctx.right.getType() == VerifierParser.INT) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Int");
+					
+					Verifier right = new IntVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+				else if (ctx.right.getType() == VerifierParser.REAL) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Real");
+					
+					Verifier right = new RealVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+			}
+			// if left element is integer type
+			else if (ctx.left.getType() == VerifierParser.INT) {
+				// add left element to the varTypes
+				varTypes.put(ctx.ID(1).getText(), "Int");
+				
+				// create left element object
+				Verifier left = new IntVar(ctx.ID(1).getText(), new UninitializedDecl());
+				
+				if (ctx.right.getType() == VerifierParser.BOOL) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Bool");
+					
+					
+					Verifier right = new BoolVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+				else if (ctx.right.getType() == VerifierParser.INT) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Int");
+					
+					Verifier right = new IntVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+				else if (ctx.right.getType() == VerifierParser.REAL) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Real");
+					
+					Verifier right = new RealVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+			}
+			// if left element is real type
+			else if (ctx.left.getType() == VerifierParser.REAL) {
+				// add left element to the varTypes
+				varTypes.put(ctx.ID(1).getText(), "Real");
+				
+				// create left element object
+				Verifier left = new RealVar(ctx.ID(1).getText(), new UninitializedDecl());
+				
+				if (ctx.right.getType() == VerifierParser.BOOL) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Bool");
+					
+					
+					Verifier right = new BoolVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+				else if (ctx.right.getType() == VerifierParser.INT) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Int");
+					
+					Verifier right = new IntVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+				else if (ctx.right.getType() == VerifierParser.REAL) {
+					
+					varTypes.put(ctx.ID(2).getText(), "Real");
+					
+					Verifier right = new RealVar(ctx.ID(2).getText(), new UninitializedDecl());
+					
+					isPair = false;
+					return new PairVar(ctx.ID(0).getText(), left , right, new UninitializedDecl());
+				}
+			}
+		}
+		isPair = false;
+		return null;
+	}
+	
 	
 	/* *****************************************************************************************
 	 * TODO Methods for initialDecl rule
@@ -803,6 +934,13 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		varTypes.put(ctx.ID().getText(), "RealArray");
 		
 		return new RealArrayVar(ctx.ID().getText(), value, new InitializedDecl());
+	}
+	
+	// unnamed pair with value
+	// [BOOL; BOOL]
+	@Override
+	public Verifier visitUnnamedBoolBoolPairValueDecl(UnnamedBoolBoolPairValueDeclContext ctx) {
+		isPair = true
 	}
 	
 	
@@ -976,6 +1114,24 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 		return new Results(visit(ctx.arithmeticExpr()));
 	}
 	
+	// boolean pair first element
+	@Override
+	public Verifier visitBoolPairFirst(BoolPairFirstContext ctx) {
+		return new PairVar(ctx.ID().getText(), "first", new BoolVerification());
+	}
+	
+	// boolean pair second element
+	@Override
+	public Verifier visitBoolPairSecond(BoolPairSecondContext ctx) {
+		return new PairVar(ctx.ID().getText(), "second", new BoolVerification());
+	}
+	
+	// boolean pair element
+	@Override
+	public Verifier visitBoolPairElement(BoolPairElementContext ctx) {
+		return new PairVar(ctx.ID(0).getText(), ctx.ID(1).getText(), new BoolVerification());
+	}
+	
 	
 	// boolean true declaration
 	@Override
@@ -1113,14 +1269,14 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			else if (varTypes.get(ctx.ID().getText()).equals("Real")) {
 				return new RealVar(ctx.ID().getText(), new Verification());
 			}
-			// Declared for NIL means the variable has been declared but with the wrong type
+			// WrongBoolDecl for UnknownVar means the variable has been declared but with the wrong type
 			else {
-				return new NIL(ctx.ID().getText(), new Declared());
+				return new UnknownVar(ctx.ID().getText(), new WrongBoolDecl());
 			}
 		}
 		// Undeclared means the variable has not been declared
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
@@ -1135,14 +1291,14 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			else if (varTypes.get(ctx.ID().getText()).equals("RealArray")) {
 				return new RealArrayVar(ctx.ID().getText(), new Verification(), visit(ctx.arithmeticExpr()));
 			}
-			// Declared for NIL means the variable has been declared but with the wrong type
+			// WrongBoolDecl for UnknownVar means the variable has been declared but with the wrong type
 			else {
-				return new NIL(ctx.ID().getText(), new Declared());
+				return new UnknownVar(ctx.ID().getText(), new WrongBoolDecl());
 			}
 		}
 		// Undeclared means the variable has not been declared
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
@@ -1156,14 +1312,14 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			else if (varTypes.get(ctx.ID().getText()).equals("Real")) {
 				return new Olds(ctx.ID().getText(), new RealType());
 			}
-			// Declared for NIL means the variable has been declared but with the wrong type
+			// WrongBoolDecl for UnknownVar means the variable has been declared but with the wrong type
 			else {
-				return new NIL(ctx.ID().getText(), new Declared());
+				return new UnknownVar(ctx.ID().getText(), new WrongBoolDecl());
 			}
 		}
 		// Undeclared means the variable has not been declared
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
@@ -1178,14 +1334,14 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 			else if (varTypes.get(ctx.ID().getText()).equals("RealArray")) {
 				return new Olds(ctx.ID().getText(), visit(ctx.arithmeticExpr()), new RealArray());
 			}
-			// Declared for NIL means the variable has been declared but with the wrong type
+			// WrongBoolDecl for UnknownVar means the variable has been declared but with the wrong type
 			else {
-				return new NIL(ctx.ID().getText(), new Declared());
+				return new UnknownVar(ctx.ID().getText(), new WrongBoolDecl());
 			}
 		}
 		// Undeclared means the variable has not been declared
 		else {
-			return new NIL(ctx.ID().getText(), new Undeclared());
+			return new UnknownVar(ctx.ID().getText(), new Undeclared());
 		}
 	}
 	
@@ -1199,6 +1355,23 @@ public class AntlrToVerifier extends VerifierBaseVisitor<Verifier>{
 	@Override
 	public Verifier visitArithArrayResult(ArithArrayResultContext ctx) {
 		return new Results(visit(ctx.arithmeticExpr()));
+	}
+	
+	// arithmetic pair first element
+	@Override
+	public Verifier visitArithPairFirst(ArithPairFirstContext ctx) {
+		return new PairVar(ctx.ID().getText(), "first", new ArithVerification());
+	}
+	
+	// arithmetic pair second element
+	@Override
+	public Verifier visitArithPairSecond(ArithPairSecondContext ctx) {
+		return new PairVar(ctx.ID().getText(), "second", new ArithVerification());
+	}
+	
+	@Override
+	public Verifier visitArithPairElement(ArithPairElementContext ctx) {
+		return new PairVar(ctx.ID(0).getText(), ctx.ID(1).getText(), new ArithVerification());
 	}
 	
 	// int number

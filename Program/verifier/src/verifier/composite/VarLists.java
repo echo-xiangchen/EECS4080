@@ -23,4 +23,10 @@ public class VarLists extends Var {
 		return new VarLists(list, this.mode);
 	}
 
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

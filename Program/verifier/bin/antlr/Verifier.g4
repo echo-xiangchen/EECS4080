@@ -184,41 +184,41 @@ initialDecl
 	| ID ':' PAIR '[' BOOL ';' BOOL ']' 
 			'=' '[' boolExpr ';' boolExpr ']'											# UnnamedBoolBoolPairValueDecl
 	| ID ':' PAIR '[' BOOL ';' type=(INT|REAL) ']' 
-			'=' '[' boolExpr ';' right=(INTNUM|REALNUM) ']'								# UnnamedBoolArithPairValueDecl
+			'=' '[' boolExpr ';' arithmeticExpr ']'								# UnnamedBoolArithPairValueDecl
 	// Int
 	| ID ':' PAIR '[' INT ';' BOOL ']' 
-			'=' '[' INTNUM ';' boolExpr ']'												# UnnamedIntBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'												# UnnamedIntBoolPairValueDecl
 	| ID ':' PAIR '[' INT ';' type=(INT|REAL) ']' 
-			'=' '[' INTNUM ';' right=(INTNUM|REALNUM) ']'								# UnnamedIntArithPairValueDecl
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# UnnamedIntArithPairValueDecl
 	// Real
 	| ID ':' PAIR '[' REAL ';' BOOL ']' 
-			'=' '[' REALNUM ';' boolExpr ']'											# UnnamedRealBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'											# UnnamedRealBoolPairValueDecl
 	| ID ':' PAIR '[' REAL ';' type=(INT|REAL) ']' 
-			'=' '[' REALNUM ';' right=(INTNUM|REALNUM) ']'								# UnnamedRealArithPairValueDecl
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# UnnamedRealArithPairValueDecl
 	// named pair with value
 	// Bool
 	| ID ':' PAIR '[' ID ':' BOOL ';' ID ':' BOOL ']' 
 			'=' '[' boolExpr ';' boolExpr ']'											# NamedBoolBoolPairValueDecl
 	| ID ':' PAIR '[' ID ':' BOOL ';' ID ':' type=(INT|REAL) ']' 
-			'=' '[' boolExpr ';' right=(INTNUM|REALNUM) ']'								# NamedBoolArithPairValueDecl
+			'=' '[' boolExpr ';' arithmeticExpr ']'								# NamedBoolArithPairValueDecl
 	// Int
 	| ID ':' PAIR '[' ID ':' INT ';' ID ':' BOOL ']' 
-			'=' '[' INTNUM ';' boolExpr ']'												# NamedIntBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'												# NamedIntBoolPairValueDecl
 	| ID ':' PAIR '[' ID ':' INT ';' ID ':' type=(INT|REAL) ']' 
-			'=' '[' INTNUM ';' right=(INTNUM|REALNUM) ']'								# NamedIntArithPairValueDecl
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# NamedIntArithPairValueDecl
 	// Real
 	| ID ':' PAIR '[' ID ':' REAL ';' ID ':' BOOL ']' 
-			'=' '[' REALNUM ';' boolExpr ']'											# NamedRealBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'											# NamedRealBoolPairValueDecl
 	| ID ':' PAIR '[' ID ':' REAL ';' ID ':' type=(INT|REAL) ']' 
-			'=' '[' REALNUM ';' right=(INTNUM|REALNUM) ']'								# NamedRealArithPairValueDecl
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# NamedRealArithPairValueDecl
 	;
 
 
 unnamedDecl
 	: type=(BOOL|INT|REAL) 								# UnnamedSingleVarDecl
 	| ARRAY '[' type=(BOOL|INT|REAL) ']' 				# UnnamedArrayDecl
-	| PAIR '[' unnamedDecl ';' unnamedDecl ']'			# UnnamedPairValueDecl
-	| PAIR '[' uninitialDecl ';' uninitialDecl ']' 		# UnnamedPairDecl
+	| PAIR '[' unnamedDecl ';' unnamedDecl ']'			# UnnamedPairDecl
+	| PAIR '[' uninitialDecl ';' uninitialDecl ']' 		# UnnamedPairValueDecl
 	;
 
 
@@ -237,6 +237,9 @@ boolExpr
 	| OLD ID '[' arithmeticExpr ']'					# OldBoolArray
 	| RESULT 										# BoolResult
 	| RESULT '[' arithmeticExpr ']'					# BoolArrayResult
+	| ID '.' FIRST 									# BoolPairFirst
+	| ID '.' SECOND 								# BoolPairSecond
+	| ID '.' ID 									# BoolPairElement
 	| TRUE 											# BoolTrue
 	| FALSE 										# BoolFalse
 	| '(' boolExpr ')'								# Paren
@@ -267,6 +270,9 @@ arithmeticExpr
 	| OLD ID '[' arithmeticExpr ']' 					# OldArithArray
 	| RESULT 											# ArithResult
 	| RESULT '[' arithmeticExpr ']' 					# ArithArrayResult
+	| ID '.' FIRST 										# ArithPairFirst
+	| ID '.' SECOND 									# ArithPairSecond
+	| ID '.' ID 										# ArithPairElement
 	| INTNUM											# IntNum
 	| ID '.' COUNT 										# CountArray
 	| ID '.' LOWER 										# LowerArray
@@ -281,6 +287,8 @@ INT : 'INTEGER';
 REAL : 'REAL';
 ARRAY : 'ARRAY';
 PAIR : 'PAIR';
+FIRST: 'first';
+SECOND: 'second';
 
 
 VERIFY : 'verify';

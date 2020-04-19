@@ -43,4 +43,10 @@ public class Alternations extends Implementations {
 		
 		return new Alternations(ifStatCopy, elseifStatCopy, elseStatCopy);
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

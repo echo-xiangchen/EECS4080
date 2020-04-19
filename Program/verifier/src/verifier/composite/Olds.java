@@ -32,4 +32,10 @@ public class Olds extends Keywords {
 			return new Olds(this.name, this.type);
 		}
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

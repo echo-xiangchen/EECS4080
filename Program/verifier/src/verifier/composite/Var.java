@@ -3,6 +3,8 @@ package verifier.composite;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.NameList;
+
 import modes.*;
 
 public abstract class Var extends Logic {
@@ -15,6 +17,9 @@ public abstract class Var extends Logic {
 	
 	// array variable value
 	public List<Verifier> arrayValue;
+	
+	// element name for pair verification
+	public String element;
 	
 	
 	// anonymous variable declaration
@@ -69,5 +74,35 @@ public abstract class Var extends Logic {
 		this.arrayValue = arrayValue;
 		this.mode = mode;
 		arrayValue = new ArrayList<Verifier>();
+	}
+	
+	
+	// uninitialized pair declaration
+	// with named left and right element
+	public Var(String name, Verifier left, Verifier right, mode mode) {
+		this.name = name;
+		children = new ArrayList<Verifier>();
+		children.add(left);
+		children.add(right);
+		this.mode = mode;
+	}
+	
+	// initialized pair declaration
+	public Var(String name, Verifier left, Verifier right, Verifier leftElement, Verifier rightElement, mode mode) {
+		this.name = name;
+		children = new ArrayList<Verifier>();
+		children.add(left);
+		children.add(right);
+		pairValues = new ArrayList<Verifier>();
+		pairValues.add(leftElement);
+		pairValues.add(rightElement);
+		this.mode = mode;
+	}
+	
+	// pair verification
+	public Var(String name, String element, mode mode) {
+		this.name = name;
+		this.element = element;
+		this.mode = mode;
 	}
 }

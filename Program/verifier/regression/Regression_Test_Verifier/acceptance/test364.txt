@@ -1,0 +1,41 @@
+-- test program verification
+-- boolean lottery (with error)
+
+lottery1: INTEGER
+lottery2: INTEGER
+
+guess1: INTEGER
+guess2: INTEGER
+
+win: INTEGER
+
+lottery()
+require
+	positive_lottery_digit: loggery1 >= 0 and lottery2 >= 0
+	positive_guess_digit: guess1 >= 0 and guess2 >= 0
+do
+	if guess1 = lottery1 and guess2 = lottery2 then
+		win := 10000;
+	elseif guess2 = lottery1 and guess1 = lottery2 then
+		win := 3000;
+	elseif guess1 = lottery1 or guess1 = lottery2 
+			or guess2 = lottery1 or guess2 = lottery2 then
+		win := 1000;
+	else
+		win := 0;
+	end
+ensure
+	first_price: (guess1 = lottery1 and guess2 = lottery2) => (win = 10000)
+	second_price: ((not (guess1 = lottery1 and guess2 = lottery2)) 
+					and (guess2 = lottery1 and guess1 = lottery2)) => (win = 3000)
+	third_price: (((not (guess1 = lottery1 and guess2 = lottery2)) 
+					and (not (guess2 = lottery1 and guess1 = lottery2))) 
+					and (guess1 = lottery1 or guess1 = lottery2 or guess2 = 
+					lottery1 or guess2 = lottery2)) => (win = 1000)
+	no_winning: ((not(guess1 = lottery1 and guess2 = lottery2)) 
+					and (not (guess2 = lottery1 and guess1 = lottery2)) 
+					and (not (guess1 = lottery1 or guess1 = lottery2 
+					or guess2 = lottery1 or guess2 = lottery2))) => (win = 0)
+end
+
+verify lottery

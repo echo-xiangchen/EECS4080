@@ -1,6 +1,9 @@
 package verifier.visitor;
 
 import org.antlr.v4.runtime.misc.Pair;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import java.util.*;
 import types.*;
 import verifier.composite.*;
@@ -15,7 +18,15 @@ public class TypeChecker implements Visitor{
 	// hashmap that stores the parameters
 	public static Map<String, Pair<VarType, Verifier>> parameterMap = new LinkedHashMap<String, Pair<VarType, Verifier>>();
 	
-
+	// hashmap that stores the pair elements
+	// only the type of the elements
+	public static Map<String, Pair<Verifier, Verifier>> pairElementMap = new LinkedHashMap<String, Pair<Verifier, Verifier>>();
+	
+	// hashmap that stores the pair values
+	// with initialized value
+	public static Map<String, Pair<Verifier, Verifier>> pairValueMap = new LinkedHashMap<String, Pair<Verifier, Verifier>>();
+	
+	
 	// indicate whether is inside a method
 	public static boolean isMethod;
 	
@@ -729,8 +740,8 @@ public class TypeChecker implements Visitor{
 				else if (!(varMap.get(a.name).a instanceof types.BoolArray)) {
 					errormsg.add("Error: variable " + a.name + " is not declared as a boolean array.");
 				}
-				else if (arrayMap.containsKey(a.name)) {
-					errormsg.add("Error: Cannot re-assign values to an array.");
+				else if (parameterMap.containsKey(a.name)) {
+					errormsg.add("Error: Variable " + a.name + " is parameter. Cannot perform this assignment.");
 				}
 				else {
 					arrayMap.put(a.name, a.arrayValue);
@@ -882,8 +893,8 @@ public class TypeChecker implements Visitor{
 				if (!varMap.containsKey(a.name)) {
 					errormsg.add("Error: variable " + a.name + " has not been declared.");
 				}
-				else if (arrayMap.containsKey(a.name)) {
-					errormsg.add("Error: Cannot re-assign values to an array.");
+				else if (parameterMap.containsKey(a.name)) {
+					errormsg.add("Error: Variable " + a.name + " is parameter. Cannot perform this assignment.");
 				}
 				else {
 					arrayMap.put(a.name, a.arrayValue);
@@ -1025,8 +1036,8 @@ public class TypeChecker implements Visitor{
 				if (!varMap.containsKey(a.name)) {
 					errormsg.add("Error: variable " + a.name + " has not been declared.");
 				}
-				else if (arrayMap.containsKey(a.name)) {
-					errormsg.add("Error: Cannot re-assign values to an array.");
+				else if (parameterMap.containsKey(a.name)) {
+					errormsg.add("Error: Variable " + a.name + " is parameter. Cannot perform this assignment.");
 				}
 				else {
 					arrayMap.put(a.name, a.arrayValue);
@@ -1044,6 +1055,170 @@ public class TypeChecker implements Visitor{
 				}
 			}
 		}
+	}
+	
+	/* *****************************************************************************************
+	 * TODO Pair
+	 * *****************************************************************************************
+	 */
+	
+	@Override
+	public void visitPair(PairVar p) {
+		// uinitialized declaration
+		// p: PAIR[x: INTEGER; y: BOOLEAN]
+		if (p.mode instanceof modes.UninitializedDecl) {
+			TypeChecker leftChecker = new TypeChecker();
+			TypeChecker rightChecker = new TypeChecker();
+			
+			p.left().accept(leftChecker);
+			p.right().accept(rightChecker);
+			
+			if (errormsg.isEmpty()) {
+				if (!varMap.containsKey(p.name)) {
+					// add p to the varMap
+					varMap.put(p.name, new Pair<VarType, Verifier>(new PairType(), null));
+					// also add element of p to the pairmap
+					pairElementMap.put(p.name, new Pair<Verifier, Verifier>(p.left(), p.right()));
+					
+					if (isParameter) {
+						parameterMap.put(p.name, new Pair<VarType, Verifier>(new PairType(), null));
+					}
+				}
+				else {
+					varMap.replace(p.name, new Pair<VarType, Verifier>(new UnknowType(), null));
+					errormsg.add("Error: Type declaration of variable " + p.name + " is ambigous. "
+							+ "Please make sure each variable is declared exactly once.");
+				}
+				
+			}
+		}
+		// boolean verification
+		// p.first
+		// p.second
+		// p.x
+		else if (p.mode instanceof modes.BoolVerification) {
+			if (!varMap.containsKey(p.name)) {
+				errormsg.add("Error: variable " + p.name + " has not been declared.");
+			}
+			else if (varMap.get(p.name).a instanceof types.UnknowType) {
+				errormsg.add("Error: Type of variable " + p.name + " in this expression is ambigous. " 
+						+ "Please make sure each variable is declared exactly once.");
+			}
+			else if (!(varMap.get(p.name).a instanceof types.PairType)) {
+				errormsg.add("Error: variable " + p.name + " is not been declared as a Pair.");
+			}
+			else if (errormsg.isEmpty()) {
+				// if it's verifying the first element
+				if (p.element.equals("first")) {
+					if (!(pairElementMap.get(p.name).a instanceof BoolVar)) {
+						errormsg.add("Error: " + p.name + ".first is not boolean type.");
+					}
+					else {
+						varMap.put("p.first", new Pair<VarType, Verifier>(new BoolType(), null));
+					}
+				}
+				// if it's verifying the second element
+				else if (p.element.equals("second")) {
+					if (!(pairElementMap.get(p.name).b instanceof BoolVar)) {
+						errormsg.add("Error: " + p.name + ".second is not boolean type.");
+					}
+					else {
+						varMap.put("p.second", new Pair<VarType, Verifier>(new BoolType(), null));
+					}
+				}
+				
+				else {
+					// if the element name matches the first element
+					if (p.element.equals(pairElementMap.get(p.name).a.name)) {
+						if (!(varMap.get(pairElementMap.get(p.name).a.name).a instanceof BoolType)) {
+							errormsg.add("Error: " + p.name + "." + p.element + " is not boolean type.");
+						}
+						else {
+							varMap.put("p." + p.element, new Pair<VarType, Verifier>(varMap.get(pairElementMap.get(p.name).a.name).a, null));
+						}
+					}
+					// if the element name matches the second element
+					else if (p.element.equals(pairElementMap.get(p.name).b.name)) {
+						if (!(varMap.get(pairElementMap.get(p.name).b.name).a instanceof BoolType)) {
+							errormsg.add("Error: " + p.name + "." + p.element + " is not boolean type.");
+						}
+						else {
+							varMap.put("p." + p.element, new Pair<VarType, Verifier>(varMap.get(pairElementMap.get(p.name).b.name).a, null));
+						}
+					}
+					// if the element name does not match any of the pair element name
+					else {
+						errormsg.add("Error: Pair " + p.name + " does not contains the element " + p.element + ".");
+					}
+				}
+			}
+		}
+		// arithmetic verification
+		// p.first
+		// p.second
+		// p.x
+		else if (p.mode instanceof modes.ArithVerification) {
+			if (!varMap.containsKey(p.name)) {
+				errormsg.add("Error: variable " + p.name + " has not been declared.");
+			}
+			else if (varMap.get(p.name).a instanceof types.UnknowType) {
+				errormsg.add("Error: Type of variable " + p.name + " in this expression is ambigous. " 
+						+ "Please make sure each variable is declared exactly once.");
+			}
+			else if (!(varMap.get(p.name).a instanceof types.PairType)) {
+				errormsg.add("Error: variable " + p.name + " is not been declared as a Pair.");
+			}
+			else if (errormsg.isEmpty()) {
+				// if it's verifying the first element
+				if (p.element.equals("first")) {
+					if (!(varMap.get(pairElementMap.get(p.name).a.name).a instanceof RealType) 
+							&& !(varMap.get(pairElementMap.get(p.name).a.name).a instanceof IntType)) {
+						errormsg.add("Error: " + p.name + ".first is not integer or real type.");
+					}
+					else {
+						varMap.put("p.first", new Pair<VarType, Verifier>(varMap.get(pairElementMap.get(p.name).a.name).a, null));
+					}
+				}
+				// if it's verifying the second element
+				else if (p.element.equals("second")) {
+					if (!(varMap.get(pairElementMap.get(p.name).b.name).a instanceof RealType) 
+							&& !(varMap.get(pairElementMap.get(p.name).b.name).a instanceof IntType)) {
+						errormsg.add("Error: " + p.name + ".second is not integer or real type.");
+					}
+					else {
+						varMap.put("p.second", new Pair<VarType, Verifier>(varMap.get(pairElementMap.get(p.name).b.name).a, null));
+					}
+				}
+				
+				else {
+					// if the element name matches the first element
+					if (p.element.equals(pairElementMap.get(p.name).a.name)) {
+						if (!(varMap.get(pairElementMap.get(p.name).a.name).a instanceof RealType) 
+								&& !(varMap.get(pairElementMap.get(p.name).a.name).a instanceof IntType)) {
+							errormsg.add("Error: " + p.name + "." + p.element + " is not integer or real type.");
+						}
+						else {
+							varMap.put("p." + p.element, new Pair<VarType, Verifier>(varMap.get(pairElementMap.get(p.name).a.name).a, null));
+						}
+					}
+					// if the element name matches the second element
+					else if (p.element.equals(pairElementMap.get(p.name).b.name)) {
+						if (!(varMap.get(pairElementMap.get(p.name).b.name).a instanceof RealType) 
+								&& !(varMap.get(pairElementMap.get(p.name).b.name).a instanceof IntType)) {
+							errormsg.add("Error: " + p.name + "." + p.element + " is not integer or real type.");
+						}
+						else {
+							varMap.put("p." + p.element, new Pair<VarType, Verifier>(varMap.get(pairElementMap.get(p.name).b.name).a, null));
+						}
+					}
+					// if the element name does not match any of the pair element name
+					else {
+						errormsg.add("Error: Pair " + p.name + " does not contains the element " + p.element + ".");
+					}
+				}
+			}
+		}
+		
 	}
 	
 	/* *****************************************************************************************
@@ -1074,9 +1249,9 @@ public class TypeChecker implements Visitor{
 			if (!varMap.containsKey(c.name)) {
 				errormsg.add("Error: Array " + c.name + " has not been declared.");
 			}
-//			else if (!arrayMap.containsKey(c.name)) {
-//				errormsg.add("Error: variable " + c.name + " has not been initialized.");
-//			}
+			else if (!parameterMap.containsKey(c.name) && !arrayMap.containsKey(c.name)) {
+				errormsg.add("Error: variable " + c.name + " has not been initialized.");
+			}
 			else {
 				InfixPrinter arrayCountPrinter = new InfixPrinter();
 				c.accept(arrayCountPrinter);
@@ -1314,7 +1489,7 @@ public class TypeChecker implements Visitor{
 				}
 				else if (varMap.get(a.name).a instanceof RealType 
 						&& varMap.get(assignValueprinter.infixOutput).a instanceof IntType) {
-					
+					// no error
 				}
 				else if (!(varMap.get(a.name).a.getClass().equals(varMap.get(assignValueprinter.infixOutput).a.getClass()))) {
 					errormsg.add("Error: variable " + a.name + " does not have the same type as " 
@@ -1637,12 +1812,12 @@ public class TypeChecker implements Visitor{
 	
 	
 	@Override
-	public void visitNIL(NIL n) {
+	public void visitUnknownVar(UnknownVar n) {
 		if (n.mode instanceof modes.Undeclared) {
 			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
 			errormsg.add("Error: variable " + n.name + " has not been declared.");
 		}
-		else if (n.mode instanceof modes.Declared) {
+		else if (n.mode instanceof modes.WrongBoolDecl) {
 			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
 			errormsg.add("Error: variable " + n.name + " has boolean type.");
 		}
@@ -1650,9 +1825,11 @@ public class TypeChecker implements Visitor{
 			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
 			errormsg.add("Error: Array assignment is not allowed.");
 		}
+		else if (n.mode instanceof modes.Declared) {
+			varMap.put(n.name, new Pair<VarType, Verifier>(new UnknowType(), null));
+			errormsg.add("Error: Type declaration of variable " + n.name + " is ambigous. "
+					+ "Please make sure each variable is declared exactly once.");
+		}
 		
 	}
-
-
-	
 }

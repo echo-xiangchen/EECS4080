@@ -1,0 +1,22 @@
+-- test program verification
+-- simple loop (with error)
+increment_i
+require
+	positive: i >= 0
+do
+	from
+		i := 1;
+	invariant
+		1 <= i  and i <= 6
+	until
+		i > 5
+	loop
+		i := i + 1;
+	variant
+		6 - i
+	end
+ensure
+	no_restriction: i <= 6
+end
+
+verify increment_i

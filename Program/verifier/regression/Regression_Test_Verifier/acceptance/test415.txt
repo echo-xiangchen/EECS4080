@@ -1,0 +1,29 @@
+-- test program verification
+-- age and weight (Not discharged)
+
+age: INTEGER
+weight: REAL
+
+s: INTEGER
+
+age_and_weight()
+require
+	no_restrict: false
+do
+	if age > 28 and weight <= 140 then
+		s := 1;
+	elseif age < 18 and weight >= 140 then
+		s := 20;
+	elseif age > 34 and weight >= 150 then
+		s := 30;
+	elseif age > 18 and weight <= 140 then
+		s := 50;
+	end
+ensure
+	case_1: (age = 17 and weight = 170) => (s = 50)
+	case_2: (age = 100 => weight = 100) => (s = 3)
+	case_3: (age = 15 => weight = 200) => (s = 2)
+	case 4: (age = 20 or weight = 120) => (s = 100)
+end
+
+verify age_and_weight

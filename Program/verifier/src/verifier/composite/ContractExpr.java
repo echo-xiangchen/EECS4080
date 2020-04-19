@@ -19,4 +19,10 @@ public class ContractExpr extends Contracts {
 				new Pair<String, Verifier>(this.contract.a, this.contract.b.copy());
 		return new ContractExpr(contractCopy);
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

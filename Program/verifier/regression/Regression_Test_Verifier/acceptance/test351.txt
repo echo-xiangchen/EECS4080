@@ -1,0 +1,18 @@
+-- test program verification
+-- Sequential (swap)  (no error)
+x: INTEGER
+y: INTEGER
+tmp: INTEGER
+
+swap()
+require
+	no_restriction: true
+do
+	tmp := x;
+	x := y;
+	y := tmp;
+ensure
+	swapped: x > y
+end
+
+verify swap

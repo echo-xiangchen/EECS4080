@@ -24,4 +24,10 @@ public class Locals extends Keywords {
 		
 		return new Locals(localVarsCopy);
 	}
+
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

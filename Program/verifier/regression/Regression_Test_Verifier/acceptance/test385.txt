@@ -1,0 +1,21 @@
+-- test program verification
+-- x and y (Not discharged)
+
+x: INTEGER
+y: INTEGER
+
+x_and_y()
+require
+	specify_value: x = 4 and y = 3
+do
+	if x + 3 = 6 then
+		y := 1;
+	else
+		y := y + 1;
+	end
+ensure
+	changed: (x = 3) => (y = 1)
+	not_changed: (not (x = 3)) => (y = 3)
+end
+
+verify x_and_y

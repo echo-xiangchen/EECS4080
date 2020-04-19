@@ -124,7 +124,7 @@ public class TestLogicVer {
 									
 									// save these five steps into seperate files
 									// for the 1st file
-									String path1 = "./output/" + testNum + "-formula0" + i + "-step01.txt";
+									String path1 = "./output/" + testNum + "-method0" + i + "-condition01.txt";
 									
 									File file1 = new File(path1);
 									
@@ -141,10 +141,10 @@ public class TestLogicVer {
 									
 									// print the result to the console
 									System.out.println(PrettyPrinter.infixFormula.get(i - 1) + "\nThis program contains loop.\n");
-									System.out.println("Output of step1 of this program has been stored in " + path1 + "\n");
+									System.out.println("Output of condition 1 of this program has been stored in " + path1 + "\n");
 									
 									// for the 2nd file
-									String path2 = "./output/" + testNum + "-formula0" + i + "-step02.txt";
+									String path2 = "./output/" + testNum + "-method0" + i + "-condition02.txt";
 									
 									File file2 = new File(path2);
 									
@@ -160,10 +160,10 @@ public class TestLogicVer {
 									outStream2.close();
 									
 									// print the result to the console
-									System.out.println("Output of step2 of this program has been stored in " + path2 + "\n");
+									System.out.println("Output of condition 2 of this program has been stored in " + path2 + "\n");
 									
 									// for the 3rd file
-									String path3 = "./output/" + testNum + "-formula0" + i + "-step03.txt";
+									String path3 = "./output/" + testNum + "-method0" + i + "-condition03.txt";
 									
 									File file3 = new File(path3);
 									
@@ -179,10 +179,10 @@ public class TestLogicVer {
 									outStream3.close();
 									
 									// print the result to the console
-									System.out.println("Output of step3 of this program has been stored in " + path3 + "\n");
+									System.out.println("Output of condition 3 of this program has been stored in " + path3 + "\n");
 									
 									// for the 4th file
-									String path4 = "./output/" + testNum + "-formula0" + i + "-step04.txt";
+									String path4 = "./output/" + testNum + "-method0" + i + "-condition04.txt";
 									
 									File file4 = new File(path4);
 									
@@ -198,10 +198,10 @@ public class TestLogicVer {
 									outStream4.close();
 									
 									// print the result to the console
-									System.out.println("Output of step4 of this program has been stored in " + path4 + "\n");
+									System.out.println("Output of condition 4 of this program has been stored in " + path4 + "\n");
 									
 									// for the 5th file
-									String path5 = "./output/" + testNum + "-formula0" + i + "-step05.txt";
+									String path5 = "./output/" + testNum + "-method0" + i + "-condition05.txt";
 									
 									File file5 = new File(path5);
 									
@@ -217,7 +217,7 @@ public class TestLogicVer {
 									outStream5.close();
 									
 									// print the result to the console
-									System.out.println("Output of step5 of this program has been stored in " + path5 + "\n");
+									System.out.println("Output of condition 5 of this program has been stored in " + path5 + "\n");
 									
 								}
 								// if it's not, then use the normal procedual
@@ -268,7 +268,7 @@ public class TestLogicVer {
 									
 									// save these five steps into seperate files
 									// for the 1st file
-									String path1 = "./output/"  + "formula0" + i + "-step01.txt";
+									String path1 = "./output/"  + "method0" + i + "-condition01.txt";
 									
 									File file1 = new File(path1);
 									
@@ -285,10 +285,10 @@ public class TestLogicVer {
 									
 									// print the result to the console
 									System.out.println(PrettyPrinter.infixFormula.get(i - 1) + "\nThis program contains loop.\n");
-									System.out.println("Output of step1 of this program has been stored in " + path1 + "\n");
+									System.out.println("Output of condition 1 of this program has been stored in " + path1 + "\n");
 									
 									// for the 2nd file
-									String path2 = "./output/"  + "formula0" + i + "-step02.txt";
+									String path2 = "./output/"  + "method0" + i + "-condition02.txt";
 									
 									File file2 = new File(path2);
 									
@@ -304,10 +304,10 @@ public class TestLogicVer {
 									outStream2.close();
 									
 									// print the result to the console
-									System.out.println("Output of step2 of this program has been stored in " + path2 + "\n");
+									System.out.println("Output of condition 2 of this program has been stored in " + path2 + "\n");
 									
 									// for the 3rd file
-									String path3 = "./output/"  + "formula0" + i + "-step03.txt";
+									String path3 = "./output/"  + "method0" + i + "-condition03.txt";
 									
 									File file3 = new File(path3);
 									
@@ -323,10 +323,10 @@ public class TestLogicVer {
 									outStream3.close();
 									
 									// print the result to the console
-									System.out.println("Output of step3 of this program has been stored in " + path3 + "\n");
+									System.out.println("Output of condition 3 of this program has been stored in " + path3 + "\n");
 									
 									// for the 4th file
-									String path4 = "./output/"  + "formula0" + i + "-step04.txt";
+									String path4 = "./output/"  + "method0" + i + "-condition04.txt";
 									
 									File file4 = new File(path4);
 									
@@ -342,10 +342,10 @@ public class TestLogicVer {
 									outStream4.close();
 									
 									// print the result to the console
-									System.out.println("Output of step4 of this program has been stored in " + path4 + "\n");
+									System.out.println("Output of condition 4 of this program has been stored in " + path4 + "\n");
 									
 									// for the 5th file
-									String path5 = "./output/"  + "formula0" + i + "-step05.txt";
+									String path5 = "./output/"  + "method0" + i + "-condition05.txt";
 									
 									File file5 = new File(path5);
 									
@@ -361,12 +361,12 @@ public class TestLogicVer {
 									outStream5.close();
 									
 									// print the result to the console
-									System.out.println("Output of step5 of this program has been stored in " + path5 + "\n");
+									System.out.println("Output of condition 5 of this program has been stored in " + path5 + "\n");
 									
 								}
 								// if it's not, then use the normal procedual
 								else {
-									String path2 = "./output/" + "formula0" + i + ".txt";
+									String path2 = "./output/" + "method0" + i + ".txt";
 									
 									File file = new File(path2);
 									
@@ -466,7 +466,7 @@ public class TestLogicVer {
 			        
 			        //System.out.println("TypeChecker.varMap: " + TypeChecker.varMap + "\n");
 			        //System.out.println("TypeChecker.arrayMap: " + TypeChecker.arrayMap + "\n");
-			        
+			        //System.out.println("TypeChecker.pairMap: " + TypeChecker.pairMap + "\n");
 			        
 			        
 			        
@@ -507,8 +507,12 @@ public class TestLogicVer {
 							verifier.get(i).accept(printer);
 							
 							//System.out.println("PrefixPrinter.completeVarMap: " + PrefixPrinter.completeVarMap);
+							//System.out.println("PrefixPrinter.inclusiveVarMap: " + PrefixPrinter.inclusiveVarMap);
 							//System.out.println("PrefixPrinter.arrayMap: " + PrefixPrinter.arrayMap);
 							//System.out.println("PrefixPrinter.oldVarMap: " + PrefixPrinter.oldVarMap);
+							//System.out.println("PrefixPrinter.pairTypeMap: " + PrefixPrinter.pairTypeMap);
+							//System.out.println("PrefixPrinter.pairValueMap: " + PrefixPrinter.pairValueMap);
+							
 						}
 						
 						
@@ -594,10 +598,9 @@ public class TestLogicVer {
 									writeToFile = writeToFile.concat("Implementation(S) : \n");
 									writeToFile = writeToFile.concat(InfixPrinter.imps.get(methondName));
 									// print wp
-									writeToFile = writeToFile.concat("wp(S, R) : \n");
+									writeToFile = writeToFile.concat("Correctness conditions : \n");
 									writeToFile = writeToFile.concat(InfixPrinter.wps.get(methondName));
-									// add the rest output
-									writeToFile = writeToFile.concat("Proof Obligation: Q => wp(S, R)\n\n");
+									
 									
 									// then test the five steps separately
 								
@@ -620,7 +623,7 @@ public class TestLogicVer {
 									
 									// if step 1 is not correct
 									if (result1 == Status.SATISFIABLE) {
-										writeToFile = writeToFile.concat("Step1 is not discharged.\n");
+										writeToFile = writeToFile.concat("Condition 1 is not discharged.\n");
 										
 										// get the model
 						            	Model m = s1.getModel();
@@ -687,7 +690,7 @@ public class TestLogicVer {
 									}
 									// if step 1 is correct
 									else if (result1 == Status.UNSATISFIABLE) {
-										writeToFile = writeToFile.concat("Step1 is discharged.\n");
+										writeToFile = writeToFile.concat("Condition 1 is discharged.\n");
 									}
 									else {
 										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -714,7 +717,7 @@ public class TestLogicVer {
 									
 									// if step 2 is not correct
 									if (result2 == Status.SATISFIABLE) {
-										writeToFile = writeToFile.concat("Step2 is not discharged.\n");
+										writeToFile = writeToFile.concat("Condition 2 is not discharged.\n");
 										
 										// get the model
 						            	Model m = s2.getModel();
@@ -781,7 +784,7 @@ public class TestLogicVer {
 									}
 									// if step 2 is correct
 									else if (result2 == Status.UNSATISFIABLE) {
-										writeToFile = writeToFile.concat("Step2 is discharged.\n");
+										writeToFile = writeToFile.concat("Condition 2 is discharged.\n");
 									}
 									else {
 										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -806,7 +809,7 @@ public class TestLogicVer {
 									
 									// if step 3 is not correct
 									if (result3 == Status.SATISFIABLE) {
-										writeToFile = writeToFile.concat("Step3 is not discharged.\n");
+										writeToFile = writeToFile.concat("Condition 3 is not discharged.\n");
 										
 										// get the model
 						            	Model m = s3.getModel();
@@ -873,7 +876,7 @@ public class TestLogicVer {
 									}
 									// if step 3 is correct
 									else if (result3 == Status.UNSATISFIABLE) {
-										writeToFile = writeToFile.concat("Step3 is discharged.\n");
+										writeToFile = writeToFile.concat("Condition 3 is discharged.\n");
 									}
 									else {
 										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -897,7 +900,7 @@ public class TestLogicVer {
 									
 									// if step 4 is not correct
 									if (result4 == Status.SATISFIABLE) {
-										writeToFile = writeToFile.concat("Step4 is not discharged.\n");
+										writeToFile = writeToFile.concat("Condition 4 is not discharged.\n");
 										
 										// get the model
 						            	Model m = s4.getModel();
@@ -962,7 +965,7 @@ public class TestLogicVer {
 									}
 									// if step 4 is correct
 									else if (result4 == Status.UNSATISFIABLE) {
-										writeToFile = writeToFile.concat("Step4 is discharged.\n");
+										writeToFile = writeToFile.concat("Condition 4 is discharged.\n");
 									}
 									else {
 										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -986,7 +989,7 @@ public class TestLogicVer {
 									
 									// if step 5 is not correct
 									if (result5 == Status.SATISFIABLE) {
-										writeToFile = writeToFile.concat("Step5 is not discharged.\n");
+										writeToFile = writeToFile.concat("Condition 5 is not discharged.\n");
 										
 										// get the model
 						            	Model m = s5.getModel();
@@ -1051,7 +1054,7 @@ public class TestLogicVer {
 									}
 									// if step 5 is correct
 									else if (result5 == Status.UNSATISFIABLE) {
-										writeToFile = writeToFile.concat("Step5 is discharged.\n");
+										writeToFile = writeToFile.concat("Condition 5 is discharged.\n");
 									}
 									else {
 										writeToFile = "Unknow formula: " + PrettyPrinter.infixFormula.get(i - 1) + "\n";
@@ -1325,8 +1328,6 @@ public class TestLogicVer {
 									
 									System.out.println(writeToFile);
 								}
-								
-								
 							}
 						}
 						/* *****************************************************************************************

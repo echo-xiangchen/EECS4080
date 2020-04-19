@@ -21,4 +21,10 @@ public class ExitCondition extends LoopStats {
 		return new ExitCondition(conditionCopy);
 	}
 
+	@Override
+	public boolean isEqual(Verifier v) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
