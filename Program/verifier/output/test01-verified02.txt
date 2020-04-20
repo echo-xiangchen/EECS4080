@@ -1,0 +1,2 @@
+(not p1.second)
+Is a tautology.

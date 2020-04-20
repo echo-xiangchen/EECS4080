@@ -1,0 +1,24 @@
+-- test Pair
+-- initialized pair with unnamed element(no error)
+x:BOOLEAN
+y:BOOLEAN
+
+i:INTEGER
+j:REAL
+
+p1:PAIR[BOOLEAN; BOOLEAN] = [true; false]
+
+p2:PAIR[BOOLEAN; INTEGER] = [true; 1]
+
+p3:PAIR[BOOLEAN; REAL] = [true; 9.4]
+
+verify p1.first
+verify p1.second
+
+
+verify p2.first
+verify p2.second >= 8
+
+
+verify p3.first
+verify p3.second < 0

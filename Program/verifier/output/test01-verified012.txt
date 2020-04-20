@@ -1,0 +1,2 @@
+(((p3.y3 + p1.first) + p2.first) >= 23)
+Is a tautology.

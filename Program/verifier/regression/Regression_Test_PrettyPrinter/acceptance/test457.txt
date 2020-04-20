@@ -1,0 +1,6 @@
+-- test Pair
+-- uninitialized pair(with error)
+
+p:PAIR[i:BOOLEAN;j:BOOLEAN]
+
+verify p.second >= 0

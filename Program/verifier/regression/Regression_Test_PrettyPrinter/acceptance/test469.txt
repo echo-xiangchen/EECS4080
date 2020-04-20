@@ -1,0 +1,6 @@
+-- test Pair
+-- uninitialized pair with unnamed element(no error)
+p:PAIR[INTEGER;INTEGER]
+
+verify p.first >= 9
+verify p.second  = 0

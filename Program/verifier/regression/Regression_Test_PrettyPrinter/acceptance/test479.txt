@@ -1,0 +1,28 @@
+-- test Pair
+-- initialized pair with named element(no error)
+x:BOOLEAN
+y:BOOLEAN
+
+i:INTEGER
+j:REAL
+
+p1:PAIR[x1:INTEGER; y1:BOOLEAN] = [90; false]
+
+p2:PAIR[x2:INTEGER; y2:INTEGER] = [34; 1]
+
+p3:PAIR[x3:INTEGER; y3:REAL] = [12; 9.4]
+
+verify p1.first > 0
+verify not p1.second 
+verify p1.x1 = 0
+verify p1.y1 and x
+
+verify p2.first <= 18
+verify p2.second + i > 78
+verify p2.x2 + 2 = 9
+verify p2.y2 - j < 0
+
+verify p3.first - 10 > 6
+verify p3.second * i = 100
+verify p3.x3 + p2.x2 > 10
+verify p3.y3 + p1.first + p2.first >= 23

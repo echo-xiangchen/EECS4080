@@ -1,0 +1,6 @@
+-- test Pair
+-- uninitialized pair(with error)
+
+p:PAIR[i:BOOLEAN;j:REAL]
+
+verify p.first > 0

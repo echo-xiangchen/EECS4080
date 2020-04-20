@@ -1,0 +1,8 @@
+((p2.second + i) > 78)
+Where: 
+    p2 : PAIR[REAL ; INTEGER] = [34.5 ; 1]
+    i : INTEGER
+
+Is not a tautology. Here is a counter example: 
+    p2 : Int
+    i : 77

@@ -512,6 +512,18 @@ public interface VerifierListener extends ParseTreeListener {
 	 */
 	void exitNamedPairDecl(VerifierParser.NamedPairDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code NamedPairUnnamedEleDecl}
+	 * labeled alternative in {@link VerifierParser#uninitialDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterNamedPairUnnamedEleDecl(VerifierParser.NamedPairUnnamedEleDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NamedPairUnnamedEleDecl}
+	 * labeled alternative in {@link VerifierParser#uninitialDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitNamedPairUnnamedEleDecl(VerifierParser.NamedPairUnnamedEleDeclContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BoolValueDecl}
 	 * labeled alternative in {@link VerifierParser#initialDecl}.
 	 * @param ctx the parse tree

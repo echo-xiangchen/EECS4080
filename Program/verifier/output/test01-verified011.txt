@@ -1,0 +1,2 @@
+((p3.x3 + p2.x2) > 10)
+Is a tautology.

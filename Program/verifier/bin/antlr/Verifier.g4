@@ -168,6 +168,7 @@ uninitialDecl
 	| ID ':' ARRAY '[' type=(BOOL|INT|REAL) ']'											# ArrayDecl
 	// pair variable
 	| ID ':' PAIR '[' ID ':' left=(BOOL|INT|REAL) ';' ID ':' right=(BOOL|INT|REAL) ']'	# NamedPairDecl
+	| ID ':' PAIR '[' left=(BOOL|INT|REAL) ';' right=(BOOL|INT|REAL) ']' 				# NamedPairUnnamedEleDecl
 	;
 
 
@@ -179,46 +180,46 @@ initialDecl
 	| ID ':' ARRAY '[' BOOL ']' '=' '<<' boolExpr (',' boolExpr)* '>>'					# BoolArrayValueDecl
 	| ID ':' ARRAY '[' INT ']' '=' '<<' arithmeticExpr (',' arithmeticExpr)* '>>'		# IntArrayValueDecl
 	| ID ':' ARRAY '[' REAL ']' '=' '<<' arithmeticExpr (',' arithmeticExpr)* '>>'		# RealArrayValueDecl
-	// unnamed pair with value
+	// pair initialized decl with unnamed element
 	// Bool
 	| ID ':' PAIR '[' BOOL ';' BOOL ']' 
-			'=' '[' boolExpr ';' boolExpr ']'											# UnnamedBoolBoolPairValueDecl
+			'=' '[' boolExpr ';' boolExpr ']'									# UnnamedBoolBoolPairValueDecl
 	| ID ':' PAIR '[' BOOL ';' type=(INT|REAL) ']' 
 			'=' '[' boolExpr ';' arithmeticExpr ']'								# UnnamedBoolArithPairValueDecl
 	// Int
 	| ID ':' PAIR '[' INT ';' BOOL ']' 
-			'=' '[' arithmeticExpr ';' boolExpr ']'												# UnnamedIntBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'								# UnnamedIntBoolPairValueDecl
 	| ID ':' PAIR '[' INT ';' type=(INT|REAL) ']' 
-			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# UnnamedIntArithPairValueDecl
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'						# UnnamedIntArithPairValueDecl
 	// Real
 	| ID ':' PAIR '[' REAL ';' BOOL ']' 
-			'=' '[' arithmeticExpr ';' boolExpr ']'											# UnnamedRealBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'								# UnnamedRealBoolPairValueDecl
 	| ID ':' PAIR '[' REAL ';' type=(INT|REAL) ']' 
-			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# UnnamedRealArithPairValueDecl
-	// named pair with value
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'						# UnnamedRealArithPairValueDecl
+	// pair initialized decl with named element
 	// Bool
 	| ID ':' PAIR '[' ID ':' BOOL ';' ID ':' BOOL ']' 
-			'=' '[' boolExpr ';' boolExpr ']'											# NamedBoolBoolPairValueDecl
+			'=' '[' boolExpr ';' boolExpr ']'									# NamedBoolBoolPairValueDecl
 	| ID ':' PAIR '[' ID ':' BOOL ';' ID ':' type=(INT|REAL) ']' 
 			'=' '[' boolExpr ';' arithmeticExpr ']'								# NamedBoolArithPairValueDecl
 	// Int
 	| ID ':' PAIR '[' ID ':' INT ';' ID ':' BOOL ']' 
-			'=' '[' arithmeticExpr ';' boolExpr ']'												# NamedIntBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'								# NamedIntBoolPairValueDecl
 	| ID ':' PAIR '[' ID ':' INT ';' ID ':' type=(INT|REAL) ']' 
-			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# NamedIntArithPairValueDecl
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'						# NamedIntArithPairValueDecl
 	// Real
 	| ID ':' PAIR '[' ID ':' REAL ';' ID ':' BOOL ']' 
-			'=' '[' arithmeticExpr ';' boolExpr ']'											# NamedRealBoolPairValueDecl
+			'=' '[' arithmeticExpr ';' boolExpr ']'								# NamedRealBoolPairValueDecl
 	| ID ':' PAIR '[' ID ':' REAL ';' ID ':' type=(INT|REAL) ']' 
-			'=' '[' arithmeticExpr ';' arithmeticExpr ']'								# NamedRealArithPairValueDecl
+			'=' '[' arithmeticExpr ';' arithmeticExpr ']'						# NamedRealArithPairValueDecl
 	;
 
 
 unnamedDecl
-	: type=(BOOL|INT|REAL) 								# UnnamedSingleVarDecl
-	| ARRAY '[' type=(BOOL|INT|REAL) ']' 				# UnnamedArrayDecl
-	| PAIR '[' unnamedDecl ';' unnamedDecl ']'			# UnnamedPairDecl
-	| PAIR '[' uninitialDecl ';' uninitialDecl ']' 		# UnnamedPairValueDecl
+	: type=(BOOL|INT|REAL) 															# UnnamedSingleVarDecl
+	| ARRAY '[' type=(BOOL|INT|REAL) ']' 											# UnnamedArrayDecl
+	| PAIR '[' type1=(BOOL|INT|REAL) ';' type2=(BOOL|INT|REAL) ']'					# UnnamedPairDecl
+	| PAIR '[' ID ':' type1=(BOOL|INT|REAL) ';' ID ':' type2=(BOOL|INT|REAL) ']' 	# UnnamedPairValueDecl
 	;
 
 

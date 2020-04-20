@@ -1,0 +1,6 @@
+-- test Pair
+-- uninitialized pair with unnamed element(no error)
+p:PAIR[BOOLEAN;REAL]
+
+verify p.first
+verify p.second >= 9.5

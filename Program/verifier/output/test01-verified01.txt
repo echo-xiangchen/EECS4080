@@ -1,6 +1,2 @@
-(p.j and true)
-Where: 
-    p : PAIR[i : REAL ; j : BOOLEAN]
-
-Is not a tautology. Here is a counter example: 
-    p : Bool
+(p1.first > 0)
+Is a tautology.

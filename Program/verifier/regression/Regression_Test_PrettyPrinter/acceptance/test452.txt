@@ -1,0 +1,6 @@
+-- test Pair
+-- uninitialized pair(no error)
+
+p:PAIR[i:INTEGER;j:REAL]
+
+verify p.first > 0

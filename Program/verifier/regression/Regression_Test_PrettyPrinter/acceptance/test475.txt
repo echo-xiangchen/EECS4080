@@ -1,0 +1,11 @@
+-- test Pair
+-- uninitialized pair with unnamed element(no error)
+p1:PAIR[REAL;INTEGER]
+
+verify p1.first = 9
+verify p1.second > 0
+
+p2:PAIR[REAL;REAL]
+
+verify p2.first = 9
+verify p2.second > 0

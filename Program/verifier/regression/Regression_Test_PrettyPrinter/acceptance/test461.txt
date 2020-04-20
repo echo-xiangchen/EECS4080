@@ -1,0 +1,5 @@
+-- test Pair
+-- uninitialized pair with unnamed element(no error)
+p:PAIR[BOOLEAN;BOOLEAN]
+
+verify p.first

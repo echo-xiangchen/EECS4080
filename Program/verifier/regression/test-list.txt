@@ -68,8 +68,11 @@ Gries-Theorems
 436 - 443: loop(increment_i)
 444 - 451: loop(find_max)
 
-332 - : uninitialized pair
-
+-- after fixing errors and retest the pair
+452 - 460: uninitialized pair(named element)
+461 - 476: uninitialized pair(unnamed element)
+477 - 482: initialized pair(named element)
+483 - 488: initialized pair(unnamed element)
 
 
 
