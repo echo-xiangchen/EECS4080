@@ -1,0 +1,53 @@
+- Abstract
+- Introduction
+	* Research Problem
+	* Contributions
+	* Resources (Github, deployment on indigo, videos)
+- Related Works (related-works.tex)
+	* Teaching formal logic in higher education 
+	* Boogie, Dafny 
+	* George
+
+/* By Saturday 7pm */
+- Background
+	* Design by Contract
+		+ pre and post conditions
+	* weakest precondition
+		+ assignments, conditionals, seq. comp.
+	* Program Verification using Hoare Triples
+		+ {Q} S {R}
+		+ loops
+	* Z3: p -> not p -> Z3 -> sat (counterexample) or unsat (tautology)
+	* ANTLR4
+- Examples of Features (examples.tex)
+	* Proposition and predicates
+	* if-statements (compute tax)
+	* Arrays, Pairs
+	*** old expressions
+	* Queries
+	* Commands
+	* loops 
+- Design
+	* Grammar
+	* Classes
+	* Composite Design Pattern
+	* Visitor Design Pattern
+	* \begin{figure*}\end{figure*}
+
+
+- Implementation of Transformations (implementation.tex)
+	* input-to-ANTLR
+	* ANTLR-to-Model
+	* Model-to-Model
+	* Model-to-Z3
+- Challenges
+	* Arrays and type checking
+	* old values 
+	* wp calculations
+- Practical Implication (practical-implication.tex)
+	* Teaching logic in absense of an instructor
+		-> facilitates online teaching
+- Future work
+	* Adopt this tool in EECS3311 F20
+	* Design an experiment to evaluate the tool
+- Appendix: Use of Tool (command line)
