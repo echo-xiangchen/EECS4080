@@ -1,0 +1,34 @@
+-- test program verification
+-- test_example (no error)
+
+
+
+a1:ARRAY[BOOLEAN]
+a2:ARRAY[INTEGER]
+a3:ARRAY[REAL]
+
+p1:PAIR[x1:BOOLEAN; y1: REAL]
+p2:PAIR[x2:REAL; y2: INTEGER]
+p3:PAIR[BOOLEAN; INTEGER]
+p4:PAIR[INTEGER;REAL]
+
+q1:BOOLEAN
+q2:BOOLEAN
+
+i1:INTEGER
+i2:INTEGER
+
+j1:REAL
+j2:REAL
+
+test_example
+require
+	not_empty: true
+do
+	q1 := q2;
+ensure
+	case1: q1 <=> q2
+	case2: q2 <=> old q2
+end
+
+verify test_example

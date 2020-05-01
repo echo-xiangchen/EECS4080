@@ -1,3 +1,0 @@
-Error: Variable k has not been declared.
-Error: Variable m has not been declared.
-Error: Variable r has not been declared.

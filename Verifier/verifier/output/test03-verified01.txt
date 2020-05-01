@@ -1,0 +1,81 @@
+test_example(a : ARRAY[INTEGER]) : ARRAY[INTEGER]
+  local
+    i : INTEGER
+  require
+    not_empty : (a.count > 0)
+  do
+    s := 5;
+    if (s = 5) then
+      p.x := s;
+    else
+      p.y := s;
+    end
+from
+    i := a.lower;
+invariant
+  loop_invariant : forall j | (((a.lower <= j) and (j < i)) => (Result[j] = a[j]))
+until
+  (i > a.upper)
+loop
+    Result[i] := a[i];
+    i := (i + 1);
+variant
+  loop_variant : ((a.upper - i) + 1)
+end
+  ensure
+    case1 : (p.x = s)
+    case2 : forall k | (((a.lower <= k) and (k <= a.upper)) => (Result[k] = a[k]))
+  end
+
+Where: 
+Precondition(Q) : 
+    not_empty : (a.count > 0)
+Postcondition(R) : 
+    case1 : (p.x = s)
+    case2 : forall k | (((a.lower <= k) and (k <= a.upper)) => (Result[k] = a[k]))
+Implementation(S) : 
+    s := 5;
+    if (s = 5) then
+      p.x := s;
+    else
+      p.y := s;
+    end
+from
+    i := a.lower;
+invariant
+  loop_invariant : forall j | (((a.lower <= j) and (j < i)) => (Result[j] = a[j]))
+until
+  (i > a.upper)
+loop
+    Result[i] := a[i];
+    i := (i + 1);
+variant
+  loop_variant : ((a.upper - i) + 1)
+end
+Correctness conditions : 
+1. Given precondition Q, the initialization step Sinit establishes LI I : {Q} Sinit {I}
+  ((a.count > 0) => (((5 = 5) => forall j | (((a.lower <= j) and (j < a.lower)) => (Result[j] = a[j]))) and ((not (5 = 5)) => forall j | (((a.lower <= j) and (j < a.lower)) => (Result[j] = a[j])))))
+
+2. At the end of Sbody, if not yet to exit, LI I is maintained : {I and (not B)} Sbody {I}
+  ((forall j | (((a.lower <= j) and (j < i)) => (Result[j] = a[j])) and (not (i > a.upper))) => forall j | (((a.lower <= j) and (j < (i + 1))) => (Result[j] = a[j])))
+
+3. If ready to exit and LI I maintained, postcondition R is established : I and B => R
+
+  3-1. I and B => case1 : ((forall j | (((a.lower <= j) and (j < i)) => (Result[j] = a[j])) and (i > a.upper)) => (p.x = s))
+
+  3-2. I and B => case2 : ((forall j | (((a.lower <= j) and (j < i)) => (Result[j] = a[j])) and (i > a.upper)) => forall k | (((a.lower <= k) and (k <= a.upper)) => (Result[k] = a[k])))
+
+4. Given LI I, and not yet to exit, Sbody maintains LV V as non-negative : {I and (not B)} Sbody {V >= 0}
+  ((forall j | (((a.lower <= j) and (j < i)) => (Result[j] = a[j])) and (not (i > a.upper))) => (((a.upper - (i + 1)) + 1) >= 0))
+
+5. Given LI I, and not yet to exit, Sbody decrements LV V : {I and (not B)} Sbody {V < V0}
+  ((forall j | (((a.lower <= j) and (j < i)) => (Result[j] = a[j])) and (not (i > a.upper))) => (((a.upper - (i + 1)) + 1) < ((a.upper - i) + 1)))
+
+Condition 1 is discharged.
+Condition 2 is not discharged.
+Counterexample is not available.
+Condition 3 postcondition case1 is not discharged.
+Counterexample is not available.
+Condition 3 postcondition case2 is discharged.
+Condition 4 is discharged.
+Condition 5 is discharged.

@@ -1,6 +1,0 @@
-((p3.first - 10) > 6)
-Where: 
-    p3 : PAIR[REAL ; REAL] = [1.2 ; 9.4]
-
-Is not a tautology. Here is a counter example: 
-    p3 : Real

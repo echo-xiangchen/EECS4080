@@ -1,4 +1,0 @@
-Error: Variable s has not been declared.
-Error: Variable s has not been declared.
-Error: Variable s has not been declared.
-Error: Variable s has not been declared.

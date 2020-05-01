@@ -1,0 +1,157 @@
+compute_tax
+  local
+    part1 : REAL
+    part2 : REAL
+    part3 : REAL
+  require
+    positive : (income >= 0)
+  do
+    if ((status = 1) or (status = 2)) then
+      if (status = 1) then
+        if (income <= 8350) then
+          part1 := (income * 0.1);
+          tax := part1;
+        elseif (income <= 33950) then
+          part1 := (8350 * 0.1);
+          part2 := ((income - 8350) * 0.15);
+          tax := (part1 + part2);
+        else
+          part1 := (8350 * 0.1);
+          part2 := ((33950 - 8350) * 0.15);
+          part3 := ((income - 33950) * 0.25);
+          tax := ((part1 + part2) + part3);
+        end
+      else
+        if (income <= 16700) then
+          part1 := (income * 0.1);
+          tax := part1;
+        elseif (income <= 67900) then
+          part1 := (16700 * 0.1);
+          part2 := ((income - 16700) * 0.15);
+          tax := (part1 + part2);
+        else
+          part1 := (16700 * 0.1);
+          part2 := ((67900 - 16700) * 0.15);
+          part3 := ((income - 67900) * 0.25);
+          tax := ((part1 + part2) + part3);
+        end
+      end
+    else
+      tax := -1;
+    end
+  ensure
+    case1_1_specific : (((status = 1) and (income = 8340)) => (tax = part1))
+    case1_1_general : (((status = 1) and (income <= 8350)) => (tax = (income * 0.1)))
+    case1_2_specific : (((status = 1) and (income = 32950)) => (tax = (part1 + part2)))
+    case1_2_general : (((status = 1) and ((income > 8350) and (income <= 33950))) => (tax = ((8350 * 0.1) + ((income - 8350) * 0.15))))
+    case1_3_specific : (((status = 1) and (income = 34870)) => (tax = ((part1 + part2) + part3)))
+    case1_3_general : (((status = 1) and (income > 33950)) => (tax = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))
+    case2_1_specific : (((status = 2) and (income = 16000)) => (tax = part1))
+    case2_1_general : (((status = 2) and (income <= 16700)) => (tax = (income * 0.1)))
+    case2_2_specific : (((status = 2) and (income = 65900)) => (tax = (part1 + part2)))
+    case2_2_general : (((status = 2) and ((income > 16700) and (income <= 67900))) => (tax = ((16700 * 0.1) + ((income - 16700) * 0.15))))
+    case2_3_specific : (((status = 2) and (income = 89000)) => (tax = ((part1 + part2) + part3)))
+    case2_3_general : (((status = 2) and (income > 67900)) => (tax = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))
+  end
+
+Where: 
+Precondition(Q) : 
+    positive : (income >= 0)
+Postcondition(R) : 
+    case1_1_specific : (((status = 1) and (income = 8340)) => (tax = part1))
+    case1_1_general : (((status = 1) and (income <= 8350)) => (tax = (income * 0.1)))
+    case1_2_specific : (((status = 1) and (income = 32950)) => (tax = (part1 + part2)))
+    case1_2_general : (((status = 1) and ((income > 8350) and (income <= 33950))) => (tax = ((8350 * 0.1) + ((income - 8350) * 0.15))))
+    case1_3_specific : (((status = 1) and (income = 34870)) => (tax = ((part1 + part2) + part3)))
+    case1_3_general : (((status = 1) and (income > 33950)) => (tax = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))
+    case2_1_specific : (((status = 2) and (income = 16000)) => (tax = part1))
+    case2_1_general : (((status = 2) and (income <= 16700)) => (tax = (income * 0.1)))
+    case2_2_specific : (((status = 2) and (income = 65900)) => (tax = (part1 + part2)))
+    case2_2_general : (((status = 2) and ((income > 16700) and (income <= 67900))) => (tax = ((16700 * 0.1) + ((income - 16700) * 0.15))))
+    case2_3_specific : (((status = 2) and (income = 89000)) => (tax = ((part1 + part2) + part3)))
+    case2_3_general : (((status = 2) and (income > 67900)) => (tax = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))
+Implementation(S) : 
+    if ((status = 1) or (status = 2)) then
+      if (status = 1) then
+        if (income <= 8350) then
+          part1 := (income * 0.1);
+          tax := part1;
+        elseif (income <= 33950) then
+          part1 := (8350 * 0.1);
+          part2 := ((income - 8350) * 0.15);
+          tax := (part1 + part2);
+        else
+          part1 := (8350 * 0.1);
+          part2 := ((33950 - 8350) * 0.15);
+          part3 := ((income - 33950) * 0.25);
+          tax := ((part1 + part2) + part3);
+        end
+      else
+        if (income <= 16700) then
+          part1 := (income * 0.1);
+          tax := part1;
+        elseif (income <= 67900) then
+          part1 := (16700 * 0.1);
+          part2 := ((income - 16700) * 0.15);
+          tax := (part1 + part2);
+        else
+          part1 := (16700 * 0.1);
+          part2 := ((67900 - 16700) * 0.15);
+          part3 := ((income - 67900) * 0.25);
+          tax := ((part1 + part2) + part3);
+        end
+      end
+    else
+      tax := -1;
+    end
+
+wp(S, case1_1_specific)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 1) and (income = 8340)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 1) and (income = 8340)) => ((part1 + ((income - 8350) * 0.15)) = (8350 * 0.1))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 1) and (income = 8340)) => (((part1 + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (8350 * 0.1)))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 1) and (income = 8340)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 1) and (income = 8340)) => ((part1 + ((income - 16700) * 0.15)) = (16700 * 0.1))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 1) and (income = 8340)) => (((part1 + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (16700 * 0.1)))))))) and ((not ((status = 1) or (status = 2))) => (((status = 1) and (income = 8340)) => (-1 = part1))))
+wp(S, case1_1_general)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 1) and (income <= 8350)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 1) and (income <= 8350)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = (income * 0.1))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 1) and (income <= 8350)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (income * 0.1)))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 1) and (income <= 8350)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 1) and (income <= 8350)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = (income * 0.1))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 1) and (income <= 8350)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (income * 0.1)))))))) and ((not ((status = 1) or (status = 2))) => (((status = 1) and (income <= 8350)) => (-1 = (income * 0.1)))))
+wp(S, case1_2_specific)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 1) and (income = 32950)) => ((income * 0.1) = (part1 + part2)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 1) and (income = 32950)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = ((8350 * 0.1) + ((income - 8350) * 0.15)))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 1) and (income = 32950)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = ((8350 * 0.1) + ((33950 - 8350) * 0.15))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 1) and (income = 32950)) => ((income * 0.1) = (part1 + part2)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 1) and (income = 32950)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = ((16700 * 0.1) + ((income - 16700) * 0.15)))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 1) and (income = 32950)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = ((16700 * 0.1) + ((67900 - 16700) * 0.15))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 1) and (income = 32950)) => (-1 = (part1 + part2)))))
+wp(S, case1_2_general)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 1) and ((income > 8350) and (income <= 33950))) => ((income * 0.1) = ((8350 * 0.1) + ((income - 8350) * 0.15))))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 1) and ((income > 8350) and (income <= 33950))) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = ((8350 * 0.1) + ((income - 8350) * 0.15)))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 1) and ((income > 8350) and (income <= 33950))) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = ((8350 * 0.1) + ((income - 8350) * 0.15))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 1) and ((income > 8350) and (income <= 33950))) => ((income * 0.1) = ((8350 * 0.1) + ((income - 8350) * 0.15))))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 1) and ((income > 8350) and (income <= 33950))) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = ((8350 * 0.1) + ((income - 8350) * 0.15)))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 1) and ((income > 8350) and (income <= 33950))) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = ((8350 * 0.1) + ((income - 8350) * 0.15))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 1) and ((income > 8350) and (income <= 33950))) => (-1 = ((8350 * 0.1) + ((income - 8350) * 0.15))))))
+wp(S, case1_3_specific)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 1) and (income = 34870)) => ((income * 0.1) = ((part1 + part2) + part3)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 1) and (income = 34870)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = (((8350 * 0.1) + ((income - 8350) * 0.15)) + part3))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 1) and (income = 34870)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 1) and (income = 34870)) => ((income * 0.1) = ((part1 + part2) + part3)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 1) and (income = 34870)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = (((16700 * 0.1) + ((income - 16700) * 0.15)) + part3))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 1) and (income = 34870)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 1) and (income = 34870)) => (-1 = ((part1 + part2) + part3)))))
+wp(S, case1_3_general)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 1) and (income > 33950)) => ((income * 0.1) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 1) and (income > 33950)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 1) and (income > 33950)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 1) and (income > 33950)) => ((income * 0.1) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 1) and (income > 33950)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 1) and (income > 33950)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 1) and (income > 33950)) => (-1 = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))))
+wp(S, case2_1_specific)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 2) and (income = 16000)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 2) and (income = 16000)) => ((part1 + ((income - 8350) * 0.15)) = (8350 * 0.1))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 2) and (income = 16000)) => (((part1 + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (8350 * 0.1)))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 2) and (income = 16000)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 2) and (income = 16000)) => ((part1 + ((income - 16700) * 0.15)) = (16700 * 0.1))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 2) and (income = 16000)) => (((part1 + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (16700 * 0.1)))))))) and ((not ((status = 1) or (status = 2))) => (((status = 2) and (income = 16000)) => (-1 = part1))))
+wp(S, case2_1_general)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 2) and (income <= 16700)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 2) and (income <= 16700)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = (income * 0.1))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 2) and (income <= 16700)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (income * 0.1)))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 2) and (income <= 16700)) => ((income * 0.1) = (income * 0.1)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 2) and (income <= 16700)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = (income * 0.1))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 2) and (income <= 16700)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (income * 0.1)))))))) and ((not ((status = 1) or (status = 2))) => (((status = 2) and (income <= 16700)) => (-1 = (income * 0.1)))))
+wp(S, case2_2_specific)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 2) and (income = 65900)) => ((income * 0.1) = (part1 + part2)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 2) and (income = 65900)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = ((8350 * 0.1) + ((income - 8350) * 0.15)))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 2) and (income = 65900)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = ((8350 * 0.1) + ((33950 - 8350) * 0.15))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 2) and (income = 65900)) => ((income * 0.1) = (part1 + part2)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 2) and (income = 65900)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = ((16700 * 0.1) + ((income - 16700) * 0.15)))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 2) and (income = 65900)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = ((16700 * 0.1) + ((67900 - 16700) * 0.15))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 2) and (income = 65900)) => (-1 = (part1 + part2)))))
+wp(S, case2_2_general)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 2) and ((income > 16700) and (income <= 67900))) => ((income * 0.1) = ((16700 * 0.1) + ((income - 16700) * 0.15))))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 2) and ((income > 16700) and (income <= 67900))) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = ((16700 * 0.1) + ((income - 16700) * 0.15)))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 2) and ((income > 16700) and (income <= 67900))) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = ((16700 * 0.1) + ((income - 16700) * 0.15))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 2) and ((income > 16700) and (income <= 67900))) => ((income * 0.1) = ((16700 * 0.1) + ((income - 16700) * 0.15))))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 2) and ((income > 16700) and (income <= 67900))) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = ((16700 * 0.1) + ((income - 16700) * 0.15)))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 2) and ((income > 16700) and (income <= 67900))) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = ((16700 * 0.1) + ((income - 16700) * 0.15))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 2) and ((income > 16700) and (income <= 67900))) => (-1 = ((16700 * 0.1) + ((income - 16700) * 0.15))))))
+wp(S, case2_3_specific)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 2) and (income = 89000)) => ((income * 0.1) = ((part1 + part2) + part3)))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 2) and (income = 89000)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = (((8350 * 0.1) + ((income - 8350) * 0.15)) + part3))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 2) and (income = 89000)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 2) and (income = 89000)) => ((income * 0.1) = ((part1 + part2) + part3)))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 2) and (income = 89000)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = (((16700 * 0.1) + ((income - 16700) * 0.15)) + part3))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 2) and (income = 89000)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 2) and (income = 89000)) => (-1 = ((part1 + part2) + part3)))))
+wp(S, case2_3_general)
+  ((((status = 1) or (status = 2)) => (((status = 1) => ((((income <= 8350) => (((status = 2) and (income > 67900)) => ((income * 0.1) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))) and (((not (income <= 8350)) and (income <= 33950)) => (((status = 2) and (income > 67900)) => (((8350 * 0.1) + ((income - 8350) * 0.15)) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)))))) and (((not (income <= 8350)) and (not (income <= 33950))) => (((status = 2) and (income > 67900)) => ((((8350 * 0.1) + ((33950 - 8350) * 0.15)) + ((income - 33950) * 0.25)) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))))) and ((not (status = 1)) => ((((income <= 16700) => (((status = 2) and (income > 67900)) => ((income * 0.1) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))) and (((not (income <= 16700)) and (income <= 67900)) => (((status = 2) and (income > 67900)) => (((16700 * 0.1) + ((income - 16700) * 0.15)) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)))))) and (((not (income <= 16700)) and (not (income <= 67900))) => (((status = 2) and (income > 67900)) => ((((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25)) = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))))))) and ((not ((status = 1) or (status = 2))) => (((status = 2) and (income > 67900)) => (-1 = (((16700 * 0.1) + ((67900 - 16700) * 0.15)) + ((income - 67900) * 0.25))))))
+
+Proof Obligation: 
+(positive) => wp(S, case1_1_specific)
+Discharged.
+(positive) => wp(S, case1_1_general)
+Discharged.
+(positive) => wp(S, case1_2_specific)
+Discharged.
+(positive) => wp(S, case1_2_general)
+Discharged.
+(positive) => wp(S, case1_3_specific)
+Discharged.
+(positive) => wp(S, case1_3_general)
+Discharged.
+(positive) => wp(S, case2_1_specific)
+Discharged.
+(positive) => wp(S, case2_1_general)
+Discharged.
+(positive) => wp(S, case2_2_specific)
+Discharged.
+(positive) => wp(S, case2_2_general)
+Discharged.
+(positive) => wp(S, case2_3_specific)
+Discharged.
+(positive) => wp(S, case2_3_general)
+Discharged.

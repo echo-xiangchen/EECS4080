@@ -1,9 +1,0 @@
-(declare-datatypes (T1 T2) ((Pair (mk-pair (first T1) (second T2)))))
-(declare-const i Int)
-(declare-const p3 (Pair Int Real))
-(assert (= (first p3) 12))
-(assert (= (second p3) 9.4))
-(assert (not (= (* (second p3) i) 100)))
-(check-sat)
-;Uncomment the following line if the result of z3 online tool returns "sat"
-;(get-model)

@@ -1,0 +1,45 @@
+-- test assignments
+-- normal variable (no error)
+
+
+
+a1:ARRAY[BOOLEAN]
+a2:ARRAY[INTEGER]
+a3:ARRAY[REAL]
+
+p1:PAIR[x1:BOOLEAN; y1: REAL]
+p2:PAIR[x2:REAL; y2: INTEGER]
+p3:PAIR[BOOLEAN; INTEGER]
+p4:PAIR[INTEGER;REAL]
+
+q1:BOOLEAN
+q2:BOOLEAN
+
+i1:INTEGER
+i2:INTEGER
+
+j1:REAL
+j2:REAL
+
+r:REAL
+s:INTEGER
+
+test_example
+require
+	not_empty: true
+do
+	q1 := q2;
+	i1 := i2;
+	j1 := j2;
+	r := s;
+ensure
+	boolean_case: q1 <=> q2
+	integer_case: i1 = i2
+	real_case: j1 = j2
+	real_integer_case: r = s
+	boolean_old: q2 <=> old q2
+	integer_old: i2 = old i2
+	real_old: j2 = old j2
+end
+
+verify test_example

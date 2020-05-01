@@ -1,8 +1,0 @@
-((p2.y2 - j) < 0)
-Where: 
-    p2 : PAIR[x2 : REAL ; y2 : INTEGER] = [34.5 ; 1]
-    j : REAL
-
-Is not a tautology. Here is a counter example: 
-    p2 : Int
-    j : 1.0

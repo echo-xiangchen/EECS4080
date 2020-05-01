@@ -1,8 +1,0 @@
-(declare-const i Int)
-(assert (= i (+ 1 3)))
-(declare-const j Int)
-(assert (= j (* i 2)))
-(assert (not (>= i (+ j 48))))
-(check-sat)
-;Remove the comment if the result of z3 online tool returns "sat"
-;(get-model)

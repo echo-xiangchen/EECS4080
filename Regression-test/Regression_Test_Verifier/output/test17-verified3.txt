@@ -1,3 +1,0 @@
-This formula is not tautology.
-(define-fun s () Bool
-  true)

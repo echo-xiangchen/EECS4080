@@ -1,1 +1,0 @@
-Error: Variable q has not been declared.

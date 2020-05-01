@@ -1,2 +1,0 @@
-Error: Variable m has not been declared.
-Error: Variable n has not been declared.

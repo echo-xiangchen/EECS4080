@@ -1,6 +1,0 @@
-(p2.first <= 18)
-Where: 
-    p2 : PAIR[REAL ; INTEGER] = [34.5 ; 1]
-
-Is not a tautology. Here is a counter example: 
-    p2 : Int

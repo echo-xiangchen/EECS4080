@@ -1,0 +1,65 @@
+-- test program verification
+-- calculating tax (Not discharged)
+
+status: INTEGER
+income: INTEGER
+tax: REAL
+
+compute_tax()
+require
+	positive: income >= 0
+local
+	part1: REAL
+	part2: REAL
+	part3: REAL
+do
+	if status = 1 or status = 2 then
+		if status = 1 then
+			if income <= 8350 then
+				part1 := income * 0.1;
+				tax := part1;
+			elseif income <= 33950 then
+				part1 := 8350 * 0.1;
+				part2 := (income - 8350) * 0.15;
+				tax := part1 + part2;
+			else
+				part1 := 8350 * 0.1;
+				part2 := (33950 - 8350) * 0.15;
+				part3 := (income - 33950) * 0.25;
+				tax := part1 + part2 + part3;
+			end
+		else
+			if income <= 16700 then
+				part1 := income * 0.1;
+				tax := part1;
+			elseif income <= 67900 then
+				part1 := 16700 * 0.1;
+				part2 := (income - 16700) * 0.15;
+				tax := part1 + part2;
+			else
+				part1 := 16700 * 0.1;
+				part2 := (67900 - 16700) * 0.15;
+				part3 := (income - 67900) * 0.25;
+				tax := part1 + part2 + part3;
+			end
+		end
+	else
+		tax := -1;
+	end
+ensure
+	case1_1_specific: (status = 1 and income = 8340) => (tax = part2)
+	case1_1_general: (status = 1 and income <= 8350) => (tax = income * 0.1)
+	case1_2_specific: (status = 1 and income = 32950) => (tax = part1 + part2)
+	case1_2_general: (status = 1 and (income > 8350 and income <= 33950)) => (tax = 8350 * 0.1 + (income - 8350) * 0.15)
+	case1_3_specific: (status = 1 and income = 34870) => (tax = part1 + part2)
+	case1_3_general: (status = 1 and income > 33950) => (tax = 8350 * 0.1 + (33950 - 8350) * 0.15 + (income - 33950) * 0.25)
+	
+	case2_1_specific: (status = 2 and income = 16000) => (tax = part1)
+	case2_1_general: (status = 2 and income <= 16700) => (tax = income * 0.1)
+	case2_2_specific: (status = 2 and income = 65900) => (tax = part1 + part2)
+	case2_2_general: (status = 2 and (income > 16700 and income <= 67900)) => (tax = 16700 * 0.1 + (income - 16700) * 0.15)
+	case2_3_specific: (status = 2 and income = 89000) => (tax = part1)
+	case2_3_general: (status = 2 and income > 67900) => (tax = 16700 * 0.1 + (67900 - 16700) * 0.15 + (income - 67900) * 0.25)
+end
+
+verify compute_tax

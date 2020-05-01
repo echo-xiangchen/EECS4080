@@ -1,8 +1,0 @@
-(declare-const i Int)
-(declare-const j Int)
-(declare-const k Int)
-(declare-const m Int)
-(assert (not (> i j)))
-(check-sat)
-;Remove the comment if the result of z3 online tool returns "sat"
-;(get-model)

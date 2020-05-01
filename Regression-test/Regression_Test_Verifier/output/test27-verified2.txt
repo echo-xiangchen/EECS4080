@@ -1,5 +1,0 @@
-This formula is not tautology.
-(define-fun q () Bool
-  false)
-(define-fun s () Bool
-  false)

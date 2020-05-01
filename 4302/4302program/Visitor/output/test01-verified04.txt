@@ -1,8 +1,0 @@
-Formula: (((i >= j) and (j >= i)) = (i = (j + 1)))
-Where: 
-    i: Int
-    j: Real
-
-Is not a tautology. Here is a counter example: 
-    i: 0
-    j: 0.0

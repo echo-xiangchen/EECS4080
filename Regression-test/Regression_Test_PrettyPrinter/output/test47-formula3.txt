@@ -1,7 +1,0 @@
-(declare-const p Bool)
-(declare-const q Bool)
-(declare-const s Bool)
-(assert (not (=> p (or (not s) q))))
-(check-sat)
-;Remove the comment if the result of z3 online tool returns "sat"
-;(get-model)

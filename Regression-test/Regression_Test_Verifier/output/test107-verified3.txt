@@ -1,5 +1,0 @@
-This formula is not tautology.
-(define-fun m () Int
-  (- 26))
-(define-fun j () Int
-  (- 64))

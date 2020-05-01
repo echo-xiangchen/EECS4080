@@ -1,0 +1,8 @@
+-- test Pair
+-- pair re-assignment(no error)
+
+p1:PAIR[x1:REAL; y1:BOOLEAN] = [1.3; true]
+
+p1 := [-3; false];
+
+verify p1.x1 > 0
