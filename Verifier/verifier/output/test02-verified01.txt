@@ -2,15 +2,15 @@ test_example
   require
     not_empty : true
   do
-    q1 := q2;
-    i1 := i2;
-    j1 := j2;
-    r := s;
+    q1 := a1[1];
+    i1 := a2[i2];
+    j1 := a3[(i1 + 1)];
+    r := a2[index1];
   ensure
-    boolean_case : (q1 = q2)
-    integer_case : (i1 = i2)
-    real_case : (j1 = j2)
-    real_integer_case : (r = s)
+    boolean_case : (q1 = a1[1])
+    integer_case : (i1 = a2[i2])
+    real_case : (j1 = a3[(i1 + 1)])
+    real_integer_case : (r = a2[index1])
     boolean_old : (q2 = old q2)
     integer_old : (i2 = old i2)
     real_old : (j2 = old j2)
@@ -20,27 +20,27 @@ Where:
 Precondition(Q) : 
     not_empty : true
 Postcondition(R) : 
-    boolean_case : (q1 = q2)
-    integer_case : (i1 = i2)
-    real_case : (j1 = j2)
-    real_integer_case : (r = s)
+    boolean_case : (q1 = a1[1])
+    integer_case : (i1 = a2[i2])
+    real_case : (j1 = a3[(i1 + 1)])
+    real_integer_case : (r = a2[index1])
     boolean_old : (q2 = old q2)
     integer_old : (i2 = old i2)
     real_old : (j2 = old j2)
 Implementation(S) : 
-    q1 := q2;
-    i1 := i2;
-    j1 := j2;
-    r := s;
+    q1 := a1[1];
+    i1 := a2[i2];
+    j1 := a3[(i1 + 1)];
+    r := a2[index1];
 
 wp(S, boolean_case)
-  (q2 = q2)
+  (a1[1] = a1[1])
 wp(S, integer_case)
-  (i2 = i2)
+  (a2[i2] = a2[i2])
 wp(S, real_case)
-  (j2 = j2)
+  (a3[(i1 + 1)] = a3[(i1 + 1)])
 wp(S, real_integer_case)
-  (s = s)
+  (a2[index1] = a2[index1])
 wp(S, boolean_old)
   (q2 = old q2)
 wp(S, integer_old)

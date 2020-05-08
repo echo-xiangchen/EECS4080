@@ -17,39 +17,63 @@ import verifier.visitor.*;
 
 public class Test {
 	
+	public static int[] find_occurrence (int[] a, int value) {
+		
+		int[] resultArray = {};
+		
+		
+		for (int i = 0; i < a.length; i++) {
+			int j = 0;
+			
+			if (a[i] == value) {
+				resultArray[j] = i;
+				j++;
+			}
+			i++;
+		}
+		
+		return resultArray;
+	}
+	
 	public static void main(String[] args) {
 		
-		BoolVar x1 = new BoolVar("x", new Verification());
+		int[] a = {1,2,5,8,1,3,1};
 		
-		BoolVar x2 = new BoolVar("x", new Verification());
+		int[] result = find_occurrence(a, 1);
 		
-		BoolVar y = new BoolVar("y", new Verification());
+		System.out.println(result);
 		
-		IntVar i1 = new IntVar("i", new Verification());
-		
-		IntVar i2 = new IntVar("i", new Verification());
-		
-		IntVar j = new IntVar("j", new Verification());
-		
-		Addition add = new Addition(i1, j);
-		
-//		IntConst const1 = new IntConst("1");
+//		BoolVar x1 = new BoolVar("x", new Verification());
 //		
-		GreaterOrEqual g = new GreaterOrEqual(i1, add);
-		
-		Verifier test = g.copy();
-		
-		((Addition)g.right()).children.set(0, j);
-		
-		InfixPrinter p1 = new InfixPrinter();
-		test.accept(p1);
-		
-		InfixPrinter p2 = new InfixPrinter();
-		g.accept(p2);
-		
-		System.out.println(p1.infixOutput);
-		
-		System.out.println(p2.infixOutput);
+//		BoolVar x2 = new BoolVar("x", new Verification());
+//		
+//		BoolVar y = new BoolVar("y", new Verification());
+//		
+//		IntVar i1 = new IntVar("i", new Verification());
+//		
+//		IntVar i2 = new IntVar("i", new Verification());
+//		
+//		IntVar j = new IntVar("j", new Verification());
+//		
+//		Addition add = new Addition(i1, j);
+//		
+////		IntConst const1 = new IntConst("1");
+////		
+//		GreaterOrEqual g = new GreaterOrEqual(i1, add);
+//		
+//		Verifier test = g.copy();
+//		
+//		((Addition)g.right()).children.set(0, j);
+//		
+//		InfixPrinter p1 = new InfixPrinter();
+//		test.accept(p1);
+//		
+//		InfixPrinter p2 = new InfixPrinter();
+//		g.accept(p2);
+//		
+//		System.out.println(p1.infixOutput);
+//		
+//		System.out.println(p2.infixOutput);
 		
 //		Addition add2 = new Addition(i2, j);
 //		

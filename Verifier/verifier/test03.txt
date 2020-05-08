@@ -1,34 +1,27 @@
 -- test program verification
 -- test_example (no error)
 
-p:PAIR[x:INTEGER; y: REAL]
-s: INTEGER
 
-test_example (a: ARRAY[INTEGER]) : ARRAY[INTEGER]
+find_occurrence (a: ARRAY[INTEGER] ; value: INTEGER) : ARRAY[INTEGER]
 require
 	not_empty: a.count > 0
 local
 	i: INTEGER
+	j: INTEGER
 do
-	-- assignment
-	s := 5;
-	
-	-- alternation
-	if s =5 then
-		p.x := s;
-	else
-		p.y := s;
-	end
-	
 	-- loop
 	from
 		i := a.lower;
+		j := 1;
 	invariant
-		loop_invariant: forall j: INTEGER; | (a.lower <= j and j < i) => (Result[j] = a[j])
+		loop_invariant: i < a.upper
 	until
 		i > a.upper
 	loop
-		Result[i] := a[i];
+		if a[i] = value then
+			Result[j] := i;
+			j := j + 1;
+		end
 		i := i + 1;
 	variant
 		loop_variant: a.upper - i + 1
