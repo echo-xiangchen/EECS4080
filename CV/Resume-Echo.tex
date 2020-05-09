@@ -30,9 +30,12 @@
 
 
 % use font package
-\usepackage{fontspec}
+%\usepackage{fontspec}
+
+
+
 % change the font
-\setmonofont{Menlo}
+%\setmonofont{Menlo}
 
 
 % provides different line thicknesses for tables
@@ -130,13 +133,15 @@
 \centerline {\textbf {\LARGE Xiang Chen}}
 \centerline {818-320 Assiniboine Road, Toronto, ON M3J 1L1}
 \centerline {(647) 781 6129 \hspace*{1mm}|\hspace*{1mm} xiang2@my.yorku.ca}
+~\\
 \leftline{\rule{\linewidth}{0.1mm}}
 ~\\
+\\
 \textbf {\Large Education}
 \begin{itemize}%[topsep=3pt]
 %\setlength{\itemsep}{-1pt}
 	\item {\bf Master of Mathematics, Computer Science}
-	\\\emph {University of Waterloo, Waterloo, Canada} {\hfill \emph{Expected Sep 2020 - Aug 2022}}
+	\\\emph {University of Waterloo, Waterloo, Canada} {\hfill \emph{Sep 2020 - Expected Aug 2022}}
 	\item {\bf Honors Bachelor of Science, Computer Science}     - GPA: 3.8/4.0
 	\\\emph {York University, Toronto, Canada} {\hfill \emph{2017 - 2020}}
 	\item {\bf Ontario College Advanced Diploma, Computer Systems Technology}     - GPA: 4.0/4.0
@@ -144,7 +149,7 @@
 	\item {\bf Honors Bachelor of Economics, International Economics and Trade}
 	\\\emph  {Guangzhou University of Chinese Medicine, Guangzhou, China}{\hfill \emph{2008 - 2012}}
 \end{itemize}
-
+~\\
 %\begin{tabbing}
 %	\\\hspace*{2mm}{\bf Relevant Courses} \\
 %	\hspace*{4mm}Software Design \hspace*{2cm} \= Web-based and Object-Oriented Programming  \\
@@ -153,56 +158,67 @@
 %	\end{tabbing}
 \leftline{\rule{\linewidth}{0.1mm}}
 ~\\
+\\
 \textbf {\Large Scholarship}
 \begin{itemize}%[topsep=3pt]
 %\setlength{\itemsep}{-1pt}
-	\item Lassonde Undergraduate Research Award (LURA): \emph {\$8,000} {\hfill \emph {Apr 2020}}
+	\item Lassonde Undergraduate Research Award (LURA): \emph {\$8,000} {\hfill \emph {May 2020 - Aug 2020}}
 	\item York University Continuing Student Scholarship: \emph {based on academic merit} {\hfill \emph {Sep 2018}}
 \end{itemize}
+~\\
 \rule{\linewidth}{0.1mm}
 ~\\
+\\
 \textbf {\Large Technical Skills} 
 \begin{itemize}%[topsep=3pt]
 %\setlength{\itemsep}{-1pt}
 	\item {\bf Languages:} Java, Python, Prolog, C, Shell Programming, Javascript, \LaTeX, HTML, MatLab, Eiffel (Design by Contract),  Verilog
 	%\item {\bf Markup Language:}  
 	%\item {\bf Scripting Language:} 
-	\item {\bf Tools:} Antlr 4, Z3 SMT Solver, Eclipse, SWI-Prolog, PyCharm
+	\item {\bf Tools:} Antlr 4 (Parser Generator Tool), Z3 SMT Solver, Eclipse, SWI-Prolog, PyCharm, Android Studio
 \end{itemize}
+~\\
 \rule{\linewidth}{0.1mm}
 ~\\
+\\
 \textbf {\Large Projects}
 % Building an Automated Verifier for a Procedural Programming Language
 \begin{itemize}%[topsep=3pt]
 %\setlength{\itemsep}{-1pt}
 	\item {\bf Building an Automated Verifier for a Procedural Programming Language}
-	\\\emph {Software Engineering Project, York University} {\hfill \emph{Jan 2020 - present}}
+	\\\emph {Software Engineering Project, York University} {\hfill \emph{Jan 2020 - Apr 2020}}
 	\begin{itemize}%[topsep=1pt]
 	%\setlength{\itemsep}{-1.5pt}
+		\item Supervisor: Jackie Wang
+		\item Final grade: A+
 		\item Extended project of previous project that involves a series of extensions:
 		\item Addition of linear data structures (e.g., array, pair, as well as their combinations).
 		\item Extension to the proposition/predicate language to include constructs of a procedural programming language, including: variable assignments, sequential composition, conditionals, loops, routines, and contractual specification (preconditions, postconditions, and class invariants).
 		\item The automated transformation of each routine into a {\bf Hoare Triple} that can either be proved as a tautology or disproved via counterexamples. The process of (automatically) proving the Hoare Triples also involves the systematic calculation of the {\bf weakest precondition} of every routine, given its implementation and postcondition.
 		\item Project GitHub: \url{https://github.com/echo-xiangchen/EECS4080}
 		\item Presentation Recording: \url{https://youtu.be/7RtcP-6Lffk}
+	\end{itemize}
 \end{itemize}
-\end{itemize}
+~\\
 % Building an Automated Veriﬁer for Propositional and Predicate Logic
 \begin{itemize}%[topsep=3pt]
 %\setlength{\itemsep}{-1pt}
-	\item {\bf Building an Automated Veriﬁer for Propositional and Predicate Logic}
+	\item {\bf Building an Automated Verifier for Propositional and Predicate Logic}
 	\\\emph {Software Engineering Project, York University} {\hfill \emph{Aug 2019 - Dec 2019}}
 	\begin{itemize}%[topsep=1pt]
 	%\setlength{\itemsep}{-1.5pt}
+		\item Supervisor: Jackie Wang
+		\item Final grade: A+
 		\item Use context-free grammar and the {\bf Antlr tool} to specify an expression language supporting the writing of propositions, predicates, and simple data structures (e.g., lists).
 		\item Implement a series of transformation rules (as {\bf Java} methods using Visitor Design Pattern), which will return runtime abstract syntax tree (AST) based on any input text conforming to the language grammar.
 		\item Turn the abstract syntax tree (AST) into the equivalent encoding in {\bf Z3 SMT Solver} for verification.
 		\item Develop a complete set of tests, both at the unit level (i.e., individual transformation rules) and at the acceptance level (i.e., end-to-end verification).
-		\item Users of this veriﬁcation tool can easily check if a valid propositional or predicate formula is a tautology, or receive a counterexample otherwise.
+		\item Users of this verification tool can easily check if a valid propositional or predicate formula is a tautology, or receive a counterexample otherwise.
 		\item Project GitHub: \url{https://github.com/echo-xiangchen/EECS4080}
 		\item Presentation Recording: \url{https://youtu.be/LHthLnmz6Bo}
 	\end{itemize}
 \end{itemize}
+~\\
 % Battleship Game Project
 \begin{itemize}%[topsep=3pt]
 %\setlength{\itemsep}{-1pt}
@@ -215,8 +231,10 @@
 		\item Develop a series of regression tests and a formal report including a clear design structure using BON diagram.
 	\end{itemize}
 \end{itemize}
+~\\
 \rule{\linewidth}{0.1mm}
 ~\\
+\\
 \textbf {\Large Employment Experience}
 % Personal Assistant
 \begin{itemize}%[topsep=3pt]
@@ -228,6 +246,7 @@
 		\item Assist professor and help students with their labs (using Java, developing Android Apps).
 		\item Deepen students' understanding of Java by explain simple concepts and algorithms to them.
 	\end{itemize}
+	~\\
 	\item {\bf Government Officer}
 	\\\emph {Government of Yayao, Guangzhou, China} {\hfill \emph{Aug 2013 – Dec 2014}}
 	\begin{itemize}%[topsep=1pt]
@@ -236,6 +255,7 @@
 	\item Maintaine the hardware and software of office computers, which helps me generate the interest of computers.
 	\item Involve in writing the web page of the Collective Management Trading Platform as well as a simple Windows program that could access and review the information on the platform.
 	\end{itemize}
+	~\\
 	% personal assisstant
 	\item {\bf Assistant} of Dr. Nanshan, Zhong (Academician of Chinese	Academy of Engineering)
 	\\\emph {Guangzhou Respiratory Institute, Guangzhou, China} {\hfill \emph{Aug 2012 – Jul 2013}}
