@@ -1,13 +1,64 @@
+
+
 % No more than 3 pages
 
 \subsection{Example: Propositional \& Predicate Logic}
 
 % show one without quantification
+\subsubsection{De Morgan's Laws}
+~\\Verifying De Morgan's laws with valid version (tautology) as well as invalid version (with counterexample): \\
+{\bf Input file:}
+\lstinputlisting[language=Eiffel]{code/De_Morgan_Laws_input.txt}
+
+{\bf Output result:}
+\lstinputlisting{code/De_Morgan_Laws_output.txt}
+
 % show one with quantification (forall)
+\subsubsection{Quantification: Single forall ($\forall$)}
+~\\For quantification verification, there is no need to declare variables separately.
+{\bf Input file:}
+\lstinputlisting[language=Eiffel]{code/single_forall_input.txt}
+
+{\bf Output result:}
+\lstinputlisting{code/single_forall_output.txt}
+
+
 % show one with quantification (exists)
+\subsubsection{Quantification: Single exists ($\exists$)}
+~\\
+{\bf Input file:}
+\lstinputlisting[language=Eiffel]{code/single_exists_input.txt}
+
+{\bf Output result:}
+\lstinputlisting{code/single_exists_output.txt}
+
 % show one with nested quantification (forall/exists, without counterexamples)
+\subsubsection{Quantification: Nested quantification ($\forall$ / $\exists$)}
+~\\
+{\bf Input file:}
+\lstinputlisting[language=Eiffel]{code/nested_quantification_input.txt}
+
+{\bf Output result:}
+\lstinputlisting{code/nested_quantification_output.txt}
 
 \subsection{Example: Program Verification}
-
 % show one example for command (compute tax)
-% indices_of(a: ARRAY[INTEGER]): ARRAY[INTEGER] -- show complete postcondition  (query)
+\subsubsection{Compute Tax}
+~\\
+{\bf Input file:}
+\lstinputlisting[language=Eiffel]{code/compute_tax_input.txt}
+
+
+{\bf Output result:}
+\lstinputlisting{code/compute_tax_output.txt}
+In this example, the output of program details in the beginning and the content of Implementation(S) are omitted because they are the same as the content of input file.\\
+
+% indices_of(a: ARRAY[INTEGER]; value: INTEGER): ARRAY[INTEGER] -- show complete postcondition  (query)
+\subsubsection{Loop: indices\_of}
+~\\
+{\bf Input file:}
+\lstinputlisting[language=Eiffel]{code/indices_of_input.txt}
+
+{\bf Output result:}
+\lstinputlisting{code/indices_of_output.txt}
+Also in this example, the output of program details in the beginning and the content of Implementation(S) are omitted because they are the same as the content of input file.

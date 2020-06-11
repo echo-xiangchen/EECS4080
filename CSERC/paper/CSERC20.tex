@@ -35,6 +35,30 @@
 
 \settopmatter{printacmref=true}
 
+% define my own color
+\usepackage{xcolor}
+\definecolor{comment}{RGB}{120,120,120}
+\definecolor{codenumber}{RGB}{100,100,100}
+
+% enable inserting codes
+\usepackage{listings}
+
+\lstset{
+  %language=Eiffel,
+  commentstyle=\color{comment},
+  basicstyle=\footnotesize\ttfamily,
+  numbers=left,
+  numberstyle=\scriptsize\color{codenumber},
+  frame=single,		% add the frame
+  breaklines=true,	% sets automatic line breaking
+ % texcsstyle=*\color{red},
+ % identifierstyle=\color{magenta},
+  extendedchars,
+  escapeinside=``,	% used for escaping
+  tabsize=2
+}
+
+
 \begin{document}
 
 \title[Short Title]{Long Title}
