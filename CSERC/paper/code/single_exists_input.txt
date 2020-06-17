@@ -1,5 +1,4 @@
 -- formula is tautology
 verify exists p,q,r : BOOLEAN | (p or not q) and (q or not r) and (r or not p)
-
 -- formula is not tautology
 verify exists s,t,v : BOOLEAN | (s and not t) and (t and not v) and (v and not s)

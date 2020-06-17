@@ -1,0 +1,9 @@
+Proof Obligation: 
+(positive_income) => wp(S, discharged)
+Discharged.
+
+(positive_income) => wp(S, not_discharged)
+Not discharged.
+Counterexample: 
+    income : 67901
+    status : 2

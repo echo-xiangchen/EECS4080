@@ -1,5 +1,4 @@
 -- formula is tautology
 verify forall i:INTEGER | exists j: INTEGER | i <= j and j <= i => i = j
-
 -- formula is not tautology
 verify exists k:INTEGER | forall n: INTEGER | k <= n and n <= k => k = n + 1

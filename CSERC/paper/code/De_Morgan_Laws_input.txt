@@ -1,9 +1,7 @@
 p: BOOLEAN
 q: BOOLEAN
-
 -- formula is tautology
 verify not (p and q) <=> not p or not q
 verify not (p or q) <=> not p and not q
-
 -- formula is not tautology
 verify not (p and q) <=> not p and not q

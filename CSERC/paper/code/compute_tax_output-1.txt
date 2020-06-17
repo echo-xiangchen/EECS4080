@@ -1,0 +1,11 @@
+compute_tax(status : INTEGER ; income : INTEGER) : REAL
+    ... (Omitted)
+
+Where: 
+Precondition(Q) : 
+    positive_income : (income >= 0)
+Postcondition(R) : 
+    case1_3_specific : (((status = 1) and (income = 34870)) => (Result = ((part1 + part2) + part3)))
+    not_discharged : (((status = 2) and (income > 67900)) => (Result = ((16700 * 0.1) + ((67900 - 16700) * 0.15))))
+Implementation(S) : 
+    ... (Omitted)

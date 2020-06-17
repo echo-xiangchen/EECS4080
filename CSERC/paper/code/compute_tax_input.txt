@@ -42,7 +42,6 @@ do
 ensure
 	-- Discharged postcondition example
 	discharged: (status = 1 and income = 34870) => (Result = part1 + part2 + part3)
-
 	-- Not discharged postcondition example
 	not_discharged: (status = 2 and income > 67900) => (Result = 16700 * 0.1 + (67900 - 16700) * 0.15)
 end

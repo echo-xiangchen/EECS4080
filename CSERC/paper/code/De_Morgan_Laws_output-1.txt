@@ -1,0 +1,5 @@
+((not (p and q)) = ((not p) or (not q)))
+Is a tautology.
+
+((not (p or q)) = ((not p) and (not q)))
+Is a tautology.

@@ -1,5 +1,4 @@
 -- formula is tautology
 verify forall i:INTEGER | i <= i * i
-
 -- formula is not tautology
 verify forall j:INTEGER | j < j * j

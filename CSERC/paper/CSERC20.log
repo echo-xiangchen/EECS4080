@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  11 JUN 2020 06:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  17 JUN 2020 07:53
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -728,7 +728,7 @@ File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
 File: listings.cfg 2020/03/24 1.8d listings configuration
 ))
 Package: listings 2020/03/24 1.8d (Carsten Heinz)
-Package hyperref Info: Option `pdfdisplaydoctitle' set `true' on input line 62.
+Package hyperref Info: Option `pdfdisplaydoctitle' set `true' on input line 63.
 
 \c@theorem=\count308
 
@@ -742,54 +742,54 @@ File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 (./CSERC20.aux)
 \openout1 = `CSERC20.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/nxlmi/m/it on input line 62.
+LaTeX Font Info:    Checking defaults for OML/nxlmi/m/it on input line 63.
 LaTeX Font Info:    Trying to load font information for OML+nxlmi on input line
- 62.
+ 63.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/newtx/omlnxlmi.fd
 File: omlnxlmi.fd 2013/11/19 Fontinst v1.933 font definitions for OML/nxlmi.
 )
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 63.
 LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 
-62.
+63.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 63.
 LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line
- 62.
+ 63.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/newtx/lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 63.
 LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input lin
-e 62.
+e 63.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/newtx/lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    ... okay on input line 63.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 62.
+(Font)              scaled to size 7.0pt on input line 63.
 LaTeX Font Info:    Trying to load font information for OT1+LinuxLibertineT-TLF
- on input line 62.
+ on input line 63.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/libertine/OT1LinuxLibertineT-TLF.
 fd
@@ -797,49 +797,49 @@ File: OT1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for OT1/
 LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.3pt on input line 62.
+(Font)              scaled to size 7.3pt on input line 63.
 <<ot1.cmap>>
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 5.5pt on input line 62.
+(Font)              scaled to size 5.5pt on input line 63.
 <<oml.cmap>>
-LaTeX Font Info:    Trying to load font information for U+msa on input line 62.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 63.
 
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 62.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 63.
 
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+ntxmia on input line 
-62.
+63.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/newtx/untxmia.fd
 File: untxmia.fd 2018/04/14 Fontinst v1.933 font definitions for U/ntxmia.
 )
 LaTeX Font Info:    Trying to load font information for U+ntxsym on input line 
-62.
+63.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/newtx/untxsym.fd
 File: untxsym.fd 2015/03/20 Fontinst v1.933 font definitions for U/ntxsym.
 )
 LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line 
-62.
+63.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/newtx/untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
-LaTeX Info: Redefining \microtypecontext on input line 62.
+LaTeX Info: Redefining \microtypecontext on input line 63.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-LaTeX Info: Redefining \showhyphens on input line 62.
+LaTeX Info: Redefining \showhyphens on input line 63.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -850,7 +850,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 
 ABD: EveryShipout initializing macros
 \AtBeginShipoutBox=\box58
-Package hyperref Info: Link coloring OFF on input line 62.
+Package hyperref Info: Link coloring OFF on input line 63.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
@@ -861,9 +861,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count310
 )
-LaTeX Info: Redefining \ref on input line 62.
-LaTeX Info: Redefining \pageref on input line 62.
-LaTeX Info: Redefining \nameref on input line 62.
+LaTeX Info: Redefining \ref on input line 63.
+LaTeX Info: Redefining \pageref on input line 63.
+LaTeX Info: Redefining \nameref on input line 63.
  (./CSERC20.out) (./CSERC20.out)
 \@outlinefile=\write4
 \openout4 = `CSERC20.out'.
@@ -937,30 +937,30 @@ Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count319
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 17.28pt on input line 80.
+(Font)              scaled to size 17.28pt on input line 81.
 LaTeX Font Info:    Trying to load font information for T1+LinuxBiolinumT-TLF o
-n input line 80.
+n input line 81.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/libertine/T1LinuxBiolinumT-TLF.fd
 File: T1LinuxBiolinumT-TLF.fd 2017/03/20 (autoinst) Font definitions for T1/Lin
 uxBiolinumT-TLF.
 )
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 17.28pt on input line 80.
+(Font)              scaled to size 17.28pt on input line 81.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxBiolinumT-TLF' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/b/n' will be
-(Font)              scaled to size 17.28pt on input line 80.
+(Font)              scaled to size 17.28pt on input line 81.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 80.
+(Font)              scaled to size 12.0pt on input line 81.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 80.
+(Font)              scaled to size 10.0pt on input line 81.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 7.0pt on input line 80.
+(Font)              scaled to size 7.0pt on input line 81.
 LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF
- on input line 80.
+ on input line 81.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.
 fd
@@ -968,29 +968,29 @@ File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/
 LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 80.
+(Font)              scaled to size 7.0pt on input line 81.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxLibertineT-TLF' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 9.0pt on input line 80.
+(Font)              scaled to size 9.0pt on input line 81.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 10.95pt on input line 80.
+(Font)              scaled to size 10.95pt on input line 81.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 8.0pt on input line 80.
+(Font)              scaled to size 8.0pt on input line 81.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 8.0pt on input line 80.
+(Font)              scaled to size 8.0pt on input line 81.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 8.0pt on input line 80.
+(Font)              scaled to size 8.0pt on input line 81.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 8.0pt on input line 80.
+(Font)              scaled to size 8.0pt on input line 81.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxLibertineT-TLF' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.2pt on input line 80.
+(Font)              scaled to size 6.2pt on input line 81.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
@@ -998,9 +998,13 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 (./sections/examples.tex
-LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
+LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/b/n' will be
 (Font)              scaled to size 9.0pt on input line 9.
-LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/it' will be
+LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/b/it' in size <9> not ava
+ilable
+(Font)              Font shape `T1/LinuxBiolinumT-TLF/b/sl' tried instead on in
+put line 9.
+LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/b/sl' will be
 (Font)              scaled to size 9.0pt on input line 9.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -1011,17 +1015,17 @@ File: lstlang2.sty 2020/03/24 1.8d listings language file
 )
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 11.
+surrounding objects on input line 10.
 
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 11.
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 11
+nput line 10.
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 10
 .
 (/usr/local/texlive/2020/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 7.0pt on input line 11.
+(Font)              scaled to size 7.0pt on input line 10.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
@@ -1035,27 +1039,47 @@ LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
 )
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 11.
+surrounding objects on input line 10.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 14.
+surrounding objects on input line 12.
 
-(./code/De_Morgan_Laws_output.txt)
+(./code/De_Morgan_Laws_output-1.txt)
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 14.
+surrounding objects on input line 12.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--15
+
+ []
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 15.
+
+(./code/De_Morgan_Laws_output-2.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 15.
 
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 18.
+(Font)              scaled to size 9.0pt on input line 16.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
+(Font)              scaled to size 9.0pt on input line 16.
+LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
+(Font)              scaled to size 9.0pt on input line 19.
+LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/it' will be
+(Font)              scaled to size 9.0pt on input line 19.
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 20.
+surrounding objects on input line 21.
 
 (./code/single_forall_input.txt)
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 20.
+surrounding objects on input line 21.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
@@ -1067,13 +1091,18 @@ Class acmart Warning: \vspace should only be used to provide space above/below
 surrounding objects on input line 23.
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+
+ []
+
+
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 30.
+surrounding objects on input line 31.
 
 (./code/single_exists_input.txt)
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 30.
+surrounding objects on input line 31.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
@@ -1085,72 +1114,144 @@ Class acmart Warning: \vspace should only be used to provide space above/below
 surrounding objects on input line 33.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 39.
-
-(./code/nested_quantification_input.txt)
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 39.
-
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 42.
-
-(./code/nested_quantification_output.txt)
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 42.
-
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 49.
-
-(./code/compute_tax_input.txt [1.1{/usr/local/texlive/2020/texmf-var/fonts/map/
-pdftex/updmap/pdftex.map}
-
-])
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 49.
-
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 53.
-
-(./code/compute_tax_output.txt
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-)
-
-Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 53.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 54--55
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
 
  []
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 60.
+surrounding objects on input line 44.
 
-(./code/indices_of_input.txt
+(./code/nested_quantification_input.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 44.
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 46.
+
+(./code/nested_quantification_output.txt [1.1{/usr/local/texlive/2020/texmf-var
+/fonts/map/pdftex/updmap/pdftex.map}
+
+])
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 46.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--53
+
+ []
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 56.
+
+(./code/compute_tax_input.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 56.
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 58.
+
+(./code/compute_tax_output-1.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 58.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--61
+
+ []
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 61.
+
+(./code/compute_tax_output-2.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 61.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 64--66
+
+ []
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 66.
+
+(./code/compute_tax_output-3.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 66.
+
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 4.
- [2.2])
+(Font)              scaled to size 7.0pt on input line 68.
+[2.2]
+Underfull \hbox (badness 10000) in paragraph at lines 69--70
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 69--70
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 73--76
+
+ []
+
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 60.
+surrounding objects on input line 76.
+
+(./code/indices_of_input.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 76.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 63.
+surrounding objects on input line 78.
 
-(./code/indices_of_output.txt)
+(./code/indices_of_output-1.txt)
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 63.
+surrounding objects on input line 78.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 79--81
+
+ []
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 81.
+
+(./code/indices_of_output-2.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 81.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 82--84
+
+ []
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 84.
+
+(./code/indices_of_output-3.txt)
+
+Class acmart Warning: \vspace should only be used to provide space above/below 
+surrounding objects on input line 84.
 
 ) (./sections/related-works.tex)
 
@@ -1164,42 +1265,45 @@ Package balance Warning: You have called \balance in second column
 (balance)                Columns might not be balanced.
 
 [3.3]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 97.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 97.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 98.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 98.
  (./CSERC20.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 97.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 97.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 98.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 98.
 Package rerunfilecheck Info: File `CSERC20.out' has not changed.
 (rerunfilecheck)             Checksum: 6F3557CEA2B776C52693F499B7AA1C78;946.
  ) 
 Here is how much of TeX's memory you used:
- 20633 strings out of 480608
- 306767 string characters out of 5903631
- 1378869 words of memory out of 5000000
- 35587 multiletter control sequences out of 15000+600000
- 655541 words of font info for 164 fonts, out of 8000000 for 9000
+ 20724 strings out of 480608
+ 309214 string characters out of 5903631
+ 1217894 words of memory out of 5000000
+ 35599 multiletter control sequences out of 15000+600000
+ 678442 words of font info for 212 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 63i,12n,100p,1476b,2093s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 63i,12n,100p,1478b,1917s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc
-}{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}
-{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc}{/u
-sr/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{/us
-r/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr
-/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/
-local/texlive/2020/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.p
-fb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/inconsolata/Inconsola
-ta-zi4r.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/libertine/Li
-nBiolinumT.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/libertine
-/LinBiolinumTB.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/liber
-tine/LinBiolinumTI.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/l
-ibertine/LinLibertineT.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/publ
-ic/libertine/LinLibertineTB.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1
-/public/libertine/LinLibertineTI.pfb></usr/local/texlive/2020/texmf-dist/fonts/
-type1/public/newtx/txsys.pfb>
-Output written on CSERC20.pdf (3 pages, 435074 bytes).
+}{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_oexx6f.enc}
+{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}{
+/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc}{/us
+r/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{/usr
+/local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr/
+local/texlive/2020/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/l
+ocal/texlive/2020/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pf
+b></usr/local/texlive/2020/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
+a-zi4r.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/newtx/Liberti
+neMathMI.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/libertine/L
+inBiolinumT.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/libertin
+e/LinBiolinumTB.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/libe
+rtine/LinBiolinumTBO.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public
+/libertine/LinBiolinumTI.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/pu
+blic/libertine/LinLibertineT.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
+1/public/libertine/LinLibertineTB.pfb></usr/local/texlive/2020/texmf-dist/fonts
+/type1/public/libertine/LinLibertineTI.pfb></usr/local/texlive/2020/texmf-dist/
+fonts/type1/public/newtx/txsys.pfb>
+Output written on CSERC20.pdf (3 pages, 487407 bytes).
 PDF statistics:
- 378 PDF objects out of 1000 (max. 8388607)
- 347 compressed objects within 4 object streams
- 230 named destinations out of 1000 (max. 500000)
- 44093 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 385 PDF objects out of 1000 (max. 8388607)
+ 349 compressed objects within 4 object streams
+ 224 named destinations out of 1000 (max. 500000)
+ 51261 words of extra memory for PDF output out of 51595 (max. 10000000)
 
