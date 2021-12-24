@@ -1,8 +1,0 @@
-forall i | (i <= (i * i))
-Is a tautology.
-
-forall j | (j < (j * j))
-Where: 
-    j : INTEGER
-Is not a tautology. Here is a counter example: 
-    j : 1

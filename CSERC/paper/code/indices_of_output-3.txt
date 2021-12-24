@@ -1,5 +1,0 @@
-Condition 1 is discharged.
-Condition 2 is discharged.
-Condition 3 is discharged.
-Condition 4 is discharged.
-Condition 5 is discharged.

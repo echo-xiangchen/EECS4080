@@ -1,9 +1,0 @@
-forall i | exists j | (((i <= j) and (j <= i)) => (i = j))
-Is a tautology.
-
-exists k | forall n | (((k <= n) and (n <= k)) => (k = (n + 1)))
-Where: 
-    k : INTEGER
-    n : INTEGER
-Is not a tautology.
-Counterexample is not available.

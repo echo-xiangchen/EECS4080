@@ -1,7 +1,0 @@
-((not (p and q)) = ((not p) and (not q)))
-Where: 
-    p : BOOLEAN
-    q : BOOLEAN
-Is not a tautology. Here is a counter example: 
-    p : false
-    q : true
